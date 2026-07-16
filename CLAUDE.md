@@ -1,5 +1,8 @@
 # Oásis UTFPR — instruções do projeto
 
+> Guia completo e agnóstico de fornecedor para agentes: **`REPOSITORIO.md`**.
+> Leia-o antes da primeira alteração. Este arquivo é o resumo.
+
 ## Regras invioláveis
 
 1. **Autoria**: commits deste repositório são autorados exclusivamente pelo dono do

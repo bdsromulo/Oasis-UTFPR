@@ -14,6 +14,9 @@ Princípios:
 - **Erro alto > erro silencioso**: toda importação de dados passa por suítes de
   validação que recusam o arquivo se qualquer linha não for explicada.
 
+> **Contribuindo com ajuda de IA?** Leia [`REPOSITORIO.md`](REPOSITORIO.md) — guia para
+> agentes, incluindo o protocolo de que nenhuma LLM se credita em commits.
+
 ## Como rodar
 
 ```
