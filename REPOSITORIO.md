@@ -74,8 +74,8 @@ histórico individual do aluno. É um **projeto independente de alunos, não ofi
 
 ## 2. Onde as coisas moram
 
-- **Código**: `C:\dev\oasis-utfpr` (local, fora do Google Drive de propósito — a
-  sincronização do Drive briga com `node_modules`/builds).
+- **Código**: `C:\Users\Rômulo Silva\Desktop\Códigos\oasis-utfpr` (local, fora do
+  Google Drive de propósito — a sincronização do Drive briga com `node_modules`/builds).
 - **Remoto**: `https://github.com/bdsromulo/Oasis-UTFPR` (público).
 - **Site publicado**: `https://bdsromulo.github.io/Oasis-UTFPR/` (deploy automático via
   GitHub Actions a cada push na `main`).

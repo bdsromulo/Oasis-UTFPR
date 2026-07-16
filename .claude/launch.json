@@ -6,7 +6,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 5173,
-      "cwd": "C:\\dev\\oasis-utfpr"
+      "cwd": "C:\\Users\\Rômulo Silva\\Desktop\\Códigos\\oasis-utfpr"
     }
   ]
 }
