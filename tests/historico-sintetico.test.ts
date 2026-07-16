@@ -16,6 +16,10 @@ const LINHAS = [
   "Disciplinas Obrigatórias",
   "Disciplinas Obrigatórias Cursadas",
   "Per.Disc/Matriz Tipo CHS CHT CHEXT Freq.",
+  // linha do ENADE sem núcleo (vaza para o bloco da vizinha; não pode contaminar)
+  "Enade - Estudante Dispensado De",
+  "1 ENADE IEnade Ingressante R 0 0 0 0 1 2025Realização Do Enade, Em Razão Do",
+  "Calendário Trienal",
   // aprovada simples
   "1 ICSD20 Introdução À Lógica S73 R 3 45 0 9,0 100,0 1 2025 Aprovado Por Nota/Frequência",
   "Para Computação Professora Exemplo - Doutorado",
@@ -78,6 +82,8 @@ describe("histórico sintético", () => {
 
   it("cursadas: situações e recuperação de reprovação", () => {
     expect(perfil.cursadas.length).toBe(7);
+    // o "Dispensado" do ENADE vizinho não pode contaminar a situação da ICSD20
+    expect(perfil.cursadas.find((c) => c.codigo === "ICSD20")?.situacao).toBe("aprovado");
     expect(perfil.aprovadas.has("ICSD20")).toBe(true);
     expect(perfil.aprovadas.has("ICSF13")).toBe(true); // situação na linha anterior
     expect(perfil.aprovadas.has("ICSE20")).toBe(true); // reprovado depois aprovado

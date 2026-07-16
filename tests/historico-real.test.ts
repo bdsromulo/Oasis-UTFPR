@@ -100,6 +100,8 @@ describe.skipIf(!existsSync(CASOS[1].arquivo))("fatos específicos: Namie", () =
     const perfil = await carregar(CASOS[1].arquivo);
     // EST70C consignada via equivalente EST70A
     expect(cumpre("EST70C", perfil, matriz)).toBe(true);
+    // ICSD20 aprovada (o ENADE vizinho dizia "Dispensado" e não pode contaminar)
+    expect(perfil.cursadas.find((c) => c.codigo === "ICSD20")?.situacao).toBe("aprovado");
     // dependência: Estágio 1
     expect(perfil.dependencias.map((d) => d.codigo)).toContain("ICSX51");
     // cancelamento seguido de aprovação (ICSG20)

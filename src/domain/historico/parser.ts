@@ -35,7 +35,9 @@ function acharCodigo(linhas: string[]): string | null {
 }
 
 function acharSituacao(linhas: string[]): Situacao | null {
-  const txt = linhas.join(" ");
+  // linhas do ENADE ("Estudante Dispensado De Realização Do Enade") não têm
+  // linha-núcleo própria e vazam para o bloco da disciplina vizinha — ignorá-las
+  const txt = linhas.filter((l) => !/enade/i.test(l)).join(" ");
   if (/Reprovado/i.test(txt)) return "reprovado";
   if (/Consigna|Crédito Consignado/i.test(txt)) return "consignado";
   if (/Cancelado/i.test(txt)) return "cancelado";
