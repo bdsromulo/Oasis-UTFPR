@@ -1,0 +1,18 @@
+# dados pessoais e documentos-fonte nunca entram no repo público
+*.pdf
+historico*.json
+perfil*.json
+
+# node / build (M2 em diante)
+node_modules/
+dist/
+.env
+.env.*
+
+# python
+__pycache__/
+*.pyc
+
+# SO
+Thumbs.db
+.DS_Store

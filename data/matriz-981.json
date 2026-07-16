@@ -1,0 +1,3732 @@
+{
+ "matriz": 981,
+ "curso": "BACHARELADO EM SISTEMAS DE INFORMAÇÃO (236)",
+ "campus": "Curitiba",
+ "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
+ "cargas": {
+  "obrigatorias": 2005,
+  "optativas": 840,
+  "extensao": 330,
+  "eletiva": 105,
+  "soma": 3280,
+  "soma_sem_ext": 2950,
+  "chext_disc_obrigatorias": 60,
+  "chext_disc_optativas": 300,
+  "ch_total_ppc": 3220
+ },
+ "conjuntos": {
+  "1159": {
+   "nome": "Segundo Estrato",
+   "periodo_inicial": 3,
+   "periodo_final": 6,
+   "ch": 360,
+   "ch_semanal": 24
+  },
+  "1160": {
+   "nome": "Terceiro Estrato - Trilhas Em Computação",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 345,
+   "ch_semanal": 23
+  },
+  "1162": {
+   "nome": "Gestão De Sistemas De Informação",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1163": {
+   "nome": "Interação Humano-Computador",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1164": {
+   "nome": "Desenvolvimento Baseado Em Plataformas",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1165": {
+   "nome": "Banco De Dados",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1166": {
+   "nome": "Inteligência Artificial",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1167": {
+   "nome": "Processamento Gráfico",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1168": {
+   "nome": "Algoritmos E Complexidade",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1169": {
+   "nome": "Engenharia De Software",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1170": {
+   "nome": "Redes De Computadores",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1171": {
+   "nome": "Sistemas Embarcados E Robótica",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1172": {
+   "nome": "Linguagens De Programação",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1173": {
+   "nome": "Otimização, Mod Analíticos E Simulação",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "1161": {
+   "nome": "Optativas Do Ciclo De Humanidades",
+   "periodo_inicial": 3,
+   "periodo_final": 6,
+   "ch": 135,
+   "ch_semanal": 9
+  }
+ },
+ "eletiva": {
+  "ch": 105,
+  "periodo_inicial": 4,
+  "periodo_final": 8,
+  "prereq_periodo": 4
+ },
+ "disciplinas": [
+  {
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Enade Ingressante",
+   "aulas_semanais": {
+    "teoricas": 981,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD20",
+   "nome": "Introdução À Lógica Para Computação",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSF13",
+   "nome": "Fundamentos De Programação 1",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 3,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG10",
+   "nome": "Fundamentos De Sistemas De Informação",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX10",
+   "nome": "Introdução Ao Computar",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7GA",
+   "nome": "Geometria Analítica",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP71A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7A1",
+   "nome": "Fundamentos De Administração",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE20",
+   "nome": "Técnicas De Programação",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSF13"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSF20",
+   "nome": "Estruturas De Dados 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSF13"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX50",
+   "nome": "Atividades Complementares Complementares",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Atividades",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "Álgebra Linear",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7GA"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C1",
+   "nome": "Cálculo Diferencial E Integral 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP71B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EST70C",
+   "nome": "Introdução À Estatística",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EST70A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7SA",
+   "nome": "Sociologia",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD21",
+   "nome": "Matemática Discreta",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSD20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSF30",
+   "nome": "Estruturas De Dados 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSF20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW20",
+   "nome": "Arquitetura Em Organização De Computadores",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSD20",
+    "ICSF20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HA",
+   "nome": "História Da Técnica E Da Tecnologia",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G1",
+   "nome": "Fundamentos De Gestão De Pessoas",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA31",
+   "nome": "Teoria Da Computação",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSA30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE40",
+   "nome": "Engenharia De Software 2",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG31",
+   "nome": "Gestão Da Informação Em Sistemas De Informação",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "GEE7A1",
+    "ICSG10"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSH31",
+   "nome": "Introdução À Interação Humano-Computador",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "GEE7A1",
+    "ICSE20",
+    "ICSX10"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI30",
+   "nome": "Sistemas Inteligentes",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSA30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM31",
+   "nome": "Desenvolvimento Integrado De Sistemas",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSB30",
+    "ICSG20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSV30",
+   "nome": "Processamento Digital De Imagens",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSF30",
+    "MAT7AL",
+    "MAT7GA"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW22",
+   "nome": "Fundamentos De Circuitos Digitais",
+   "periodo": 3,
+   "conjunto": 1159,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSW20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "COE70A",
+   "nome": "Comunicação Oral E Escrita",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70J",
+   "nome": "Libras",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70K",
+   "nome": "Tecnologias Digitais Na Educação",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FB",
+   "nome": "Fundamentos Da Ética",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "Teoria Das Ciências Humanas",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "Metropolização Contemporânea: Tecnologia E Território",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "História Geral Da Economia",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PC",
+   "nome": "Planejamento De Carreira",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "Tecnologia, Trabalho E Saúde",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XB",
+   "nome": "Presença Africana No Brasil: Tecnologia, Trabalho E Cultura",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "Tecnopolíticas Da Sociedade Contemporânea",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QBI7CA",
+   "nome": "Ciências Do Ambiente",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7E1",
+   "nome": "Fundamentos De Empreendedorismo",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA30",
+   "nome": "Projeto E Análise De Algoritmos",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSD21",
+    "ICSF30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB30",
+   "nome": "Introdução A Banco De Dados",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSD21",
+    "ICSE20",
+    "ICSF30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG20",
+   "nome": "Análise E Projeto De Sistemas",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSO30",
+   "nome": "Sistemas Operacionais",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSW20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF66",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ICSX20",
+   "nome": "Trabalho De Integração 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSF20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX51",
+   "nome": "Estágio 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 200
+   },
+   "prerequisitos": [
+    "Período:4"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG41",
+   "nome": "Tecnologias Da Informação Aplicada À Gestão",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSG31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG42",
+   "nome": "Gestão Do Conhecimento",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ICSG31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG44",
+   "nome": "Informática Na Saúde",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSG20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG45",
+   "nome": "Sistemas De Informação Em Saúde",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSG31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG47",
+   "nome": "Inteligência Coletiva E Redes Sociais Eletrônicas",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSG10",
+    "ICSG31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG48",
+   "nome": "Modelagem De Processos De Negócios",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSG20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG70",
+   "nome": "Sistemas De Informação E Organizações",
+   "periodo": 4,
+   "conjunto": 1162,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSG31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSHX0",
+   "nome": "Acessibilidade E Inclusão Digital",
+   "periodo": 4,
+   "conjunto": 1163,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSH31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSHX1",
+   "nome": "Computação E Sociedade",
+   "periodo": 4,
+   "conjunto": 1163,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "FCH7SA",
+    "ICSH31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSH41",
+   "nome": "Avaliação Em Interação Humano-Computador",
+   "periodo": 4,
+   "conjunto": 1163,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSH31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSH43",
+   "nome": "Trabalho Cooperativo Apoiado Por Computador",
+   "periodo": 4,
+   "conjunto": 1163,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FCH7SA",
+    "ICSH31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSH45",
+   "nome": "Tópicos Em Design De Interação",
+   "periodo": 4,
+   "conjunto": 1163,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSH31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM42",
+   "nome": "Infraestrutura Para Tecnologia De Informação",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM45",
+   "nome": "Computação Em Nuvem",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM46",
+   "nome": "Programação Para Dispositivos Móveis E Sem Fio",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSE20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM47",
+   "nome": "Desenvolvimento De Aplicações Web-Front- End",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSE20",
+    "ICSM31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM48",
+   "nome": "Desenvolvimento De Aplicações Web-Back- End",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSB30",
+    "ICSE20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM49",
+   "nome": "Padrões Web",
+   "periodo": 4,
+   "conjunto": 1164,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB41",
+   "nome": "Banco De Dados 2",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB50",
+   "nome": "Banco De Dados",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB52",
+   "nome": "Data Warehousing",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB53",
+   "nome": "Introdução A Ciência De Dados",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70C",
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB54",
+   "nome": "Introduction To Data Science",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70C",
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB56",
+   "nome": "Ciência De Dados",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70C",
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB57",
+   "nome": "Data Science",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70C",
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB59",
+   "nome": "Processamento De Linguagem Natural",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB60",
+   "nome": "Nosql - Banco De Dados Não Relacionais",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB61",
+   "nome": "Big Data",
+   "periodo": 4,
+   "conjunto": 1165,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSB30",
+    "ICSE20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSIX0",
+   "nome": "Inteligência Artificial E Sociedade",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI31",
+   "nome": "Ciência Das Redes",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI41",
+   "nome": "Redes Neurais",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI50",
+   "nome": "Inteligência Artificial",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI51",
+   "nome": "Computação Evolucionária",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI52",
+   "nome": "Inteligência Artificial Distribuída",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI53",
+   "nome": "Mineração De Dados",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI54",
+   "nome": "Grafos De Conhecimento",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI55",
+   "nome": "Sistemas Autônomos Inteligentes",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI56",
+   "nome": "Sistemas Fuzzy",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI57",
+   "nome": "Introdução Às Ciências Cognitivas",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSD21",
+    "ICSX10"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI58",
+   "nome": "Data Mining",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI59",
+   "nome": "Programação Orientada À Notificações",
+   "periodo": 4,
+   "conjunto": 1166,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSV40",
+   "nome": "Computação Gráfica",
+   "periodo": 4,
+   "conjunto": 1167,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSV41",
+   "nome": "Introdução À Visão Computacional",
+   "periodo": 4,
+   "conjunto": 1167,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSV45",
+   "nome": "Reconhecimento De Padrões Em Imagens",
+   "periodo": 4,
+   "conjunto": 1167,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA4A",
+   "nome": "Geometria Computacional",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA30",
+    "MAT7AL"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA41",
+   "nome": "Complexidade Computacional",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA42",
+   "nome": "Programação Competitiva, Interinstitucionalidade",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA46",
+   "nome": "E Mercado De Trabalho Algoritmos E Complexidade",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA47",
+   "nome": "Computação Quântica",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA48",
+   "nome": "Teoria Dos Grafos",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSA49",
+   "nome": "Introdução À Criptografia",
+   "periodo": 4,
+   "conjunto": 1168,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA30",
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE41",
+   "nome": "Engenharia De Requisitos",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE42",
+   "nome": "Metodologias Ágeis Para O Desenvolvimento De Software",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE43",
+   "nome": "Testes, Verificação E Validação De Sistemas",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE44",
+   "nome": "Sistemas Legados",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE45",
+   "nome": "Modelagem De Software",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE46",
+   "nome": "Métricas E Estimativas De Software",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE47",
+   "nome": "Gerência De Projetos",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE48",
+   "nome": "Qualidade De Software",
+   "periodo": 4,
+   "conjunto": 1169,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR31",
+   "nome": "Comunicação De Dados",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR40",
+   "nome": "Redes E Sistemas De Comunicações Móveis",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR41",
+   "nome": "Oficina De Redes",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSO30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR42",
+   "nome": "Infraestrutura De Lans Hierárquicas",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR43",
+   "nome": "Infraestrutura De Wans",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR44",
+   "nome": "Segurança De Redes E Sistemas",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR45",
+   "nome": "Projeto De Infraestrutura De Redes",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR46",
+   "nome": "Roteamento E Qualidade De Serviços",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR47",
+   "nome": "Redes Sem Fio",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR48",
+   "nome": "Simulação E Análise De Desempenho De Redes De Computadores",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR49",
+   "nome": "Tópicos Avançados Em Redes De Computadores",
+   "periodo": 4,
+   "conjunto": 1170,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELEW40",
+   "nome": "Engenharia De Sistemas",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSE30",
+    "ICSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELN7AB",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELEW41",
+   "nome": "Robótica",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ICSF30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW4B",
+   "nome": "Eletricidade",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW40",
+   "nome": "Sistemas Microcontrolados",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSW22"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW41",
+   "nome": "Sistemas Embarcados",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSW20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW42",
+   "nome": "Lógica Reconfigurável",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSW40"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW45",
+   "nome": "Robótica Móvel",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSF30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW46",
+   "nome": "Engenharia De Sistemas Aplicada A Sistemas Ciberfísicos",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSO30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW47",
+   "nome": "Sistemas Tempo Real",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSO30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW51",
+   "nome": "Arquitetura De Computadores Para Sistemas Embarcados",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSO30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSW53",
+   "nome": "Computação Reconfigurável",
+   "periodo": 4,
+   "conjunto": 1171,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSW22"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSL40",
+   "nome": "Estrutura De Linguagens De Programação",
+   "periodo": 4,
+   "conjunto": 1172,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSL41",
+   "nome": "Construção De Compiladores",
+   "periodo": 4,
+   "conjunto": 1172,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD41",
+   "nome": "Programação Matemática",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSA30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTE2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ICSD42",
+   "nome": "Simulação De Sistemas Biológicos E Sociais",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSF30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD43",
+   "nome": "Simulação De Eventos Discretos",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EST70C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD45",
+   "nome": "Modelagem E Avaliação De Sistemas",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70C",
+    "ICSG20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD47",
+   "nome": "Otimização De Sistemas",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD50",
+   "nome": "Métodos Estocásticos",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EST70C",
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD51",
+   "nome": "Metaheurística",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EST70C",
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD52",
+   "nome": "Introdução À Computação Científica",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSD21"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7N1",
+   "nome": "Cálculo Numérico",
+   "periodo": 4,
+   "conjunto": 1173,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7AL"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FA",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PA",
+   "nome": "Psicologia Do Trabalho",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE30",
+   "nome": "Engenharia De Software",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSG20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSR30",
+   "nome": "Redes De Computadores",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSO30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX52",
+   "nome": "Estágio 2",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 200
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSS30",
+   "nome": "Sistemas Distribuídos",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ICSO30",
+    "ICSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX30",
+   "nome": "Trabalho De Integração 2",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ICSX20"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX40",
+   "nome": "Trabalho De Conclusão 1",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ICSX30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSX41",
+   "nome": "Trabalho De Conclusão 2",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Trabalho De Conclusão",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ICSX40"
+   ],
+   "equivalentes": []
+  }
+ ]
+}
