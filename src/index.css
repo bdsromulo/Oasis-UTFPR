@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  /* amarelo UTFPR como acento sobre base neutra */
+  --color-utfpr-400: #ffd23f;
+  --color-utfpr-500: #fecd0f;
+  --color-utfpr-600: #d9ae00;
+  --color-utfpr-700: #a88700;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+}

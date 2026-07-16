@@ -1,5 +1,7 @@
 # dados pessoais e documentos-fonte nunca entram no repo público
 *.pdf
+# exceção: fixture SINTÉTICA de teste (aluno fictício, sem dados pessoais)
+!tests/fixtures/historico-sintetico.pdf
 historico*.json
 perfil*.json
 
@@ -16,3 +18,4 @@ __pycache__/
 # SO
 Thumbs.db
 .DS_Store
+tsconfig.tsbuildinfo

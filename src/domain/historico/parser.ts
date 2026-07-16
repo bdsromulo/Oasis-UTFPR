@@ -1,0 +1,273 @@
+// Parser do Histórico Escolar (Portal do Aluno UTFPR) — texto → PerfilAluno.
+//
+// Estratégia (validada nos históricos reais de referência):
+//  - Os CONTADORES vêm das tabelas-resumo do próprio histórico (Resumo Optativas,
+//    Resumo Eletiva, CHEXT geral, Quadro Resumo) — regulares e confiáveis.
+//  - As DISCIPLINAS CURSADAS são segmentadas pela "linha-núcleo" numérica
+//    (CHS CHT CHEXT média freq sem ano); código e situação são buscados no bloco
+//    entre a linha-núcleo anterior e a seguinte, pois o PDF intercala as células.
+//  - Anomalia não explicada vira aviso no perfil — erro alto > erro silencioso.
+import type { DisciplinaCursada, PerfilAluno, ResumoConjunto, Situacao } from "../tipos";
+
+const RE_NUCLEO =
+  /(?:^|\s)(\d{1,2})\s+(\d{1,3})\s+(\d{1,3})\s+([\d,]+|\*)\s+([\d,]+|\*)\s+([12])\s*(20\d{2})/;
+const RE_CODIGO = /^[A-Z]{2,4}[0-9][A-Z0-9]{1,3}$|^[A-Z]{3,5}[0-9]{2}[A-Z0-9]?$/;
+const RE_TURMA = /^[A-Z]\d{2}$/;
+
+function ehCodigo(tok: string): boolean {
+  return (
+    tok.length >= 5 &&
+    tok.length <= 7 &&
+    /^[A-Z][A-Z0-9]+$/.test(tok) &&
+    /\d/.test(tok) &&
+    !RE_TURMA.test(tok) &&
+    RE_CODIGO.test(tok)
+  );
+}
+
+function acharCodigo(linhas: string[]): string | null {
+  for (const l of linhas) {
+    for (const tok of l.split(/\s+/)) {
+      if (ehCodigo(tok)) return tok;
+    }
+  }
+  return null;
+}
+
+function acharSituacao(linhas: string[]): Situacao | null {
+  const txt = linhas.join(" ");
+  if (/Reprovado/i.test(txt)) return "reprovado";
+  if (/Consigna|Crédito Consignado/i.test(txt)) return "consignado";
+  if (/Cancelado/i.test(txt)) return "cancelado";
+  if (/Dispensa/i.test(txt)) return "dispensado";
+  if (/Aprovado/i.test(txt)) return "aprovado";
+  if (/Matriculado|Cursando/i.test(txt)) return "cursando";
+  return null;
+}
+
+function num(s: string): number | null {
+  if (s === "*" || s === undefined) return null;
+  return parseFloat(s.replace(/\./g, "").replace(",", "."));
+}
+
+export function parseHistorico(linhasIn: string[]): PerfilAluno {
+  const linhas = linhasIn.map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const avisos: string[] = [];
+  const perfil: PerfilAluno = {
+    nome: "",
+    matricula: null,
+    curso: "",
+    matriz: null,
+    periodo: null,
+    coefAbsoluto: null,
+    coefNormalizado: null,
+    ingresso: null,
+    cursadas: [],
+    aprovadas: new Set(),
+    matriculadas: [],
+    obrigatoriasFaltantes: [],
+    dependencias: [],
+    resumoConjuntos: [],
+    eletivas: null,
+    extensao: null,
+    resumoGeral: null,
+    avisos,
+  };
+
+  // ---------- cabeçalho ----------
+  for (const l of linhas) {
+    let m = l.match(/Aluno:\s*(\d+)\s*-\s*(.+?)\s+Identidade/);
+    if (m) {
+      perfil.matricula = m[1];
+      perfil.nome = m[2].trim();
+    }
+    m = l.match(/Curso:\s*(\d+\s*-\s*.+?)\s+Período:\s*(\d+)/);
+    if (m) {
+      perfil.curso = m[1].trim();
+      perfil.periodo = parseInt(m[2]);
+    }
+    m = l.match(/Matriz:\s*(\d+)/);
+    if (m && !perfil.matriz) perfil.matriz = parseInt(m[1]);
+    m = l.match(/Coeficiente absoluto:\s*([\d,]+)/);
+    if (m) perfil.coefAbsoluto = num(m[1]);
+    m = l.match(/Coeficiente normalizado:\s*([\d,]+)/);
+    if (m) perfil.coefNormalizado = num(m[1]);
+    m = l.match(/Ingresso:\s*(\d\/\d{4})/);
+    if (m) perfil.ingresso = m[1];
+  }
+  if (!perfil.nome) avisos.push("cabeçalho: nome do aluno não encontrado");
+
+  // ---------- máquina de seções ----------
+  type Secao =
+    | "nenhuma"
+    | "obrigatorias"
+    | "optativas"
+    | "resumoOptativas"
+    | "eletivas"
+    | "faltantes"
+    | "dependencias"
+    | "matriculadas"
+    | "resumoGeral";
+  let secao: Secao = "nenhuma";
+  // linhas de cursadas acumuladas por seção de origem
+  const cursadasLinhas: { texto: string; origem: "obrigatoria" | "optativa" }[] = [];
+
+  for (const l of linhas) {
+    // transições de seção (a ordem importa: cabeçalhos mais específicos primeiro)
+    if (/Disciplinas Obrigatórias Cursadas/.test(l)) { secao = "obrigatorias"; continue; }
+    if (/Disciplinas Optativas Cursadas/.test(l)) { secao = "optativas"; continue; }
+    if (/Resumo Optativas/.test(l)) { secao = "resumoOptativas"; continue; }
+    if (/Detalhes das Optativas Cursadas/.test(l)) { secao = "nenhuma"; continue; }
+    if (/Detalhamento do Conjunto/.test(l)) { secao = "resumoOptativas"; continue; }
+    if (/Detalhes das Disciplinas Eletivas/.test(l)) { secao = "nenhuma"; continue; }
+    if (/Resumo Eletiva/.test(l)) { secao = "eletivas"; continue; }
+    if (/Atividade Extensionista|Componentes Curriculares/.test(l)) { secao = "nenhuma"; }
+    if (/Disciplinas Obrigatórias Faltantes/.test(l)) { secao = "faltantes"; continue; }
+    if (/^Dependências/.test(l)) { secao = "dependencias"; continue; }
+    if (/Disciplinas Matriculadas/.test(l)) { secao = "matriculadas"; continue; }
+    if (/Exame De Curso|Exame de Suficiência/.test(l)) { secao = "nenhuma"; continue; }
+    if (/Quadro Resumo disciplinas/.test(l)) { secao = "resumoGeral"; continue; }
+    if (/Detalhes Para o Cálculo|Quadro De Carga Horária|Histórico de Disciplinas Faltantes/.test(l)) {
+      secao = "nenhuma";
+      continue;
+    }
+    // legenda de rodapé encerra tabela de cursadas
+    if (/^\(0\) Período da disciplina/.test(l)) { secao = "nenhuma"; continue; }
+
+    switch (secao) {
+      case "obrigatorias":
+        cursadasLinhas.push({ texto: l, origem: "obrigatoria" });
+        break;
+      case "optativas":
+        cursadasLinhas.push({ texto: l, origem: "optativa" });
+        break;
+      case "resumoOptativas": {
+        const m = l.match(
+          /^(\d{4})\s+(?:\(\*\)\s+)?(.+?)\s+(\d)\s+(\d)\s+([\d,]+)\s+(\d+)\s+(\d+)\s+(Faltantes|\d+)\s+(\d+)$/,
+        );
+        if (m) {
+          perfil.resumoConjuntos.push({
+            conjunto: m[1],
+            nome: m[2].trim(),
+            chObrigatoria: parseInt(m[6]),
+            chCursadaAprovada: parseInt(m[7]),
+            chFaltante: m[8] === "Faltantes" ? "faltantes" : parseInt(m[8]),
+            chValidada: parseInt(m[9]),
+          } satisfies ResumoConjunto);
+        }
+        break;
+      }
+      case "eletivas": {
+        const m = l.match(/^Eletiva\s+(\d+)\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+)\s+(\d+)$/);
+        if (m) {
+          perfil.eletivas = {
+            chTotal: parseInt(m[1]),
+            chCursadaAprovada: parseInt(m[2]),
+            chFaltante: parseInt(m[3]),
+            chValidada: parseInt(m[4]),
+          };
+          secao = "nenhuma";
+        }
+        break;
+      }
+      case "faltantes": {
+        const m = l.match(/^(\d)\s+([A-Z0-9]{4,7})\s+(.+)$/);
+        if (m && ehCodigo(m[2])) {
+          perfil.obrigatoriasFaltantes.push({ periodo: parseInt(m[1]), codigo: m[2], nome: m[3].trim() });
+        }
+        break;
+      }
+      case "dependencias": {
+        const m = l.match(/^([A-Z0-9]{4,7})\s+(.+)$/);
+        if (m && ehCodigo(m[1])) perfil.dependencias.push({ codigo: m[1], nome: m[2].trim() });
+        break;
+      }
+      case "matriculadas": {
+        const m = l.match(/^([A-Z0-9]{4,7})\s+(.+?)\s+([A-Z]\d{2})\s*(.*)$/);
+        if (m && ehCodigo(m[1])) {
+          perfil.matriculadas.push({ codigo: m[1], nome: m[2].trim(), turma: m[3], situacao: m[4].trim() });
+        }
+        break;
+      }
+      case "resumoGeral": {
+        let m = l.match(/CHT Disciplinas Obrigatórias\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+        if (m) {
+          perfil.resumoGeral = perfil.resumoGeral ?? {
+            obrigatorias: { total: 0, aprovada: 0, faltante: 0 },
+            optativas: { total: 0, aprovada: 0, faltante: 0 },
+            eletivas: { total: 0, aprovada: 0, faltante: 0 },
+          };
+          perfil.resumoGeral.obrigatorias = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+        }
+        m = l.match(/CHT Disciplinas Optativas\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+        if (m && perfil.resumoGeral) {
+          perfil.resumoGeral.optativas = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+        }
+        m = l.match(/CHT Disciplinas Eletivas\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
+        if (m && perfil.resumoGeral) {
+          perfil.resumoGeral.eletivas = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+        }
+        break;
+      }
+    }
+
+    // extensão geral aparece fora das seções mapeadas
+    const ext = l.match(/CHEXT geral do curso\s+(\d+)\s+(\d+)\s+(\d+)/);
+    if (ext) {
+      perfil.extensao = { chTotal: parseInt(ext[1]), chCursada: parseInt(ext[2]), chFaltante: parseInt(ext[3]) };
+    }
+  }
+
+  // ---------- cursadas: segmentação por linha-núcleo ----------
+  const nucleos: number[] = [];
+  cursadasLinhas.forEach((cl, i) => {
+    if (RE_NUCLEO.test(cl.texto)) nucleos.push(i);
+  });
+  nucleos.forEach((idx, k) => {
+    const ini = k === 0 ? 0 : nucleos[k - 1] + 1;
+    const fim = k + 1 < nucleos.length ? nucleos[k + 1] : cursadasLinhas.length;
+    const antes = cursadasLinhas.slice(ini, idx).map((c) => c.texto);
+    const depois = cursadasLinhas.slice(idx + 1, fim).map((c) => c.texto);
+    const linhaNucleo = cursadasLinhas[idx].texto;
+    const m = linhaNucleo.match(RE_NUCLEO)!;
+
+    const codigo = acharCodigo([linhaNucleo, ...antes, ...depois]);
+    const situacao =
+      acharSituacao([linhaNucleo]) ?? acharSituacao(antes) ?? acharSituacao(depois);
+    if (!codigo) {
+      avisos.push(`cursadas: linha-núcleo sem código identificável: "${linhaNucleo.slice(0, 80)}"`);
+      return;
+    }
+    if (!situacao) {
+      avisos.push(`cursadas: ${codigo} sem situação identificável`);
+      return;
+    }
+    perfil.cursadas.push({
+      codigo,
+      // o texto do PDF intercala células demais para reconstruir o nome com
+      // segurança; quem exibe resolve o nome pelo código na matriz
+      nome: "",
+      situacao,
+      origem: cursadasLinhas[idx].origem,
+      media: num(m[4]),
+      frequencia: num(m[5]),
+      cht: parseInt(m[2]),
+      semestre: parseInt(m[6]),
+      ano: parseInt(m[7]),
+    } satisfies DisciplinaCursada);
+  });
+
+  // aprovadas: última ocorrência vence (reprovação seguida de aprovação conta)
+  for (const c of perfil.cursadas) {
+    if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {
+      perfil.aprovadas.add(c.codigo);
+    }
+  }
+  for (const mtr of perfil.matriculadas) {
+    if (/Aprovado/i.test(mtr.situacao)) perfil.aprovadas.add(mtr.codigo);
+  }
+
+  if (perfil.cursadas.length === 0) avisos.push("nenhuma disciplina cursada encontrada");
+  if (perfil.resumoConjuntos.length === 0) avisos.push("Resumo Optativas não encontrado");
+  return perfil;
+}

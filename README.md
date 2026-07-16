@@ -14,6 +14,29 @@ Princípios:
 - **Erro alto > erro silencioso**: toda importação de dados passa por suítes de
   validação que recusam o arquivo se qualquer linha não for explicada.
 
+## Como rodar
+
+```
+npm install
+npm run dev    # desenvolvimento (http://localhost:5173/Oasis-UTFPR/)
+npm test       # testes (inclui parser de histórico com fixture sintética)
+npm run build  # produção
+```
+
+O app é publicado automaticamente no GitHub Pages a cada push na main.
+
+## Arquitetura em camadas
+
+1. **Dados** (`data/` + `tools/`): JSONs públicos gerados dos documentos oficiais,
+   com suítes de validação que recusam importação com qualquer linha não explicada.
+2. **Domínio** (`src/domain/`): TypeScript puro e testável — extração posicional de
+   texto (pdf.js), parser do Histórico Escolar → `PerfilAluno`, e o motor de regras
+   (contadores por conjunto, pré-requisitos/equivalências, conflitos de grade).
+3. **UI** (`src/ui/`): React + Tailwind. Três telas: **Minha situação** (progresso em
+   obrigatórias, 2º estrato, humanidades, 12 trilhas, eletivas e extensão),
+   **Posso cursar** (elegíveis × oferta do semestre, com filtros) e **Grade**
+   (montagem visual, conflitos de horário e de sede, relatório para a matrícula).
+
 ## Estado atual
 
 Camada de dados (M1) pronta:
