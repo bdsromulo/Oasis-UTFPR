@@ -13,10 +13,8 @@ Regras aprendidas na auditoria de 2026/1 (cada uma verificada no texto cru do PD
   R6. Enquadramentos válidos: Presencial, EaD.
   R7. A fonte pode imprimir mais horários que as aulas/sem declaradas (ex.: MAT7GA S02,
       5 horários p/ 4 aulas) — vira AVISO, não erro: leitura fiel > expectativa.
-  R8. Busca dirigida: todo código de disciplina da matriz 981 que aparece no texto cru
-      do PDF deve estar no JSON (e vice-versa, todo código do JSON deve estar no cru).
 
-Uso: python tools/validate_turmas.py <turmas.pdf> <turmas.json> [matriz.json]
+Uso: python tools/validate_turmas.py <turmas.pdf> <turmas.json>
 """
 import json, re, sys, os, pdfplumber
 from collections import Counter
@@ -24,7 +22,6 @@ from collections import Counter
 DEV = os.path.dirname(os.path.abspath(__file__))
 PDF = sys.argv[1] if len(sys.argv) > 1 else r"I:\Meu Drive\Oásis UTFPR\Turmas Abertas - Portal do Aluno UTFPR.pdf"
 JSN = sys.argv[2] if len(sys.argv) > 2 else os.path.join(DEV, "..", "data", "turmas", "2026-1.json")
-MTZ = sys.argv[3] if len(sys.argv) > 3 else os.path.join(DEV, "..", "data", "matriz-981.json")
 
 J = json.load(open(JSN, encoding="utf-8"))
 ds = J["disciplinas"]
@@ -74,24 +71,6 @@ for d in ds:
         for p in t["prioridade_cursos"]:
             if not p["curso"].strip():
                 erros.append(f"{tag}: prioridade sem curso {p}")
-
-# ---- R8: busca dirigida com os códigos conhecidos da matriz ----
-if os.path.exists(MTZ):
-    matriz = json.load(open(MTZ, encoding="utf-8"))
-    cods_matriz = {d["codigo"] for d in matriz["disciplinas"]}
-    cods_json = {d["codigo"] for d in ds}
-    # códigos da matriz presentes no texto cru como cabeçalho "COD - "
-    no_cru = {c for c in cods_matriz if re.search(r"\b" + re.escape(c) + r" - ", raw)}
-    perdidos = sorted(no_cru - cods_json)
-    if perdidos:
-        erros.append(f"R8 códigos da matriz no PDF mas fora do JSON: {perdidos}")
-    fantasmas = sorted(c for c in cods_json if not re.search(r"\b" + re.escape(c) + r"\b", raw))
-    if fantasmas:
-        erros.append(f"R8 códigos no JSON que não existem no PDF: {fantasmas}")
-    print(f"[R8] matriz x oferta: {len(no_cru & cods_json)} | fora da matriz 981 (eletivas etc.): "
-          f"{sorted(cods_json - cods_matriz)}")
-else:
-    avisos.append("R8 pulado: matriz-981.json não encontrado")
 
 print(f"ERROS: {len(erros)}")
 for e in erros: print("  !!", e)

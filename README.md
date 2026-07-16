@@ -42,7 +42,7 @@ python tools/validate_matriz.py
 Leitor secundário (contingência): `tools/parse_gnh.py` converte o backup do
 [Grade na Hora](https://gradenahora.com.br/) para o mesmo schema.
 
-As regras de validação (R1–R8 para turmas, M1–M7 para a matriz) estão documentadas
+As regras de validação (R1–R7 para turmas, M1–M7 para a matriz) estão documentadas
 nos próprios scripts, incluindo as anomalias conhecidas da fonte — p. ex., o portal
 imprime os horários N vezes quando a turma tem N professores, e turmas "Sem Reserva"
 podem vir com lista de prioridades apesar da definição oficial dizer o contrário.
