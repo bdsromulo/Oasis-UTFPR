@@ -6,6 +6,9 @@
   --color-utfpr-500: #fecd0f;
   --color-utfpr-600: #d9ae00;
   --color-utfpr-700: #a88700;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -13,5 +16,10 @@ html {
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  @apply bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
 }
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-display);
+}
+

@@ -18,6 +18,7 @@ const PASTA = "I:\\Meu Drive\\Oásis UTFPR\\";
 const CASOS = [
   { arquivo: PASTA + "Histórico Completo.pdf", nomeContem: "ROMULO" },
   { arquivo: PASTA + "namie.pdf", nomeContem: "NAMIE" },
+  { arquivo: PASTA + "historico2026-1.pdf", nomeContem: "YAGO" },
 ];
 
 async function carregar(arquivo: string) {
@@ -107,5 +108,16 @@ describe.skipIf(!existsSync(CASOS[1].arquivo))("fatos específicos: Namie", () =
     // cancelamento seguido de aprovação (ICSG20)
     expect(perfil.aprovadas.has("ICSG20")).toBe(true);
     expect(perfil.eletivas?.chFaltante).toBe(45);
+  });
+});
+
+describe.skipIf(!existsSync(CASOS[2].arquivo))("fatos específicos: Yago", () => {
+  it("eletivas fechadas, consignação e dependência de estágio", async () => {
+    const perfil = await carregar(CASOS[2].arquivo);
+    expect(perfil.eletivas?.chFaltante).toBe(0);
+    expect(perfil.eletivas?.chValidada).toBe(105);
+    expect(perfil.dependencias.map((d) => d.codigo)).toContain("ICSX51");
+    expect(perfil.cursadas.filter((c) => c.situacao === "consignado").length).toBe(1);
+    expect(perfil.cursadas.filter((c) => c.situacao === "cancelado").length).toBe(1);
   });
 });
