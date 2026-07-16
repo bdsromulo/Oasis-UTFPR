@@ -1,9 +1,8 @@
 // Tabela de horários dos slots de aula (M1..M6, T1..T6, N1..N5).
 //
-// ATENÇÃO: valores PROVISÓRIOS obtidos de página não institucional
-// (paginapessoal.utfpr.edu.br/giuvaneconti/horarios) — aguardando o gabarito
-// oficial do dono do projeto para confirmação. Os intervalos entre blocos
-// (ex.: M3→M4, T3→T4) são implícitos nas descontinuidades dos horários.
+// Confirmada pelo gabarito oficial do dono do projeto (16/07/2026). Os
+// intervalos entre blocos (ex.: M3→M4, T3→T4) são implícitos nas
+// descontinuidades dos horários.
 export interface FaixaHorario {
   inicio: string;
   fim: string;
