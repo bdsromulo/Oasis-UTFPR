@@ -9,6 +9,7 @@ import {
   type ItemGrade,
 } from "../../domain/motor/grade";
 import type { SelecaoTurma } from "../App";
+import { faixaDoSlot } from "../../domain/horarios";
 import { Badge, Botao, Card } from "../componentes";
 import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
 
@@ -170,9 +171,20 @@ export function TelaGrade(props: {
                       : "border-t border-zinc-100 dark:border-zinc-800/50"
                   }
                 >
-                  <td className="border-r border-zinc-100 bg-zinc-50/40 p-1.5 text-center font-mono font-semibold text-zinc-500 dark:border-zinc-800/60 dark:bg-zinc-900/40 dark:text-zinc-400">
-                    {turno}
-                    {aula}
+                  <td
+                    className="border-r border-zinc-100 bg-zinc-50/40 p-1.5 text-center font-mono font-semibold text-zinc-500 dark:border-zinc-800/60 dark:bg-zinc-900/40 dark:text-zinc-400"
+                    title={(() => {
+                      const f = faixaDoSlot(turno, aula);
+                      return f ? `${f.inicio}–${f.fim}` : undefined;
+                    })()}
+                  >
+                    <div>
+                      {turno}
+                      {aula}
+                    </div>
+                    <div className="text-[9px] font-normal leading-tight text-zinc-400">
+                      {faixaDoSlot(turno, aula)?.inicio}
+                    </div>
                   </td>
                   {DIAS.map(([dia]) => {
                     const ocupantes = porSlot.get(`${dia}${turno}${aula}`) ?? [];

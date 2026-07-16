@@ -7,6 +7,8 @@ import turmasJson from "../../data/turmas/2026-1.json";
 import { TelaSituacao } from "./telas/Situacao";
 import { TelaPossoCursar } from "./telas/PossoCursar";
 import { TelaGrade } from "./telas/Grade";
+import { TelaLayoutGNH } from "./telas/LayoutGNH";
+import { MiniGrade, type PreviewTurma } from "./MiniGrade";
 import { Botao, Card } from "./componentes";
 import {
   LogoUTFPR,
@@ -27,9 +29,11 @@ export interface SelecaoTurma {
 }
 
 type Aba = "situacao" | "cursar" | "grade";
+type Layout = "oasis" | "gnh";
 
 const CHAVE_PERFIL = "oasis.perfil.v1";
 const CHAVE_GRADE = "oasis.grade.v1";
+const CHAVE_LAYOUT = "oasis.layout.v1";
 
 function salvarPerfil(p: PerfilAluno) {
   localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ ...p, aprovadas: [...p.aprovadas] }));
@@ -48,6 +52,10 @@ function lerPerfil(): PerfilAluno | null {
 export function App() {
   const [perfil, setPerfil] = useState<PerfilAluno | null>(lerPerfil);
   const [aba, setAba] = useState<Aba>("situacao");
+  const [layout, setLayout] = useState<Layout>(
+    () => (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis",
+  );
+  const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [selecao, setSelecao] = useState<SelecaoTurma[]>(() => {
@@ -114,23 +122,50 @@ export function App() {
           </div>
         </div>
         {perfil && (
-          <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/80 bg-white/80 py-1.5 pl-3.5 pr-2 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
-            <div className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-              <IconUser className="h-4 w-4 text-utfpr-600 dark:text-utfpr-500" />
-              <span>
-                {perfil.nome.split(" ")[0]} · <span className="text-zinc-400 font-normal">{perfil.periodo}º período</span>
-              </span>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* comutador de layout: Oásis (abas + inovações) | GNH (lista única, roots) */}
+            <div className="flex rounded-xl border border-zinc-200/80 bg-zinc-100/70 p-0.5 text-xs font-bold dark:border-zinc-800/80 dark:bg-zinc-900/70">
+              {(
+                [
+                  ["oasis", "Layout Oásis"],
+                  ["gnh", "Layout GNH"],
+                ] as [Layout, string][]
+              ).map(([id, rotulo]) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    setLayout(id);
+                    localStorage.setItem(CHAVE_LAYOUT, id);
+                  }}
+                  className={`rounded-[10px] px-3 py-1.5 transition-colors ${
+                    layout === id
+                      ? "bg-utfpr-500 text-zinc-900"
+                      : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  {rotulo}
+                </button>
+              ))}
             </div>
-            <Botao
-              onClick={() => {
-                localStorage.removeItem(CHAVE_PERFIL);
-                setPerfil(null);
-                setSelecao([]);
-              }}
-              variante="sutil"
-            >
-              Trocar histórico
-            </Botao>
+            <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/80 bg-white/80 py-1.5 pl-3.5 pr-2 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
+              <div className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                <IconUser className="h-4 w-4 text-utfpr-600 dark:text-utfpr-500" />
+                <span>
+                  {perfil.nome.split(" ")[0]} ·{" "}
+                  <span className="text-zinc-400 font-normal">{perfil.periodo}º período</span>
+                </span>
+              </div>
+              <Botao
+                onClick={() => {
+                  localStorage.removeItem(CHAVE_PERFIL);
+                  setPerfil(null);
+                  setSelecao([]);
+                }}
+                variante="sutil"
+              >
+                Trocar histórico
+              </Botao>
+            </div>
           </div>
         )}
       </header>
@@ -187,51 +222,83 @@ export function App() {
           </Card>
         </div>
       ) : (
-        <>
-          <nav className="mb-8 flex gap-1.5 rounded-2xl border border-zinc-200/80 bg-zinc-100/70 p-1.5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/70">
-            {abas.map(([id, rotulo]) => {
-              const ativo = aba === id;
-              return (
-                <button
-                  key={id}
-                  onClick={() => setAba(id)}
-                  className={`inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-display text-sm font-bold transition-all duration-150 ${
-                    ativo
-                      ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-800 dark:text-white"
-                      : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  {id === "situacao" && <IconUser className="h-4 w-4" />}
-                  {id === "cursar" && <IconBookOpen className="h-4 w-4" />}
-                  {id === "grade" && <IconCalendar className="h-4 w-4" />}
-                  <span>{rotulo}</span>
-                </button>
-              );
-            })}
-          </nav>
-          {perfil.avisos.length > 0 && (
-            <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-sm text-amber-800 dark:border-amber-800/80 dark:bg-amber-950/60 dark:text-amber-200">
-              <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
-              <div>
-                <span className="font-semibold">Observações na leitura do documento:</span>{" "}
-                {perfil.avisos.join("; ")}
+        <div className="flex items-start gap-6">
+          {/* coluna principal */}
+          <div className="min-w-0 flex-1">
+            {layout === "oasis" && (
+              <nav className="mb-8 flex gap-1.5 rounded-2xl border border-zinc-200/80 bg-zinc-100/70 p-1.5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/70">
+                {abas.map(([id, rotulo]) => {
+                  const ativo = aba === id;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => setAba(id)}
+                      className={`inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-display text-sm font-bold transition-all duration-150 ${
+                        ativo
+                          ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-800 dark:text-white"
+                          : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                      }`}
+                    >
+                      {id === "situacao" && <IconUser className="h-4 w-4" />}
+                      {id === "cursar" && <IconBookOpen className="h-4 w-4" />}
+                      {id === "grade" && <IconCalendar className="h-4 w-4" />}
+                      <span>{rotulo}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+            )}
+            {perfil.avisos.length > 0 && (
+              <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-sm text-amber-800 dark:border-amber-800/80 dark:bg-amber-950/60 dark:text-amber-200">
+                <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                <div>
+                  <span className="font-semibold">Observações na leitura do documento:</span>{" "}
+                  {perfil.avisos.join("; ")}
+                </div>
               </div>
-            </div>
+            )}
+            {layout === "gnh" ? (
+              <TelaLayoutGNH
+                perfil={perfil}
+                matriz={matriz}
+                oferta={oferta}
+                selecao={selecao}
+                setSelecao={setSelecao}
+                onPreview={setPreview}
+              />
+            ) : (
+              <>
+                {aba === "situacao" && <TelaSituacao perfil={perfil} matriz={matriz} />}
+                {aba === "cursar" && (
+                  <TelaPossoCursar
+                    perfil={perfil}
+                    matriz={matriz}
+                    oferta={oferta}
+                    selecao={selecao}
+                    setSelecao={setSelecao}
+                    onPreview={setPreview}
+                  />
+                )}
+                {aba === "grade" && (
+                  <TelaGrade oferta={oferta} selecao={selecao} setSelecao={setSelecao} />
+                )}
+              </>
+            )}
+          </div>
+
+          {/* sidebar de feedback contínuo (estilo GNH): sempre visível em telas largas,
+              exceto na aba Grade do layout Oásis (que já mostra a grade completa) */}
+          {(layout === "gnh" || aba !== "grade") && (
+            <aside className="sticky top-4 hidden w-60 shrink-0 lg:block">
+              <MiniGrade
+                oferta={oferta}
+                selecao={selecao}
+                preview={preview}
+                onLimpar={() => setSelecao([])}
+              />
+            </aside>
           )}
-          {aba === "situacao" && <TelaSituacao perfil={perfil} matriz={matriz} />}
-          {aba === "cursar" && (
-            <TelaPossoCursar
-              perfil={perfil}
-              matriz={matriz}
-              oferta={oferta}
-              selecao={selecao}
-              setSelecao={setSelecao}
-            />
-          )}
-          {aba === "grade" && (
-            <TelaGrade oferta={oferta} selecao={selecao} setSelecao={setSelecao} />
-          )}
-        </>
+        </div>
       )}
 
       <footer className="mt-20 border-t border-zinc-200/80 pt-6 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
