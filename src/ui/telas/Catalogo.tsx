@@ -1,8 +1,17 @@
 import { useState, useMemo } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { montarPainel } from "../../domain/motor/situacao";
-import { Badge, Barra, Botao, Card } from "../componentes";
+import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
+import { renderizarTextoComCodigos } from "./Situacao";
+
+function normNome(nome: string): string {
+  return nome
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
 
 export type CategoriaCatalogo = "todas" | "obrigatorias" | "segundoEstrato" | "humanidades" | "trilhas" | "eletivas" | "extensao";
 
@@ -15,7 +24,7 @@ export function TelaCatalogo(props: {
 }) {
   const { perfil, matriz, oferta } = props;
   const [categoria, setCategoria] = useState<CategoriaCatalogo>(props.categoriaInicial ?? "todas");
-  const [filtroStatus, setFiltroStatus] = useState<"todas" | "concluidas" | "pendentes">("todas");
+  const [filtroStatus, setFiltroStatus] = useState<"todas" | "abertas" | "semoferta" | "concluidas">("todas");
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
 
@@ -74,11 +83,40 @@ export function TelaCatalogo(props: {
     const codigosOfertados = new Set(oferta.disciplinas.map((d) => d.codigo));
 
     return matriz.disciplinas.map((dm) => {
-      const cursada = mapaCursadas.get(dm.codigo);
+      const nomeNorm = normNome(dm.nome);
+
+      let cursada = mapaCursadas.get(dm.codigo);
+      if (!cursada) {
+        for (const eq of dm.equivalentes) {
+          const cEq = mapaCursadas.get(eq.codigo);
+          if (cEq) {
+            cursada = cEq;
+            break;
+          }
+        }
+      }
+      if (!cursada && perfil) {
+        for (const c of perfil.cursadas) {
+          if (c.nome && normNome(c.nome) === nomeNorm) {
+            cursada = {
+              situacao: c.situacao,
+              media: c.media,
+              freq: c.frequencia,
+              cht: c.cht || 0,
+              origem: c.origem,
+            };
+            break;
+          }
+        }
+      }
+
       const concluida = cursada?.situacao === "aprovado" || cursada?.situacao === "consignado" || cursada?.situacao === "dispensado";
       const matriculada = cursada?.situacao === "matriculado";
       const dependencia = cursada?.situacao === "reprovado";
-      const temOferta = codigosOfertados.has(dm.codigo);
+
+      const temOferta = codigosOfertados.has(dm.codigo) ||
+        dm.equivalentes.some((eq) => codigosOfertados.has(eq.codigo)) ||
+        oferta.disciplinas.some((o) => normNome(o.nome) === nomeNorm);
 
       let cat: CategoriaCatalogo = "eletivas";
       if (dm.conjunto === null) {
@@ -123,7 +161,8 @@ export function TelaCatalogo(props: {
       }
 
       if (filtroStatus === "concluidas" && !item.concluida) return false;
-      if (filtroStatus === "pendentes" && item.concluida) return false;
+      if (filtroStatus === "abertas" && (item.concluida || !item.temOferta)) return false;
+      if (filtroStatus === "semoferta" && (item.concluida || item.temOferta)) return false;
 
       if (termo) {
         const codNorm = item.disciplina.codigo.toLowerCase();
@@ -160,7 +199,8 @@ export function TelaCatalogo(props: {
   const contagens = useMemo(() => {
     let total = 0;
     let concluidas = 0;
-    let pendentes = 0;
+    let abertas = 0;
+    let semoferta = 0;
 
     for (const item of itensDisciplinas) {
       if (categoria !== "todas") {
@@ -170,9 +210,10 @@ export function TelaCatalogo(props: {
       }
       total++;
       if (item.concluida) concluidas++;
-      else pendentes++;
+      else if (item.temOferta) abertas++;
+      else semoferta++;
     }
-    return { total, concluidas, pendentes };
+    return { total, concluidas, abertas, semoferta };
   }, [itensDisciplinas, categoria]);
 
   const categoriasOpcoes: [CategoriaCatalogo, string][] = [
@@ -190,20 +231,10 @@ export function TelaCatalogo(props: {
       {/* Cabeçalho da página de Catálogo */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800/80">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="font-display text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
-              Catálogo e Lista de Matérias do Curso
-            </h2>
-          </div>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Explore todas as disciplinas curriculares do Bacharelado em Sistemas de Informação (Matriz 981), verifique pré-requisitos, cargas horárias e progresso.
-          </p>
+          <h2 className="font-display text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+            Catálogo e Lista de Matérias do Curso
+          </h2>
         </div>
-        {props.onVoltar && (
-          <Botao variante="neutro" onClick={props.onVoltar} classe="text-xs">
-            ← Voltar para Minha Situação
-          </Botao>
-        )}
       </div>
 
       {/* Navegação por Categoria / Estrato */}
@@ -232,7 +263,7 @@ export function TelaCatalogo(props: {
           <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
             <div>
               <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block">
-                Progresso no Estrato / Categoria: {infoProgresso.titulo}
+                Progresso: {infoProgresso.titulo}
               </span>
               <div className="font-display text-2xl font-black text-zinc-900 dark:text-zinc-100 mt-0.5">
                 {infoProgresso.cumprido} <span className="text-zinc-400 font-normal text-sm">/ {infoProgresso.exigido}h</span>
@@ -298,32 +329,44 @@ export function TelaCatalogo(props: {
                       Disciplinas da Trilha ({disciplinasTrilha.length}):
                     </span>
                     <ul className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                      {disciplinasTrilha.map((dt) => (
-                        <li
-                          key={dt.disciplina.codigo}
-                          className="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-2 py-1.5 text-xs dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50"
-                        >
-                          <div className="min-w-0 flex items-center gap-1.5">
-                            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100 shrink-0 text-[11px]">
-                              {dt.disciplina.codigo}
-                            </span>
-                            <span className="truncate text-zinc-700 dark:text-zinc-300 text-[11px]" title={dt.disciplina.nome}>
-                              {dt.disciplina.nome}
-                            </span>
-                          </div>
-                          {dt.concluida ? (
-                            <Badge tom="ok" classe="!text-[10px] !px-1.5 !py-0.5">
-                              OK
-                            </Badge>
-                          ) : dt.temOferta ? (
-                            <Badge tom="acento" classe="!text-[10px] !px-1.5 !py-0.5">
-                              Oferta
-                            </Badge>
-                          ) : (
-                            <span className="font-mono text-[10px] text-zinc-400 shrink-0">{dt.disciplina.horas.total}h</span>
-                          )}
-                        </li>
-                      ))}
+                      {[...disciplinasTrilha]
+                        .sort((a, b) => {
+                          const pesoA = a.concluida ? 1 : a.temOferta ? 2 : 3;
+                          const pesoB = b.concluida ? 1 : b.temOferta ? 2 : 3;
+                          if (pesoA !== pesoB) return pesoA - pesoB;
+                          return a.disciplina.codigo.localeCompare(b.disciplina.codigo);
+                        })
+                        .map((dt) => (
+                          <li
+                            key={dt.disciplina.codigo}
+                            className="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-2 py-1.5 text-xs dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50"
+                          >
+                            <div className="min-w-0 flex items-center gap-1.5">
+                              <span
+                                title={`${dt.disciplina.codigo} — ${dt.disciplina.nome}`}
+                                className="font-mono font-bold text-zinc-900 dark:text-zinc-100 shrink-0 text-[11px] cursor-help underline decoration-dotted decoration-zinc-400"
+                              >
+                                {dt.disciplina.codigo}
+                              </span>
+                              <span className="truncate text-zinc-700 dark:text-zinc-300 text-[11px]" title={dt.disciplina.nome}>
+                                {dt.disciplina.nome}
+                              </span>
+                            </div>
+                            {dt.concluida ? (
+                              <Badge tom="ok" classe="!text-[10px] !px-1.5 !py-0.5">
+                                OK
+                              </Badge>
+                            ) : dt.temOferta ? (
+                              <Badge tom="acento" classe="!text-[10px] !px-1.5 !py-0.5">
+                                Aberta
+                              </Badge>
+                            ) : (
+                              <Badge tom="neutro" classe="!text-[10px] !px-1.5 !py-0.5">
+                                Sem Oferta
+                              </Badge>
+                            )}
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </Card>
@@ -333,7 +376,7 @@ export function TelaCatalogo(props: {
         </section>
       )}
 
-      {/* Barra de Busca, Ordenação e Filtro de Status */}
+      {/* Barra de Busca, Filtro de Status e Ordenação */}
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white p-3.5 shadow-xs dark:border-zinc-800/80 dark:bg-zinc-900">
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           <div className="relative flex-1 sm:w-72">
@@ -347,23 +390,7 @@ export function TelaCatalogo(props: {
             />
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            <span>Ordenação:</span>
-            <select
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-              className="rounded-xl border border-zinc-200 bg-zinc-50 py-2 px-3 text-xs font-bold text-zinc-900 outline-none transition-all focus:border-utfpr-500 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
-            >
-              <option value="az">Ordem Alfabética (A-Z)</option>
-              <option value="za">Ordem Alfabética (Z-A)</option>
-              <option value="ch_desc">Mais Horas (90h, 75h, 60h...)</option>
-              <option value="ch_asc">Menos Horas (30h, 45h, 60h...)</option>
-              <option value="per_asc">Período (Mais Anterior 1º→8º)</option>
-              <option value="per_desc">Período (Mais Posterior 8º→1º)</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
+          <div className="flex flex-wrap items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
             <button
               onClick={() => setFiltroStatus("todas")}
               className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
@@ -375,6 +402,26 @@ export function TelaCatalogo(props: {
               Todas ({contagens.total})
             </button>
             <button
+              onClick={() => setFiltroStatus("abertas")}
+              className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
+                filtroStatus === "abertas"
+                  ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
+                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+              }`}
+            >
+              Abertas ({contagens.abertas})
+            </button>
+            <button
+              onClick={() => setFiltroStatus("semoferta")}
+              className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
+                filtroStatus === "semoferta"
+                  ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
+                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+              }`}
+            >
+              Sem Oferta ({contagens.semoferta})
+            </button>
+            <button
               onClick={() => setFiltroStatus("concluidas")}
               className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
                 filtroStatus === "concluidas"
@@ -384,17 +431,9 @@ export function TelaCatalogo(props: {
             >
               Concluídas ({contagens.concluidas})
             </button>
-            <button
-              onClick={() => setFiltroStatus("pendentes")}
-              className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
-                filtroStatus === "pendentes"
-                  ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-              }`}
-            >
-              {categoria === "obrigatorias" ? "Pendentes" : "Abertas"} ({contagens.pendentes})
-            </button>
           </div>
+
+          <MenuOrdenacao valor={ordenacao} onMudar={setOrdenacao} />
         </div>
 
         <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
@@ -427,7 +466,12 @@ export function TelaCatalogo(props: {
                 <div>
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100">{d.codigo}</span>
+                      <span
+                        title={`${d.codigo} — ${d.nome}`}
+                        className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100 cursor-help underline decoration-dotted decoration-zinc-400"
+                      >
+                        {d.codigo}
+                      </span>
                       <span className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                         {d.periodo ? `${d.periodo}º Período` : "Optativa"}
                       </span>
@@ -437,9 +481,9 @@ export function TelaCatalogo(props: {
                         {cursada?.situacao === "aprovado" ? "Aprovado" : "Concluída"}
                       </Badge>
                     ) : temOferta ? (
-                      <Badge tom="acento">Oferta no semestre</Badge>
+                      <Badge tom="acento">Aberta</Badge>
                     ) : (
-                      <Badge tom="neutro">{categoria === "obrigatorias" ? "Pendente" : "Aberta"}</Badge>
+                      <Badge tom="neutro">Sem Oferta</Badge>
                     )}
                   </div>
 
@@ -465,7 +509,7 @@ export function TelaCatalogo(props: {
                           <div className="flex flex-wrap items-center gap-1">
                             <span className="font-semibold text-zinc-500">Pré-requisito:</span>
                             <span className="font-mono text-zinc-700 dark:text-zinc-300 font-semibold">
-                              {d.prerequisitos.join(", ")}
+                              {renderizarTextoComCodigos(d.prerequisitos.join(", "), matriz)}
                             </span>
                           </div>
                         ) : (

@@ -147,3 +147,8 @@ export interface PerfilAluno {
   periodoDocumento?: string | null;
   avisos: string[];
 }
+
+export interface SelecaoTurma {
+  codDisciplina: string;
+  codTurma: string;
+}

@@ -397,3 +397,21 @@ export function IconFilter(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function IconSortUpDown(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={props.className ?? "w-4 h-4"}
+      {...props}
+    >
+      <path d="M7 20V4 M3 8l4-4 4 4" />
+      <path d="M17 4v16 M13 16l4 4 4-4" />
+    </svg>
+  );
+}
+

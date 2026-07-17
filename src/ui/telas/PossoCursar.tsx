@@ -4,14 +4,13 @@ import { listarElegiveis, type Elegivel } from "../../domain/motor/elegiveis";
 import {
   horariosUnicos,
   rotuloSlot,
-  rotuloSlotComSede,
   haveriaConflito,
   type ItemGrade,
 } from "../../domain/motor/grade";
 import { faixaDoSlot } from "../../domain/horarios";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
-import { Badge, Botao, Card } from "../componentes";
+import { Badge, Botao, Card, MenuOrdenacao } from "../componentes";
 import { IconPlus, IconTrash, IconCheck, IconWarning, IconFilter } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
 
@@ -33,12 +32,6 @@ function grupoDe(e: Elegivel): Grupo {
   return "trilhas";
 }
 
-// Identifica se a turma é prioritariamente do curso BSI Curitiba (códigos S0X diurno / S7X noturno)
-function isTurmaBSI(codigoTurma: string): boolean {
-  const prefix = codigoTurma.toUpperCase().slice(0, 2);
-  return prefix === "S0" || prefix === "S7" || prefix === "S1" || prefix === "S2";
-}
-
 function CardDisciplinaPossoCursar({
   e,
   selecao,
@@ -57,12 +50,10 @@ function CardDisciplinaPossoCursar({
   matriz?: Matriz;
 }) {
   const [expandido, setExpandido] = useState(false);
-  const [verOutras, setVerOutras] = useState(false);
 
-  // Separar turmas de BSI das outras turmas extras (quando há grande volume de ofertas)
-  const { turmasBSI, turmasOutras } = useMemo(() => {
+  const { turmasBSI } = useMemo(() => {
     if (!e.oferta || e.oferta.turmas.length === 0) {
-      return { turmasBSI: [], turmasOutras: [] };
+      return { turmasBSI: [] };
     }
     const todas = e.oferta.turmas.filter((t) => {
       if (!filtrarConflitos) return true;
@@ -73,22 +64,7 @@ function CardDisciplinaPossoCursar({
       return !haveriaConflito(itensSelecao, e.oferta!, t);
     });
 
-    if (todas.length <= 3) {
-      return { turmasBSI: todas, turmasOutras: [] };
-    }
-    const bsi: typeof todas = [];
-    const outras: typeof todas = [];
-    for (const t of todas) {
-      if (isTurmaBSI(t.codigo)) {
-        bsi.push(t);
-      } else {
-        outras.push(t);
-      }
-    }
-    if (bsi.length === 0 || outras.length === 0) {
-      return { turmasBSI: todas, turmasOutras: [] };
-    }
-    return { turmasBSI: bsi, turmasOutras: outras };
+    return { turmasBSI: todas };
   }, [e.oferta, filtrarConflitos, selecao, itensSelecao, e.disciplina.codigo]);
 
   return (
@@ -99,7 +75,10 @@ function CardDisciplinaPossoCursar({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-utfpr-600 dark:group-hover:text-utfpr-400 transition-colors">
-            <span className="font-mono text-xs font-semibold text-zinc-400 mr-1.5">
+            <span
+              title={`${e.disciplina.codigo} — ${e.disciplina.nome}`}
+              className="font-mono text-xs font-semibold text-zinc-400 mr-1.5 cursor-help underline decoration-dotted decoration-zinc-400"
+            >
               {e.disciplina.codigo}
             </span>
             {e.disciplina.nome}
@@ -176,6 +155,20 @@ function CardDisciplinaPossoCursar({
                               <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
                                 {t.professores_raw || "Professor a definir"}
                               </span>
+                              {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
+                                .filter(Boolean)
+                                .map((s) => (
+                                  <span
+                                    key={s}
+                                    className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                      s === "Ecoville" || s === "Neoville"
+                                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                                        : "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300"
+                                    }`}
+                                  >
+                                    📍 {s}
+                                  </span>
+                                ))}
                             </div>
                             <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-xs text-zinc-600 dark:text-zinc-300">
                               {horariosUnicos(t).map((h, idx) => {
@@ -195,20 +188,6 @@ function CardDisciplinaPossoCursar({
                         </div>
 
                         <div className="flex shrink-0 items-center gap-1.5">
-                          {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
-                            .filter(Boolean)
-                            .map((s) => (
-                              <span
-                                key={s}
-                                className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                                  s === "Ecoville" || s === "Neoville"
-                                    ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-                                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
-                                }`}
-                              >
-                                📍 {s}
-                              </span>
-                            ))}
                           <Botao
                             variante={marcada ? "sutil" : "neutro"}
                             onClick={(evt) => {
@@ -235,102 +214,7 @@ function CardDisciplinaPossoCursar({
                   })}
                 </ul>
               ) : (
-                <p className="text-xs text-zinc-400 italic">Nenhuma turma do curso BSI exibida para seus filtros.</p>
-              )}
-
-              {turmasOutras.length > 0 && (
-                <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800/80">
-                  <button
-                    onClick={() => setVerOutras(!verOutras)}
-                    className="flex w-full items-center justify-between rounded-xl bg-zinc-100/80 px-3 py-2 text-xs font-semibold text-zinc-600 transition-colors hover:bg-zinc-200/80 dark:bg-zinc-800/80 dark:text-zinc-300 dark:hover:bg-zinc-700/80 cursor-pointer"
-                  >
-                    <span>
-                      {verOutras ? "Ocultar" : "Ver mais"} {turmasOutras.length} turmas de outros cursos ou turnos
-                    </span>
-                    <span className="font-mono">{verOutras ? "▲" : "▼"}</span>
-                  </button>
-
-                  {verOutras && (
-                    <ul className="mt-2 space-y-2">
-                      {turmasOutras.map((t) => {
-                        const marcada = selecao.some(
-                          (s) => s.codDisciplina === e.disciplina.codigo && s.codTurma === t.codigo,
-                        );
-                        return (
-                          <li
-                            key={t.codigo}
-                            onMouseEnter={() => onPreview({ disciplina: e.oferta!, turma: t })}
-                            onMouseLeave={() => onPreview(null)}
-                            className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border p-3 transition-colors ${
-                              marcada
-                                ? "border-utfpr-500/60 bg-utfpr-500/15 dark:bg-utfpr-500/10 shadow-2xs"
-                                : "border-zinc-200/80 bg-zinc-50/50 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700"
-                            }`}
-                          >
-                            <div
-                              className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 select-none"
-                              onClick={() => alternarTurma(e.disciplina.codigo, t.codigo)}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={marcada}
-                                onChange={() => {}}
-                                className="h-4 w-4 rounded border-zinc-300 accent-utfpr-500 dark:border-zinc-700 pointer-events-none"
-                              />
-                              <div className="min-w-0 flex-1">
-                                <div className="flex flex-wrap items-center gap-2">
-                                  <span className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                                    {t.codigo}
-                                  </span>
-                                  <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-                                    {t.professores_raw || "Professor a definir"}
-                                  </span>
-                                </div>
-                                <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-xs text-zinc-600 dark:text-zinc-300">
-                                  {horariosUnicos(t).map((h, idx) => {
-                                    const f = faixaDoSlot(h.turno, h.aula);
-                                    return (
-                                      <span
-                                        key={idx}
-                                        title={f ? `${f.inicio}–${f.fim}` : undefined}
-                                        className="rounded bg-zinc-100 px-1.5 py-0.5 dark:bg-zinc-800"
-                                      >
-                                        {rotuloSlotComSede(h)}
-                                      </span>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex shrink-0 items-center gap-1.5">
-                              <Botao
-                                variante={marcada ? "sutil" : "neutro"}
-                                onClick={(evt) => {
-                                  evt.stopPropagation();
-                                  alternarTurma(e.disciplina.codigo, t.codigo);
-                                }}
-                                classe={`!px-2.5 !py-1 text-xs ${marcada ? "!text-red-600 hover:!bg-red-50 dark:hover:!bg-red-950/40" : ""}`}
-                              >
-                                {marcada ? (
-                                  <>
-                                    <IconTrash className="h-3.5 w-3.5" />
-                                    <span>remover</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <IconPlus className="h-3.5 w-3.5" />
-                                    <span>adicionar</span>
-                                  </>
-                                )}
-                              </Botao>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  )}
-                </div>
+                <p className="text-xs text-zinc-400 italic">Nenhuma turma exibida para seus filtros.</p>
               )}
             </>
           ) : (
@@ -352,8 +236,9 @@ export function TelaPossoCursar(props: {
   setSelecao: (s: SelecaoTurma[]) => void;
   onPreview: (p: PreviewTurma | null) => void;
   filtrarConflitos?: boolean;
+  onAbrirGradeMagica?: () => void;
 }) {
-  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false } = props;
+  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [filtrosAbertos, setFiltrosAbertos] = useState(false);
@@ -485,34 +370,31 @@ export function TelaPossoCursar(props: {
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             placeholder="Buscar matéria, código ou professor…"
-            className="w-64 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-sm focus:border-utfpr-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800"
+            className="flex-1 min-w-[240px] sm:min-w-[320px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
           />
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            <span>Ordenação:</span>
-            <select
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-              className="rounded-xl border border-zinc-200 bg-zinc-50 py-1.5 px-3 text-xs font-bold text-zinc-900 outline-none transition-all focus:border-utfpr-500 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
-            >
-              <option value="az">Ordem Alfabética (A-Z)</option>
-              <option value="za">Ordem Alfabética (Z-A)</option>
-              <option value="ch_desc">Mais Horas (90h, 75h, 60h...)</option>
-              <option value="ch_asc">Menos Horas (30h, 45h, 60h...)</option>
-              <option value="per_asc">Período (Mais Anterior 1º→8º)</option>
-              <option value="per_desc">Período (Mais Posterior 8º→1º)</option>
-            </select>
-          </div>
           <button
             onClick={() => setFiltrosAbertos(!filtrosAbertos)}
-            className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 font-display text-sm font-bold transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 font-display text-sm font-bold transition-all cursor-pointer ${
               filtrosAbertos || grupo !== "todas" || !soOfertadas || !soLiberadas
-                ? "bg-utfpr-500 text-zinc-950 shadow-xs"
-                : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                ? "bg-utfpr-500 text-zinc-950 shadow-xs border-2 border-zinc-900 dark:border-amber-400"
+                : "border border-zinc-300 bg-zinc-100 text-zinc-800 hover:border-zinc-900 hover:bg-zinc-200 dark:border-amber-400/70 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:border-amber-400 dark:hover:bg-zinc-700"
             }`}
           >
             <IconFilter className="h-4 w-4" />
             <span>Filtros</span>
           </button>
+          <MenuOrdenacao valor={ordenacao} onMudar={setOrdenacao} />
+          {onAbrirGradeMagica && (
+            <button
+              onClick={onAbrirGradeMagica}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
+              title="Preenchimento inteligente de grade"
+            >
+              <span>✨</span>
+              <span className="hidden sm:inline">Preencher Grade (Inteligente)</span>
+              <span className="sm:hidden">Grade Mágica</span>
+            </button>
+          )}
         </div>
 
         <div className="font-mono text-xs font-bold text-zinc-500">

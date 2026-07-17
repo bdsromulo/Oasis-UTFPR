@@ -3,7 +3,8 @@ import type { Matriz, OfertaSemestre, PerfilAluno } from "../domain/tipos";
 import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
 import matrizJson from "../../data/matriz-981.json";
-import turmasJson from "../../data/turmas/2026-1.json";
+import turmas20261Json from "../../data/turmas/2026-1.json";
+import turmas20252Json from "../../data/turmas/2025-2.json";
 import { TelaSituacao } from "./telas/Situacao";
 import { TelaPossoCursar } from "./telas/PossoCursar";
 import { TelaGrade } from "./telas/Grade";
@@ -12,6 +13,7 @@ import { TelaCatalogo, type CategoriaCatalogo } from "./telas/Catalogo";
 import { TelaCheckin, type DadosCheckin } from "./telas/Checkin";
 import { TelaConfiguracoes, type Preferencias } from "./telas/Configuracoes";
 import { MiniGrade, type PreviewTurma } from "./MiniGrade";
+import { ModalGradeMagica } from "./telas/ModalGradeMagica";
 import { Botao, Badge } from "./componentes";
 import {
   LogoUTFPR,
@@ -25,7 +27,6 @@ import {
 } from "./icons";
 
 const matriz = matrizJson as unknown as Matriz;
-const oferta = turmasJson as unknown as OfertaSemestre;
 
 export interface SelecaoTurma {
   codDisciplina: string;
@@ -78,6 +79,12 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const oferta = useMemo<OfertaSemestre>(() => {
+    if (preferencias.semestreAtivo === "2025-2") {
+      return turmas20252Json as unknown as OfertaSemestre;
+    }
+    return turmas20261Json as unknown as OfertaSemestre;
+  }, [preferencias.semestreAtivo]);
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -143,6 +150,7 @@ export function App() {
       setSelecao(novaCesta["A"] ?? []);
     }
   }
+  const [modalGradeMagica, setModalGradeMagica] = useState(false);
 
   // Sincronizar tema no DOM
   useEffect(() => {
@@ -260,13 +268,39 @@ export function App() {
         <div className="flex items-center gap-3.5">
           <LogoUTFPR className="h-9 w-9 shrink-0" />
           <div>
-            <div className="flex items-baseline gap-2">
-              <h1 className="font-display text-2xl font-black tracking-tight">
+            <div className="flex items-center gap-2.5">
+              <h1 className="font-display text-2xl font-black tracking-tight leading-none">
                 <span className="text-utfpr-600 dark:text-utfpr-500">Oásis</span> UTFPR
               </h1>
-              <span className="rounded-md border border-zinc-200/80 bg-zinc-100/80 px-2 py-0.5 font-mono text-xs font-semibold text-zinc-600 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-400">
-                {oferta.semestre}
-              </span>
+              <label
+                className={`relative inline-flex items-center gap-1.5 rounded-md border pl-2.5 pr-4 py-0.5 font-mono text-xs font-bold transition-colors cursor-pointer shadow-2xs select-none ${
+                  preferencias.modoPlanejamento === "previa" || (preferencias.modoPlanejamento !== "corrido" && (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"))
+                    ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
+                    : "border-orange-500/40 bg-orange-500/15 text-orange-700 dark:text-orange-300 hover:bg-orange-500/25"
+                }`}
+                title="Selecione o período letivo para simulação e consulta de turmas"
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${
+                    preferencias.modoPlanejamento === "previa" || (preferencias.modoPlanejamento !== "corrido" && (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"))
+                      ? "bg-emerald-500"
+                      : "bg-orange-500"
+                  }`}
+                />
+                <select
+                  value={preferencias.semestreAtivo || "2026-1"}
+                  onChange={(e) => setPreferencias({ ...preferencias, semestreAtivo: e.target.value })}
+                  className="bg-transparent font-mono text-xs font-bold focus:outline-none cursor-pointer appearance-none text-current"
+                >
+                  <option value="2026-1" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+                    2026.1
+                  </option>
+                  <option value="2025-2" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+                    2025.2
+                  </option>
+                </select>
+                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] opacity-70">▾</span>
+              </label>
             </div>
             <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               Sistemas de Informação · Câmpus Curitiba · Matriz 981
@@ -416,29 +450,31 @@ export function App() {
               <div className="space-y-6">
                 {/* Sub-navegação de Planejamento e Toggle de Layout unificados */}
                 <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-2 pl-3 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
-                  <div className="flex items-center gap-1.5 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
-                    <button
-                      onClick={() => setAbaPlanejamento("cursar")}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
-                        abaPlanejamento === "cursar"
-                          ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
-                          : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                      }`}
-                    >
-                      <IconBookOpen className="h-3.5 w-3.5" />
-                      <span>Matérias Abertas ({oferta.disciplinas.reduce((acc, d) => acc + d.turmas.length, 0)} turmas)</span>
-                    </button>
-                    <button
-                      onClick={() => setAbaPlanejamento("grade")}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
-                        abaPlanejamento === "grade"
-                          ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
-                          : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                      }`}
-                    >
-                      <IconCalendar className="h-3.5 w-3.5" />
-                      <span>Minha Grade ({selecao.length})</span>
-                    </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center gap-1.5 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
+                      <button
+                        onClick={() => setAbaPlanejamento("cursar")}
+                        className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
+                          abaPlanejamento === "cursar"
+                            ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
+                            : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                        }`}
+                      >
+                        <IconBookOpen className="h-3.5 w-3.5" />
+                        <span>Matérias Abertas ({oferta.disciplinas.reduce((acc, d) => acc + d.turmas.length, 0)} turmas)</span>
+                      </button>
+                      <button
+                        onClick={() => setAbaPlanejamento("grade")}
+                        className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
+                          abaPlanejamento === "grade"
+                            ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
+                            : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                        }`}
+                      >
+                        <IconCalendar className="h-3.5 w-3.5" />
+                        <span>Minha Grade ({selecao.length})</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Toggle de Layout no cabeçalho de planejamento (Item 1 e 4) */}
@@ -469,7 +505,7 @@ export function App() {
                             setPreferencias({ ...preferencias, layout: "gnh" });
                             localStorage.setItem(CHAVE_LAYOUT, "gnh");
                           }}
-                          title="Layout Grade na Hora (lista compacta por linhas com detalhes)"
+                          title="Layout GNH (lista bruta e densa igual ao portal original)"
                           className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
                             (preferencias.layout ?? layout) === "gnh"
                               ? "bg-utfpr-500 text-zinc-950 font-black shadow-2xs"
@@ -493,6 +529,7 @@ export function App() {
                       setSelecao={setSelecao}
                       onPreview={setPreview}
                       filtrarConflitos={preferencias.filtrarConflitos}
+                      onAbrirGradeMagica={() => setModalGradeMagica(true)}
                     />
                   ) : (
                     <TelaPossoCursar
@@ -503,6 +540,7 @@ export function App() {
                       setSelecao={setSelecao}
                       onPreview={setPreview}
                       filtrarConflitos={preferencias.filtrarConflitos}
+                      onAbrirGradeMagica={() => setModalGradeMagica(true)}
                     />
                   )
                 ) : (
@@ -515,6 +553,9 @@ export function App() {
                     onMudarGradeAtiva={handleMudarGradeAtiva}
                     onNovaGrade={handleNovaGrade}
                     onRemoverGrade={handleRemoverGrade}
+                    perfil={perfil}
+                    matriz={matriz}
+                    onAbrirGradeMagica={() => setModalGradeMagica(true)}
                   />
                 )}
               </div>
@@ -534,11 +575,28 @@ export function App() {
                 onMudarGradeAtiva={handleMudarGradeAtiva}
                 onNovaGrade={handleNovaGrade}
                 onRemoverGrade={handleRemoverGrade}
+                onRemoverTurma={(codigo) =>
+                  setSelecao((s) => s.filter((item) => item.codDisciplina !== codigo))
+                }
               />
             </aside>
           )}
         </div>
       )}
+
+      {/* Modal Grade Mágica unificado para todo o Planejamento */}
+      <ModalGradeMagica
+        aberto={modalGradeMagica}
+        onFechar={() => setModalGradeMagica(false)}
+        perfil={perfil}
+        matriz={matriz}
+        oferta={oferta}
+        onGerarGrade={(s) => {
+          setSelecao(s);
+          setModalGradeMagica(false);
+          setAbaPlanejamento("grade");
+        }}
+      />
 
       {/* Modal de Configurações Centralizadas (TASK-01) */}
       <TelaConfiguracoes

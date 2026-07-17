@@ -441,6 +441,11 @@
      "codigo": "EST70A",
      "cht": 60,
      "grupo": null
+    },
+    {
+     "codigo": "EST70B",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -559,7 +564,13 @@
     "total": 45
    },
    "prerequisitos": [],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "ES81A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
   },
   {
    "codigo": "GEE7G1",
@@ -755,7 +766,13 @@
     "MAT7AL",
     "MAT7GA"
    ],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "IF69D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
   },
   {
    "codigo": "ICSW22",
@@ -867,7 +884,13 @@
     "total": 45
    },
    "prerequisitos": [],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "ES70H",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
   },
   {
    "codigo": "FCH7FC",
@@ -1087,7 +1110,13 @@
     "total": 30
    },
    "prerequisitos": [],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "QB70J",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
   },
   {
    "codigo": "GEE7E1",
@@ -1623,7 +1652,13 @@
    "prerequisitos": [
     "ICSE20"
    ],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "CSM43",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
   },
   {
    "codigo": "ICSM47",

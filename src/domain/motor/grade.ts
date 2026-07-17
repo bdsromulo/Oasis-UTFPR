@@ -1,5 +1,5 @@
 // Montagem de grade: seleção de turmas, detecção de conflitos e relatório.
-import type { DisciplinaOfertada, Horario, Turma } from "../tipos";
+import type { DisciplinaOfertada, Horario, OfertaSemestre, SelecaoTurma, Turma } from "../tipos";
 
 export interface ItemGrade {
   disciplina: DisciplinaOfertada;
@@ -128,4 +128,14 @@ export function relatorioTexto(itens: ItemGrade[]): string {
         ` | ${horariosUnicos(i.turma).map(rotuloSlot).join(" ")}`,
     )
     .join("\n");
+}
+
+export function itensDaSelecao(oferta: OfertaSemestre, selecao: SelecaoTurma[]): ItemGrade[] {
+  const out: ItemGrade[] = [];
+  for (const s of selecao) {
+    const d = oferta.disciplinas.find((x) => x.codigo === s.codDisciplina);
+    const t = d?.turmas.find((x) => x.codigo === s.codTurma);
+    if (d && t) out.push({ disciplina: d, turma: t });
+  }
+  return out;
 }

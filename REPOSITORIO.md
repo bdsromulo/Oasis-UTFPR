@@ -93,6 +93,7 @@ Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não im
    - `motor/situacao.ts`: Converte perfil nas métricas de cumprimento de 1º estrato, 2º estrato, ciclo de humanidades, trilhas em computação e horas de extensão.
    - `motor/elegiveis.ts`: Cruza matérias aprovadas com pré-requisitos da matriz e turmas ativas no semestre.
    - `motor/grade.ts`: Detecta choques de horário (`turno + aula`) e divergências de sede (`Centro`, `Ecoville`, `Neoville`) em um mesmo turno.
+   - `motor/grade-magica.ts`: Sistema de Recomendação de Grade (Grade Mágica) maximizando carga horária e avanço em matérias obrigatórias, aplicando pesos diferenciados para turmas S73 (Prioridade 1, +100pts) e S71 (Prioridade 2, +30pts) de BSI, e validando restrições de turnos.
 
 3. **Camada 3 — Interface Visual (`src/ui/`):**
    - **Design Aesthetics:** Visual limpo, sem emojis, tipografia de alta fidelidade com `Outfit` (cabeçalhos) e `Plus Jakarta Sans` (corpo), paleta neutra `zinc` contrastando com amarelo dourado `utfpr` (`--color-utfpr-500`).

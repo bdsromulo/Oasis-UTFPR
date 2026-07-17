@@ -8,10 +8,11 @@ import {
   relatorioTexto,
   type ItemGrade,
 } from "../../domain/motor/grade";
-import type { SelecaoTurma } from "../App";
+import type { Matriz, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { faixaDoSlot } from "../../domain/horarios";
 import { Badge, Botao, Card } from "../componentes";
 import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
+import { ModalGradeMagica } from "./ModalGradeMagica";
 
 const DIAS: [number, string][] = [
   [2, "Segunda"],
@@ -46,9 +47,13 @@ export function TelaGrade(props: {
   onMudarGradeAtiva?: (id: string) => void;
   onNovaGrade?: () => void;
   onRemoverGrade?: (id: string) => void;
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz;
+  onAbrirGradeMagica?: () => void;
 }) {
   const { oferta, selecao, setSelecao } = props;
   const [copiado, setCopiado] = useState(false);
+  const [modalGradeMagica, setModalGradeMagica] = useState(false);
 
   const itens: ItemGrade[] = useMemo(() => {
     const out: ItemGrade[] = [];
@@ -130,6 +135,18 @@ export function TelaGrade(props: {
     return (
       <div className="space-y-6">
         {barraAbas}
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
+          <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            Dica: você pode gerar uma grade ideal automaticamente ou adicionar matérias na aba Matérias Abertas.
+          </p>
+          <Botao
+            variante="primario"
+            onClick={props.onAbrirGradeMagica || (() => setModalGradeMagica(true))}
+            classe="!bg-gradient-to-r !from-amber-500 !to-utfpr-500 !text-zinc-950 !border-amber-600/30 hover:!brightness-105 transition-all shadow-md font-bold cursor-pointer"
+          >
+            ✨ Preencher Grade (Grade Mágica)
+          </Botao>
+        </div>
         <Card classe="p-12 text-center">
           <div className="flex flex-col items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
@@ -176,6 +193,13 @@ export function TelaGrade(props: {
           </Badge>
         </div>
         <div className="flex items-center gap-2.5">
+          <Botao
+            variante="primario"
+            onClick={props.onAbrirGradeMagica || (() => setModalGradeMagica(true))}
+            classe="!bg-gradient-to-r !from-amber-500 !to-utfpr-500 !text-zinc-950 !border-amber-600/30 hover:!brightness-105 transition-all shadow-md font-bold cursor-pointer"
+          >
+            ✨ Preencher Grade (Grade Mágica)
+          </Botao>
           <Botao
             variante="primario"
             onClick={() => {
@@ -260,11 +284,23 @@ export function TelaGrade(props: {
                           {ocupantes.map((o, i) => (
                             <div
                               key={i}
-                              className={`truncate rounded-lg px-2 py-1 text-xs transition-transform hover:scale-[1.01] ${o.cor}`}
+                              className={`group relative flex items-center justify-between gap-1 rounded-lg px-2 py-1 text-xs transition-transform hover:scale-[1.01] ${o.cor}`}
                               title={`${o.item.disciplina.nome} — ${o.item.turma.codigo}${o.sala ? ` (${o.sala})` : ""}`}
                             >
-                              <span className="font-mono">{o.item.disciplina.codigo}</span>
-                              {o.sala ? ` · ${o.sala}` : ""}
+                              <div className="truncate min-w-0">
+                                <span className="font-mono font-bold">{o.item.disciplina.codigo}</span>
+                                {o.sala ? ` · ${o.sala}` : ""}
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelecao(selecao.filter((s) => s.codDisciplina !== o.item.disciplina.codigo));
+                                }}
+                                className="hidden h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-red-500 font-mono text-[9px] font-bold text-white shadow-2xs group-hover:flex hover:bg-red-600 cursor-pointer"
+                                title={`Remover ${o.item.disciplina.codigo}`}
+                              >
+                                ×
+                              </button>
                             </div>
                           ))}
                         </div>
@@ -314,6 +350,18 @@ export function TelaGrade(props: {
           ))}
         </div>
       </div>
+
+      <ModalGradeMagica
+        aberto={modalGradeMagica}
+        onFechar={() => setModalGradeMagica(false)}
+        perfil={props.perfil ?? null}
+        matriz={props.matriz ?? null}
+        oferta={props.oferta}
+        onGerarGrade={(s) => {
+          props.setSelecao(s);
+          setModalGradeMagica(false);
+        }}
+      />
     </div>
   );
 }

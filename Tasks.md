@@ -47,7 +47,11 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
   - Em *"Minha Situação"* e onde houver códigos soltos (ex.: `ICSW31` na lista de faltantes ou em avisos), o código deve ser renderizado com sublinhado interativo (`underline decoration-dotted` ou badge com ícone i).
   - Ao passar o mouse (`hover`), revelar imediatamente um tooltip limpo com o nome completo da matéria e créditos.
 - `[x]` **TASK-04 — Visualização Detalhada de Matérias Concluídas por Categoria:**
-  - Na aba *"Minha Situação"*, permitir clicar ou passar o mouse sobre os cards dos estratos (`Obrigatórias`, `2º Estrato`, `Humanidades`, `Eletivas`, `Extensão`) para abrir uma listagem clara das disciplinas que compõem aquele saldo de horas.
+  - Na aba *"Minha Situação"*, permitir clicar sobre os botões unificados de "Exibir Lista" nos cards dos estratos (`Obrigatórias`, `2º Estrato`, `Humanidades`, `Eletivas`, `Extensão`) para abrir o Catálogo com filtro pré-definido e toggle de ordenação minimalista.
+- `[x]` **TASK-05C — Remoção Rápida na Grade (Loop de Edição Estilo GNH):**
+  - Na minigrade lateral, na grade modal completa e nos blocos da tabela visual em *Grade*, o hover sobre qualquer disciplina revela um botão "X" instantâneo (`×`) no canto do item, permitindo exclusão em um clique sem sair da tela.
+- `[x]` **TASK-05D — Estados e Modos de Planejamento do Semestre:**
+  - Implementação de dois modos essenciais nas Configurações e no topo do site: a) *Em prévia de matrícula* (oficial, divulgado no período de matrícula); b) *Em período corrido de semestre* (simulação com base em dados de semestres anteriores).
 
 ### Prioridade Média
 - `[/]` **TASK-06 — Configurações Avançadas e Motor de Recomendação de Grade (Grade Mágica):**

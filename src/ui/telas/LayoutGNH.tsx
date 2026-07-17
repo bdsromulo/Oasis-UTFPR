@@ -13,7 +13,7 @@ import {
 import { faixaDoSlot } from "../../domain/horarios";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
-import { Badge } from "../componentes";
+import { Badge, MenuOrdenacao } from "../componentes";
 
 export function normalizarTextoBusca(str: string): string {
   return str
@@ -60,7 +60,10 @@ function DisciplinaGNHItem({
     <div className="rounded-2xl border border-zinc-200/80 bg-white shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900/60 overflow-hidden">
       <div className="p-3.5 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/40">
         <div className="flex flex-wrap items-baseline gap-2">
-          <span className="font-mono text-sm font-bold text-utfpr-700 dark:text-utfpr-500">
+          <span
+            title={`${d.codigo} — ${d.nome}`}
+            className="font-mono text-sm font-bold text-utfpr-700 dark:text-utfpr-500 cursor-help underline decoration-dotted decoration-utfpr-500/50"
+          >
             [{d.codigo}]
           </span>
           <span className="font-display font-bold text-zinc-900 dark:text-zinc-100">{d.nome}</span>
@@ -158,8 +161,9 @@ export function TelaLayoutGNH(props: {
   setSelecao: (s: SelecaoTurma[]) => void;
   onPreview: (p: PreviewTurma | null) => void;
   filtrarConflitos?: boolean;
+  onAbrirGradeMagica?: () => void;
 }) {
-  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false } = props;
+  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [soPendentes, setSoPendentes] = useState(false);
@@ -262,23 +266,8 @@ export function TelaLayoutGNH(props: {
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar matéria, código ou professor…"
-          className="w-64 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-sm focus:border-utfpr-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800"
+          className="flex-1 min-w-[240px] sm:min-w-[320px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
         />
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-          <span>Ordenação:</span>
-          <select
-            value={ordenacao}
-            onChange={(e) => setOrdenacao(e.target.value)}
-            className="rounded-xl border border-zinc-200 bg-zinc-50 py-1.5 px-3 text-xs font-bold text-zinc-900 outline-none transition-all focus:border-utfpr-500 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
-          >
-            <option value="az">Ordem Alfabética (A-Z)</option>
-            <option value="za">Ordem Alfabética (Z-A)</option>
-            <option value="ch_desc">Mais Horas (90h, 75h, 60h...)</option>
-            <option value="ch_asc">Menos Horas (30h, 45h, 60h...)</option>
-            <option value="per_asc">Período (Mais Anterior 1º→8º)</option>
-            <option value="per_desc">Período (Mais Posterior 8º→1º)</option>
-          </select>
-        </div>
         <label className="flex cursor-pointer items-center gap-2 font-medium text-zinc-700 select-none dark:text-zinc-300">
           <input
             type="checkbox"
@@ -297,6 +286,18 @@ export function TelaLayoutGNH(props: {
           />
           só liberadas
         </label>
+        <MenuOrdenacao valor={ordenacao} onMudar={setOrdenacao} />
+        {onAbrirGradeMagica && (
+          <button
+            onClick={onAbrirGradeMagica}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
+            title="Preenchimento inteligente de grade"
+          >
+            <span>✨</span>
+            <span className="hidden sm:inline">Preencher Grade (Inteligente)</span>
+            <span className="sm:hidden">Grade Mágica</span>
+          </button>
+        )}
         <span className="ml-auto font-mono text-xs font-bold text-zinc-500">
           {disciplinas.length} disciplinas
         </span>

@@ -67,6 +67,7 @@ export function MiniGrade(props: {
   onMudarGradeAtiva?: (id: string) => void;
   onNovaGrade?: () => void;
   onRemoverGrade?: (id: string) => void;
+  onRemoverTurma?: (codigoDisciplina: string) => void;
 }) {
   const [modalCompletoAberto, setModalCompletoAberto] = useState(false);
   const {
@@ -78,6 +79,7 @@ export function MiniGrade(props: {
     onMudarGradeAtiva,
     onNovaGrade,
     onRemoverGrade,
+    onRemoverTurma,
   } = props;
   const itens = useMemo(() => itensDaSelecao(oferta, selecao), [oferta, selecao]);
   const conflitos = useMemo(() => detectarConflitos(itens), [itens]);
@@ -262,13 +264,27 @@ export function MiniGrade(props: {
       {itens.length > 0 && (
         <ul className="mt-2 space-y-1">
           {itens.map((item, i) => (
-            <li key={item.disciplina.codigo} className="flex items-center gap-1.5 text-xs">
-              <span
-                className={`h-2 w-2 shrink-0 rounded-full ${CORES_GRADE[i % CORES_GRADE.length]}`}
-              />
-              <span className="truncate text-zinc-600 dark:text-zinc-300">
-                <span className="font-mono font-bold">{item.disciplina.codigo}</span> {item.turma.codigo} — <span className="font-semibold text-zinc-800 dark:text-zinc-200">{item.disciplina.nome}</span>
-              </span>
+            <li key={item.disciplina.codigo} className="group relative flex items-center justify-between gap-1.5 text-xs">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span
+                  className={`h-2 w-2 shrink-0 rounded-full ${CORES_GRADE[i % CORES_GRADE.length]}`}
+                />
+                <span className="truncate text-zinc-600 dark:text-zinc-300">
+                  <span className="font-mono font-bold">{item.disciplina.codigo}</span> {item.turma.codigo} — <span className="font-semibold text-zinc-800 dark:text-zinc-200">{item.disciplina.nome}</span>
+                </span>
+              </div>
+              {onRemoverTurma && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemoverTurma(item.disciplina.codigo);
+                  }}
+                  className="hidden h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-500 font-mono text-[10px] font-bold text-white shadow-2xs group-hover:flex hover:bg-red-600"
+                  title={`Remover ${item.disciplina.codigo}`}
+                >
+                  ×
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -337,7 +353,7 @@ export function MiniGrade(props: {
                                   {ocupantes.map((ocup, idxItem) => (
                                     <div
                                       key={`${ocup.codigo}-${ocup.turma}-${idxItem}`}
-                                      className={`rounded-xl p-2 shadow-2xs ${ocup.cor}`}
+                                      className={`group relative rounded-xl p-2 shadow-2xs ${ocup.cor}`}
                                     >
                                       <div className="font-mono text-[11px] font-black tracking-tight flex items-center justify-between">
                                         <span>{ocup.codigo}</span>
@@ -350,6 +366,18 @@ export function MiniGrade(props: {
                                         <div className="mt-1 text-[10px] font-semibold opacity-90 flex items-center gap-0.5">
                                           <span>📍 {ocup.sede}</span>
                                         </div>
+                                      )}
+                                      {onRemoverTurma && (
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            onRemoverTurma(ocup.codigo);
+                                          }}
+                                          className="absolute right-1.5 top-1.5 hidden h-4 w-4 items-center justify-center rounded-full bg-red-500 font-mono text-[10px] font-bold text-white shadow-2xs group-hover:flex hover:bg-red-600 cursor-pointer"
+                                          title={`Remover ${ocup.codigo}`}
+                                        >
+                                          ×
+                                        </button>
                                       )}
                                     </div>
                                   ))}

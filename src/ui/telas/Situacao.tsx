@@ -431,13 +431,18 @@ export function TelaSituacao(props: {
                 </div>
               </div>
             </div>
-
-            <div className="mt-2 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
-              <span className="text-xs font-bold text-utfpr-600 group-hover:text-utfpr-500 dark:text-utfpr-400 flex items-center gap-1.5 transition-colors">
-                <span>Explorar todas as 6 trilhas, progresso individual e matérias no catálogo completo</span>
+            <div className="mt-3 flex items-center justify-end border-t border-zinc-100 pt-3 dark:border-zinc-800">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onAbrirCatalogo) onAbrirCatalogo("trilhas");
+                }}
+                className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+              >
+                <span>Exibir Lista</span>
                 <span>→</span>
-              </span>
-              <span className="font-mono text-xs text-zinc-400">Ver detalhes expandidos</span>
+              </button>
             </div>
           </div>
         </Card>
