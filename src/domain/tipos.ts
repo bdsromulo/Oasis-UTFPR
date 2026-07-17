@@ -143,5 +143,7 @@ export interface PerfilAluno {
     optativas: { total: number; aprovada: number; faltante: number };
     eletivas: { total: number; aprovada: number; faltante: number };
   } | null;
+  dataEmissao?: string | null;
+  periodoDocumento?: string | null;
   avisos: string[];
 }

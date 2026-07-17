@@ -1,38 +1,182 @@
+import { useMemo, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
+import type { CategoriaCatalogo } from "./Catalogo";
+
+export function renderizarTextoComCodigos(texto: string, matriz: Matriz) {
+  const partes = texto.split(/([A-Z]{2,5}\d{1,4}[A-Z]?)/g);
+  return partes.map((parte, idx) => {
+    const d = matriz.disciplinas.find((dm) => dm.codigo === parte);
+    if (d) {
+      return (
+        <span
+          key={idx}
+          title={`${d.codigo} — ${d.nome} (${d.periodo ? `${d.periodo}º período` : "Optativa"}) · ${d.horas.total}h`}
+          className="cursor-help font-mono font-bold underline decoration-dotted decoration-utfpr-500 underline-offset-2 text-zinc-900 dark:text-zinc-100 hover:text-utfpr-600 dark:hover:text-utfpr-400 transition-colors"
+        >
+          {parte}
+        </span>
+      );
+    }
+    return parte;
+  });
+}
 
 function CardProgresso(props: {
   titulo: string;
   cumprido: number;
   exigido: number;
-  rodape?: string;
+  rodape?: ReactNode;
+  concluidas?: { codigo: string; nome: string; cht?: number | null }[];
+  categoria: CategoriaCatalogo;
+  onAbrirCatalogo?: (cat: CategoriaCatalogo) => void;
 }) {
   const completo = props.cumprido >= props.exigido && props.exigido > 0;
+
   return (
-    <Card titulo={props.titulo}>
-      <div className="mb-2 flex items-baseline justify-between">
-        <span className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-          {props.cumprido}
-          <span className="font-sans text-sm font-normal text-zinc-400"> / {props.exigido}h</span>
-        </span>
-        {completo && (
-          <Badge tom="ok" icon={<IconCheck className="h-3.5 w-3.5" />}>
-            concluído
-          </Badge>
-        )}
+    <Card
+      titulo={props.titulo}
+      classe="flex flex-col justify-between transition-all hover:border-utfpr-500/40 hover:shadow-md cursor-pointer group"
+    >
+      <div
+        onClick={() => {
+          if (props.onAbrirCatalogo) props.onAbrirCatalogo(props.categoria);
+        }}
+      >
+        <div className="mb-2 flex items-baseline justify-between">
+          <span className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            {props.cumprido}
+            <span className="font-sans text-sm font-normal text-zinc-400"> / {props.exigido}h</span>
+          </span>
+          {completo && (
+            <Badge tom="ok" icon={<IconCheck className="h-3.5 w-3.5" />}>
+              concluído
+            </Badge>
+          )}
+        </div>
+        <Barra valor={props.cumprido} max={props.exigido} />
+        {props.rodape && <div className="mt-2.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">{props.rodape}</div>}
       </div>
-      <Barra valor={props.cumprido} max={props.exigido} />
-      {props.rodape && <p className="mt-2.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">{props.rodape}</p>}
+
+      <div className="mt-3.5 flex items-center justify-end border-t border-zinc-100 pt-2.5 dark:border-zinc-800">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (props.onAbrirCatalogo) props.onAbrirCatalogo(props.categoria);
+          }}
+          className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+        >
+          <span>Exibir Lista</span>
+          <span>→</span>
+        </button>
+      </div>
     </Card>
   );
 }
 
-export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
-  const { perfil, matriz } = props;
+export function TelaSituacao(props: {
+  perfil: PerfilAluno | null;
+  matriz: Matriz;
+  onAbrirConfiguracoes?: () => void;
+  onAbrirCatalogo?: (cat: CategoriaCatalogo) => void;
+}) {
+  const { perfil, matriz, onAbrirCatalogo } = props;
+
+  const concluidasMapa = useMemo(() => {
+    const mapa: Record<string, { codigo: string; nome: string; cht?: number | null }[]> = {
+      obrigatorias: [],
+      segundoEstrato: [],
+      humanidades: [],
+      eletivas: [],
+      extensao: [],
+    };
+    if (!perfil) return mapa;
+
+    for (const c of perfil.cursadas) {
+      if (c.situacao !== "aprovado" && c.situacao !== "consignado" && c.situacao !== "dispensado") continue;
+      const dm = matriz.disciplinas.find((d) => d.codigo === c.codigo);
+      const item = { codigo: c.codigo, nome: dm ? dm.nome : c.nome, cht: c.cht || (dm ? dm.horas.total : null) };
+
+      if (dm && dm.horas.chext > 0) {
+        mapa.extensao.push(item);
+      }
+
+      if (c.origem === "obrigatoria" || (dm && dm.conjunto === null)) {
+        mapa.obrigatorias.push(item);
+      } else if (dm && dm.conjunto === 1159) {
+        mapa.segundoEstrato.push(item);
+      } else if (dm && dm.conjunto === 1161) {
+        mapa.humanidades.push(item);
+      } else if (dm && dm.conjunto && dm.conjunto >= 1162 && dm.conjunto <= 1173) {
+        const key = String(dm.conjunto);
+        if (!mapa[key]) mapa[key] = [];
+        mapa[key].push(item);
+      } else {
+        mapa.eletivas.push(item);
+      }
+    }
+    return mapa;
+  }, [perfil, matriz]);
+
+  const estagio1 = useMemo(() => {
+    if (!perfil) return false;
+    return perfil.cursadas.some(
+      (c) =>
+        (c.codigo === "ICSX51" || c.nome.toLowerCase().includes("estágio 1") || c.nome.toLowerCase().includes("estagio 1")) &&
+        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
+    );
+  }, [perfil]);
+
+  const estagio2 = useMemo(() => {
+    if (!perfil) return false;
+    return perfil.cursadas.some(
+      (c) =>
+        (c.codigo === "ICSX52" || c.nome.toLowerCase().includes("estágio 2") || c.nome.toLowerCase().includes("estagio 2")) &&
+        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
+    );
+  }, [perfil]);
+
+  const qtdEstagio = (estagio1 ? 1 : 0) + (estagio2 ? 1 : 0);
+
+  const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
+  const horasAprovadasGlobal = useMemo(() => {
+    if (!perfil) return 0;
+    let soma = 0;
+    for (const c of perfil.cursadas) {
+      if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {
+        soma += c.cht || 0;
+      }
+    }
+    return Math.min(soma, horasTotalPPC);
+  }, [perfil, horasTotalPPC]);
+
+  if (!perfil) {
+    return (
+      <Card titulo="Modo Livre — Sem Histórico Escolar Importado" classe="p-6 sm:p-8 text-center max-w-2xl mx-auto my-8">
+        <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-6">
+          Você está navegando no portal no modo <strong>Grade na Hora (Modo Livre)</strong> sem um histórico escolar do Portal do Aluno atrelado à sua sessão.
+          Para visualizar o progresso de horas nos estratos (1º, 2º e 3º), trilhas cumpridas e checagem automática de pré-requisitos, importe seu PDF.
+        </p>
+        <button
+          onClick={props.onAbrirConfiguracoes}
+          className="inline-flex items-center gap-2 rounded-xl bg-utfpr-500 px-4 py-2.5 font-display text-xs font-bold text-zinc-950 shadow-xs transition-all hover:bg-utfpr-400 active:scale-[0.98]"
+        >
+          <span>Abrir Configurações e Importar Histórico (PDF)</span>
+        </button>
+      </Card>
+    );
+  }
+
   const painel = montarPainel(perfil, matriz);
   const obr = painel.obrigatorias;
+
+  // Cálculo de totais e excedentes das Trilhas no 3º Estrato (exigência total do 3º estrato: 345h)
+  const somaCumpridoTrilhas = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
+  const totalExigido3Estrato = 345;
+  const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
 
   return (
     <div className="space-y-8">
@@ -46,16 +190,76 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
         </div>
       ))}
 
+      {/* MINI CABEÇALHO COM PERÍODO, CR E PROGRESSO GLOBAL DE HORAS (ITEM 3) */}
+      <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex flex-wrap items-center gap-6 sm:gap-10">
+          <div>
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              Período de Referência
+            </span>
+            <div className="mt-0.5 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+              {perfil.periodo ? `${perfil.periodo}º Período` : "Em Curso"}
+              <span className="ml-2 font-sans text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                ({perfil.ingresso ? `Ingresso: ${perfil.ingresso}` : "Matriz 981"})
+              </span>
+            </div>
+          </div>
+
+          <div className="h-8 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
+
+          <div>
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              CR Absoluto
+            </span>
+            <div className="mt-0.5 font-display text-lg font-black text-utfpr-500">
+              {perfil.coefAbsoluto?.toFixed(4) ?? "—"}
+            </div>
+          </div>
+
+          <div>
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              CR Normalizado
+            </span>
+            <div className="mt-0.5 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+              {perfil.coefNormalizado?.toFixed(4) ?? "—"}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-[240px] max-w-md">
+          <div className="mb-1.5 flex items-baseline justify-between text-xs">
+            <span className="font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              Progresso Geral do Curso
+            </span>
+            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">
+              {horasAprovadasGlobal} <span className="text-zinc-400 font-normal">/ {horasTotalPPC}h</span>
+            </span>
+          </div>
+          <Barra valor={horasAprovadasGlobal} max={horasTotalPPC} />
+        </div>
+      </div>
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {obr && (
           <CardProgresso
             titulo="Obrigatórias (1º estrato)"
             cumprido={obr.aprovada}
             exigido={obr.total}
+            concluidas={concluidasMapa.obrigatorias}
+            categoria="obrigatorias"
+            onAbrirCatalogo={onAbrirCatalogo}
             rodape={
-              perfil.obrigatoriasFaltantes.length
-                ? `Pendentemente: ${perfil.obrigatoriasFaltantes.map((f) => f.codigo).join(", ")}`
-                : "Todas as obrigatórias foram concluídas"
+              perfil.obrigatoriasFaltantes.length ? (
+                <div className="flex flex-wrap items-center gap-1.5 leading-relaxed">
+                  <span className="font-bold text-zinc-700 dark:text-zinc-300">Pendente:</span>
+                  {renderizarTextoComCodigos(
+                    perfil.obrigatoriasFaltantes.map((f) => f.codigo).join(", "),
+                    matriz
+                  )}
+                </div>
+              ) : (
+                "Todas as obrigatórias foram concluídas"
+              )
             }
           />
         )}
@@ -64,6 +268,9 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
             titulo="2º Estrato"
             cumprido={painel.segundoEstrato.cumprido}
             exigido={painel.segundoEstrato.exigido}
+            concluidas={concluidasMapa.segundoEstrato}
+            categoria="segundoEstrato"
+            onAbrirCatalogo={onAbrirCatalogo}
           />
         )}
         {painel.humanidades && (
@@ -71,6 +278,9 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
             titulo="Ciclo de Humanidades"
             cumprido={painel.humanidades.cumprido}
             exigido={painel.humanidades.exigido}
+            concluidas={concluidasMapa.humanidades}
+            categoria="humanidades"
+            onAbrirCatalogo={onAbrirCatalogo}
           />
         )}
         {painel.eletivas && (
@@ -78,6 +288,9 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
             titulo="Eletivas"
             cumprido={painel.eletivas.cumprido}
             exigido={painel.eletivas.exigido}
+            concluidas={concluidasMapa.eletivas}
+            categoria="eletivas"
+            onAbrirCatalogo={onAbrirCatalogo}
           />
         )}
         {painel.extensao && (
@@ -85,47 +298,149 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
             titulo="Extensão Universitária"
             cumprido={painel.extensao.cumprido}
             exigido={painel.extensao.exigido}
+            concluidas={concluidasMapa.extensao}
+            categoria="extensao"
+            onAbrirCatalogo={onAbrirCatalogo}
             rodape="Atividades extensionistas registradas no histórico"
           />
         )}
-        <Card titulo="Coeficiente de Rendimento">
-          <div className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {perfil.coefAbsoluto?.toFixed(4) ?? "—"}
+        <Card
+          titulo="Estágio Curricular"
+          classe="flex flex-col justify-between transition-all hover:border-utfpr-500/40 hover:shadow-md cursor-pointer group"
+        >
+          <div
+            onClick={() => {
+              if (onAbrirCatalogo) onAbrirCatalogo("todas");
+            }}
+          >
+            <div className="mb-2 flex items-baseline justify-between">
+              <span className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                Estágio {qtdEstagio}
+                <span className="font-sans text-sm font-normal text-zinc-400"> / 2</span>
+              </span>
+              {qtdEstagio === 2 && (
+                <Badge tom="ok" icon={<IconCheck className="h-3.5 w-3.5" />}>
+                  concluído
+                </Badge>
+              )}
+            </div>
+
+            {/* 2 blocos grossos tipo Stories do Instagram */}
+            <div className="flex items-center gap-2 pt-1">
+              <div className="flex-1 space-y-1">
+                <div
+                  className={`h-3.5 rounded-full transition-colors ${
+                    estagio1
+                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
+                      : "bg-zinc-200/80 dark:bg-zinc-800"
+                  }`}
+                />
+                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Estágio 1 (200h)
+                </span>
+              </div>
+              <div className="flex-1 space-y-1">
+                <div
+                  className={`h-3.5 rounded-full transition-colors ${
+                    estagio2
+                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
+                      : "bg-zinc-200/80 dark:bg-zinc-800"
+                  }`}
+                />
+                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Estágio 2 (200h)
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              Estágio supervisionado obrigatório para conclusão do BSI
+            </div>
           </div>
-          <p className="mt-1.5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-            Normalizado: <strong className="text-zinc-700 dark:text-zinc-300">{perfil.coefNormalizado?.toFixed(4) ?? "—"}</strong> · O coeficiente define sua prioridade na alocação de vagas
-          </p>
+
+          <div className="mt-3.5 flex items-center justify-end border-t border-zinc-100 pt-2.5 dark:border-zinc-800">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onAbrirCatalogo) onAbrirCatalogo("todas");
+              }}
+              className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+            >
+              <span>Exibir Lista</span>
+              <span>→</span>
+            </button>
+          </div>
         </Card>
       </section>
 
-      <section className="space-y-3.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-zinc-200/80 pb-2 dark:border-zinc-800/80">
-          <h2 className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-            Trilhas em Computação (3º Estrato)
-          </h2>
-          <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-            {painel.trilhasValidadas} de 3 trilhas validadas · Exigência total de 345h no estrato
-          </span>
-        </div>
-        <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
-          {painel.trilhas.map((t) => (
-            <Card key={t.conjunto} classe="p-4">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="truncate font-display text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                  {t.nome}
-                </span>
-                {t.validado ? (
-                  <Badge tom="ok" icon={<IconCheck className="h-3 w-3" />}>
-                    validada
-                  </Badge>
-                ) : t.cumprido > 0 ? (
-                  <Badge tom="acento">{t.cumprido}h</Badge>
-                ) : null}
+      {/* BLOCO ÚNICO DE TRILHAS NO MENU PRINCIPAL (ITEM 4) */}
+      <section>
+        <Card
+          classe="p-6 transition-all hover:border-utfpr-500/40 hover:shadow-md cursor-pointer group bg-gradient-to-r from-white via-white to-utfpr-500/5 dark:from-zinc-900 dark:via-zinc-900 dark:to-utfpr-500/10"
+        >
+          <div
+            onClick={() => {
+              if (onAbrirCatalogo) onAbrirCatalogo("trilhas");
+            }}
+            className="space-y-4"
+          >
+            <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              <div>
+                <h2 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  Trilhas em Computação (3º Estrato)
+                </h2>
+                <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                  Cumprimento total no 3º estrato. Exigência do curso: validação integral de <strong>3 trilhas distintas</strong> (mínimo de 345h).
+                </p>
               </div>
-              <Barra valor={t.cumprido} max={t.exigido} destaque={t.cumprido > 0} />
-            </Card>
-          ))}
-        </div>
+              <Badge
+                tom={painel.trilhasValidadas >= 3 ? "ok" : "acento"}
+                classe="px-3 py-1 text-xs font-bold shrink-0"
+              >
+                {painel.trilhasValidadas} de 3 trilhas validadas
+              </Badge>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-3">
+              <div>
+                <div className="mb-1 flex items-baseline justify-between">
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Total Cursado no Estrato:</span>
+                  <span className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                    {somaCumpridoTrilhas} <span className="font-sans text-xs font-normal text-zinc-400">/ {totalExigido3Estrato}h</span>
+                  </span>
+                </div>
+                <Barra valor={somaCumpridoTrilhas} max={totalExigido3Estrato} />
+              </div>
+
+              <div>
+                <div className="mb-1 flex items-baseline justify-between">
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Trilhas Concluídas:</span>
+                  <span className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                    {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ 3</span>
+                  </span>
+                </div>
+                <Barra valor={painel.trilhasValidadas} max={3} destaque={painel.trilhasValidadas > 0} />
+              </div>
+
+              <div className="flex flex-col justify-between rounded-xl bg-zinc-50 p-3 border border-zinc-200/60 dark:bg-zinc-800/50 dark:border-zinc-700/60">
+                <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  Horas Excedentes / Saldo Extra:
+                </span>
+                <div className="font-display text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                  +{horasExcedentesTrilhas}h <span className="font-sans text-xs font-normal text-zinc-400">acima do mínimo</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-2 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
+              <span className="text-xs font-bold text-utfpr-600 group-hover:text-utfpr-500 dark:text-utfpr-400 flex items-center gap-1.5 transition-colors">
+                <span>Explorar todas as 6 trilhas, progresso individual e matérias no catálogo completo</span>
+                <span>→</span>
+              </span>
+              <span className="font-mono text-xs text-zinc-400">Ver detalhes expandidos</span>
+            </div>
+          </div>
+        </Card>
       </section>
 
       {perfil.dependencias.length > 0 && (
@@ -136,7 +451,10 @@ export function TelaSituacao(props: { perfil: PerfilAluno; matriz: Matriz }) {
           <div className="flex flex-wrap gap-2">
             {perfil.dependencias.map((d) => (
               <Badge key={d.codigo} tom="alerta" icon={<IconWarning className="h-3.5 w-3.5" />}>
-                <span className="font-mono font-bold">{d.codigo}</span> — {d.nome}
+                <span className="font-mono font-bold cursor-help" title={`${d.codigo} — ${d.nome}`}>
+                  {d.codigo}
+                </span>{" "}
+                — {d.nome}
               </Badge>
             ))}
           </div>

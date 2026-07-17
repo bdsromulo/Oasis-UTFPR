@@ -11,20 +11,23 @@ export interface Elegivel {
 }
 
 /** aluno cumpre `codigo`? (aprovação direta ou por equivalente declarada na matriz) */
-export function cumpre(codigo: string, perfil: PerfilAluno, matriz: Matriz): boolean {
+export function cumpre(codigo: string, perfil: PerfilAluno | null, matriz: Matriz): boolean {
+  if (!perfil) return false;
   if (perfil.aprovadas.has(codigo)) return true;
   const d = matriz.disciplinas.find((x) => x.codigo === codigo);
   return !!d?.equivalentes.some((e) => perfil.aprovadas.has(e.codigo));
 }
 
-function bloqueio(d: DisciplinaMatriz, perfil: PerfilAluno, matriz: Matriz): string | null {
+function bloqueio(d: DisciplinaMatriz, perfil: PerfilAluno | null, matriz: Matriz): string | null {
+  if (!perfil) return null; // Modo livre sem histórico: todas liberadas para simulação de grade
   const pendentes: string[] = [];
   for (const p of d.prerequisitos) {
     const mPer = p.match(/^Período:(\d)$/);
     if (mPer) {
       if ((perfil.periodo ?? 0) < parseInt(mPer[1])) pendentes.push(`estar no ${mPer[1]}º período`);
     } else if (!cumpre(p, perfil, matriz)) {
-      pendentes.push(p);
+      const dep = matriz.disciplinas.find((x) => x.codigo === p);
+      pendentes.push(dep ? `${p} (${dep.nome})` : p);
     }
   }
   return pendentes.length ? `falta: ${pendentes.join(", ")}` : null;
@@ -39,12 +42,12 @@ export function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): string {
 
 /** Todas as disciplinas da matriz ainda não cumpridas, com estado de liberação e oferta. */
 export function listarElegiveis(
-  perfil: PerfilAluno,
+  perfil: PerfilAluno | null,
   matriz: Matriz,
   oferta: OfertaSemestre,
 ): Elegivel[] {
   const ofertadas = new Map(oferta.disciplinas.map((d) => [d.codigo, d]));
-  const matriculadas = new Set(perfil.matriculadas.map((m) => m.codigo));
+  const matriculadas = new Set(perfil?.matriculadas.map((m) => m.codigo) ?? []);
   const out: Elegivel[] = [];
   for (const d of matriz.disciplinas) {
     if (d.codigo.startsWith("ENADE")) continue;

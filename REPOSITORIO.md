@@ -1,286 +1,153 @@
-# REPOSITORIO.md — guia para agentes (LLMs) que atuam no Oásis UTFPR
+# REPOSITORIO.md — Guia e Contrato para Agentes (LLMs) e Mantenedores do Oásis UTFPR
 
-Este documento é o contrato de trabalho para qualquer assistente de IA que edite este
-repositório. Leia-o **inteiro** antes da primeira alteração. Ele descreve o protocolo
-inviolável de autoria, a arquitetura, o pipeline de dados, as convenções e o que já foi
-aprendido resolvendo problemas reais aqui. `CLAUDE.md` é a versão curta; este arquivo é
-a versão completa e agnóstica de fornecedor.
+Este documento é o **contrato de trabalho e manual canônico de arquitetura** para qualquer assistente de IA ou desenvolvedor que atue neste repositório. Leia-o **inteiro** antes de qualquer alteração. Ele descreve o protocolo inviolável de autoria, a arquitetura em 3 camadas, o pipeline de dados, a metodologia de validação e a estrutura documental do projeto.
 
 ---
 
-## 0. Protocolo de autoria — INVIOLÁVEL
+## 0. Protocolo de Autoria — INVIOLÁVEL
 
-**Nenhuma LLM pode se autocreditar em nada versionado neste repositório.** Isto vale
-para qualquer assistente (Claude, GPT, Gemini, Llama, ou outro), em qualquer contexto.
+**Nenhuma LLM ou IA pode se autocreditar em nada versionado neste repositório.** Isto vale para qualquer assistente (Claude Code, Gemini, Antigravity, GPT, Llama ou outro), em qualquer contexto e ferramenta.
 
-Proibido, sem exceção:
+**Proibido, sem exceção:**
+- Trailers `Co-Authored-By:` citando uma IA em mensagens de commit.
+- Trailers `Co-Authored-By:` de qualquer pessoa que não seja o mantenedor do commit.
+- "Generated with", "Assisted by", créditos de IA, emojis de robô (🤖), ou assinaturas em mensagens de commit, corpos de PR, comentários de código ou arquivos versionados.
+- Adicionar a IA como contribuidora no Git ou GitHub.
 
-- Trailer `Co-Authored-By:` citando uma IA em mensagens de commit.
-- Trailer `Co-Authored-By:` de qualquer pessoa que não seja o dono do projeto.
-- "Generated with", "Assisted by", créditos de IA, emojis de robô, ou assinaturas
-  de assistente em mensagens de commit, corpos de PR, `AUTHORS`, `package.json`,
-  comentários de código, ou qualquer outro arquivo versionado.
-- Adicionar a IA como contribuidora por qualquer meio que o GitHub interprete como
-  co-autoria (o GitHub lista como Contributor quem aparece em trailers `Co-Authored-By`).
-
-Obrigatório:
-
-- Todo commit tem como autor **exclusivamente o dono do projeto**
-  (`Rômulo Silva <romulo.supersons@gmail.com>`). Confirme com
-  `git log --format="%an <%ae>" -1` após commitar.
-- A configuração `.claude/settings.json` já traz `includeCoAuthoredBy: false`.
-  Não reverta isso. Se o seu harness tiver ajuste equivalente, ative-o também.
-- Mensagens de commit descrevem **o quê e por quê**, em português, sem qualquer
-  referência a quem/o que as escreveu.
-
-**Regra de colisão:** o dono quer que `.claude/` (e este guia) permaneçam **visíveis**
-no repositório, para transparência do processo. Mas se em algum momento manter artefatos
-de IA visíveis **forçar** algum crédito de autoria (por política de plataforma, hook, ou
-ferramenta), a não-autoria vence: **remova completamente os artefatos de IA do
-repositório** em vez de aceitar qualquer forma de crédito. Não-autoria > visibilidade.
-
-Se você não conseguir cumprir isto (por exemplo, seu ambiente injeta co-autoria e você
-não consegue desativá-la), **não faça commits** — descreva as mudanças e deixe o dono
-commitar.
+**Obrigatório:**
+- Todo commit tem como autor **exclusivamente o dono do projeto** (`Rômulo Silva <romulo.supersons@gmail.com>`). Confirme sempre com `git log --format="%an <%ae>" -1` após commitar.
+- A configuração `.claude/settings.json` traz `includeCoAuthoredBy: false`. Mantenha intacta.
+- Mensagens de commit descrevem **o quê e por quê**, em português, de forma clara e limpa.
 
 ---
 
-## 1. O que é o projeto
+## 1. O que é o projeto e Metodologia de Desenvolvimento
 
-Plataforma web para o aluno de **Bacharelado em Sistemas de Informação (BSI) da UTFPR
-Câmpus Curitiba, matriz 981** acompanhar sua situação no curso: o que já cursou, o que
-pode cursar (respeitando pré-requisitos), montagem da grade horária do semestre,
-contadores de carga horária por categoria (obrigatórias, 2º estrato, trilhas,
-humanidades, eletivas, extensão) e — em evolução — previsão de formatura.
+O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente desenvolvida por alunos para alunos do curso de **Bacharelado em Sistemas de Informação (BSI) da UTFPR Câmpus Curitiba, matriz 981**. Permite que o estudante acompanhe sua situação curricular (concluídas, pendentes, coeficientes), verifique o que pode cursar, monte a grade horária ideal e confira trilhas e horas extensionistas.
 
-Inspiração: o **Grade na Hora** (gradenahora.com.br), porém focado em BSI e ciente do
-histórico individual do aluno. É um **projeto independente de alunos, não oficial**.
+### Metodologia e Escalação de Trabalho
+Atualmente, o projeto adota uma metodologia de **Desenvolvimento Ágil Individual com Vibe Coding / IA Assistida (Antigravity & Claude Code)**. Para garantir escalabilidade e transição suave para **trabalho grupal de mantenedores no futuro**, a documentação é dividida em **três documentos canônicos especializados**:
 
-### Princípios de produto (não negociáveis sem o dono)
+1. **`REPOSITORIO.md` (Este arquivo):** O manual arquitetural, regras invioláveis, pipeline de extração de dados e como navegar e testar o repositório.
+2. **`Estrategia.md`:** O planejamento estratégico de produto, Engenharia de Requisitos, Governança de Informação (GI, PETI, PEN), Dimensões e Atributos de Qualidade da Informação (`d1: Atualidade`) e diretrizes de Interação Humano-Computador (IHC/Heurísticas).
+3. **`Tasks.md`:** O backlog operacional vivo e rastreador de tarefas divididas em *Concluídas*, *Pendentes (Prio Alta/Média)* e *Backlog / Futuro*.
 
-- **Local-first**: o histórico escolar (dado pessoal) é processado 100% no navegador e
-  nunca sai da máquina do aluno. Persistência só em `localStorage`.
-- **Estático**: o site roda inteiro no GitHub Pages, sem backend. Os únicos dados
-  servidos são arquivos públicos em `data/`. Features que exijam servidor estão fora
-  do escopo até decisão explícita do dono.
-- **Erro alto > erro silencioso**: toda importação de dados passa por suítes de
-  validação que **recusam** o arquivo se qualquer linha não for explicada. Preferimos
-  falhar visivelmente a exibir um número sutilmente errado.
-- **Dados oficiais podem divergir da prática**: correções vindas da vivência (ex.: um
-  pré-requisito que na prática não trava) entram em camada de anotações separada, nunca
-  sobrescrevendo a fonte oficial.
+### Princípios de Produto
+- **Local-first & Privacidade Absoluta:** O processamento de históricos escolares é executado 100% no navegador (`pdfjs-dist`). Nenhum dado pessoal é transmitido a servidores externos.
+- **100% Estático:** O site é hospedado no GitHub Pages (`base: "/Oasis-UTFPR/"`).
+- **Erro Alto > Erro Silencioso:** Validações de importação de dados (`validate_matriz.py`, `validate_turmas.py`) bloqueiam a ingestão se houver qualquer linha não justificada (`0 ERROS`).
+- **Fidelidade à Fonte vs. Vivência Prática:** Os arquivos `data/` refletem os documentos oficiais da universidade. Correções da vivência (ex.: pré-requisito de TC1 que na prática não trava) entram em camada de anotação/regras específica do domínio, nunca adulterando o dado cru oficial.
 
 ---
 
-## 2. Onde as coisas moram
+## 2. Como Navegar no Repositório (Estrutura de Pastas)
 
-- **Código**: `C:\Users\Rômulo Silva\Desktop\Códigos\oasis-utfpr` (local, fora do
-  Google Drive de propósito — a sincronização do Drive briga com `node_modules`/builds).
-- **Remoto**: `https://github.com/bdsromulo/Oasis-UTFPR` (público).
-- **Site publicado**: `https://bdsromulo.github.io/Oasis-UTFPR/` (deploy automático via
-  GitHub Actions a cada push na `main`).
-- **Documentos-fonte** (PDFs oficiais do Portal do Aluno, históricos de alunos): ficam
-  **fora do repositório**, na pasta local do dono (`I:\Meu Drive\Oásis UTFPR`). Nunca
-  os commite — `.gitignore` bloqueia `*.pdf` (exceção única: a fixture sintética de
-  teste, aluno fictício, em `tests/fixtures/`).
-
----
-
-## 3. Arquitetura em três camadas
-
-O projeto é deliberadamente estratificado. Respeite os limites: lógica de domínio não
-importa React; a UI não reimplementa regras.
-
-### Camada 1 — Dados (`data/` + `tools/`)
-
-JSONs públicos derivados dos documentos oficiais, mais os parsers/validadores (Python).
-
-| Arquivo | Conteúdo | Fonte |
-|---|---|---|
-| `data/matriz-981.json` | 150 disciplinas: período, conjunto (2º estrato/12 trilhas/humanidades), cargas, pré-requisitos, equivalências; + cargas oficiais e legenda dos conjuntos | Consulta Curso e Matriz Curricular (Portal do Aluno) |
-| `data/turmas/2026-1.json` | 77 disciplinas, 177 turmas, 584 horários | PDF oficial de Turmas Abertas |
-| `data/turmas/2025-2.json` | 85 disciplinas | Backup do Grade na Hora (leitor secundário) |
-
-Ferramentas (Python 3 + `pdfplumber`; `pypdfium2` para renderizar PDFs como imagem):
-
-- `tools/parse_matriz.py` — Lista de Matérias (PDF) → `matriz-981.json`.
-- `tools/validate_matriz.py` — invariantes M1–M7 (ver §5).
-- `tools/parse_turmas_pdf.py` — **fonte primária** de turmas: PDF de Turmas Abertas →
-  `data/turmas/<sem>.json`.
-- `tools/validate_turmas.py` — invariantes R1–R7 (ver §5).
-- `tools/parse_gnh.py` — **leitor secundário/contingência**: converte o JSON do Grade
-  na Hora para o mesmo schema. Usado para semestres sem PDF (ex.: 2025-2) ou se o
-  layout do PDF quebrar. O GNH também serve de gabarito de teste, mas nunca é a
-  fonte de verdade quando o PDF oficial existe.
-
-### Camada 2 — Domínio (`src/domain/`)
-
-TypeScript puro, testável, sem dependência de UI:
-
-- `tipos.ts` — tipos canônicos (`Matriz`, `OfertaSemestre`, `PerfilAluno`, etc.).
-- `historico/extrair-linhas.ts` — extrai linhas de texto de um PDF com `pdfjs-dist`,
-  agrupando por coordenada Y e ordenando por X (mesmo método posicional dos parsers
-  Python). O setup do worker é responsabilidade de quem chama.
-- `historico/parser.ts` — Histórico Escolar (linhas) → `PerfilAluno`.
-- `motor/situacao.ts` — painel de progresso por categoria/conjunto.
-- `motor/elegiveis.ts` — "o que posso cursar": pré-requisitos + equivalências × oferta.
-- `motor/grade.ts` — seleção de turmas, conflitos (horário e sede) e relatório.
-
-### Camada 3 — UI (`src/ui/`)
-
-React 19 + Vite + Tailwind v4. `App.tsx` orquestra estado (perfil em `localStorage`,
-grade selecionada) e três telas em `ui/telas/`: **Situação**, **PossoCursar**, **Grade**.
-Componentes básicos em `ui/componentes.tsx`.
-
-Também: `scripts/perfil-cli.ts` gera o `PerfilAluno` de um PDF local (uso de
-desenvolvimento; a saída contém dados pessoais e **não** deve ser commitada).
+```text
+oasis-utfpr/
+├── REPOSITORIO.md            # Contrato de trabalho e manual arquitetural (este arquivo)
+├── Estrategia.md             # Planejamento estratégico, GI (PEN/PETI/Processos) e IHC
+├── Tasks.md                  # Backlog vivo de tarefas e features
+├── CLAUDE.md                 # Resumo rápido de diretrizes para IAs
+├── index.html                # Ponto de entrada web (carrega fontes Outfit/Plus Jakarta Sans)
+├── data/                     # JSONs canônicos servidos à aplicação estática
+│   ├── matriz-981.json       # Matriz curricular de BSI 981 (150 disciplinas categorizadas)
+│   └── turmas/               # Ofertas semestrais de disciplinas e horários
+│       ├── 2026-1.json       # Oferta primária gerada via PDF do Portal do Aluno
+│       └── 2025-2.json       # Oferta secundária (Grade na Hora)
+├── tools/                    # Pipeline de extração e validação de dados em Python 3
+│   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-981.json
+│   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
+│   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
+│   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
+│   └── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
+├── src/                      # Código fonte da aplicação web (Vite + React 19 + TypeScript)
+│   ├── index.css             # Tokens Tailwind v4 e estilos base (--color-utfpr-*)
+│   ├── main.tsx              # Montagem do React no DOM
+│   ├── domain/               # Lógica de negócio pura (sem dependências de UI/React)
+│   │   ├── tipos.ts          # Contratos canônicos de dados (Matriz, Oferta, Perfil)
+│   │   ├── historico/        # Leitura de posições PDF e parser de histórico
+│   │   └── motor/            # Regras de situação curricular, elegibilidade e choques de grade
+│   └── ui/                   # Camada visual React + Tailwind
+│       ├── App.tsx           # Orquestrador de estado e cabeçalho da plataforma
+│       ├── componentes.tsx   # Componentes base (Card, Botao, Badge, Barra)
+│       ├── icons.tsx         # Ícones SVG minimalistas (sem emojis) e LogoUTFPR
+│       └── telas/            # Telas especializadas (Situacao, PossoCursar, Grade)
+└── tests/                    # Suíte de testes automatizados (Vitest)
+    ├── fixtures/             # PDFs e arquivos sintéticos de teste (aluno fictício)
+    ├── historico-sintetico.test.ts # Testes que rodam sempre em CI/CD
+    └── historico-real.test.ts      # Testes locais com históricos de mantenedores (skip em CI)
+```
 
 ---
 
-## 4. Pipeline de dados (rotina por semestre)
+## 3. Arquitetura em Três Camadas Estratificadas
+
+Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não importa React nem classes CSS; a interface visual (`src/ui/`) apenas consome dados do domínio e aciona eventos.
+
+1. **Camada 1 — Dados e Pipeline (`data/` + `tools/`):**
+   - Extração posicional por colunas (`COLS`) no `parse_turmas_pdf.py` a partir do PDF oficial.
+   - Auditoria rigorosa nos validadores: **Regras R1 a R7** para turmas e **M1 a M7** para matriz.
+
+2. **Camada 2 — Domínio (`src/domain/`):**
+   - `historico/parser.ts`: Transforma texto extraído em `PerfilAluno` (identificando matérias aprovadas por equivalência, aproveitamento ou notas).
+   - `motor/situacao.ts`: Converte perfil nas métricas de cumprimento de 1º estrato, 2º estrato, ciclo de humanidades, trilhas em computação e horas de extensão.
+   - `motor/elegiveis.ts`: Cruza matérias aprovadas com pré-requisitos da matriz e turmas ativas no semestre.
+   - `motor/grade.ts`: Detecta choques de horário (`turno + aula`) e divergências de sede (`Centro`, `Ecoville`, `Neoville`) em um mesmo turno.
+
+3. **Camada 3 — Interface Visual (`src/ui/`):**
+   - **Design Aesthetics:** Visual limpo, sem emojis, tipografia de alta fidelidade com `Outfit` (cabeçalhos) e `Plus Jakarta Sans` (corpo), paleta neutra `zinc` contrastando com amarelo dourado `utfpr` (`--color-utfpr-500`).
+   - Ícones estritamente vetoriais em `src/ui/icons.tsx`.
+
+---
+
+## 4. Rodando, Testando e Validando
 
 ```bash
-# TURMAS (a cada semestre) — fonte primária: PDF oficial
-#  1. Salve a página "Turmas Abertas" do Portal do Aluno como PDF (fora do repo)
-#  2. Gere o JSON canônico:
-python tools/parse_turmas_pdf.py "Turmas Abertas.pdf" 2026-2
-#  3. Valide — só é válido com 0 erros:
-python tools/validate_turmas.py "Turmas Abertas.pdf" data/turmas/2026-2.json
+# Instalar dependências Node
+npm install
 
-# Contingência (sem PDF, ou layout quebrado): leitor secundário GNH
-python tools/parse_gnh.py "https://gradenahora.com.br/utfpr/2026-2/listahorario0120260200236.json" 2026-2
-#   (URL: /utfpr/{AAAA-S}/listahorario01{AAAA0S}00236.json ; 01=Curitiba, 236=BSI)
+# Rodar servidor de desenvolvimento local
+npm run dev
 
-# MATRIZ (muda raramente)
-python tools/parse_matriz.py "Lista de Matérias Matriz Curricular.pdf"
+# Rodar suíte completa de testes automatizados (Obrigatório antes de qualquer push)
+npm test -- --run
+
+# Gerar build de produção para checagem de tipos e bundle
+npm run build
+
+# Validação do pipeline de dados (quando atualizar PDFs de turmas ou matriz)
+python tools/validate_turmas.py "Turmas Abertas - Portal do Aluno UTFPR.pdf" data/turmas/2026-1.json
 python tools/validate_matriz.py
 ```
 
-**A validação é o portão.** Nunca commite um JSON de dados cuja suíte não passe com
-0 erros. Avisos ("~") são anomalias conhecidas da fonte e são aceitáveis; erros ("!!")
-não são.
+---
+
+## 5. Regras de Contribuição e Manutenção
+- Toda nova funcionalidade deve ser planejada e registrada primeiro em `Tasks.md`.
+- Se a feature envolver mudanças de arquitetura de informação ou usabilidade, consulte e registre em `Estrategia.md`.
+- Garantir que `git status` esteja limpo e que `npm test` e `npm run build` tenham sido executados localmente com sucesso antes de concluir uma tarefa.
 
 ---
 
-## 5. Como validamos (metodologia — leia antes de mexer em parser)
+## 6. Registro de Feedbacks de IHC e Refinamentos de UX/UI Concluídos
+Este repositório consolida as seguintes definições canônicas de interface e experiência (feedback contínuo dos mantenedores e usuários BSI):
 
-Parsers baseados em posição são frágeis a mudanças de layout. Nossa garantia é
-**processual e triangulada**, não a confiança cega no parser:
+1. **Navegação Principal Estratificada (`App.tsx`):**
+   - **Abas de Nível Superior:** Separadas de forma limpa em **`Minha Situação`** (`situacao`), **`Planejamento de Matrícula`** (`planejamento`) e **`Catálogo de Matérias`** (`catalogo`).
+   - **Bloqueio Dinâmico sem Histórico:** Quando o estudante acessa a plataforma no Modo Livre sem um PDF carregado (`!perfil`), ele cai diretamente na aba de *Planejamento de Matrícula*. A aba *Minha Situação* é bloqueada (`disabled={!perfil}`) com ícone de cadeado 🔒 e tooltip orientando a importação em Configurações. Ao carregar o PDF, a aba é liberada automaticamente.
 
-1. **Cobertura total de tokens** (imune a gabarito): conte no texto cru do PDF tudo que
-   tem forma inequívoca (horários `\d[MTN]\d(...)`, `Matriz:\d+`, cabeçalhos de
-   disciplina) e exija que o mesmo número apareça no JSON. Disciplina nova entra na
-   conta automaticamente. É a regra R1 (turmas) e a M1/M2 (matriz, via somas oficiais).
-2. **Invariantes internas do documento**: regras que o documento deve obedecer a si
-   mesmo (nº de horários = aulas semanais declaradas; soma das obrigatórias = total
-   oficial do rodapé; pré-requisito referencia disciplina existente; domínios válidos).
-3. **Conferência visual**: renderize páginas do PDF como imagem e compare campo a campo.
-   Pega classes de erro que texto não pega (coluna deslocada, glifo trocado).
-4. **Casos reais como teste de ouro**: dois históricos com perfis diferentes cobrem a
-   maioria das anomalias (um cheio de convalidações/reprovações, outro com equivalência,
-   dependência e trilhas zeradas).
+2. **Hierarquia e Posição dos Comutadores de Layout (`App.tsx` & `PossoCursar.tsx`):**
+   - O seletor de visualização (`Layout Oásis` vs. `Layout Grade na Hora`) não reside no cabeçalho superior global nem no final da página do feed.
+   - Ele está posicionado **diretamente no cabeçalho da sub-navegação de Planejamento de Matrícula**, ao lado das abas `Posso Cursar` e `Minha Grade`, eliminando duplicidades e apresentando o controle exatamente no momento de escolha de horários.
 
-### Regra de ouro ao encontrar uma anomalia nova
+3. **Catálogo e Lista Completa de Disciplinas por Estrato (`Catalogo.tsx`):**
+   - Todos os cards de estrato em *Minha Situação* (`Obrigatórias (1º estrato)`, `2º Estrato`, `Ciclo de Humanidades`, `Eletivas`, `Extensão`) permitem clique no card inteiro ou no link de rodapé para abrir a tela dedicada **`Catálogo e Lista de Matérias do Curso`** já filtrada para o estrato selecionado.
+   - O catálogo oferece abas de filtro por estrato, filtro rápido por status (`Todas`, `Concluídas`, `Pendentes`) e barra de busca por código ou nome com normalização de acentos e case-insensitive.
 
-**Audite no texto cru do PDF antes de tocar no parser.** Quase sempre a "anomalia" é o
-parser lendo fielmente uma esquisitice real da fonte. Se confirmar que é da fonte,
-**codifique-a como regra conhecida no validador** (com comentário explicando), em vez de
-"consertar" o parser para mascará-la. Leitura fiel > expectativa.
+4. **Visão Sintetizada vs. Expandida das Trilhas (3º Estrato):**
+   - **No Menu Principal (*Minha Situação*):** As Trilhas em Computação são exibidas em **bloco único sintetizado** (`CardTrilhasResumo`), consolidando as metas globais do estrato: total de trilhas validadas (`X de 3 trilhas`), carga horária total acumulada vs. mínima exigida (`345h`) e saldo de horas excedentes (`+Xh acima do mínimo`).
+   - **Na Visão Expandida (*Catálogo -> Trilhas*):** Ao clicar no bloco sintetizado, o usuário acessa o detalhamento de cada uma das 6 trilhas, com barras de progresso individuais e listagem completa de disciplinas vinculadas com status (`OK`, `Oferta no semestre`, `Pendente`).
 
-### Anomalias já catalogadas (não as trate como bugs)
-
-- O portal **repete o bloco de horários N vezes quando a turma tem N professores**
-  (ex.: ICSX10, ICSR30, FCH7XG). Deduplicar ao comparar/contar.
-- **Aulas assíncronas (EAD) têm slot próprio** (ex.: GEE74F em `D-PTO`).
-- Turmas **"Sem Reserva" podem vir com lista de prioridades**, contradizendo a própria
-  definição do documento (ex.: FCH7SB S02/S06). Aceitar e preservar.
-- **Nomes de curso podem terminar em dígito** ("Lic Fisica 9"): um dígito só inicia uma
-  nova prioridade se o próximo token for "-".
-- **CSX41** aparece com "1,7333… aulas semanais" (fração) — registro degenerado da fonte.
-- **MAT7GA S02** imprime 5 horários para 4 aulas declaradas — vira aviso, não erro.
-- Colagem de coluna: `Matriz:NNN` e o `Não` da coluna Optativa podem grudar no fim do
-  nome do professor quando o gap horizontal fica abaixo da tolerância.
-- **Sala e horário vêm no mesmo token** (`3T4(CB-105)`): não existe o modo de falha
-  "horário certo, sala errada" — o token entra inteiro ou a cobertura acusa.
-- **Histórico Escolar**: a linha do **ENADE** ("Estudante Dispensado de Realização do
-  Enade") não tem linha-núcleo própria e vaza para o bloco da disciplina vizinha; a
-  detecção de situação deve ignorar linhas com "enade". O nome da disciplina é
-  intercalado demais no PDF para reconstrução confiável — resolvemos nomes pelo código
-  na matriz, não pelo texto do histórico.
-- Regra descartada: houve uma verificação R8 (cruzar oferta × matriz) que foi
-  **removida** porque penalizava disciplinas novas ainda não mapeadas. Não a reintroduza.
-
-### Uma divergência oficial × prática já conhecida
-
-A Consulta de Matriz lista **ICSX30 (TI2) como pré-requisito de ICSX40 (TC1)**, e o
-sistema respeita isso. Na prática do curso, TI2 não trava TC1. Mantemos o dado oficial
-como está; correções de vivência pertencem a uma futura camada de anotações, não ao
-`matriz-981.json`.
-
----
-
-## 6. Rodando e testando
-
-```bash
-npm install
-npm run dev     # http://localhost:5173/Oasis-UTFPR/  (note o base path)
-npm test        # vitest: fixture sintética (sempre) + históricos reais (skip se ausentes)
-npm run build   # tsc -b && vite build
-```
-
-- `vite.config.ts` define `base: "/Oasis-UTFPR/"` (necessário para o GitHub Pages).
-  Se o nome do repositório mudar, ajuste o base **e** os fetches de assets.
-- Os testes reais (`tests/historico-real.test.ts`) usam `describe.skipIf` para os PDFs
-  do dono; em CI/outra máquina eles são pulados e a fixture sintética
-  (`tests/historico-sintetico.test.ts` + `tests/fixtures/historico-sintetico.pdf`) roda
-  sempre. Ao mexer no parser, atualize a fixture sintética para cobrir o novo caso.
-- Em Node, o `pdfjs-dist` precisa do build legacy — já há alias em `vite.config.ts`.
-
----
-
-## 7. Convenções
-
-- **Idioma**: código, identificadores, comentários e mensagens de commit em português.
-- **Nomes de tipos/campos**: seguem o domínio (`PerfilAluno`, `resumoConjuntos`,
-  `chFaltante`), não jargão em inglês.
-- **Identidade visual**: amarelo UTFPR (`--color-utfpr-*` em `src/index.css`) como cor
-  de **acento** sobre base neutra (zinc); temas claro e escuro. **Não** derive cores do
-  nome "Oásis" (areia foi explicitamente vetada). O nome do produto pode mudar; não o
-  amarre à identidade visual.
-- **Dados pessoais**: jamais versione histórico de aluno, `PerfilAluno` serializado, ou
-  qualquer saída do `perfil-cli.ts`. `.gitignore` cobre `*.pdf`, `historico*.json`,
-  `perfil*.json` — mantenha essa proteção.
-- **Contadores de carga horária** vêm das tabelas-resumo do próprio histórico (fonte
-  oficial já consolidada pela UTFPR), não de recontagem nossa. A matriz entra para
-  nomear, classificar e detectar inconsistências.
-
----
-
-## 8. Git e GitHub
-
-- Trabalhe na `main` (repo pequeno, um mantenedor). Commits pequenos e descritivos.
-- Antes de commitar dados: rode o validador correspondente (§4) e garanta 0 erros.
-- Antes de commitar código: `npm test` e `npm run build` limpos.
-- CI/CD: `.github/workflows/deploy.yml` roda testes e publica no Pages a cada push na
-  `main`. Se os testes falharem, o deploy não acontece.
-- **Releia a §0 antes de cada commit.** Autor = só o dono; zero co-autoria de IA.
-
----
-
-## 9. Roadmap (estado e próximos passos)
-
-Entregue (M1+M2): camada de dados validada; parser de histórico no navegador; motor de
-regras; app React com as três telas; deploy automático. Validado visualmente com dois
-históricos reais.
-
-A seguir, na ordem sugerida: separar múltiplos professores por turma; planos A/B/C de
-grade + filtros de preferência de horário ("sem aulas de manhã"); previsão de formatura
-com caminho crítico (a cadeia TI1→TI2→TC1→TC2 é o gargalo); grafo interativo de
-pré-requisitos; export da grade como imagem. **Fase 2** (só com decisão do dono):
-camada de comunidade (avaliações de professores, materiais, dicas) e base de disciplinas
-de outros cursos cursáveis como eletivas — aí entra a discussão de persistência/servidor.
-
----
-
-Em caso de dúvida sobre escopo, privacidade ou uma anomalia nova de dados: **pergunte ao
-dono do projeto** em vez de assumir. E, novamente: nenhuma LLM se credita aqui.
+5. **Terminologia Limpa e Feedbacks Interativos (`Situacao.tsx`):**
+   - O título para disciplinas faltantes em cards foi padronizado de `Pendentemente:` para **`Pendente:`**.
+   - Qualquer menção a códigos de disciplina em *Minha Situação* (lista de pendentes, dependências, avisos de importação) passa pela função `renderizarTextoComCodigos`, recebendo sublinhado interativo pontilhado e revelando em tooltip instantâneo o código, nome completo, período e carga horária.

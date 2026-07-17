@@ -23,6 +23,10 @@ export function rotuloSlot(h: Horario): string {
   return `${DIAS[h.dia]} ${h.turno}${h.aula}`;
 }
 
+export function rotuloSlotComSede(h: Horario): string {
+  return `${DIAS[h.dia]} ${h.turno}${h.aula} (${h.sede})`;
+}
+
 /** horários únicos da turma (a fonte repete o bloco por professor) */
 export function horariosUnicos(t: Turma): Horario[] {
   const vistos = new Set<string>();
@@ -54,7 +58,7 @@ export function detectarConflitos(itens: ItemGrade[]): Conflito[] {
         });
         continue;
       }
-      // sedes diferentes no mesmo dia+turno = deslocamento inviável entre aulas
+      // sedes diferentes no mesmo dia+turno ou em turnos sequenciais imediatos (M6->T1, T6->N1) = deslocamento inviável
       for (const h of ha) {
         const mesmoTurno = hb.find(
           (x) => x.dia === h.dia && x.turno === h.turno && x.sede !== h.sede,
@@ -64,7 +68,27 @@ export function detectarConflitos(itens: ItemGrade[]): Conflito[] {
             a: itens[i],
             b: itens[j],
             tipo: "sedes",
-            detalhe: `${DIAS[h.dia]} ${h.turno}: ${h.sede} × ${mesmoTurno.sede}`,
+            detalhe: `${DIAS[h.dia]} ${h.turno}: ${h.sede} × ${mesmoTurno.sede} (mesmo turno)`,
+          });
+          break;
+        }
+
+        const sequencial = hb.find(
+          (x) =>
+            x.dia === h.dia &&
+            x.sede !== h.sede &&
+            ((h.turno === x.turno && Math.abs(h.aula - x.aula) === 1) ||
+              (h.turno === "M" && h.aula >= 5 && x.turno === "T" && x.aula <= 2) ||
+              (x.turno === "M" && x.aula >= 5 && h.turno === "T" && h.aula <= 2) ||
+              (h.turno === "T" && h.aula >= 5 && x.turno === "N" && x.aula <= 2) ||
+              (x.turno === "T" && x.aula >= 5 && h.turno === "N" && h.aula <= 2)),
+        );
+        if (sequencial) {
+          conflitos.push({
+            a: itens[i],
+            b: itens[j],
+            tipo: "sedes",
+            detalhe: `${DIAS[h.dia]} ${rotuloSlot(h)} (${h.sede}) seguida de ${rotuloSlot(sequencial)} (${sequencial.sede})`,
           });
           break;
         }
@@ -72,6 +96,22 @@ export function detectarConflitos(itens: ItemGrade[]): Conflito[] {
     }
   }
   return conflitos;
+}
+
+/** Verifica se a turma candidata entraria em conflito com os itens atuais da seleção */
+export function haveriaConflito(
+  itensAtual: ItemGrade[],
+  disciplina: DisciplinaOfertada,
+  turma: Turma,
+): boolean {
+  if (
+    itensAtual.some(
+      (i) => i.disciplina.codigo === disciplina.codigo && i.turma.codigo === turma.codigo,
+    )
+  ) {
+    return false;
+  }
+  return detectarConflitos([...itensAtual, { disciplina, turma }]).length > 0;
 }
 
 /** total de aulas semanais da seleção */

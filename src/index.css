@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* amarelo UTFPR como acento sobre base neutra */
   --color-utfpr-400: #ffd23f;
@@ -16,7 +18,7 @@ html {
 }
 
 body {
-  @apply bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  @apply bg-[#f4f5f7] font-sans text-zinc-900 antialiased selection:bg-utfpr-500/30 selection:text-zinc-950 min-h-screen dark:bg-zinc-950 dark:text-zinc-100 dark:selection:bg-utfpr-500/30 dark:selection:text-utfpr-400;
 }
 
 h1, h2, h3, h4, h5, h6, .font-display {

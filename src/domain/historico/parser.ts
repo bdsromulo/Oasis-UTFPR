@@ -96,6 +96,10 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     if (m) perfil.coefNormalizado = num(m[1]);
     m = l.match(/Ingresso:\s*(\d\/\d{4})/);
     if (m) perfil.ingresso = m[1];
+    m = l.match(/Data\/?Hora da Emissão:\s*([\d/:-]+|\d{2}\/\d{2}\/\d{4})/i) || l.match(/Emitido em:\s*([\d/:-]+|\d{2}\/\d{2}\/\d{4})/i) || l.match(/Data de Emissão:\s*([\d/:-]+|\d{2}\/\d{2}\/\d{4})/i) || l.match(/(\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2})/);
+    if (m && !perfil.dataEmissao) {
+      perfil.dataEmissao = m[1];
+    }
   }
   if (!perfil.nome) avisos.push("cabeçalho: nome do aluno não encontrado");
 
@@ -267,6 +271,20 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
   }
   for (const mtr of perfil.matriculadas) {
     if (/Aprovado/i.test(mtr.situacao)) perfil.aprovadas.add(mtr.codigo);
+  }
+
+  let maxAno = 0;
+  let maxSem = 0;
+  for (const c of perfil.cursadas) {
+    if (c.ano && c.semestre && (c.ano > maxAno || (c.ano === maxAno && c.semestre > maxSem))) {
+      maxAno = c.ano;
+      maxSem = c.semestre;
+    }
+  }
+  if (maxAno > 0) {
+    perfil.periodoDocumento = `${maxAno}/${maxSem}`;
+  } else if (perfil.ingresso) {
+    perfil.periodoDocumento = `Ingresso ${perfil.ingresso}`;
   }
 
   if (perfil.cursadas.length === 0) avisos.push("nenhuma disciplina cursada encontrada");
