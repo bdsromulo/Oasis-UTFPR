@@ -37,6 +37,7 @@ function CardDisciplinaPossoCursar({
   selecao,
   alternarTurma,
   onPreview,
+  onAbrirMobilePreview,
   filtrarConflitos = false,
   itensSelecao = [],
   matriz,
@@ -45,6 +46,7 @@ function CardDisciplinaPossoCursar({
   selecao: SelecaoTurma[];
   alternarTurma: (codDisciplina: string, codTurma: string) => void;
   onPreview: (p: PreviewTurma | null) => void;
+  onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos?: boolean;
   itensSelecao?: ItemGrade[];
   matriz?: Matriz;
@@ -188,6 +190,20 @@ function CardDisciplinaPossoCursar({
                         </div>
 
                         <div className="flex shrink-0 items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={(ev) => {
+                              ev.stopPropagation();
+                              const p = { disciplina: e.oferta!, turma: t };
+                              onPreview(p);
+                              if (onAbrirMobilePreview) onAbrirMobilePreview(p);
+                            }}
+                            className="inline-flex items-center gap-1 rounded-xl border border-zinc-200/80 bg-zinc-50 px-2.5 py-1 text-xs font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
+                            title="Espiar nesta turma na grade (ideal no celular ou para teste rápido)"
+                          >
+                            <span>👁️</span>
+                            <span className="hidden sm:inline">Espiar</span>
+                          </button>
                           <Botao
                             variante={marcada ? "sutil" : "neutro"}
                             onClick={(evt) => {
@@ -235,10 +251,11 @@ export function TelaPossoCursar(props: {
   selecao: SelecaoTurma[];
   setSelecao: (s: SelecaoTurma[]) => void;
   onPreview: (p: PreviewTurma | null) => void;
+  onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos?: boolean;
   onAbrirGradeMagica?: () => void;
 }) {
-  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
+  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, onAbrirMobilePreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [filtrosAbertos, setFiltrosAbertos] = useState(false);
@@ -489,6 +506,7 @@ export function TelaPossoCursar(props: {
             selecao={selecao}
             alternarTurma={alternarTurma}
             onPreview={onPreview}
+            onAbrirMobilePreview={onAbrirMobilePreview}
             filtrarConflitos={filtrarConflitos}
             itensSelecao={itensSelecao}
             matriz={matriz}

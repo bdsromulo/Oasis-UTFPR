@@ -73,6 +73,7 @@ export function MiniGrade(props: {
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [modalConfirmarLimpar, setModalConfirmarLimpar] = useState(false);
   const [minimizada, setMinimizada] = useState(() => localStorage.getItem("minigrade_minimizada") === "true");
+  const [turnoFiltro, setTurnoFiltro] = useState<"TODOS" | "M" | "T" | "N">("TODOS");
 
   function handleToggleMinimizar(e: React.MouseEvent) {
     e.stopPropagation();
@@ -263,10 +264,30 @@ export function MiniGrade(props: {
             </div>
           )}
 
+          <div className="flex items-center justify-between gap-1 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            <span className="text-[10px] font-bold uppercase text-zinc-400">Turno:</span>
+            <div className="flex gap-1">
+              {(["TODOS", "M", "T", "N"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTurnoFiltro(t)}
+                  className={`rounded px-1.5 py-0.5 text-[10px] font-bold transition-colors cursor-pointer ${
+                    turnoFiltro === t
+                      ? "bg-utfpr-500 text-zinc-950"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
+                  }`}
+                >
+                  {t === "TODOS" ? "Todos" : t === "M" ? "Manhã" : t === "T" ? "Tarde" : "Noite"}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <table className="w-full border-collapse text-[10px] leading-none">
             <thead>
               <tr>
-                <th className="w-6" />
+                <th className="w-6 sticky left-0 bg-white dark:bg-zinc-900 z-10" />
                 {DIAS.map(([dia, r]) => (
                   <th key={dia} className="pb-1 font-semibold text-zinc-400">
                     {r}
@@ -275,7 +296,7 @@ export function MiniGrade(props: {
               </tr>
             </thead>
             <tbody>
-              {SLOTS.map(([turno, aula]) => {
+              {SLOTS.filter(([turno]) => turnoFiltro === "TODOS" || turno === turnoFiltro).map(([turno, aula]) => {
                 const faixa = faixaDoSlot(turno, aula);
                 return (
                   <tr
@@ -283,7 +304,7 @@ export function MiniGrade(props: {
                     className={aula === 1 ? "border-t border-zinc-200 dark:border-zinc-700" : ""}
                   >
                     <td
-                      className="py-px pr-1 text-right font-mono text-zinc-400"
+                      className="py-px pr-1 text-right font-mono text-zinc-400 sticky left-0 bg-white dark:bg-zinc-900 z-10"
                       title={faixa ? `${faixa.inicio}–${faixa.fim}` : undefined}
                     >
                       {turno}

@@ -109,6 +109,7 @@ export function App() {
   }, [semestreAtivo, todasOfertas]);
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
+  const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [gradeAtiva, setGradeAtiva] = useState<string>(() => {
@@ -641,6 +642,10 @@ export function App() {
                       selecao={selecao}
                       setSelecao={setSelecao}
                       onPreview={setPreview}
+                      onAbrirMobilePreview={(p) => {
+                        setPreview(p);
+                        setMobileGradeDrawerAberto(true);
+                      }}
                       filtrarConflitos={preferencias.filtrarConflitos}
                       onAbrirGradeMagica={() => setModalGradeMagica(true)}
                     />
@@ -652,6 +657,10 @@ export function App() {
                       selecao={selecao}
                       setSelecao={setSelecao}
                       onPreview={setPreview}
+                      onAbrirMobilePreview={(p) => {
+                        setPreview(p);
+                        setMobileGradeDrawerAberto(true);
+                      }}
                       filtrarConflitos={preferencias.filtrarConflitos}
                       onAbrirGradeMagica={() => setModalGradeMagica(true)}
                     />
@@ -756,7 +765,106 @@ export function App() {
         carregandoPDF={carregando}
       />
 
-      <footer className="mt-20 border-t border-zinc-200/80 pt-6 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
+      {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta) */}
+      {(aba === "situacao" || (aba === "planejamento" && abaPlanejamento === "cursar")) && (
+        <>
+          <div className="fixed bottom-4 left-4 right-4 z-40 lg:hidden">
+            <div className="flex items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-900/90 p-3.5 px-5 shadow-2xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-950/90 text-white">
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-display text-sm font-black">Grade {gradeAtiva}</span>
+                  <span className="rounded-full bg-utfpr-500/20 px-2 py-0.5 font-mono text-xs font-bold text-utfpr-400">
+                    {selecao.length} {selecao.length === 1 ? "turma" : "turmas"}
+                  </span>
+                </div>
+                {preview ? (
+                  <span className="truncate text-xs font-semibold text-amber-400">
+                    👁️ Espiando {preview.turma.codigo} ({preview.disciplina.codigo})
+                  </span>
+                ) : (
+                  <span className="truncate text-xs text-zinc-400">
+                    Toque para inspecionar grade
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setMobileGradeDrawerAberto(true)}
+                className="shrink-0 ml-3 rounded-xl bg-utfpr-500 px-4 py-2 font-display text-xs font-black text-zinc-950 shadow-md transition-all hover:bg-utfpr-400 active:scale-95 cursor-pointer"
+              >
+                {preview ? "Ver Preview" : "Abrir Grade"}
+              </button>
+            </div>
+          </div>
+
+          {mobileGradeDrawerAberto && (
+            <div className="fixed inset-0 z-50 flex flex-col justify-end lg:hidden">
+              <div
+                className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+                onClick={() => {
+                  setMobileGradeDrawerAberto(false);
+                  if (preview) setPreview(null);
+                }}
+              />
+              <div className="relative z-10 max-h-[85vh] overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 flex flex-col">
+                <div className="flex items-center justify-between border-b border-zinc-200/80 pb-4 mb-4 dark:border-zinc-800">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white">
+                      Mini-Grade no Celular
+                    </h3>
+                    {preview && (
+                      <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-xs font-bold text-amber-500">
+                        Espiando
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileGradeDrawerAberto(false);
+                      if (preview) setPreview(null);
+                    }}
+                    className="rounded-full bg-zinc-100 p-2 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto pb-6">
+                  <MiniGrade
+                    oferta={oferta}
+                    selecao={selecao}
+                    preview={preview}
+                    onLimpar={() => {
+                      setSelecao([]);
+                      setCestaExclusoes((prev: any) => {
+                        const n = { ...prev, [gradeAtiva]: { disciplinas: [], professores: [] } };
+                        return n;
+                      });
+                    }}
+                    cestaGrades={cestaGrades}
+                    gradeAtiva={gradeAtiva}
+                    onMudarGradeAtiva={handleMudarGradeAtiva}
+                    onNovaGrade={handleNovaGrade}
+                    onRemoverGrade={handleRemoverGrade}
+                    onRemoverTurma={(codigo) =>
+                      setSelecao((s) => s.filter((item) => item.codDisciplina !== codigo))
+                    }
+                    exclusoesSugestao={exclusoesAtivas}
+                    onLimparExclusoes={() => {
+                      setCestaExclusoes((prev: any) => {
+                        const n = { ...prev, [gradeAtiva]: { disciplinas: [], professores: [] } };
+                        return n;
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      <footer className="mt-20 border-t border-zinc-200/80 pt-6 pb-24 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
         Projeto acadêmico independente desenvolvido por e para estudantes de BSI — não oficial. Sempre verifique e confirme seus dados no Portal do Aluno da UTFPR.
       </footer>
     </div>

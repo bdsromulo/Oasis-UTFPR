@@ -30,6 +30,7 @@ function DisciplinaGNHItem({
   selecao,
   alternar,
   onPreview,
+  onAbrirMobilePreview,
   filtrarConflitos,
   itensSelecao,
 }: {
@@ -38,6 +39,7 @@ function DisciplinaGNHItem({
   selecao: SelecaoTurma[];
   alternar: (codDisciplina: string, codTurma: string) => void;
   onPreview: (p: PreviewTurma | null) => void;
+  onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos: boolean;
   itensSelecao: ItemGrade[];
 }) {
@@ -111,6 +113,21 @@ function DisciplinaGNHItem({
                     {t.professores_raw || "professor a definir"}
                   </span>
                   <div className="ml-auto flex flex-wrap items-center gap-1.5 justify-end">
+                    <button
+                      type="button"
+                      onClick={(ev) => {
+                        ev.stopPropagation();
+                        ev.preventDefault();
+                        const p = { disciplina: d, turma: t };
+                        onPreview(p);
+                        if (onAbrirMobilePreview) onAbrirMobilePreview(p);
+                      }}
+                      className="inline-flex items-center gap-1 rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-0.5 text-[11px] font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
+                      title="Espiar nesta turma na grade"
+                    >
+                      <span>👁️</span>
+                      <span className="hidden sm:inline">Espiar</span>
+                    </button>
                     {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
                       .filter(Boolean)
                       .map((s) => (
@@ -160,10 +177,11 @@ export function TelaLayoutGNH(props: {
   selecao: SelecaoTurma[];
   setSelecao: (s: SelecaoTurma[]) => void;
   onPreview: (p: PreviewTurma | null) => void;
+  onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos?: boolean;
   onAbrirGradeMagica?: () => void;
 }) {
-  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
+  const { perfil, matriz, oferta, selecao, setSelecao, onPreview, onAbrirMobilePreview, filtrarConflitos = false, onAbrirGradeMagica } = props;
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [soPendentes, setSoPendentes] = useState(false);
@@ -314,6 +332,7 @@ export function TelaLayoutGNH(props: {
               selecao={selecao}
               alternar={alternar}
               onPreview={onPreview}
+              onAbrirMobilePreview={onAbrirMobilePreview}
               filtrarConflitos={filtrarConflitos}
               itensSelecao={itensSelecao}
             />

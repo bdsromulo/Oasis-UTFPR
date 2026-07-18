@@ -78,6 +78,7 @@ export function TelaGrade(props: {
   const [semestreOrigemSelecionado, setSemestreOrigemSelecionado] = useState<string | null>(null);
   const [gradeOrigemSelecionada, setGradeOrigemSelecionada] = useState<string>("A");
   const [confirmacaoSobreescreverImportacao, setConfirmacaoSobreescreverImportacao] = useState(false);
+  const [turnoFiltro, setTurnoFiltro] = useState<"TODOS" | "M" | "T" | "N">("TODOS");
 
   const itens: ItemGrade[] = useMemo(() => itensDaSelecao(oferta, selecao), [oferta, selecao]);
 
@@ -689,11 +690,33 @@ export function TelaGrade(props: {
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Filtrar Turno:</span>
+          <div className="flex gap-1.5">
+            {(["TODOS", "M", "T", "N"] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTurnoFiltro(t)}
+                className={`rounded-lg px-3 py-1 font-display text-xs font-bold transition-all cursor-pointer ${
+                  turnoFiltro === t
+                    ? "bg-utfpr-500 text-zinc-950 shadow-xs"
+                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                }`}
+              >
+                {t === "TODOS" ? "Todos os Turnos" : t === "M" ? "Manhã" : t === "T" ? "Tarde" : "Noite"}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div ref={gradeTableRef} className="overflow-x-auto rounded-2xl border border-zinc-200/80 shadow-xs dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-2 sm:p-4">
         <table className="w-full min-w-[680px] border-collapse bg-white text-xs dark:bg-zinc-900">
           <thead>
             <tr className="bg-zinc-50/80 dark:bg-zinc-800/50">
-              <th className="w-12 border-b border-r border-zinc-200/80 p-2.5 text-center font-mono text-zinc-400 dark:border-zinc-800/80">
+              <th className="w-12 border-b border-r border-zinc-200/80 p-2.5 text-center font-mono text-zinc-400 dark:border-zinc-800/80 sticky left-0 z-10 bg-zinc-50 dark:bg-zinc-800">
                 Turno
               </th>
               {DIAS.map(([, rot]) => (
@@ -707,7 +730,7 @@ export function TelaGrade(props: {
             </tr>
           </thead>
           <tbody>
-            {SLOTS.map(([turno, aula]) => {
+            {SLOTS.filter(([turno]) => turnoFiltro === "TODOS" || turno === turnoFiltro).map(([turno, aula]) => {
               const marcoTurno = aula === 1;
               return (
                 <tr
@@ -719,7 +742,7 @@ export function TelaGrade(props: {
                   }
                 >
                   <td
-                    className="border-r border-zinc-100 bg-zinc-50/40 p-1.5 text-center font-mono font-semibold text-zinc-500 dark:border-zinc-800/60 dark:bg-zinc-900/40 dark:text-zinc-400"
+                    className="border-r border-zinc-100 bg-zinc-50/90 p-1.5 text-center font-mono font-semibold text-zinc-500 dark:border-zinc-800/60 dark:bg-zinc-900/90 dark:text-zinc-400 sticky left-0 z-10 shadow-xs"
                     title={(() => {
                       const f = faixaDoSlot(turno, aula);
                       return f ? `${f.inicio}–${f.fim}` : undefined;

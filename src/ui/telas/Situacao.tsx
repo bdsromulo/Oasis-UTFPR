@@ -191,9 +191,9 @@ export function TelaSituacao(props: {
       ))}
 
       {/* MINI CABEÇALHO COM PERÍODO, CR E PROGRESSO GLOBAL DE HORAS (ITEM 3) */}
-      <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="flex flex-wrap items-center gap-6 sm:gap-10">
-          <div>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-4 sm:gap-10">
+          <div className="col-span-2 sm:col-span-1">
             <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
               Período de Referência
             </span>
@@ -226,7 +226,7 @@ export function TelaSituacao(props: {
           </div>
         </div>
 
-        <div className="flex-1 min-w-[240px] max-w-md">
+        <div className="w-full lg:flex-1 lg:min-w-[240px] lg:max-w-md">
           <div className="mb-1.5 flex items-baseline justify-between text-xs">
             <span className="font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Progresso Geral do Curso
