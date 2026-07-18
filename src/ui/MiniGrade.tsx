@@ -129,7 +129,7 @@ export function MiniGrade(props: {
           localStorage.setItem("minigrade_minimizada", "false");
         }
       }}
-      className={`rounded-2xl border border-zinc-200/80 bg-white p-3 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900 transition-all ${
+      className={`rounded-2xl border border-zinc-200/80 bg-white p-3 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900 transition-all max-h-[calc(100vh-2rem)] overflow-y-auto ${
         minimizada ? "cursor-pointer hover:border-utfpr-500/50 hover:shadow-md" : ""
       }`}
       title={minimizada ? "Clique em qualquer lugar para expandir a Prévia de Planejamento" : undefined}

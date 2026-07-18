@@ -687,7 +687,7 @@ export function App() {
 
           {/* sidebar de feedback contínuo: visível nas abas Situação e em Planejamento/Posso Cursar */}
           {(aba === "situacao" || (aba === "planejamento" && abaPlanejamento === "cursar")) && (
-            <aside className="sticky top-4 hidden w-60 shrink-0 lg:block">
+            <aside className="sticky top-4 self-start hidden w-60 shrink-0 lg:block">
               <MiniGrade
                 oferta={oferta}
                 selecao={selecao}

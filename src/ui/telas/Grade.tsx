@@ -846,7 +846,7 @@ export function TelaGrade(props: {
             const discMatriz = props.matriz?.disciplinas.find(
               (x) => x.codigo === item.disciplina.codigo || (x.equivalentes || []).some((eq) => eq.codigo === item.disciplina.codigo) || normNome(x.nome) === normNome(item.disciplina.nome)
             );
-            const catRaw = discMatriz && props.matriz ? categoriaDe(discMatriz, props.matriz) : null;
+            const catRaw = discMatriz && props.matriz ? categoriaDe(discMatriz, props.matriz) : "eletiva";
             const catNome =
               catRaw === "obrigatória"
                 ? "Obrigatória"
@@ -854,9 +854,11 @@ export function TelaGrade(props: {
                 ? "2º Estrato"
                 : catRaw === "humanidades"
                 ? "Optativa de Humanidades"
+                : catRaw === "eletiva"
+                ? "Eletiva"
                 : catRaw
                 ? catRaw.charAt(0).toUpperCase() + catRaw.slice(1)
-                : "Matéria";
+                : "Eletiva";
 
             const nomesProfessores =
               item.turma.professores && item.turma.professores.length > 0

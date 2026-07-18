@@ -44,7 +44,8 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
   const por = new Map(perfil.resumoConjuntos.map((r) => [r.conjunto, r]));
   const trilhas: ProgressoConjunto[] = [];
   for (const [cod, conj] of Object.entries(matriz.conjuntos)) {
-    if (cod === "1159" || cod === "1160" || cod === "1161") continue;
+    const numCod = Number(cod);
+    if (numCod < 1162 || numCod > 1173) continue;
     const r = por.get(cod);
     trilhas.push(
       r

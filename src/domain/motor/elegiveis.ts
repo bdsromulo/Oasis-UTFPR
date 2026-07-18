@@ -59,6 +59,7 @@ export function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): string {
   if (d.conjunto === null) return "obrigatória";
   if (d.conjunto === 1159) return "2º estrato";
   if (d.conjunto === 1161) return "humanidades";
+  if (d.conjunto === 1199) return "eletiva";
   return matriz.conjuntos[String(d.conjunto)]?.nome ?? String(d.conjunto);
 }
 

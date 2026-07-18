@@ -119,6 +119,13 @@
    "periodo_final": 6,
    "ch": 135,
    "ch_semanal": 9
+  },
+  "1199": {
+   "nome": "Disciplinas Eletivas",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 105,
+   "ch_semanal": null
   }
  },
  "eletiva": {
@@ -3812,6 +3819,248 @@
      "grupo": null
     }
    ]
+  },
+  {
+   "codigo": "FCH7SB",
+   "nome": "Tecnologia E Sociedade",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE73F",
+   "nome": "Teorias Organizacionais",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE74F",
+   "nome": "Comportamento Organizacional",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QB54B",
+   "nome": "Energia E Meio Ambiente",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XE",
+   "nome": "Políticas Públicas",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "DIN83A",
+   "nome": "Projeto De Interfaces E Experiências Digitais",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SD",
+   "nome": "Sociedade E Política No Brasil",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QB7AH",
+   "nome": "Educação Ambiental",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GE79A",
+   "nome": "Gestão De Pessoas",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GE70H",
+   "nome": "Gestão Financeira",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7T1",
+   "nome": "Tópicos Matemáticos 1",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
   }
  ]
 }
