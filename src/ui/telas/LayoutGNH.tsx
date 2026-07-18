@@ -291,11 +291,11 @@ export function TelaLayoutGNH(props: {
           <button
             onClick={onAbrirGradeMagica}
             className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
-            title="Preenchimento inteligente de grade"
+            title="Preenchimento com Sugestão de Grade"
           >
             <span>✨</span>
-            <span className="hidden sm:inline">Preencher Grade (Inteligente)</span>
-            <span className="sm:hidden">Grade Mágica</span>
+            <span className="hidden sm:inline">Sugestão de Grade</span>
+            <span className="sm:hidden">Sugestão</span>
           </button>
         )}
         <span className="ml-auto font-mono text-xs font-bold text-zinc-500">

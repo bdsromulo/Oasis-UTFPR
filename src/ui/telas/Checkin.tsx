@@ -56,7 +56,7 @@ export function TelaCheckin(props: {
           Bem-vindo ao <span className="text-utfpr-600 dark:text-utfpr-500">Oásis</span> UTFPR
         </h1>
         <p className="max-w-xl mx-auto text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-          A plataforma independente de planejamento curricular e montagem inteligente de grade horária
+          A plataforma independente de planejamento curricular, sugestão e montagem de grade horária
           feita de estudantes para estudantes da UTFPR.
         </p>
       </div>

@@ -843,6 +843,28 @@
    "equivalentes": []
   },
   {
+   "codigo": "ED70U",
+   "nome": "Libras B",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
    "codigo": "EDU70K",
    "nome": "Tecnologias Digitais Na Educação",
    "periodo": 3,
@@ -1117,6 +1139,28 @@
      "grupo": null
     }
    ]
+  },
+  {
+   "codigo": "FCH7XC",
+   "nome": "Presença Africana No Brasil",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
   },
   {
    "codigo": "GEE7E1",
@@ -3761,7 +3805,13 @@
    "prerequisitos": [
     "ICSX40"
    ],
-   "equivalentes": []
+   "equivalentes": [
+    {
+     "codigo": "CSX41",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
   }
  ]
 }

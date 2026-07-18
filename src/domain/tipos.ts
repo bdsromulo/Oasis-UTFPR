@@ -72,6 +72,10 @@ export interface Turma {
   professores_raw: string;
   optativa_matrizes: string[];
   optativa: boolean;
+  /** Se criada via equivalência/agrupamento no catálogo, indica o código original da disciplina onde a turma existe (ex: "IF69D") */
+  codDisciplinaOriginal?: string;
+  /** Se criada via equivalência/agrupamento no catálogo, indica o código original da turma (ex: "S11") */
+  codTurmaOriginal?: string;
 }
 
 export interface Horario {

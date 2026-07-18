@@ -2,7 +2,7 @@ import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from ".
 import { listarElegiveis } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao } from "./grade";
 
-export interface OpcoesGradeMagica {
+export interface OpcoesSugestaoGrade {
   estrategia: "adiantar_maximo" | "balanceado";
   naoManha: boolean;
   naoTarde: boolean;
@@ -11,7 +11,15 @@ export interface OpcoesGradeMagica {
   sedeEcoville?: boolean;
   sedeNeoville?: boolean;
   maxDisciplinas?: number;
+  disciplinasExcluidas?: ({ codigo: string; nome: string } | string)[];
+  professoresExcluidos?: string[];
+  trilhasExcluidas?: string[];
+  semHumanidades?: boolean;
+  semTrilhas?: boolean;
+  priorizarExtensionistas?: boolean;
 }
+
+export type OpcoesGradeMagica = OpcoesSugestaoGrade;
 
 /**
  * Retorna o peso de prioridade da turma para alunos de BSI:
@@ -61,6 +69,57 @@ export function turmaViolaSedes(
     if (h.sede === "Centro" && !c) return true;
     if (h.sede === "Ecoville" && !e) return true;
     if (h.sede === "Neoville" && !n) return true;
+  }
+  return false;
+}
+
+/**
+ * Verifica se a disciplina está marcada para exclusão pelo usuário
+ */
+export function disciplinaEstaExcluida(
+  disciplina: { codigo: string; nome: string },
+  excluidas?: ({ codigo: string; nome: string } | string)[],
+): boolean {
+  if (!excluidas || excluidas.length === 0) return false;
+  const cod = disciplina.codigo.trim().toUpperCase();
+  const nome = disciplina.nome.trim().toLowerCase();
+  return excluidas.some((item) => {
+    if (typeof item === "string") {
+      const s = item.trim().toLowerCase();
+      return cod === item.trim().toUpperCase() || nome.includes(s);
+    }
+    return cod === item.codigo.trim().toUpperCase();
+  });
+}
+
+/**
+ * Verifica se a turma possui algum professor excluído na Sugestão de Grade.
+ * Se o professor excluído é um dos professores (mesmo em turmas com múltiplos professores), exclui a turma inteira.
+ */
+export function turmaViolaProfessores(
+  turma: Turma,
+  restricoes: { professoresExcluidos?: string[] },
+): boolean {
+  if (!restricoes.professoresExcluidos || restricoes.professoresExcluidos.length === 0) {
+    return false;
+  }
+  const listaProfs: string[] = [];
+  if (turma.professores && turma.professores.length > 0) {
+    listaProfs.push(...turma.professores);
+  }
+  if (turma.professores_raw) {
+    listaProfs.push(...turma.professores_raw.split(/[,;/]+/));
+  }
+
+  for (const profEx of restricoes.professoresExcluidos) {
+    const profExLimpo = profEx.trim().toLowerCase();
+    if (!profExLimpo) continue;
+    for (const profTurma of listaProfs) {
+      const pLimpo = profTurma.trim().toLowerCase();
+      if (pLimpo === profExLimpo || pLimpo.includes(profExLimpo) || profExLimpo.includes(pLimpo)) {
+        return true;
+      }
+    }
   }
   return false;
 }
@@ -138,18 +197,19 @@ export function calcularScoreBalanceamento(
 }
 
 /**
- * Algoritmo da Grade Mágica:
+ * Algoritmo da Sugestão de Grade:
  * Monta automaticamente a grade ideal para o aluno maximizando carga horária e avanço no curso,
- * respeitando restrições de turno, pré-requisitos e choques de horário, e aplicando o peso correto
- * de prioridade entre S73 (Prio 1) e S71 (Prio 2).
+ * respeitando restrições de turno, pré-requisitos, choques de horário e exclusões personalizadas,
+ * e aplicando o peso correto de prioridade entre S73 (Prio 1) e S71 (Prio 2).
  */
-export function gerarGradeMagica(
+export function gerarSugestaoGrade(
   perfil: PerfilAluno | null,
   matriz: Matriz,
   oferta: OfertaSemestre,
-  opcoes: OpcoesGradeMagica,
+  opcoes: OpcoesSugestaoGrade,
+  selecaoInicial?: SelecaoTurma[],
 ): SelecaoTurma[] {
-  const maxDisc = opcoes.maxDisciplinas || (opcoes.estrategia === "balanceado" ? 5 : 7);
+  const maxDisc = opcoes.maxDisciplinas || (opcoes.estrategia === "balanceado" ? 5 : 99);
 
   // 1. Calcular demanda de horas pendentes por categoria no perfil / matriz
   const r1161 = perfil?.resumoConjuntos.find((x) => x.conjunto === "1161");
@@ -182,19 +242,41 @@ export function gerarGradeMagica(
         .reduce((acc, t) => acc + Math.max(0, t.chExigida - t.cump), 0)
     : 180;
 
+  // Inicializar seleção e contadores de carga horária a partir da seleção inicial (se houver)
+  const selecaoFinal: SelecaoTurma[] = selecaoInicial ? [...selecaoInicial] : [];
+  let chTotalAlocada = 0;
+  let chAlocadaHumanidades = 0;
+  let chAlocadaEstrato2 = 0;
+  let chAlocadaTrilhas = 0;
+
+  for (const s of selecaoFinal) {
+    const dm = matriz?.disciplinas.find((x) => x.codigo === s.codDisciplina);
+    const dOf = oferta.disciplinas.find((x) => x.codigo === s.codDisciplina);
+    const h = dm ? dm.horas.total : ((dOf?.aulas_semanais_presenciais || 4) * 15);
+    const c = dm?.conjunto ?? null;
+    chTotalAlocada += h;
+    if (c === 1161) chAlocadaHumanidades += h;
+    else if (c === 1159) chAlocadaEstrato2 += h;
+    else if (c !== null && c !== 1160) chAlocadaTrilhas += h;
+  }
+
   // 2. Obter todas as disciplinas elegíveis (pendentes/liberadas) respeitando se a categoria já foi concluída
   const elegiveis = listarElegiveis(perfil, matriz, oferta).filter((e) => {
     if (e.motivoBloqueio || !e.oferta || e.oferta.turmas.length === 0) return false;
+    if (selecaoFinal.some((s) => s.codDisciplina === e.disciplina.codigo)) return false;
+    if (disciplinaEstaExcluida(e.disciplina, opcoes.disciplinasExcluidas)) return false;
+    if (opcoes.semHumanidades && e.disciplina.conjunto === 1161) return false;
     if (e.disciplina.conjunto === 1161 && chFaltanteHumanidades <= 0) return false;
     if (e.disciplina.conjunto === 1159 && chFaltanteEstrato2 <= 0) return false;
     if (
       e.disciplina.conjunto !== null &&
       e.disciplina.conjunto !== 1159 &&
       e.disciplina.conjunto !== 1160 &&
-      e.disciplina.conjunto !== 1161 &&
-      chFaltanteTrilhas <= 0
+      e.disciplina.conjunto !== 1161
     ) {
-      return false;
+      if (opcoes.semTrilhas) return false;
+      if (opcoes.trilhasExcluidas && opcoes.trilhasExcluidas.includes(String(e.disciplina.conjunto))) return false;
+      if (chFaltanteTrilhas <= 0) return false;
     }
     return true;
   });
@@ -207,12 +289,16 @@ export function gerarGradeMagica(
     pts += (10 - periodo) * 12; // Períodos mais iniciais têm mais peso
     pts += Math.min(e.disciplina.horas.total, 90) / 5; // Carga horária
 
+    if (opcoes.priorizarExtensionistas && e.disciplina.horas.chext > 0) {
+      pts += 45; // Aumentar significativamente o peso de matérias extensionistas quando priorizado
+    }
+
     // Reduzir ligeiramente a prioridade inicial de humanidades frente a disciplinas técnicas/obrigatórias
     if (e.disciplina.conjunto === 1161) pts -= 15;
 
     // Filtrar e pontuar as turmas válidas dessa disciplina
     const turmasValidas = e.oferta!.turmas
-      .filter((t) => !turmaViolaTurnos(t, opcoes) && !turmaViolaSedes(t, opcoes))
+      .filter((t) => !turmaViolaTurnos(t, opcoes) && !turmaViolaSedes(t, opcoes) && !turmaViolaProfessores(t, opcoes))
       .map((t) => ({
         turma: t,
         pontos: calcularPesoPrioridadeTurma(t),
@@ -231,14 +317,10 @@ export function gerarGradeMagica(
     .filter((d) => d.turmasValidas.length > 0)
     .sort((a, b) => b.pontosDisc - a.pontosDisc);
 
-  // 4. Algoritmo Guloso / Backtracking leve para selecionar turmas sem choque e sem exceder horas necessárias
-  const selecaoFinal: SelecaoTurma[] = [];
-  let chAlocadaHumanidades = 0;
-  let chAlocadaEstrato2 = 0;
-  let chAlocadaTrilhas = 0;
-
+  // 4. Algoritmo Guloso / Backtracking leve para selecionar turmas sem choque e sem exceder horas necessárias (limite máximo de 405h)
   for (const item of candidatas) {
-    if (selecaoFinal.length >= maxDisc) break;
+    if (opcoes.estrategia === "balanceado" && selecaoFinal.length >= maxDisc) break;
+    if (chTotalAlocada + item.elegivel.disciplina.horas.total > 405) continue;
 
     const c = item.elegivel.disciplina.conjunto;
     if (c === 1161 && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
@@ -293,6 +375,7 @@ export function gerarGradeMagica(
         codDisciplina: item.elegivel.disciplina.codigo,
         codTurma: melhorTurma.codigo,
       });
+      chTotalAlocada += item.elegivel.disciplina.horas.total;
       if (c === 1161) {
         chAlocadaHumanidades += item.elegivel.disciplina.horas.total;
       } else if (c === 1159) {
@@ -305,3 +388,5 @@ export function gerarGradeMagica(
 
   return selecaoFinal;
 }
+
+export const gerarGradeMagica = gerarSugestaoGrade;

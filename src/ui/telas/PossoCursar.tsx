@@ -388,11 +388,11 @@ export function TelaPossoCursar(props: {
             <button
               onClick={onAbrirGradeMagica}
               className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
-              title="Preenchimento inteligente de grade"
+              title="Preenchimento com Sugestão de Grade"
             >
               <span>✨</span>
-              <span className="hidden sm:inline">Preencher Grade (Inteligente)</span>
-              <span className="sm:hidden">Grade Mágica</span>
+              <span className="hidden sm:inline">Sugestão de Grade</span>
+              <span className="sm:hidden">Sugestão</span>
             </button>
           )}
         </div>
@@ -404,24 +404,27 @@ export function TelaPossoCursar(props: {
 
       {filtrosAbertos && (
         <div className="space-y-3 rounded-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80 transition-all">
-          {/* grupos de categoria */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            {GRUPOS.map(([id, rotulo]) => (
-              <button
-                key={id}
-                onClick={() => {
-                  setGrupo(id);
-                  if (id !== "trilhas") setTrilha("todas");
-                }}
-                className={`rounded-xl px-3.5 py-1.5 text-sm font-semibold transition-colors cursor-pointer ${
-                  grupo === id
-                    ? "bg-utfpr-500 text-zinc-900"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {rotulo}
-              </button>
-            ))}
+          {/* grupos de categoria (Dropdown) */}
+          <div className="flex flex-wrap items-center gap-2">
+            <label htmlFor="grupo-possocursar" className="font-display text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
+              Categoria:
+            </label>
+            <select
+              id="grupo-possocursar"
+              value={grupo}
+              onChange={(e) => {
+                const id = e.target.value as Grupo;
+                setGrupo(id);
+                if (id !== "trilhas") setTrilha("todas");
+              }}
+              className="cursor-pointer rounded-xl border border-zinc-300 bg-white px-3.5 py-2 font-display text-xs font-bold text-zinc-900 shadow-2xs transition-all focus:border-utfpr-500 focus:outline-none focus:ring-2 focus:ring-utfpr-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-utfpr-400 min-w-[200px]"
+            >
+              {GRUPOS.map(([id, rotulo]) => (
+                <option key={id} value={id}>
+                  {rotulo === "todas" ? "Todas as Categorias" : rotulo}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* sub-filtro: só aparece com Trilhas selecionado */}

@@ -44,6 +44,9 @@ const CHAVE_GRADE_ATIVA = "oasis.grade_ativa.v1";
 const CHAVE_LAYOUT = "oasis.layout.v1";
 const CHAVE_PREFS = "oasis.preferencias.v1";
 const CHAVE_CHECKIN = "oasis.checkin.v1";
+const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
+const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
+const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 
 function salvarPerfil(p: PerfilAluno) {
   localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ ...p, aprovadas: [...p.aprovadas] }));
@@ -79,12 +82,32 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const semestreAtivo = preferencias.semestreAtivo || "2026-1";
+
+  const todasOfertas: Record<string, OfertaSemestre> = useMemo(() => {
+    const o20261 = turmas20261Json as unknown as OfertaSemestre;
+    const o20252 = turmas20252Json as unknown as OfertaSemestre;
+    const o20262: OfertaSemestre = {
+      ...o20252,
+      semestre: "2026-2",
+      fonte: "Simulação Prévia (baseada nas ofertas de 2025.2)",
+      disciplinas: o20252.disciplinas.filter(
+        (d) =>
+          d.codigo !== "ICSH41" &&
+          !d.nome.toLowerCase().includes("avaliação em interação humano-computador")
+      ),
+    };
+    return {
+      "2026-1": o20261,
+      "2025-2": o20252,
+      "2026-2": o20262,
+    };
+  }, []);
+
   const oferta = useMemo<OfertaSemestre>(() => {
-    if (preferencias.semestreAtivo === "2025-2") {
-      return turmas20252Json as unknown as OfertaSemestre;
-    }
-    return turmas20261Json as unknown as OfertaSemestre;
-  }, [preferencias.semestreAtivo]);
+    return todasOfertas[semestreAtivo] || todasOfertas["2026-1"];
+  }, [semestreAtivo, todasOfertas]);
+
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -92,32 +115,86 @@ export function App() {
     return localStorage.getItem(CHAVE_GRADE_ATIVA) ?? "A";
   });
 
-  const [cestaGrades, setCestaGrades] = useState<Record<string, SelecaoTurma[]>>(() => {
+  const [todasCestasPorSemestre, setTodasCestasPorSemestre] = useState<
+    Record<string, Record<string, SelecaoTurma[]>>
+  >(() => {
     try {
-      const salvo = JSON.parse(localStorage.getItem(CHAVE_CESTA) ?? "null");
+      const salvo = JSON.parse(localStorage.getItem(CHAVE_CESTAS_POR_SEMESTRE) ?? "null");
       if (salvo && typeof salvo === "object" && Object.keys(salvo).length > 0) return salvo;
     } catch {}
     try {
+      const salvoV1 = JSON.parse(localStorage.getItem(CHAVE_CESTA) ?? "null");
+      if (salvoV1 && typeof salvoV1 === "object") {
+        return { "2026-1": salvoV1 };
+      }
+    } catch {}
+    try {
       const gradeAtual = JSON.parse(localStorage.getItem(CHAVE_GRADE) ?? "[]");
-      return { A: gradeAtual };
+      return { "2026-1": { A: gradeAtual } };
     } catch {
-      return { A: [] };
+      return { "2026-1": { A: [] } };
     }
   });
 
-  const [selecao, setSelecao] = useState<SelecaoTurma[]>(() => {
-    return cestaGrades[gradeAtiva] ?? [];
+  const [todasExclusoesPorSemestre, setTodasExclusoesPorSemestre] = useState<
+    Record<string, Record<string, any>>
+  >(() => {
+    try {
+      const salvo = JSON.parse(localStorage.getItem(CHAVE_EXCLUSOES_POR_SEMESTRE) ?? "null");
+      if (salvo && typeof salvo === "object") return salvo;
+    } catch {}
+    try {
+      const salvoV1 = JSON.parse(localStorage.getItem(CHAVE_CESTA_EXCLUSOES) ?? "null");
+      if (salvoV1 && typeof salvoV1 === "object") {
+        return { "2026-1": salvoV1 };
+      }
+    } catch {}
+    return { "2026-1": {} };
   });
 
-  // Salvar grade e cesta no localStorage e manter sincronizados
+  const cestaGrades = useMemo(() => {
+    return todasCestasPorSemestre[semestreAtivo] ?? { A: [] };
+  }, [todasCestasPorSemestre, semestreAtivo]);
+
+  const cestaExclusoes = useMemo(() => {
+    return todasExclusoesPorSemestre[semestreAtivo] ?? {};
+  }, [todasExclusoesPorSemestre, semestreAtivo]);
+
+  const exclusoesAtivas = useMemo(() => {
+    return cestaExclusoes[gradeAtiva] ?? null;
+  }, [cestaExclusoes, gradeAtiva]);
+
+  const [selecao, setSelecao] = useState<SelecaoTurma[]>(() => {
+    return (todasCestasPorSemestre[semestreAtivo] ?? { A: [] })[gradeAtiva] ?? [];
+  });
+
+  function setCestaExclusoes(acao: any) {
+    setTodasExclusoesPorSemestre((prevTodas) => {
+      const atual = prevTodas[semestreAtivo] || {};
+      const novo = typeof acao === "function" ? acao(atual) : acao;
+      const novoTodas = { ...prevTodas, [semestreAtivo]: novo };
+      localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(novoTodas));
+      if (semestreAtivo === "2026-1") {
+        localStorage.setItem(CHAVE_CESTA_EXCLUSOES, JSON.stringify(novo));
+      }
+      return novoTodas;
+    });
+  }
+
   useEffect(() => {
     localStorage.setItem(CHAVE_GRADE, JSON.stringify(selecao));
-    setCestaGrades((prev) => {
-      const novaCesta = { ...prev, [gradeAtiva]: selecao };
-      localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
-      return novaCesta;
+    setTodasCestasPorSemestre((prev) => {
+      const cestaAtual = prev[semestreAtivo] || { A: [] };
+      if (cestaAtual[gradeAtiva] === selecao) return prev;
+      const novaCesta = { ...cestaAtual, [gradeAtiva]: selecao };
+      const novoTodas = { ...prev, [semestreAtivo]: novaCesta };
+      localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(novoTodas));
+      if (semestreAtivo === "2026-1") {
+        localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
+      }
+      return novoTodas;
     });
-  }, [selecao, gradeAtiva]);
+  }, [selecao, gradeAtiva, semestreAtivo]);
 
   function handleMudarGradeAtiva(g: string) {
     setGradeAtiva(g);
@@ -131,8 +208,12 @@ export function App() {
     const nova = abasPossiveis.find((l) => !chaves.includes(l));
     if (!nova) return;
     const novaCesta = { ...cestaGrades, [nova]: [] };
-    setCestaGrades(novaCesta);
-    localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
+    setTodasCestasPorSemestre((prev) => {
+      const n = { ...prev, [semestreAtivo]: novaCesta };
+      localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(n));
+      return n;
+    });
+    setCestaExclusoes((prev: any) => ({ ...prev, [nova]: { disciplinas: [], professores: [] } }));
     setGradeAtiva(nova);
     localStorage.setItem(CHAVE_GRADE_ATIVA, nova);
     setSelecao([]);
@@ -142,8 +223,16 @@ export function App() {
     if (g === "A") return;
     const novaCesta = { ...cestaGrades };
     delete novaCesta[g];
-    setCestaGrades(novaCesta);
-    localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
+    setTodasCestasPorSemestre((prev) => {
+      const n = { ...prev, [semestreAtivo]: novaCesta };
+      localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(n));
+      return n;
+    });
+    setCestaExclusoes((prev: any) => {
+      const n = { ...prev };
+      delete n[g];
+      return n;
+    });
     if (gradeAtiva === g) {
       setGradeAtiva("A");
       localStorage.setItem(CHAVE_GRADE_ATIVA, "A");
@@ -235,6 +324,9 @@ export function App() {
     localStorage.clear();
     setPerfil(null);
     setCheckinConcluido(false);
+    setTodasCestasPorSemestre({ [semestreAtivo]: { A: [] } });
+    setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
+    setGradeAtiva("A");
     setSelecao([]);
     setPreferencias({ tema: "sistema", layout: "oasis" });
     setLayout("oasis");
@@ -247,6 +339,9 @@ export function App() {
     localStorage.removeItem(CHAVE_CHECKIN);
     setPerfil(null);
     setCheckinConcluido(false);
+    setTodasCestasPorSemestre({ [semestreAtivo]: { A: [] } });
+    setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
+    setGradeAtiva("A");
     setSelecao([]);
     setAba("planejamento");
     setAbaPlanejamento("cursar");
@@ -289,9 +384,21 @@ export function App() {
                 />
                 <select
                   value={preferencias.semestreAtivo || "2026-1"}
-                  onChange={(e) => setPreferencias({ ...preferencias, semestreAtivo: e.target.value })}
+                  onChange={(e) => {
+                    const novoSem = e.target.value;
+                    setPreferencias({ ...preferencias, semestreAtivo: novoSem });
+                    const novaCesta = todasCestasPorSemestre[novoSem] || { A: [] };
+                    const chaves = Object.keys(novaCesta);
+                    const abaDestino = chaves.includes(gradeAtiva) ? gradeAtiva : (chaves[0] || "A");
+                    setGradeAtiva(abaDestino);
+                    localStorage.setItem(CHAVE_GRADE_ATIVA, abaDestino);
+                    setSelecao(novaCesta[abaDestino] || []);
+                  }}
                   className="bg-transparent font-mono text-xs font-bold focus:outline-none cursor-pointer appearance-none text-current"
                 >
+                  <option value="2026-2" className="bg-white text-emerald-700 font-bold dark:bg-zinc-900 dark:text-emerald-400">
+                    2026.2 (Prévia)
+                  </option>
                   <option value="2026-1" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                     2026.1
                   </option>
@@ -365,6 +472,28 @@ export function App() {
         )}
       </header>
 
+      {/* Banner de Aviso: 2026.2 Dados Simulados */}
+      {(oferta.semestre === "2026-2" || oferta.semestre === "2026.2" || preferencias.semestreAtivo === "2026-2") && (
+        <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-3.5">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/25 text-2xl font-bold text-emerald-600 dark:text-emerald-300 shadow-xs">
+                ⚠️
+              </span>
+              <div>
+                <div className="font-display text-sm font-black text-emerald-900 dark:text-emerald-100 uppercase tracking-wide flex items-center gap-2">
+                  <span>Módulo de Prévia: 2026.2 (Simulação Futura)</span>
+                  <span className="inline-flex items-center rounded-lg bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white shadow-2xs">DADOS SIMULADOS DE 2025.2</span>
+                </div>
+                <p className="mt-1 leading-relaxed text-zinc-800 dark:text-zinc-200 text-xs font-semibold">
+                  Este módulo de <strong className="text-emerald-700 dark:text-emerald-300 underline">2026.2</strong> está operando com dados simulados herdados de 2025.2 (com remoção de matérias como <em>Avaliação em IHC</em> para simular disciplinas não ofertadas) e <strong className="text-red-600 dark:text-red-400 font-black uppercase">não representa dados genuínos</strong> oficiais de 2026.2.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Se não tem perfil nem fez checkin (ou trocou de usuário), mostra Checkin */}
       {!perfil && !checkinConcluido ? (
         <TelaCheckin
@@ -377,8 +506,8 @@ export function App() {
         <div className="flex items-start gap-6">
           {/* coluna principal */}
           <div className="min-w-0 flex-1">
-            <nav className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-zinc-100/70 p-1.5 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/70">
-              <div className="flex flex-1 gap-1.5 min-w-[280px]">
+            <nav className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-3xl border-2 border-zinc-200/90 bg-white/90 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/90">
+              <div className="flex flex-1 gap-2 min-w-[280px]">
                 {abasPrincipal.map(([id, rotulo]) => {
                   const ativo = aba === id;
                   const bloqueado = id === "situacao" && !perfil;
@@ -394,19 +523,19 @@ export function App() {
                       onClick={() => {
                         if (!bloqueado) setAba(id);
                       }}
-                      className={`inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-display text-sm font-bold transition-all duration-150 ${
+                      className={`inline-flex flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-2xl px-5 py-3 font-display text-sm sm:text-base font-black transition-all duration-200 ${
                         bloqueado
                           ? "opacity-50 cursor-not-allowed bg-transparent text-zinc-400 dark:text-zinc-600"
                           : ativo
-                            ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-800 dark:text-white"
-                            : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                            ? "bg-zinc-900 text-utfpr-400 shadow-lg ring-2 ring-utfpr-500/40 dark:bg-zinc-800 dark:text-utfpr-400"
+                            : "bg-zinc-100/80 text-zinc-700 hover:bg-utfpr-50 hover:text-zinc-950 hover:border-utfpr-300 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white border border-transparent"
                       }`}
                     >
                       {id === "situacao" && (
-                        bloqueado ? <span title="Desbloqueie carregando o histórico">🔒</span> : <IconUser className="h-4 w-4" />
+                        bloqueado ? <span title="Desbloqueie carregando o histórico">🔒</span> : <IconUser className="h-4 w-4 sm:h-5 sm:w-5" />
                       )}
-                      {id === "planejamento" && <IconBookOpen className="h-4 w-4" />}
-                      {id === "catalogo" && <IconCalendar className="h-4 w-4" />}
+                      {id === "planejamento" && <IconBookOpen className="h-4 w-4 sm:h-5 sm:w-5" />}
+                      {id === "catalogo" && <IconCalendar className="h-4 w-4 sm:h-5 sm:w-5" />}
                       <span>{rotulo}</span>
                     </button>
                   );
@@ -448,75 +577,59 @@ export function App() {
 
             {aba === "planejamento" && (
               <div className="space-y-6">
-                {/* Sub-navegação de Planejamento e Toggle de Layout unificados */}
-                <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-2 pl-3 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="flex items-center gap-1.5 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
-                      <button
-                        onClick={() => setAbaPlanejamento("cursar")}
-                        className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
-                          abaPlanejamento === "cursar"
-                            ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
-                            : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                        }`}
-                      >
-                        <IconBookOpen className="h-3.5 w-3.5" />
-                        <span>Matérias Abertas ({oferta.disciplinas.reduce((acc, d) => acc + d.turmas.length, 0)} turmas)</span>
-                      </button>
-                      <button
-                        onClick={() => setAbaPlanejamento("grade")}
-                        className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
-                          abaPlanejamento === "grade"
-                            ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
-                            : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                        }`}
-                      >
-                        <IconCalendar className="h-3.5 w-3.5" />
-                        <span>Minha Grade ({selecao.length})</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Toggle de Layout no cabeçalho de planejamento (Item 1 e 4) */}
-                  {abaPlanejamento === "cursar" && (
-                    <div className="flex items-center gap-2 pr-1">
-                      <span className="hidden sm:inline font-display text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                        Visualização:
+                {/* Sub-navegação totalizando o cabeçalho, com ícones e texto maiores e coloridos */}
+                <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2.5 shadow-lg backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setAbaPlanejamento("cursar")}
+                      className={`flex items-center justify-center gap-3 rounded-2xl py-4 px-5 font-display text-base sm:text-lg font-black transition-all duration-200 cursor-pointer ${
+                        abaPlanejamento === "cursar"
+                          ? "bg-gradient-to-r from-utfpr-500 via-amber-400 to-utfpr-500 text-zinc-950 shadow-md ring-2 ring-utfpr-500/50 scale-[1.01]"
+                          : "bg-zinc-50/90 text-zinc-700 hover:bg-utfpr-50 hover:text-zinc-950 hover:border-utfpr-300 dark:bg-zinc-800/60 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white border border-zinc-200/80 dark:border-zinc-700/80"
+                      }`}
+                    >
+                      <span className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl transition-transform ${
+                        abaPlanejamento === "cursar"
+                          ? "bg-zinc-950/20 text-zinc-950 scale-110"
+                          : "bg-utfpr-500/20 text-utfpr-600 dark:bg-utfpr-500/20 dark:text-utfpr-400 group-hover:scale-110"
+                      }`}>
+                        <IconBookOpen className="h-5 w-5 sm:h-6 sm:w-6" />
                       </span>
-                      <div className="flex items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
-                        <button
-                          onClick={() => {
-                            setLayout("oasis");
-                            setPreferencias({ ...preferencias, layout: "oasis" });
-                            localStorage.setItem(CHAVE_LAYOUT, "oasis");
-                          }}
-                          title="Layout Oásis (cards interativos com tags)"
-                          className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-                            (preferencias.layout ?? layout) === "oasis"
-                              ? "bg-utfpr-500 text-zinc-950 font-black shadow-2xs"
-                              : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                          }`}
-                        >
-                          Layout Oásis
-                        </button>
-                        <button
-                          onClick={() => {
-                            setLayout("gnh");
-                            setPreferencias({ ...preferencias, layout: "gnh" });
-                            localStorage.setItem(CHAVE_LAYOUT, "gnh");
-                          }}
-                          title="Layout GNH (lista bruta e densa igual ao portal original)"
-                          className={`rounded-lg px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-                            (preferencias.layout ?? layout) === "gnh"
-                              ? "bg-utfpr-500 text-zinc-950 font-black shadow-2xs"
-                              : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                          }`}
-                        >
-                          Layout GNH
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                      <span className="truncate">Matérias Abertas</span>
+                      <span className={`shrink-0 rounded-full px-2.5 py-1 font-mono text-xs sm:text-sm font-black shadow-2xs ${
+                        abaPlanejamento === "cursar"
+                          ? "bg-zinc-950 text-utfpr-400"
+                          : "bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+                      }`}>
+                        {oferta.disciplinas.reduce((acc, d) => acc + d.turmas.length, 0)} turmas
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() => setAbaPlanejamento("grade")}
+                      className={`flex items-center justify-center gap-3 rounded-2xl py-4 px-5 font-display text-base sm:text-lg font-black transition-all duration-200 cursor-pointer ${
+                        abaPlanejamento === "grade"
+                          ? "bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 text-zinc-950 shadow-md ring-2 ring-emerald-500/50 scale-[1.01]"
+                          : "bg-zinc-50/90 text-zinc-700 hover:bg-emerald-50 hover:text-zinc-950 hover:border-emerald-300 dark:bg-zinc-800/60 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white border border-zinc-200/80 dark:border-zinc-700/80"
+                      }`}
+                    >
+                      <span className={`flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl transition-transform ${
+                        abaPlanejamento === "grade"
+                          ? "bg-zinc-950/20 text-zinc-950 scale-110"
+                          : "bg-emerald-500/20 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 group-hover:scale-110"
+                      }`}>
+                        <IconCalendar className="h-5 w-5 sm:h-6 sm:w-6" />
+                      </span>
+                      <span className="truncate">Minha Grade</span>
+                      <span className={`shrink-0 rounded-full px-2.5 py-1 font-mono text-xs sm:text-sm font-black shadow-2xs ${
+                        abaPlanejamento === "grade"
+                          ? "bg-zinc-950 text-emerald-400"
+                          : "bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+                      }`}>
+                        {selecao.length} {selecao.length === 1 ? "turma" : "turmas"}
+                      </span>
+                    </button>
+                  </div>
                 </div>
 
                 {abaPlanejamento === "cursar" ? (
@@ -556,6 +669,16 @@ export function App() {
                     perfil={perfil}
                     matriz={matriz}
                     onAbrirGradeMagica={() => setModalGradeMagica(true)}
+                    exclusoesSugestao={exclusoesAtivas}
+                    onLimparExclusoes={() => {
+                      setCestaExclusoes((prev: any) => {
+                        const n = { ...prev, [gradeAtiva]: { disciplinas: [], professores: [] } };
+                        return n;
+                      });
+                    }}
+                    todasCestasPorSemestre={todasCestasPorSemestre}
+                    semestreAtivo={semestreAtivo}
+                    todasOfertas={todasOfertas}
                   />
                 )}
               </div>
@@ -569,7 +692,13 @@ export function App() {
                 oferta={oferta}
                 selecao={selecao}
                 preview={preview}
-                onLimpar={() => setSelecao([])}
+                onLimpar={() => {
+                  setSelecao([]);
+                  setCestaExclusoes((prev: any) => {
+                    const n = { ...prev, [gradeAtiva]: { disciplinas: [], professores: [] } };
+                    return n;
+                  });
+                }}
                 cestaGrades={cestaGrades}
                 gradeAtiva={gradeAtiva}
                 onMudarGradeAtiva={handleMudarGradeAtiva}
@@ -578,21 +707,35 @@ export function App() {
                 onRemoverTurma={(codigo) =>
                   setSelecao((s) => s.filter((item) => item.codDisciplina !== codigo))
                 }
+                exclusoesSugestao={exclusoesAtivas}
+                onLimparExclusoes={() => {
+                  setCestaExclusoes((prev: any) => {
+                    const n = { ...prev, [gradeAtiva]: { disciplinas: [], professores: [] } };
+                    return n;
+                  });
+                }}
               />
             </aside>
           )}
         </div>
       )}
 
-      {/* Modal Grade Mágica unificado para todo o Planejamento */}
+      {/* Modal Sugestão de Grade unificado para todo o Planejamento */}
       <ModalGradeMagica
         aberto={modalGradeMagica}
         onFechar={() => setModalGradeMagica(false)}
         perfil={perfil}
         matriz={matriz}
         oferta={oferta}
-        onGerarGrade={(s) => {
+        selecaoAtual={selecao}
+        onGerarGrade={(s, meta) => {
           setSelecao(s);
+          if (meta) {
+            setCestaExclusoes((prev: any) => {
+              const n = { ...prev, [gradeAtiva]: meta };
+              return n;
+            });
+          }
           setModalGradeMagica(false);
           setAbaPlanejamento("grade");
         }}

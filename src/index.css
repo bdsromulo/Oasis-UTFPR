@@ -18,10 +18,50 @@ html {
 }
 
 body {
-  @apply bg-[#f4f5f7] font-sans text-zinc-900 antialiased selection:bg-utfpr-500/30 selection:text-zinc-950 min-h-screen dark:bg-zinc-950 dark:text-zinc-100 dark:selection:bg-utfpr-500/30 dark:selection:text-utfpr-400;
+  @apply bg-gradient-to-br from-[#f2f5f9] via-[#e9edf5] to-[#f0f4fb] font-sans text-zinc-950 antialiased selection:bg-utfpr-500/40 selection:text-zinc-950 min-h-screen dark:bg-zinc-950 dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950 dark:text-zinc-100 dark:selection:bg-utfpr-500/30 dark:selection:text-utfpr-400;
 }
 
 h1, h2, h3, h4, h5, h6, .font-display {
   font-family: var(--font-display);
+}
+
+/* Melhorias profundas de contraste e vivacidade para o Modo Claro (Oásis / UTFPR) */
+html:not(.dark) {
+  --tw-border-opacity: 1;
+}
+
+/* Bordas de cards e painéis bem definidas e nítidas no modo claro */
+html:not(.dark) .border-zinc-200\/80,
+html:not(.dark) .border-zinc-200 {
+  border-color: rgba(203, 213, 225, 0.95) !important; /* slate-300 de alto contraste */
+}
+
+/* Textos secundários fortes para perfeita legibilidade */
+html:not(.dark) .text-zinc-500 {
+  color: #475569 !important; /* slate-600 forte */
+}
+
+html:not(.dark) .text-zinc-600 {
+  color: #334155 !important; /* slate-700 nítido */
+}
+
+html:not(.dark) .text-zinc-700 {
+  color: #1e293b !important; /* slate-800 denso */
+}
+
+/* Superfícies brancas com sombra premium levemente aquecida/azulada e borda límpida */
+html:not(.dark) .bg-white\/80,
+html:not(.dark) .bg-white\/90,
+html:not(.dark) .bg-white {
+  background-color: rgba(255, 255, 255, 0.97) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.07), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+}
+
+/* Superfícies secundárias cinzas mais limpas com contraste elegante */
+html:not(.dark) .bg-zinc-100\/70,
+html:not(.dark) .bg-zinc-100\/80,
+html:not(.dark) .bg-zinc-100 {
+  background-color: rgba(241, 245, 249, 0.95) !important; /* slate-100/200 nítido */
+  border-color: rgba(203, 213, 225, 0.85);
 }
 

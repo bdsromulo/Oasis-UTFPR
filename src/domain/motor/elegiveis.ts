@@ -10,7 +10,7 @@ export interface Elegivel {
   jaMatriculada: boolean;
 }
 
-function normNome(nome: string): string {
+export function normNome(nome: string): string {
   return nome
     .toLowerCase()
     .normalize("NFD")
@@ -72,61 +72,18 @@ export function buscarOfertaParaPlanejamento(
   ofertadas: Map<string, DisciplinaOfertada>,
 ): DisciplinaOfertada | null {
   const direta = ofertadas.get(d.codigo);
-  const turmasEquivs: any[] = [];
-  const codigosEquivsConhecidos = new Set<string>();
-
-  if (d.equivalentes && d.equivalentes.length > 0) {
-    for (const eq of d.equivalentes) {
-      codigosEquivsConhecidos.add(eq.codigo);
-      const ofEq = ofertadas.get(eq.codigo);
-      if (ofEq) {
-        for (const t of ofEq.turmas) {
-          if (t.horarios && t.horarios.length > 0) {
-            turmasEquivs.push({
-              ...t,
-              codigo: `${t.codigo} (${eq.codigo})`,
-            });
-          }
-        }
-      }
-    }
-  }
-
-  // Regra Automática: Matérias com nomes exatamente iguais no mesmo curso/campus são automaticamente equivalentes no planejamento
-  const nomeDNorm = normNome(d.nome);
-  for (const [codOf, of] of ofertadas.entries()) {
-    if (codOf !== d.codigo && !codigosEquivsConhecidos.has(codOf)) {
-      if (normNome(of.nome) === nomeDNorm) {
-        codigosEquivsConhecidos.add(codOf);
-        for (const t of of.turmas) {
-          if (t.horarios && t.horarios.length > 0) {
-            turmasEquivs.push({
-              ...t,
-              codigo: `${t.codigo} (${codOf})`,
-            });
-          }
-        }
-      }
-    }
-  }
-
-  const turmasDiretas = direta
-    ? direta.turmas.filter((t) => t.horarios && t.horarios.length > 0)
-    : [];
-  const todasTurmas = [...turmasDiretas, ...turmasEquivs];
-  if (todasTurmas.length === 0) return null;
+  if (!direta) return null;
+  const turmasDiretas = direta.turmas
+    .filter((t) => t.horarios && t.horarios.length > 0)
+    .map((t) => ({ ...t, codDisciplinaOriginal: d.codigo, codTurmaOriginal: t.codigo }));
+  if (turmasDiretas.length === 0) return null;
   return {
-    codigo: d.codigo,
-    nome: direta?.nome ?? d.nome,
-    aulas_semanais_presenciais:
-      direta?.aulas_semanais_presenciais ?? d.aulas_semanais.teoricas + d.aulas_semanais.praticas,
-    aulas_semanais_assincronas: direta?.aulas_semanais_assincronas ?? 0,
-    horas_semestrais_extensionistas: direta?.horas_semestrais_extensionistas ?? d.horas.chext,
-    turmas: todasTurmas,
+    ...direta,
+    turmas: turmasDiretas,
   };
 }
 
-/** Todas as disciplinas da matriz ainda não cumpridas, com estado de liberação e oferta. */
+/** Todas as disciplinas da matriz ainda não cumpridas e disciplinas ofertadas no semestre, com estado de liberação e oferta. */
 export function listarElegiveis(
   perfil: PerfilAluno | null,
   matriz: Matriz,
@@ -135,9 +92,12 @@ export function listarElegiveis(
   const ofertadas = new Map(oferta.disciplinas.map((d) => [d.codigo, d]));
   const matriculadas = new Set(perfil?.matriculadas.map((m) => m.codigo) ?? []);
   const out: Elegivel[] = [];
+  const codigosAdicionados = new Set<string>();
+
   for (const d of matriz.disciplinas) {
     if (d.codigo.startsWith("ENADE")) continue;
     if (cumpre(d.codigo, perfil, matriz)) continue;
+    codigosAdicionados.add(d.codigo);
     out.push({
       disciplina: d,
       oferta: buscarOfertaParaPlanejamento(d, ofertadas),
@@ -146,6 +106,69 @@ export function listarElegiveis(
       jaMatriculada: matriculadas.has(d.codigo),
     });
   }
+
+  // Adicionar disciplinas ofertadas no semestre que não estão diretamente na matriz (por equivalência ou optativas/eletivas)
+  for (const [codOf, of] of ofertadas.entries()) {
+    if (codigosAdicionados.has(codOf) || codOf.startsWith("ENADE")) continue;
+    if (cumpre(codOf, perfil, matriz)) continue;
+
+    const turmasComHorario = of.turmas
+      .filter((t) => t.horarios && t.horarios.length > 0)
+      .map((t) => ({ ...t, codDisciplinaOriginal: codOf, codTurmaOriginal: t.codigo }));
+    if (turmasComHorario.length === 0) continue;
+
+    // Verificar se esta disciplina ofertada é equivalente a alguma disciplina da matriz para herdar categoria, período e bloqueios
+    let discRef: DisciplinaMatriz | undefined;
+    for (const d of matriz.disciplinas) {
+      const equivs = d.equivalentes || [];
+      if (equivs.some((eq) => eq.codigo === codOf) || normNome(d.nome) === normNome(of.nome)) {
+        discRef = d;
+        break;
+      }
+    }
+
+    if (discRef && cumpre(discRef.codigo, perfil, matriz)) continue;
+
+    const aulasPresenciais = of.aulas_semanais_presenciais ?? 4;
+    const aulasAssincronas = of.aulas_semanais_assincronas ?? 0;
+    const chext = of.horas_semestrais_extensionistas ?? 0;
+
+    const discSimulada: DisciplinaMatriz = {
+      codigo: codOf,
+      nome: of.nome,
+      periodo: discRef?.periodo ?? 0,
+      conjunto: discRef?.conjunto ?? null,
+      modelo: discRef?.modelo ?? "padrão",
+      horas: {
+        ad: discRef?.horas.ad ?? (aulasPresenciais * 15),
+        chext: chext,
+        chead: discRef?.horas.chead ?? (aulasAssincronas * 15),
+        total: (aulasPresenciais + aulasAssincronas) * 15,
+      },
+      aulas_semanais: {
+        teoricas: aulasPresenciais,
+        praticas: 0,
+        total: aulasPresenciais + aulasAssincronas,
+        aps: 0,
+        apcc: 0,
+      },
+      prerequisitos: discRef?.prerequisitos ?? [],
+      equivalentes: [],
+    };
+
+    codigosAdicionados.add(codOf);
+    out.push({
+      disciplina: discSimulada,
+      oferta: {
+        ...of,
+        turmas: turmasComHorario,
+      },
+      categoria: discRef ? categoriaDe(discRef, matriz) : "eletiva",
+      motivoBloqueio: discRef ? bloqueio(discRef, perfil, matriz) : null,
+      jaMatriculada: matriculadas.has(codOf),
+    });
+  }
+
   // liberadas e ofertadas primeiro; depois por período na matriz
   out.sort(
     (a, b) =>

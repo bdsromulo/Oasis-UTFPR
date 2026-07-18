@@ -24,6 +24,7 @@ export function TelaCatalogo(props: {
 }) {
   const { perfil, matriz, oferta } = props;
   const [categoria, setCategoria] = useState<CategoriaCatalogo>(props.categoriaInicial ?? "todas");
+  const [filtroPeriodo, setFiltroPeriodo] = useState<string>("todos");
   const [filtroStatus, setFiltroStatus] = useState<"todas" | "abertas" | "semoferta" | "concluidas">("todas");
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
@@ -160,6 +161,14 @@ export function TelaCatalogo(props: {
         }
       }
 
+      if (filtroPeriodo !== "todos") {
+        if (filtroPeriodo === "optativas") {
+          if (item.disciplina.periodo !== null && item.disciplina.periodo !== 0) return false;
+        } else {
+          if (String(item.disciplina.periodo) !== filtroPeriodo) return false;
+        }
+      }
+
       if (filtroStatus === "concluidas" && !item.concluida) return false;
       if (filtroStatus === "abertas" && (item.concluida || !item.temOferta)) return false;
       if (filtroStatus === "semoferta" && (item.concluida || item.temOferta)) return false;
@@ -237,24 +246,48 @@ export function TelaCatalogo(props: {
         </div>
       </div>
 
-      {/* Navegação por Categoria / Estrato */}
-      <div className="flex flex-wrap gap-1.5 rounded-2xl border border-zinc-200/80 bg-zinc-100/70 p-1.5 dark:border-zinc-800/80 dark:bg-zinc-900/70">
-        {categoriasOpcoes.map(([id, rotulo]) => {
-          const ativa = categoria === id;
-          return (
-            <button
-              key={id}
-              onClick={() => setCategoria(id)}
-              className={`rounded-xl px-3.5 py-2 font-display text-xs font-bold transition-all cursor-pointer ${
-                ativa
-                  ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-800 dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-              }`}
-            >
-              {rotulo}
-            </button>
-          );
-        })}
+      {/* Filtros de Categoria (Dropdown) e Período (exclusivo para Catálogo) */}
+      <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-zinc-200/80 bg-zinc-100/70 p-3.5 dark:border-zinc-800/80 dark:bg-zinc-900/70">
+        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[240px]">
+          <label htmlFor="categoria-catalogo" className="font-display text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
+            Categoria:
+          </label>
+          <select
+            id="categoria-catalogo"
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value as CategoriaCatalogo)}
+            className="flex-1 cursor-pointer rounded-xl border border-zinc-300 bg-white px-3.5 py-2 font-display text-xs font-bold text-zinc-900 shadow-2xs transition-all focus:border-utfpr-500 focus:outline-none focus:ring-2 focus:ring-utfpr-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-utfpr-400"
+          >
+            {categoriasOpcoes.map(([id, rotulo]) => (
+              <option key={id} value={id}>
+                {rotulo}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[240px]">
+          <label htmlFor="periodo-catalogo" className="font-display text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
+            Período:
+          </label>
+          <select
+            id="periodo-catalogo"
+            value={filtroPeriodo}
+            onChange={(e) => setFiltroPeriodo(e.target.value)}
+            className="flex-1 cursor-pointer rounded-xl border border-zinc-300 bg-white px-3.5 py-2 font-display text-xs font-bold text-zinc-900 shadow-2xs transition-all focus:border-utfpr-500 focus:outline-none focus:ring-2 focus:ring-utfpr-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-utfpr-400"
+          >
+            <option value="todos">Todos os Períodos</option>
+            <option value="1">1º Período</option>
+            <option value="2">2º Período</option>
+            <option value="3">3º Período</option>
+            <option value="4">4º Período</option>
+            <option value="5">5º Período</option>
+            <option value="6">6º Período</option>
+            <option value="7">7º Período</option>
+            <option value="8">8º Período</option>
+            <option value="optativas">Optativas / Sem Período Fixo</option>
+          </select>
+        </div>
       </div>
 
       {/* CARD PROGRESSO DA CATEGORIA SELECIONADA (ITEM 7) */}

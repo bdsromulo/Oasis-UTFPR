@@ -4,6 +4,8 @@ import type { DisciplinaOfertada, Horario, OfertaSemestre, SelecaoTurma, Turma }
 export interface ItemGrade {
   disciplina: DisciplinaOfertada;
   turma: Turma;
+  /** Se veio de uma disciplina equivalente/agrupada no catálogo, armazena a seleção original que gerou o item */
+  selecaoOriginal?: SelecaoTurma;
 }
 
 export interface Conflito {
@@ -106,7 +108,9 @@ export function haveriaConflito(
 ): boolean {
   if (
     itensAtual.some(
-      (i) => i.disciplina.codigo === disciplina.codigo && i.turma.codigo === turma.codigo,
+      (i) =>
+        (i.disciplina.codigo === disciplina.codigo && i.turma.codigo === turma.codigo) ||
+        (i.selecaoOriginal?.codDisciplina === disciplina.codigo && i.selecaoOriginal?.codTurma === turma.codigo),
     )
   ) {
     return false;
@@ -135,7 +139,28 @@ export function itensDaSelecao(oferta: OfertaSemestre, selecao: SelecaoTurma[]):
   for (const s of selecao) {
     const d = oferta.disciplinas.find((x) => x.codigo === s.codDisciplina);
     const t = d?.turmas.find((x) => x.codigo === s.codTurma);
-    if (d && t) out.push({ disciplina: d, turma: t });
+    if (d && t) {
+      out.push({ disciplina: d, turma: t, selecaoOriginal: s });
+      continue;
+    }
+    const match = s.codTurma.match(/^(.+?)\s*\(([A-Z0-9]+)\)$/);
+    if (match) {
+      const codTurmaReal = match[1].trim();
+      const codDiscReal = match[2].trim();
+      const dReal = oferta.disciplinas.find((x) => x.codigo === codDiscReal);
+      const tReal = dReal?.turmas.find((x) => x.codigo === codTurmaReal);
+      if (dReal && tReal) {
+        out.push({
+          disciplina: dReal,
+          turma: {
+            ...tReal,
+            codDisciplinaOriginal: codDiscReal,
+            codTurmaOriginal: codTurmaReal,
+          },
+          selecaoOriginal: s,
+        });
+      }
+    }
   }
   return out;
 }

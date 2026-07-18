@@ -103,22 +103,28 @@ export function TelaConfiguracoes(props: {
             </div>
           </div>
 
-          {/* Seção 2: Preferências de Layout */}
+          {/* Seção 2: Preferências de Layout (Exclusivo para Matérias Abertas) */}
           <div className="space-y-3">
-            <label className="block font-display text-sm font-bold text-zinc-800 dark:text-zinc-200">
-              Estilo de Navegação (Layout)
-            </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="block font-display text-sm font-bold text-zinc-800 dark:text-zinc-200">
+                Visualização de Matérias Abertas (Layout)
+              </label>
+              <Badge tom="acento">Exclusivo: Matérias Abertas</Badge>
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 -mt-1 leading-relaxed">
+              Escolha como deseja visualizar a lista de ofertas na aba <strong>Matérias Abertas</strong> no Planejamento de Matrícula:
+            </p>
+            <div className="grid grid-cols-2 gap-3 pt-1">
               {[
                 {
                   id: "oasis" as const,
-                  rotulo: "Layout Oásis (Completo)",
-                  desc: "Abas separadas, foco em progresso de estratos, estatísticas e visão estratégica.",
+                  rotulo: "Layout Oásis (Recomendado)",
+                  desc: "Cards visuais interativos com tags coloridas, status de pré-requisitos, horários organizados e progresso da trilha.",
                 },
                 {
                   id: "gnh" as const,
-                  rotulo: "Layout Grade na Hora",
-                  desc: "Foco rápido em montagem de grade horária, turmas abertas e simulação direta.",
+                  rotulo: "Layout GNH (Grade na Hora)",
+                  desc: "Tabela compacta e densa em formato de lista bruta, inspirada no visual clássico para consulta rápida.",
                 },
               ].map((op) => {
                 const ativo = preferencias.layout === op.id;
