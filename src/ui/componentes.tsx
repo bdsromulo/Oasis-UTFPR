@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, type ReactNode } from "react";
 import { IconSortUpDown, IconCheck } from "./icons";
+import { calcularProgressoMateria } from "../domain/motor/progressoGrade";
+import type { Matriz, PerfilAluno } from "../domain/tipos";
 
 export function Card(props: { titulo?: ReactNode; children: ReactNode; classe?: string }) {
   return (
@@ -162,6 +164,282 @@ export function MenuOrdenacao(props: {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+export function BarraProgressoComPreview(props: {
+  cumprido: number;
+  preview: number;
+  exigido: number;
+  classe?: string;
+  corCumprido?: string;
+  corPreview?: string;
+  corVazio?: string;
+}) {
+  const max = props.exigido > 0 ? props.exigido : 1;
+  const pCumprido = Math.min(100, Math.max(0, (props.cumprido / max) * 100));
+  const pPreview = Math.min(100 - pCumprido, Math.max(0, (props.preview / max) * 100));
+
+  const cor1 = props.corCumprido ?? "bg-emerald-500 dark:bg-emerald-400";
+  const cor2 = props.corPreview ?? "bg-utfpr-500 dark:bg-utfpr-500";
+  const cor3 = props.corVazio ?? "bg-zinc-200/80 dark:bg-zinc-800/80";
+
+  return (
+    <div className={`h-2.5 w-full overflow-hidden rounded-full flex ${cor3} ${props.classe ?? ""}`}>
+      {pCumprido > 0 && (
+        <div
+          className={`h-full transition-all duration-300 ${cor1}`}
+          style={{ width: `${pCumprido}%` }}
+          title={`Já cumprido: ${props.cumprido}h (${Math.round(pCumprido)}%)`}
+        />
+      )}
+      {pPreview > 0 && (
+        <div
+          className={`h-full transition-all duration-300 ${cor2}`}
+          style={{ width: `${pPreview}%` }}
+          title={`Impulso previsto: +${props.preview}h (${Math.round(pPreview)}%)`}
+        />
+      )}
+    </div>
+  );
+}
+
+export function CardPreviewHoverMateria(props: {
+  codigoDisciplina: string;
+  nomeDisciplina?: string;
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz | null;
+  cargaHoraria?: number;
+  classe?: string;
+  tituloCustom?: string;
+}) {
+  const dados = calcularProgressoMateria(
+    props.codigoDisciplina,
+    props.nomeDisciplina ?? props.codigoDisciplina,
+    props.cargaHoraria ?? 60,
+    props.perfil,
+    props.matriz
+  );
+
+  return (
+    <div
+      className={`rounded-xl border-2 border-utfpr-500/70 bg-white p-3.5 shadow-lg dark:border-utfpr-500/60 dark:bg-zinc-900 transition-all animate-in fade-in duration-150 ${props.classe ?? ""}`}
+    >
+      <div className="flex items-start justify-between gap-2 border-b border-zinc-100 pb-2 dark:border-zinc-800">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-utfpr-700 dark:text-utfpr-400">
+            <span>✨ {props.tituloCustom ?? "Preview do Hover · Impacto na Categoria"}</span>
+          </div>
+          <div className="mt-0.5 font-display text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-tight truncate">
+            {props.codigoDisciplina} — {props.nomeDisciplina ?? dados.categoriaNome}
+          </div>
+          <div className="mt-0.5 font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            {dados.categoriaNome}
+          </div>
+        </div>
+        <span className="shrink-0 rounded-lg bg-utfpr-500/15 border border-utfpr-500/30 px-2 py-1 font-mono text-xs font-bold text-utfpr-800 dark:text-utfpr-300">
+          +{dados.previewCarga}h
+        </span>
+      </div>
+
+      <div className="mt-2.5 space-y-1.5">
+        <div className="flex items-baseline justify-between text-xs">
+          <span className="font-semibold text-zinc-600 dark:text-zinc-400">
+            Progresso ({dados.categoriaNome}):{" "}
+            <strong className="text-zinc-900 dark:text-zinc-100">{dados.cumpridoBase}h</strong>
+            {dados.previewCarga > 0 && (
+              <span className="text-utfpr-600 dark:text-utfpr-400 font-bold"> +{dados.previewCarga}h</span>
+            )}
+          </span>
+          <span className="font-mono font-bold text-zinc-500 dark:text-zinc-400">
+            {Math.min(dados.exigido, dados.cumpridoSimulado)} / {dados.exigido}h
+          </span>
+        </div>
+
+        <BarraProgressoComPreview
+          cumprido={dados.cumpridoBase}
+          preview={dados.previewCarga}
+          exigido={dados.exigido}
+        />
+
+        <div className="flex flex-wrap items-center justify-between text-[10px] pt-0.5 font-semibold text-zinc-500 dark:text-zinc-400 gap-2">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 shrink-0" /> Feito ({dados.cumpridoBase}h)
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-utfpr-500 shrink-0" /> +{dados.previewCarga}h nesta
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-700 shrink-0" /> Faltante (
+            {Math.max(0, dados.exigido - dados.cumpridoSimulado)}h)
+          </span>
+        </div>
+
+        <div className="text-[11px] font-bold text-utfpr-700 dark:text-utfpr-300 pt-1 border-t border-zinc-100 dark:border-zinc-800/80 mt-1">
+          {dados.statusTexto}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const porRes = window.innerWidth < 768;
+    const porUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const porTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    return porRes && (porUA || porTouch);
+  });
+
+  useEffect(() => {
+    const check = () => {
+      const porRes = window.innerWidth < 768;
+      const porUA = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const porTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      setIsMobile(porRes && (porUA || porTouch));
+    };
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
+export function BalaoProgressoHover(props: {
+  codigoDisciplina: string;
+  nomeDisciplina?: string;
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz | null;
+  cargaHoraria?: number;
+  posicao?: "superior" | "inferior";
+  classe?: string;
+  carregando?: boolean;
+  semHistorico?: boolean;
+}) {
+  const sup = (props.posicao ?? "superior") === "superior";
+
+  if (!props.perfil || !props.perfil.cursadas?.length || props.semHistorico) {
+    return (
+      <div
+        className={`absolute left-1/2 -translate-x-1/2 z-50 w-64 rounded-xl border border-zinc-200/95 bg-white/95 p-2.5 shadow-2xl backdrop-blur-md dark:border-zinc-700/90 dark:bg-zinc-900/95 transition-all animate-in fade-in zoom-in-95 duration-150 pointer-events-none ${
+          sup ? "bottom-full mb-3" : "top-full mt-3"
+        } ${props.classe ?? ""}`}
+      >
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 border-[7px] border-transparent ${
+            sup
+              ? "top-full border-t-white dark:border-t-zinc-900"
+              : "bottom-full border-b-white dark:border-b-zinc-900"
+          }`}
+        />
+        <div className="flex flex-col gap-0.5 text-left">
+          <span className="font-mono text-[10px] font-bold text-zinc-500 dark:text-zinc-400">
+            {props.codigoDisciplina}
+          </span>
+          <div className="font-display text-xs font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+            {props.nomeDisciplina ?? props.codigoDisciplina}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (props.carregando) {
+    return (
+      <div
+        className={`absolute left-1/2 -translate-x-1/2 z-50 w-64 rounded-xl border border-zinc-200/95 bg-white/95 p-2.5 shadow-2xl backdrop-blur-md dark:border-zinc-700/90 dark:bg-zinc-900/95 transition-all animate-in fade-in zoom-in-95 duration-150 pointer-events-none ${
+          sup ? "bottom-full mb-3" : "top-full mt-3"
+        } ${props.classe ?? ""}`}
+      >
+        {/* Seta do balão */}
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 border-[7px] border-transparent ${
+            sup
+              ? "top-full border-t-white dark:border-t-zinc-900"
+              : "bottom-full border-b-white dark:border-b-zinc-900"
+          }`}
+        />
+
+        <div className="flex items-center gap-2.5 text-left">
+          <div className="relative shrink-0 flex items-center justify-center">
+            <style>{`
+              @keyframes radialPieProgress {
+                0% { stroke-dashoffset: 100.53; }
+                100% { stroke-dashoffset: 0; }
+              }
+            `}</style>
+            <svg viewBox="0 0 36 36" className="w-6 h-6 -rotate-90">
+              <circle cx="18" cy="18" r="16" fill="none" className="stroke-zinc-200 dark:stroke-zinc-700" strokeWidth="4" />
+              <circle
+                cx="18" cy="18" r="16" fill="none"
+                className="stroke-utfpr-500" strokeWidth="4" strokeDasharray="100.53"
+                style={{ animation: "radialPieProgress 1s linear forwards" }}
+              />
+            </svg>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="font-display text-xs font-bold text-zinc-900 dark:text-zinc-100 leading-snug truncate">
+              {props.nomeDisciplina ?? props.codigoDisciplina}
+            </div>
+            <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+              Carregando progresso (1s)...
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const dados = calcularProgressoMateria(
+    props.codigoDisciplina,
+    props.nomeDisciplina ?? props.codigoDisciplina,
+    props.cargaHoraria ?? 60,
+    props.perfil,
+    props.matriz
+  );
+
+  return (
+    <div
+      className={`absolute left-1/2 -translate-x-1/2 z-50 w-72 rounded-xl border border-zinc-200/95 bg-white/95 p-3 shadow-2xl backdrop-blur-md dark:border-zinc-700/90 dark:bg-zinc-900/95 transition-all animate-in fade-in zoom-in-95 duration-200 pointer-events-none ${
+        sup ? "bottom-full mb-3" : "top-full mt-3"
+      } ${props.classe ?? ""}`}
+    >
+      {/* Seta do balão */}
+      <div
+        className={`absolute left-1/2 -translate-x-1/2 border-[7px] border-transparent ${
+          sup
+            ? "top-full border-t-white dark:border-t-zinc-900"
+            : "bottom-full border-b-white dark:border-b-zinc-900"
+        }`}
+      />
+
+      <div className="flex flex-col gap-1 text-left">
+        <div className="font-display text-xs font-bold text-zinc-900 dark:text-zinc-100 leading-snug truncate">
+          {props.nomeDisciplina ?? props.codigoDisciplina}
+        </div>
+        <div className="font-mono text-[11px] font-semibold text-utfpr-600 dark:text-utfpr-400 truncate">
+          {dados.categoriaNome}
+        </div>
+
+        <div className="mt-1.5 space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
+            <span>Progresso</span>
+            <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200">
+              {dados.cumpridoBase}h <span className="text-utfpr-600 dark:text-utfpr-400 font-bold">+{dados.previewCarga}h</span>
+              {" / "}
+              {dados.exigido}h
+            </span>
+          </div>
+          <BarraProgressoComPreview
+            cumprido={dados.cumpridoBase}
+            preview={dados.previewCarga}
+            exigido={dados.exigido}
+            classe="h-2"
+          />
+        </div>
+      </div>
     </div>
   );
 }

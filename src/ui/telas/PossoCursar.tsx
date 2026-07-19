@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { listarElegiveis, type Elegivel } from "../../domain/motor/elegiveis";
 import {
@@ -10,7 +10,8 @@ import {
 import { faixaDoSlot } from "../../domain/horarios";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
-import { Badge, Botao, Card, MenuOrdenacao } from "../componentes";
+import { Badge, Botao, Card, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
+import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
 import { IconPlus, IconTrash, IconCheck, IconWarning, IconFilter } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
 
@@ -41,6 +42,7 @@ function CardDisciplinaPossoCursar({
   filtrarConflitos = false,
   itensSelecao = [],
   matriz,
+  perfil,
 }: {
   e: Elegivel;
   selecao: SelecaoTurma[];
@@ -50,7 +52,30 @@ function CardDisciplinaPossoCursar({
   filtrarConflitos?: boolean;
   itensSelecao?: ItemGrade[];
   matriz?: Matriz;
+  perfil?: PerfilAluno | null;
 }) {
+  const isMobile = useIsMobile();
+  const temHistorico = Boolean(perfil && perfil.cursadas && perfil.cursadas.length > 0);
+  const [statusHoverTurma, setStatusHoverTurma] = useState<string | null>(null);
+  const [progressoCarregadoTurma, setProgressoCarregadoTurma] = useState<string | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const iniciarHoverStatus = (chave: string) => {
+    if (!temHistorico) return;
+    setStatusHoverTurma(chave);
+    setProgressoCarregadoTurma(null);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setProgressoCarregadoTurma(chave);
+    }, 1000);
+  };
+
+  const cancelarHoverStatus = () => {
+    setStatusHoverTurma(null);
+    setProgressoCarregadoTurma(null);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+  };
+
   const [expandido, setExpandido] = useState(false);
 
   const { turmasBSI } = useMemo(() => {
@@ -190,20 +215,58 @@ function CardDisciplinaPossoCursar({
                         </div>
 
                         <div className="flex shrink-0 items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={(ev) => {
-                              ev.stopPropagation();
-                              const p = { disciplina: e.oferta!, turma: t };
-                              onPreview(p);
-                              if (onAbrirMobilePreview) onAbrirMobilePreview(p);
-                            }}
-                            className="inline-flex items-center gap-1 rounded-xl border border-zinc-200/80 bg-zinc-50 px-2.5 py-1 text-xs font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
-                            title="Espiar nesta turma na grade (ideal no celular ou para teste rápido)"
-                          >
-                            <span>👁️</span>
-                            <span className="hidden sm:inline">Espiar</span>
-                          </button>
+                          {isMobile && (
+                            <button
+                              type="button"
+                              onClick={(ev) => {
+                                ev.stopPropagation();
+                                const p = { disciplina: e.oferta!, turma: t };
+                                onPreview(p);
+                                if (onAbrirMobilePreview) onAbrirMobilePreview(p);
+                              }}
+                              className="inline-flex items-center gap-1 rounded-xl border border-zinc-200/80 bg-zinc-50 px-2.5 py-1 text-xs font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
+                              title="Espiar nesta turma na grade (ideal no celular ou para teste rápido)"
+                            >
+                              <span>👁️</span>
+                              <span>Espiar</span>
+                            </button>
+                          )}
+                          {temHistorico && (
+                            <div
+                              className="relative inline-block"
+                              onMouseEnter={() => iniciarHoverStatus(t.codigo)}
+                              onMouseLeave={cancelarHoverStatus}
+                            >
+                              <button
+                                type="button"
+                                onClick={(ev) => {
+                                  ev.stopPropagation();
+                                  if (statusHoverTurma === t.codigo) {
+                                    cancelarHoverStatus();
+                                  } else {
+                                    setStatusHoverTurma(t.codigo);
+                                    setProgressoCarregadoTurma(t.codigo);
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1 rounded-xl border border-zinc-200/80 bg-zinc-50 px-2.5 py-1 text-xs font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
+                                title="Status de progresso desta matéria no currículo"
+                              >
+                                <span>📊</span>
+                                <span>Status</span>
+                              </button>
+                              {statusHoverTurma === t.codigo && (
+                                <BalaoProgressoHover
+                                  codigoDisciplina={e.disciplina.codigo}
+                                  nomeDisciplina={e.disciplina.nome}
+                                  cargaHoraria={obterCargaHoraria(e.disciplina, matriz)}
+                                  perfil={perfil}
+                                  matriz={matriz}
+                                  posicao="superior"
+                                  carregando={progressoCarregadoTurma !== t.codigo}
+                                />
+                              )}
+                            </div>
+                          )}
                           <Botao
                             variante={marcada ? "sutil" : "neutro"}
                             onClick={(evt) => {
@@ -510,6 +573,7 @@ export function TelaPossoCursar(props: {
             filtrarConflitos={filtrarConflitos}
             itensSelecao={itensSelecao}
             matriz={matriz}
+            perfil={perfil}
           />
         ))}
       </div>

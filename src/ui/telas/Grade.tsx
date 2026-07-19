@@ -13,7 +13,8 @@ import {
 import type { Matriz, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { faixaDoSlot } from "../../domain/horarios";
 import { categoriaDe, normNome } from "../../domain/motor/elegiveis";
-import { Badge, Botao, Card } from "../componentes";
+import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGrade } from "../../domain/motor/progressoGrade";
+import { Badge, Botao, Card, BarraProgressoComPreview, BalaoProgressoHover } from "../componentes";
 import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
 
@@ -43,6 +44,317 @@ const CORES = [
   "bg-indigo-400 text-indigo-950 dark:bg-indigo-500 dark:text-indigo-950",
 ];
 
+function CardResumoCategoria({ r, isSubTrilha }: { r: ResumoCategoriaGrade; isSubTrilha?: boolean }) {
+  const max = r.exigido > 0 ? r.exigido : 1;
+  const pctTotal = Math.min(100, Math.round((r.cumpridoSimulado / max) * 100));
+  const ehExcedenteConcluido = Boolean(isSubTrilha && r.cumpridoBase >= r.exigido && r.impulsoGrade > 0);
+
+  return (
+    <div
+      key={r.categoriaId}
+      className={`flex flex-col justify-between rounded-2xl border p-4.5 transition-all ${
+        ehExcedenteConcluido
+          ? "border-amber-500/60 bg-amber-50/50 dark:border-amber-500/50 dark:bg-amber-950/30 ring-1 ring-amber-500/30 shadow-md"
+          : r.impulsoGrade > 0
+          ? "border-utfpr-500/40 bg-utfpr-50/30 dark:border-utfpr-500/30 dark:bg-utfpr-950/20 shadow-sm"
+          : "border-zinc-200/80 bg-zinc-50/60 dark:border-zinc-800/80 dark:bg-zinc-900/60 opacity-85"
+      }`}
+    >
+      <div>
+        <div className="flex items-start justify-between gap-2">
+          <span className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+            {r.categoriaNome}
+          </span>
+          {r.impulsoGrade > 0 && (
+            ehExcedenteConcluido ? (
+              <span className="shrink-0 rounded-lg bg-amber-500/25 border border-amber-500/50 px-2 py-0.5 font-mono text-xs font-black text-amber-900 dark:text-amber-200 ring-1 ring-amber-500/30 flex items-center gap-1">
+                ⚡ +{r.impulsoGrade}h (Excedente)
+              </span>
+            ) : (
+              <span className="shrink-0 rounded-lg bg-utfpr-500/15 border border-utfpr-500/30 px-2 py-0.5 font-mono text-xs font-bold text-utfpr-800 dark:text-utfpr-300">
+                +{r.impulsoGrade}h
+              </span>
+            )
+          )}
+        </div>
+
+        <div className="mt-3 space-y-1.5">
+          <div className="flex items-baseline justify-between text-xs">
+            <span className="font-medium text-zinc-600 dark:text-zinc-400">
+              Progresso: <strong className="text-zinc-900 dark:text-zinc-100">{r.cumpridoBase}h</strong>
+              {r.impulsoGrade > 0 && (
+                <span className="text-utfpr-600 dark:text-utfpr-400 font-bold"> +{r.impulsoGrade}h</span>
+              )}
+            </span>
+            <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">
+              {Math.min(r.exigido, r.cumpridoSimulado)}/{r.exigido}h ({pctTotal}%)
+            </span>
+          </div>
+
+          <BarraProgressoComPreview
+            cumprido={r.cumpridoBase}
+            preview={r.impulsoGrade}
+            exigido={r.exigido}
+          />
+        </div>
+
+        {ehExcedenteConcluido && (
+          <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-500/15 border border-amber-500/30 p-2.5 text-[11px] font-bold text-amber-900 dark:text-amber-200">
+            <span className="text-sm shrink-0 mt-0.5">⭐️</span>
+            <span>
+              Trilha já completa ({r.cumpridoBase}/{r.exigido}h)! As <strong className="font-mono text-amber-700 dark:text-amber-300">+{r.impulsoGrade}h</strong> contam como <strong className="underline decoration-amber-500">horas excedentes</strong> para o 3º Estrato/Eletivas.
+            </span>
+          </div>
+        )}
+
+        {r.disciplinasEnvolvidas.length > 0 && (
+          <div className="mt-3 pt-2.5 border-t border-zinc-200/60 dark:border-zinc-800/80 space-y-1">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              Matérias na grade ({r.disciplinasEnvolvidas.length}):
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {r.disciplinasEnvolvidas.map((disc) => (
+                <span
+                  key={disc.codigo}
+                  className="inline-flex items-center gap-1 rounded bg-white/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-700 shadow-2xs border border-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700/80"
+                  title={`${disc.nome} (${disc.carga}h)`}
+                >
+                  {disc.codigo}
+                  <span className="text-[10px] font-bold text-utfpr-600 dark:text-utfpr-400">
+                    +{disc.carga}h
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
+        {r.statusTexto}
+      </div>
+    </div>
+  );
+}
+
+function SecaoResumoImpactoGrade(props: {
+  itens: ItemGrade[];
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz | null;
+}) {
+  const temHistorico = Boolean(props.perfil && props.perfil.cursadas && props.perfil.cursadas.length > 0);
+  const resumos = useMemo(
+    () => calcularResumoProgressoGrade(props.itens, props.perfil, props.matriz),
+    [props.itens, props.perfil, props.matriz]
+  );
+
+  if (!temHistorico) {
+    return (
+      <div className="mt-8 rounded-3xl border border-zinc-200/90 bg-white p-6 shadow-md dark:border-zinc-800 dark:bg-zinc-900 space-y-5 animate-in fade-in duration-300">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
+                📈
+              </span>
+              <h3 className="font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+                Resumo do Impacto Curricular da Grade
+              </h3>
+            </div>
+            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+              Confira quanto as matérias selecionadas impulsionam cada estrato do seu curso em relação ao progresso atual.
+            </p>
+          </div>
+        </div>
+
+        <div className="relative overflow-hidden rounded-2xl">
+          {/* Overlay bloqueio com mensagem */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-white/75 p-6 text-center backdrop-blur-md dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 shadow-lg">
+            <span className="mb-2.5 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/20 text-2xl text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 shadow-inner">
+              🔒
+            </span>
+            <h4 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
+              Histórico do Aluno não carregado
+            </h4>
+            <p className="mt-1 max-w-md text-xs font-medium text-zinc-600 dark:text-zinc-300 leading-relaxed">
+              Não é possível enxergar o resumo de progresso esperado pois o Histórico Escolar do aluno não foi carregado no início da sessão. Carregue seu histórico na aba inicial para liberar a visualização do progresso curricular por estrato e trilha.
+            </p>
+          </div>
+
+          {/* Previews vazios com blur ao fundo */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 blur-md opacity-40 pointer-events-none select-none p-2">
+            {[
+              "Obrigatórias (1º Estrato)",
+              "2º Estrato",
+              "Ciclo de Humanidades",
+              "Trilhas em Computação (3º Estrato)",
+              "Eletivas / Atividades",
+              "Estágio / TCC"
+            ].map((titulo, i) => (
+              <div key={i} className="flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-4.5 dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <span className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">{titulo}</span>
+                  <span className="text-xs font-bold text-zinc-400">0h / ---h</span>
+                </div>
+                <div className="h-2.5 w-full rounded-full bg-zinc-100 dark:bg-zinc-800" />
+                <div className="text-[11px] text-zinc-400">Progresso bloqueado (sem histórico)</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (resumos.length === 0) return null;
+
+  const resumosNormaisPrimeiraParte = resumos.filter((r) =>
+    ["obrigatorias", "1159", "1161"].includes(r.categoriaId)
+  );
+  const resumoTrilhasGeral = resumos.find((r) => r.categoriaId === "trilhas_geral");
+  const resumosSubTrilhas = resumos.filter(
+    (r) => !isNaN(Number(r.categoriaId)) && Number(r.categoriaId) >= 1162 && Number(r.categoriaId) <= 1173
+  );
+  const resumosNormaisSegundaParte = resumos.filter(
+    (r) =>
+      !["obrigatorias", "1159", "1161", "trilhas_geral"].includes(r.categoriaId) &&
+      !(!isNaN(Number(r.categoriaId)) && Number(r.categoriaId) >= 1162 && Number(r.categoriaId) <= 1173)
+  );
+
+  return (
+    <div className="mt-8 rounded-3xl border border-zinc-200/90 bg-white p-6 shadow-md dark:border-zinc-800 dark:bg-zinc-900 space-y-5 animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
+              📈
+            </span>
+            <h3 className="font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+              Resumo do Impacto Curricular da Grade
+            </h3>
+          </div>
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            Confira quanto as matérias selecionadas impulsionam cada estrato do seu curso em relação ao progresso atual.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-xs font-semibold">
+          <span className="flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> Já concluído
+          </span>
+          <span className="flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <span className="h-2.5 w-2.5 rounded-full bg-utfpr-500" /> +Impulso nesta Grade
+          </span>
+          <span className="flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <span className="h-2.5 w-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700" /> Faltante
+          </span>
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {resumosNormaisPrimeiraParte.map((r) => (
+          <CardResumoCategoria key={r.categoriaId} r={r} />
+        ))}
+
+        {(resumoTrilhasGeral || resumosSubTrilhas.length > 0) && (
+          <div className="col-span-full rounded-3xl border-2 border-utfpr-500/35 bg-gradient-to-br from-zinc-50/95 via-white to-utfpr-500/5 p-5 dark:from-zinc-900/95 dark:via-zinc-900 dark:to-utfpr-500/10 shadow-lg space-y-5">
+            {resumoTrilhasGeral && (
+              <div className="flex flex-col justify-between rounded-2xl border border-utfpr-500/40 bg-white/90 p-4.5 dark:bg-zinc-900/90 shadow-sm">
+                <div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
+                        🎯
+                      </span>
+                      <span className="font-display text-base font-black text-zinc-900 dark:text-zinc-100 leading-snug">
+                        {resumoTrilhasGeral.categoriaNome}
+                      </span>
+                    </div>
+                    {resumoTrilhasGeral.impulsoGrade > 0 && (
+                      <span className="shrink-0 rounded-lg bg-utfpr-500/15 border border-utfpr-500/30 px-2.5 py-1 font-mono text-xs font-bold text-utfpr-800 dark:text-utfpr-300">
+                        +{resumoTrilhasGeral.impulsoGrade}h
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-3 space-y-1.5">
+                    <div className="flex items-baseline justify-between text-xs">
+                      <span className="font-medium text-zinc-600 dark:text-zinc-400">
+                        Progresso Total (3 Trilhas): <strong className="text-zinc-900 dark:text-zinc-100">{resumoTrilhasGeral.cumpridoBase}h</strong>
+                        {resumoTrilhasGeral.impulsoGrade > 0 && (
+                          <span className="text-utfpr-600 dark:text-utfpr-400 font-bold"> +{resumoTrilhasGeral.impulsoGrade}h</span>
+                        )}
+                      </span>
+                      <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">
+                        {Math.min(resumoTrilhasGeral.exigido, resumoTrilhasGeral.cumpridoSimulado)}/{resumoTrilhasGeral.exigido}h ({Math.min(100, Math.round((resumoTrilhasGeral.cumpridoSimulado / (resumoTrilhasGeral.exigido || 1)) * 100))}%)
+                      </span>
+                    </div>
+
+                    <BarraProgressoComPreview
+                      cumprido={resumoTrilhasGeral.cumpridoBase}
+                      preview={resumoTrilhasGeral.impulsoGrade}
+                      exigido={resumoTrilhasGeral.exigido}
+                    />
+                  </div>
+
+                  {resumoTrilhasGeral.disciplinasEnvolvidas.length > 0 && (
+                    <div className="mt-3 pt-2.5 border-t border-zinc-200/60 dark:border-zinc-800/80 space-y-1">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        Matérias de Trilhas nesta grade ({resumoTrilhasGeral.disciplinasEnvolvidas.length}):
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {resumoTrilhasGeral.disciplinasEnvolvidas.map((disc) => (
+                          <span
+                            key={disc.codigo}
+                            className="inline-flex items-center gap-1 rounded bg-white/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-700 shadow-2xs border border-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700/80"
+                            title={`${disc.nome} (${disc.carga}h)`}
+                          >
+                            {disc.codigo}
+                            <span className="text-[10px] font-bold text-utfpr-600 dark:text-utfpr-400">
+                              +{disc.carga}h
+                            </span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-3 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
+                  {resumoTrilhasGeral.statusTexto}
+                </div>
+              </div>
+            )}
+
+            {resumosSubTrilhas.length > 0 && (
+              <div className="space-y-3 pt-2 border-t border-zinc-200/80 dark:border-zinc-800/80">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold uppercase tracking-wider text-utfpr-700 dark:text-utfpr-400">
+                      📌 Progresso Individual por Trilha ({resumosSubTrilhas.length})
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
+                    As 3 trilhas com maior carga somam para as 345h obrigatórias do estrato
+                  </span>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {resumosSubTrilhas.map((r) => (
+                    <CardResumoCategoria key={r.categoriaId} r={r} isSubTrilha={true} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {resumosNormaisSegundaParte.map((r) => (
+          <CardResumoCategoria key={r.categoriaId} r={r} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TelaGrade(props: {
   oferta: OfertaSemestre;
   selecao: SelecaoTurma[];
@@ -70,6 +382,35 @@ export function TelaGrade(props: {
   const [copiado, setCopiado] = useState(false);
   const [modalGradeMagica, setModalGradeMagica] = useState(false);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
+  const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
+  const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const iniciarHover = (id: string, chaveElemento?: string) => {
+    setDisciplinaHoverId(id);
+    if (chaveElemento) {
+      setElementoHoverKey(chaveElemento);
+      setProgressoCarregadoKey(null);
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = setTimeout(() => {
+        setProgressoCarregadoKey(chaveElemento);
+      }, 1000);
+    } else {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      setElementoHoverKey(null);
+      setProgressoCarregadoKey(null);
+    }
+  };
+
+  const cancelarHover = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setDisciplinaHoverId(null);
+    setElementoHoverKey(null);
+    setProgressoCarregadoKey(null);
+  };
   const [modalConfirmarLimpar, setModalConfirmarLimpar] = useState(false);
   const [baixandoImagem, setBaixandoImagem] = useState(false);
   const gradeTableRef = useRef<HTMLDivElement>(null);
@@ -771,14 +1112,15 @@ export function TelaGrade(props: {
                             const isHovered =
                               disciplinaHoverId === o.item.disciplina.codigo ||
                               disciplinaHoverId === codIdentificador;
+
                             return (
                               <div
                                 key={i}
-                                onMouseEnter={() => setDisciplinaHoverId(codIdentificador)}
-                                onMouseLeave={() => setDisciplinaHoverId(null)}
+                                onMouseEnter={() => iniciarHover(codIdentificador)}
+                                onMouseLeave={cancelarHover}
                                 className={`group relative flex items-center justify-between gap-1 rounded-lg px-2 py-1 text-xs transition-all ${o.cor} ${
                                   isHovered
-                                    ? "ring-2 ring-zinc-950 dark:ring-white scale-[1.03] shadow-md z-10 brightness-105"
+                                    ? "ring-2 ring-zinc-950 dark:ring-white scale-[1.03] shadow-md z-40 brightness-105 overflow-visible"
                                     : "hover:scale-[1.01]"
                                 }`}
                                 title={`${o.item.disciplina.nome} — ${o.item.turma.codigo}${o.sala ? ` (${o.sala})` : ""}`}
@@ -889,11 +1231,33 @@ export function TelaGrade(props: {
                 : item.turma.professores_raw || "Professor a definir";
 
             const codIdentificador = item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo;
+            const chaveElemento = `card-${codIdentificador}-${item.turma.codigo}-${i}`;
+            const isHovered = disciplinaHoverId === item.disciplina.codigo || disciplinaHoverId === codIdentificador;
+            const isEsteElemento = elementoHoverKey === chaveElemento;
+            const progressoPronto = progressoCarregadoKey === chaveElemento;
+
             return (
               <div
                 key={item.selecaoOriginal ? `${item.selecaoOriginal.codDisciplina}-${item.selecaoOriginal.codTurma}` : item.disciplina.codigo}
-                className="flex flex-col justify-between gap-3 rounded-xl border border-zinc-200/80 bg-white p-3.5 shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900"
+                onMouseEnter={() => iniciarHover(codIdentificador, chaveElemento)}
+                onMouseLeave={cancelarHover}
+                className={`relative flex flex-col justify-between gap-3 rounded-xl border p-3.5 shadow-2xs transition-all ${
+                  isHovered
+                    ? "border-utfpr-500 bg-utfpr-500/5 ring-1 ring-utfpr-500 dark:border-utfpr-400 dark:bg-utfpr-500/10 scale-[1.01] z-40 overflow-visible"
+                    : "border-zinc-200/80 bg-white dark:border-zinc-800/80 dark:bg-zinc-900"
+                }`}
               >
+                {isEsteElemento && (
+                  <BalaoProgressoHover
+                    codigoDisciplina={item.disciplina.codigo}
+                    nomeDisciplina={item.disciplina.nome}
+                    cargaHoraria={obterCargaHoraria(item.disciplina, props.matriz)}
+                    perfil={props.perfil}
+                    matriz={props.matriz}
+                    posicao="superior"
+                    carregando={!progressoPronto}
+                  />
+                )}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-start gap-2.5">
                     <span className={`mt-1 h-3 w-3 shrink-0 rounded-full ${CORES[i % CORES.length].split(" ")[0]}`} />
@@ -936,6 +1300,9 @@ export function TelaGrade(props: {
           })}
         </div>
       </div>
+
+      {/* Resumo visual do Impacto da Grade nas Categorias do Curso */}
+      <SecaoResumoImpactoGrade itens={itens} perfil={props.perfil} matriz={props.matriz} />
 
       {modaisJSX}
     </div>

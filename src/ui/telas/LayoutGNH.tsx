@@ -2,7 +2,7 @@
 // disciplinas com turmas abertas no semestre, marcação direta e preview na
 // minigrade lateral — com as melhorias que o nosso motor permite (filtro de
 // pendentes do MEU curso, liberadas por pré-requisito, busca).
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
 import {
@@ -13,7 +13,8 @@ import {
 import { faixaDoSlot } from "../../domain/horarios";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
-import { Badge, MenuOrdenacao } from "../componentes";
+import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
+import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
 
 export function normalizarTextoBusca(str: string): string {
   return str
@@ -33,6 +34,8 @@ function DisciplinaGNHItem({
   onAbrirMobilePreview,
   filtrarConflitos,
   itensSelecao,
+  perfil,
+  matriz,
 }: {
   d: DisciplinaOfertada;
   est: { pendente: boolean; bloqueio: string | null; naMatriz: boolean };
@@ -42,7 +45,31 @@ function DisciplinaGNHItem({
   onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos: boolean;
   itensSelecao: ItemGrade[];
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz | null;
 }) {
+  const isMobile = useIsMobile();
+  const temHistorico = Boolean(perfil && perfil.cursadas && perfil.cursadas.length > 0);
+  const [statusHoverTurma, setStatusHoverTurma] = useState<string | null>(null);
+  const [progressoCarregadoTurma, setProgressoCarregadoTurma] = useState<string | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const iniciarHoverStatus = (chave: string) => {
+    if (!temHistorico) return;
+    setStatusHoverTurma(chave);
+    setProgressoCarregadoTurma(null);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setProgressoCarregadoTurma(chave);
+    }, 1000);
+  };
+
+  const cancelarHoverStatus = () => {
+    setStatusHoverTurma(null);
+    setProgressoCarregadoTurma(null);
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+  };
+
   const turmasExibidas = useMemo(() => {
     if (!filtrarConflitos) return d.turmas;
     return d.turmas.filter((t) => {
@@ -68,51 +95,67 @@ function DisciplinaGNHItem({
           >
             [{d.codigo}]
           </span>
-          <span className="font-display font-bold text-zinc-900 dark:text-zinc-100">{d.nome}</span>
-          <span className="text-xs text-zinc-400">
-            ({d.aulas_semanais_presenciais ?? "?"} aulas/sem)
+          <span className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            {d.nome}
           </span>
-          {(d.horas_semestrais_extensionistas ?? 0) > 0 && <Badge tom="neutro">extensionista</Badge>}
-          {est.pendente && !est.bloqueio && <Badge tom="ok">liberada</Badge>}
-          {est.pendente && est.bloqueio && (
-            <span title={est.bloqueio} className="cursor-help">
-              <Badge tom="alerta">bloqueada</Badge>
-            </span>
+          <span className="font-mono text-xs font-semibold text-zinc-500">
+            ({obterCargaHoraria(d, matriz)}h)
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {est.naMatriz ? (
+            est.pendente ? (
+              <Badge tom="alerta">Pendente</Badge>
+            ) : (
+              <Badge tom="neutro">Concluída</Badge>
+            )
+          ) : (
+            <Badge tom="neutro">Eletiva / Outro Curso</Badge>
           )}
-          {est.naMatriz && !est.pendente && <Badge tom="neutro">já cumprida</Badge>}
-          {!est.naMatriz && <Badge tom="neutro">fora da matriz 981</Badge>}
+
+          {est.bloqueio ? (
+            <span title={est.bloqueio} className="cursor-help">
+              <Badge tom="alerta">🔒 Trancada</Badge>
+            </span>
+          ) : est.pendente && est.naMatriz ? (
+            <Badge tom="ok">✨ Liberada</Badge>
+          ) : null}
         </div>
       </div>
 
-      {turmasExibidas.length > 0 ? (
-        <ul className="p-3 space-y-1">
-          {turmasExibidas.map((t) => {
+      <div className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+        {turmasExibidas.length === 0 ? (
+          <div className="p-3.5 text-xs text-zinc-500 italic">
+            Nenhuma turma disponível ou todas causam conflito com a grade atual.
+          </div>
+        ) : (
+          turmasExibidas.map((t) => {
             const sel = marcada(d.codigo, t.codigo);
             return (
-              <li
+              <label
                 key={t.codigo}
+                className={`flex items-center gap-3 px-3.5 py-2.5 text-xs transition-colors cursor-pointer select-none ${
+                  sel
+                    ? "bg-utfpr-500/15 font-semibold text-utfpr-950 dark:bg-utfpr-500/20 dark:text-utfpr-200"
+                    : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                }`}
                 onMouseEnter={() => onPreview({ disciplina: d, turma: t })}
                 onMouseLeave={() => onPreview(null)}
               >
-                <label
-                  className={`flex cursor-pointer flex-wrap items-center gap-x-2 gap-y-0.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors select-none ${
-                    sel
-                      ? "bg-utfpr-500/15 dark:bg-utfpr-500/10 font-medium"
-                      : "hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={sel}
-                    onChange={() => alternar(d.codigo, t.codigo)}
-                    className="h-3.5 w-3.5 accent-utfpr-500"
-                  />
-                  <span className="font-mono font-bold">{t.codigo}</span>
-                  <span className="text-zinc-500">—</span>
-                  <span className="truncate text-zinc-700 dark:text-zinc-300">
-                    {t.professores_raw || "professor a definir"}
-                  </span>
-                  <div className="ml-auto flex flex-wrap items-center gap-1.5 justify-end">
+                <input
+                  type="checkbox"
+                  checked={sel}
+                  onChange={() => alternar(d.codigo, t.codigo)}
+                  className="h-3.5 w-3.5 accent-utfpr-500"
+                />
+                <span className="font-mono font-bold">{t.codigo}</span>
+                <span className="text-zinc-500">—</span>
+                <span className="truncate text-zinc-700 dark:text-zinc-300">
+                  {t.professores_raw || "professor a definir"}
+                </span>
+                <div className="ml-auto flex flex-wrap items-center gap-1.5 justify-end">
+                  {isMobile && (
                     <button
                       type="button"
                       onClick={(ev) => {
@@ -123,49 +166,84 @@ function DisciplinaGNHItem({
                         if (onAbrirMobilePreview) onAbrirMobilePreview(p);
                       }}
                       className="inline-flex items-center gap-1 rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-0.5 text-[11px] font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
-                      title="Espiar nesta turma na grade"
+                      title="Espiar nesta turma na grade (ideal no celular ou para teste rápido)"
                     >
                       <span>👁️</span>
-                      <span className="hidden sm:inline">Espiar</span>
+                      <span>Espiar</span>
                     </button>
-                    {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
-                      .filter(Boolean)
-                      .map((s) => (
-                        <span
-                          key={s}
-                          className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
-                            s === "Ecoville" || s === "Neoville"
-                              ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-                              : "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300"
-                          }`}
-                        >
-                          📍 {s}
-                        </span>
-                      ))}
-                    <span
-                      className="font-mono text-xs text-zinc-500 dark:text-zinc-400"
-                      title={horariosUnicos(t)
-                        .map((h) => {
-                          const f = faixaDoSlot(h.turno, h.aula);
-                          return `${h.dia}${h.turno}${h.aula} (${h.sede})${f ? ` ${f.inicio}–${f.fim}` : ""}`;
-                        })
-                        .join("  ")}
+                  )}
+                  {temHistorico && (
+                    <div
+                      className="relative inline-block"
+                      onMouseEnter={() => iniciarHoverStatus(t.codigo)}
+                      onMouseLeave={cancelarHoverStatus}
                     >
-                      [{" "}
-                      {horariosUnicos(t)
-                        .map((h) => `${h.dia}${h.turno}${h.aula} ${h.sala ?? ""}`)
-                        .join(" - ") || "sem horário"}{" "}
-                      ]
-                    </span>
-                  </div>
-                </label>
-              </li>
+                      <button
+                        type="button"
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          ev.preventDefault();
+                          if (statusHoverTurma === t.codigo) {
+                            cancelarHoverStatus();
+                          } else {
+                            setStatusHoverTurma(t.codigo);
+                            setProgressoCarregadoTurma(t.codigo);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1 rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-0.5 text-[11px] font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
+                        title="Status de progresso desta matéria no currículo"
+                      >
+                        <span>📊</span>
+                        <span>Status</span>
+                      </button>
+                      {statusHoverTurma === t.codigo && (
+                        <BalaoProgressoHover
+                          codigoDisciplina={d.codigo}
+                          nomeDisciplina={d.nome}
+                          cargaHoraria={obterCargaHoraria(d, matriz)}
+                          perfil={perfil}
+                          matriz={matriz}
+                          posicao="superior"
+                          carregando={progressoCarregadoTurma !== t.codigo}
+                        />
+                      )}
+                    </div>
+                  )}
+                  {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
+                    .filter(Boolean)
+                    .map((s) => (
+                      <span
+                        key={s}
+                        className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                          s === "Ecoville" || s === "Neoville"
+                            ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                            : "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300"
+                        }`}
+                      >
+                        📍 {s}
+                      </span>
+                    ))}
+                  <span
+                    className="font-mono text-xs text-zinc-500 dark:text-zinc-400"
+                    title={horariosUnicos(t)
+                      .map((h) => {
+                        const f = faixaDoSlot(h.turno, h.aula);
+                        return `${h.dia}${h.turno}${h.aula} (${h.sede})${f ? ` ${f.inicio}–${f.fim}` : ""}`;
+                      })
+                      .join("  ")}
+                  >
+                    [{" "}
+                    {horariosUnicos(t)
+                      .map((h) => `${h.dia}${h.turno}${h.aula} ${h.sala ?? ""}`)
+                      .join(" - ") || "sem horário"}{" "}
+                    ]
+                  </span>
+                </div>
+              </label>
             );
-          })}
-        </ul>
-      ) : (
-        <p className="p-3 text-xs text-zinc-400 italic">Nenhuma turma compatível exibida.</p>
-      )}
+          })
+        )}
+      </div>
     </div>
   );
 }
@@ -335,6 +413,8 @@ export function TelaLayoutGNH(props: {
               onAbrirMobilePreview={onAbrirMobilePreview}
               filtrarConflitos={filtrarConflitos}
               itensSelecao={itensSelecao}
+              perfil={props.perfil}
+              matriz={props.matriz}
             />
           );
         })}

@@ -701,6 +701,8 @@ export function App() {
                 oferta={oferta}
                 selecao={selecao}
                 preview={preview}
+                perfil={perfil}
+                matriz={matriz}
                 onLimpar={() => {
                   setSelecao([]);
                   setCestaExclusoes((prev: any) => {
@@ -834,6 +836,8 @@ export function App() {
                     oferta={oferta}
                     selecao={selecao}
                     preview={preview}
+                    perfil={perfil}
+                    matriz={matriz}
                     onLimpar={() => {
                       setSelecao([]);
                       setCestaExclusoes((prev: any) => {

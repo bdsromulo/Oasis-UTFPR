@@ -1,8 +1,8 @@
 // Sidebar de feedback contínuo (inspirada na minigrade do Grade na Hora):
 // grade semanal compacta sempre visível com as turmas escolhidas, preview da
 // turma sob o mouse, contador de aulas e alerta de conflitos.
-import { useState, useMemo } from "react";
-import type { DisciplinaOfertada, OfertaSemestre, Turma } from "../domain/tipos";
+import { useState, useMemo, useRef } from "react";
+import type { DisciplinaOfertada, OfertaSemestre, Turma, Matriz, PerfilAluno } from "../domain/tipos";
 import {
   aulasSemanais,
   chaveSlot,
@@ -14,7 +14,8 @@ import {
 } from "../domain/motor/grade";
 import { faixaDoSlot } from "../domain/horarios";
 import type { SelecaoTurma } from "./App";
-import { Badge } from "./componentes";
+import { Badge, BalaoProgressoHover } from "./componentes";
+import { obterCargaHoraria } from "../domain/motor/progressoGrade";
 
 const DIAS: [number, string][] = [
   [2, "S"],
@@ -54,6 +55,8 @@ export function MiniGrade(props: {
   oferta: OfertaSemestre;
   selecao: SelecaoTurma[];
   preview: PreviewTurma | null;
+  perfil?: PerfilAluno | null;
+  matriz?: Matriz | null;
   onLimpar?: () => void;
   cestaGrades?: { [id: string]: SelecaoTurma[] };
   gradeAtiva?: string;
@@ -71,6 +74,35 @@ export function MiniGrade(props: {
 }) {
   const [modalCompletoAberto, setModalCompletoAberto] = useState(false);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
+  const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
+  const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const iniciarHover = (id: string, chaveElemento?: string) => {
+    setDisciplinaHoverId(id);
+    if (chaveElemento) {
+      setElementoHoverKey(chaveElemento);
+      setProgressoCarregadoKey(null);
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = setTimeout(() => {
+        setProgressoCarregadoKey(chaveElemento);
+      }, 1000);
+    } else {
+      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+      setElementoHoverKey(null);
+      setProgressoCarregadoKey(null);
+    }
+  };
+
+  const cancelarHover = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setDisciplinaHoverId(null);
+    setElementoHoverKey(null);
+    setProgressoCarregadoKey(null);
+  };
   const [modalConfirmarLimpar, setModalConfirmarLimpar] = useState(false);
   const [minimizada, setMinimizada] = useState(() => localStorage.getItem("minigrade_minimizada") === "true");
   const [turnoFiltro, setTurnoFiltro] = useState<"TODOS" | "M" | "T" | "N">("TODOS");
@@ -316,6 +348,7 @@ export function MiniGrade(props: {
                       const emPreview = slotsPreview.has(k);
                       const choque = ocupantes.length > 1 || (emPreview && ocupantes.length > 0);
                       const isHovered = ocupantes.some((o) => o.codigo === disciplinaHoverId);
+
                       return (
                         <td key={dia} className="p-px">
                           <div
@@ -324,8 +357,8 @@ export function MiniGrade(props: {
                               (emPreview && preview ? ` (preview: ${preview.disciplina.codigo})` : "") +
                               (faixa ? ` · ${faixa.inicio}–${faixa.fim}` : "")
                             }
-                            onMouseEnter={() => ocupantes.length > 0 && setDisciplinaHoverId(ocupantes[0].codigo)}
-                            onMouseLeave={() => setDisciplinaHoverId(null)}
+                            onMouseEnter={() => ocupantes.length > 0 && iniciarHover(ocupantes[0].codigo)}
+                            onMouseLeave={cancelarHover}
                             className={`h-3.5 rounded-sm transition-all flex items-center justify-center relative ${
                               choque
                                 ? "bg-red-500 ring-1 ring-red-600"
@@ -335,7 +368,7 @@ export function MiniGrade(props: {
                                     ? "bg-utfpr-500/40 ring-1 ring-utfpr-500"
                                     : "bg-zinc-100 dark:bg-zinc-800"
                             } ${
-                              isHovered ? "ring-2 ring-zinc-950 dark:ring-white scale-110 z-10 shadow-xs brightness-105" : ""
+                              isHovered ? "ring-2 ring-zinc-950 dark:ring-white scale-110 z-40 shadow-xs brightness-105 overflow-visible" : ""
                             }`}
                           >
                             {isHovered && ocupantes.length > 0 && (
@@ -414,36 +447,38 @@ export function MiniGrade(props: {
               </div>
             )}
 
-          {/* Preview em destaque com NOME COMPLETO da matéria */}
-          {preview ? (
-            <div className="flex items-center gap-2 rounded-xl border border-utfpr-500/50 bg-utfpr-500/15 p-2 text-xs font-semibold text-zinc-900 dark:border-utfpr-500/40 dark:bg-utfpr-500/10 dark:text-zinc-100 shadow-2xs animate-in fade-in duration-150">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-utfpr-500" />
-              <span className="truncate">
-                <span className="font-mono font-bold text-utfpr-800 dark:text-utfpr-400 mr-1">
-                  {preview.disciplina.codigo}
-                </span>
-                <span className="font-mono mr-1.5">{preview.turma.codigo}</span>—{" "}
-                <span className="font-bold ml-1">{preview.disciplina.nome}</span>
-              </span>
-            </div>
-          ) : null}
 
           {itens.length > 0 && (
             <ul className="space-y-1">
               {itens.map((item, i) => {
                 const codIdentificador = item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo;
+                const chaveElemento = `mini-sel-${codIdentificador}-${item.turma.codigo}-${i}`;
                 const isHovered =
                   disciplinaHoverId === item.disciplina.codigo ||
                   disciplinaHoverId === codIdentificador;
+                const isEsteElemento = elementoHoverKey === chaveElemento;
+                const progressoPronto = progressoCarregadoKey === chaveElemento;
+
                 return (
                   <li
                     key={item.selecaoOriginal ? `${item.selecaoOriginal.codDisciplina}-${item.selecaoOriginal.codTurma}` : item.disciplina.codigo}
-                    onMouseEnter={() => setDisciplinaHoverId(codIdentificador)}
-                    onMouseLeave={() => setDisciplinaHoverId(null)}
+                    onMouseEnter={() => iniciarHover(codIdentificador, chaveElemento)}
+                    onMouseLeave={cancelarHover}
                     className={`group relative flex items-center justify-between gap-1.5 text-xs rounded-md px-1.5 py-1 transition-all ${
-                      isHovered ? "bg-zinc-100 dark:bg-zinc-800 ring-1 ring-zinc-300 dark:ring-zinc-700 scale-[1.01]" : ""
+                      isHovered ? "bg-zinc-100 dark:bg-zinc-800 ring-1 ring-zinc-300 dark:ring-zinc-700 scale-[1.01] z-40 overflow-visible" : ""
                     }`}
                   >
+                    {isEsteElemento && (
+                      <BalaoProgressoHover
+                        codigoDisciplina={item.disciplina.codigo}
+                        nomeDisciplina={item.disciplina.nome}
+                        cargaHoraria={obterCargaHoraria(item.disciplina, props.matriz)}
+                        perfil={props.perfil}
+                        matriz={props.matriz}
+                        posicao="superior"
+                        carregando={!progressoPronto}
+                      />
+                    )}
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span
                         className={`h-2 w-2 shrink-0 rounded-full ${CORES_GRADE[i % CORES_GRADE.length]}`}
