@@ -48,11 +48,21 @@ const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
 const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
 const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 
-function salvarPerfil(p: PerfilAluno) {
-  localStorage.setItem(CHAVE_PERFIL, JSON.stringify({ ...p, aprovadas: [...p.aprovadas] }));
+// Modo privado: quando ativo, o histórico é guardado apenas em sessionStorage
+// (some ao fechar a aba/navegador) em vez de localStorage — útil em máquina
+// compartilhada. As preferências (não sensíveis) seguem em localStorage.
+function salvarPerfil(p: PerfilAluno, privado?: boolean) {
+  const serial = JSON.stringify({ ...p, aprovadas: [...p.aprovadas] });
+  if (privado) {
+    sessionStorage.setItem(CHAVE_PERFIL, serial);
+    localStorage.removeItem(CHAVE_PERFIL);
+  } else {
+    localStorage.setItem(CHAVE_PERFIL, serial);
+    sessionStorage.removeItem(CHAVE_PERFIL);
+  }
 }
 function lerPerfil(): PerfilAluno | null {
-  const bruto = localStorage.getItem(CHAVE_PERFIL);
+  const bruto = sessionStorage.getItem(CHAVE_PERFIL) ?? localStorage.getItem(CHAVE_PERFIL);
   if (!bruto) return null;
   try {
     const obj = JSON.parse(bruto);
@@ -197,6 +207,12 @@ export function App() {
     });
   }, [selecao, gradeAtiva, semestreAtivo]);
 
+  // Migra o histórico entre localStorage e sessionStorage ao alternar o modo privado.
+  useEffect(() => {
+    if (perfil) salvarPerfil(perfil, preferencias.privado);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferencias.privado]);
+
   function handleMudarGradeAtiva(g: string) {
     setGradeAtiva(g);
     localStorage.setItem(CHAVE_GRADE_ATIVA, g);
@@ -306,7 +322,7 @@ export function App() {
   }
 
   function confirmarNovoPerfil(p: PerfilAluno) {
-    salvarPerfil(p);
+    salvarPerfil(p, preferencias.privado);
     setPerfil(p);
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
@@ -323,6 +339,7 @@ export function App() {
 
   function handleLimparDados() {
     localStorage.clear();
+    sessionStorage.removeItem(CHAVE_PERFIL);
     setPerfil(null);
     setCheckinConcluido(false);
     setTodasCestasPorSemestre({ [semestreAtivo]: { A: [] } });
@@ -337,6 +354,7 @@ export function App() {
 
   function handleTrocarUsuario() {
     localStorage.removeItem(CHAVE_PERFIL);
+    sessionStorage.removeItem(CHAVE_PERFIL);
     localStorage.removeItem(CHAVE_CHECKIN);
     setPerfil(null);
     setCheckinConcluido(false);

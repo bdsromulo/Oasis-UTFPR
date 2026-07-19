@@ -21,6 +21,8 @@ export interface Preferencias {
   curso?: string;
   matriz?: string;
   semestreAtivo?: string;
+  /** Modo privado: guarda o histórico só na sessão (some ao fechar a aba) */
+  privado?: boolean;
 }
 
 export function TelaConfiguracoes(props: {
@@ -234,6 +236,35 @@ export function TelaConfiguracoes(props: {
                 <IconUser className="w-4 h-4 shrink-0" />
                 <span>Trocar usuário / Encerrar sessão</span>
               </Botao>
+            </div>
+
+            {/* Modo privado: histórico só na sessão do navegador */}
+            <div className="flex items-center justify-between gap-4 rounded-xl border border-zinc-200/70 bg-white/50 p-3 dark:border-zinc-800 dark:bg-zinc-900/40">
+              <div>
+                <span className="font-display text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                  Não salvar histórico neste dispositivo (modo privado)
+                </span>
+                <p className="text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Ideal em computador compartilhado: seu histórico fica apenas na sessão atual e é
+                  apagado ao fechar a aba ou o navegador, em vez de persistir no dispositivo.
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-pressed={!!preferencias.privado}
+                onClick={() =>
+                  onSalvarPreferencias({ ...preferencias, privado: !preferencias.privado })
+                }
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  preferencias.privado ? "bg-utfpr-500" : "bg-zinc-300 dark:bg-zinc-700"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                    preferencias.privado ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
             </div>
 
             {processandoPreview && (

@@ -22,6 +22,8 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[ ]` **RF11 — Linha do Tempo Curricular e Análise de Progressão Longitudinal (Comparativo Multi-Histórico):** Armazenamento de sucessivos históricos escolares no armazenamento local do navegador para medir progressão de créditos e variação temporal do Coeficiente de Rendimento (CR) e conclusão de trilhas.
 - `[x]` **RF12 — Estados e Modos de Planejamento do Semestre:** Suporte aos dois estados essenciais de uso: a) *Prévia de Matrícula (Oficial)* para o período que antecede e sucede a matrícula com base nos dados reais divulgados; b) *Período Corrido de Semestre (Simulação)* para organização durante o semestre vigente hipotetizando ofertas similares.
 - `[x]` **RF13 — Edição Contínua e Remoção Rápida na Grade (Loop Estilo GNH):** Botão "X" instantâneo revelado no hover de cada disciplina na minigrade lateral, no modal da grade completa e nos blocos da tabela visual de horários para remoção em um único clique sem perda de contexto.
+- `[x]` **RF14 — Gamificação e Simulação de Impacto da Grade no Progresso:** Ao montar a grade do semestre, simular em tempo real o *impulso* que cada disciplina selecionada dá à integralização de cada categoria curricular (Obrigatórias, 2º Estrato, Humanidades, Trilhas, Eletivas, Extensão e Estágio), sobrepondo o cumprido do histórico ao previsto pela grade (`motor/progressoGrade.ts`), tornando visível o avanço que aquele semestre representa.
+- `[ ]` **RF15 — Avaliações da Comunidade por Disciplina:** Permitir que o aluno registre dificuldade (1–3) e comentário nas disciplinas que já **concluiu** (validadas no próprio histórico), autenticado pelo próprio vínculo, redistribuindo a informação agregada aos demais usuários. Depende de decisão de infraestrutura (ver §5).
 
 ### Requisitos Não Funcionais (RNF)
 - `[x]` **RNF01 — Privacidade e Local-First:** Todo parseamento de documentos pessoais ocorre no browser via `pdfjs-dist`. Nenhum histórico escolar transita por rede.
@@ -29,6 +31,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RNF03 — Integridade e Invariantes de Dados (Erro Alto):** A ingestão de ofertas semestrais e matriz curricular deve passar por auditoria rigorosa via scripts Python (`validate_turmas.py`, `validate_matriz.py`), reprovando qualquer divergência documental com erro explícito (`0 erros`).
 - `[x]` **RNF04 — Design Visual de Alta Fidelidade (Sem Emojis):** Interface limpa, minimalista e acessível com tipografia de produto (`Outfit` + `Plus Jakarta Sans`) e ícones vetoriais SVG, sem dependência de emojis ou fontes genéricas.
 - `[x]` **RNF05 — Responsividade Absoluta:** O layout deve adaptar-se graciosamente a dispositivos móveis, tablets e monitores desktop amplos.
+- `[/]` **RNF06 — Minimização de Dados e Autenticação por Vínculo (Camada de Comunidade):** Qualquer funcionalidade que exija troca com a rede (avaliações da comunidade) deve enviar o **mínimo indispensável** — nunca o RA em claro, notas, CR, nome do aluno ou o PDF do histórico — e ancorar a identidade em uma **prova de vínculo institucional** que iniba criação em massa de identidades (Sybil) e falsificação de RA, em conformidade com a LGPD (consentimento, finalidade e minimização). Ver §5.
 
 ---
 
@@ -52,15 +55,42 @@ A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônico
   - Zero falsos positivos ou omissões na detecção de choques de horário na grade.
 
 ### 2.3 Processo de GI — Ciclo de Vida da Informação
-- **3.1 Determinação das Exigências:** Identificação precisa do que o aluno necessita saber para se matricular (falta quanto para formar? tem pré-requisito? tem choque de horário? qual a sala/sede?).
-- **3.2 Obtenção da Informação:**
-  - *Estática Canônica:* Extração e validação das tabelas de matriz (`matriz-981.json`) e turmas abertas (`turmas/2026-1.json`) a partir de relatórios institucionais oficiais.
-  - *Dinâmica Individual:* Leitura em tempo real do histórico do aluno via upload de PDF.
-- **3.3 Distribuição e Disponibilização da Informação:**
-  - Segregação visual em 3 pilares intuitivos: **Minha Situação** (visão estratégica/longo prazo), **Posso Cursar** (visão tática/elegibilidade no semestre) e **Grade** (visão operacional/execução da matrícula).
-- **3.4 Feedback da Utilização:**
-  - Alertas visuais imediatos de observações do parser e inconsistências (`perfil.avisos`, `painel.inconsistencias`).
-  - Copiador de relatório de matrícula pronto para colagem no portal oficial.
+
+O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de BSI** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo, futuro) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
+
+#### 3.1 Determinação das Exigências — *quem precisa de qual informação, e quando*
+
+| Quem? | Informação Exigida | Quando? |
+| :--- | :--- | :--- |
+| **Aluno de BSI** | Quanto falta para integralizar cada estrato (obrigatórias, 2º estrato, humanidades, trilhas, eletivas, extensão, estágio)? Qual meu Coeficiente de Rendimento absoluto e normalizado? | Contínuo; pico ao fim do semestre |
+| **Aluno de BSI** | Quais disciplinas estou liberado a cursar (pré-requisitos cumpridos × oferta do semestre)? | Períodos de matrícula e rematrícula |
+| **Aluno de BSI** | Há choque de horário ou conflito de deslocamento entre sedes (Centro/Ecoville/Neoville) na grade que estou montando? Quanto esta grade me faz avançar? | Período de matrícula |
+| **Aluno de BSI** | Qual a dificuldade percebida e a experiência de quem já cursou uma dada disciplina/turma? | Antes de escolher turmas |
+| **Aluno Contribuidor** | Quais das minhas disciplinas concluídas posso avaliar, e como registrar dificuldade e comentário de forma autenticada? | Após concluir a disciplina |
+| **Mantenedores** | Quais turmas foram abertas no semestre? A matriz sofreu alteração? Há avaliações da comunidade pendentes de moderação? | Semestral; contínuo para moderação |
+
+#### 3.2 Obtenção e Plano de Aquisição da Informação — *qual dado, de qual fonte*
+
+| Informação exigida | Dado a ser obtido | Fonte do dado |
+| :--- | :--- | :--- |
+| **Matriz curricular vigente (981)** | Disciplinas, período, conjunto/estrato, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → `data/matriz-981.json` |
+| **Oferta de turmas do semestre** | Códigos de turma, horários (turno M/T/N + slot), sede/sala, professores e prioridade BSI (S73 P1, S71 P2) | PDF oficial de Turmas Abertas — Portal do Aluno → `data/turmas/<sem>.json` |
+| **Progresso individual do aluno** | RA, disciplinas cursadas, notas, frequência, status (aprovado/equivalência/aproveitamento/dependência) e créditos | Histórico Escolar em PDF — **processado 100% no navegador, sem trânsito em rede** |
+| **Avaliação de disciplina pela comunidade** | Nível de dificuldade (1–3), comentário textual, código da disciplina e token de prova de vínculo | Submissão autenticada do Aluno Contribuidor (e-mail institucional + histórico validado localmente) — *futuro, ver §5* |
+
+#### 3.3 Distribuição e Disponibilização da Informação — *quem recebe, e como*
+
+| Quem? | Como? |
+| :--- | :--- |
+| **Aluno de BSI** | Abas **Minha Situação** (visão estratégica/longo prazo), **Planejamento de Matrícula** (posso cursar + grade + conflitos) e **Catálogo de Matérias**; tooltips de códigos; relatório copiável para o Portal; simulação gamificada de impulso da grade no progresso |
+| **Aluno Contribuidor** | Botão **Avaliar** habilitado por disciplina concluída (validada no próprio histórico); painel de dificuldade média e comentários agregados por disciplina — *futuro* |
+| **Mantenedores** | Pipeline de dados versionado (`data/` + validadores Python com erro alto); futuro portal de administração/moderação para homologar ofertas e avaliações sem editar JSON manualmente |
+
+#### 3.4 Feedback da Utilização
+- Alertas visuais imediatos de observações do parser e inconsistências (`perfil.avisos`, `painel.inconsistencias`).
+- Badges dinâmicas de status da grade em tempo real (contagem de aulas/semana, *Sem conflitos* vs *Choque de horário*) e simulação de impulso no progresso curricular.
+- Copiador de relatório de matrícula pronto para colagem no portal oficial.
+- *Futuro:* fila de moderação de avaliações da comunidade e sinal de "dificuldade média" retroalimentando a decisão de escolha de turmas de outros alunos.
 
 ### 2.4 Dimensões e Atributos de Qualidade da Informação (QI)
 
@@ -71,6 +101,7 @@ Conforme a metodologia de avaliação de qualidade de dados do projeto, cada inf
 | **Disciplinas abertas no semestre vigente** | Matérias ofertadas no semestre (`data/turmas/<sem>.json`) | **d1: Atualidade** | **a1: intervalo de tempo**<br>• **Alto:** se a informação é datada com intervalo máximo de até 2 meses antes do início do semestre letivo vigente.<br>• **Baixo:** se a informação é datada com intervalo superior a 2 meses antes do início do semestre letivo vigente. |
 | **Progresso no curso e integralização** | Histórico Escolar em PDF do aluno | **d2: Confiabilidade / Precisão** | **a2: fidelidade posicional**<br>• **Alto:** se todas as linhas de disciplina possuem código, nome e carga horária perfeitamente alinhados e validados contra invariantes do curso (`0 erros`).<br>• **Baixo:** se há falhas de parsing ou divergências em cargas horárias de dependências/equivalências. |
 | **Horários e sedes das aulas** | Conflito de turno e sala (`motor/grade.ts`) | **d3: Integridade** | **a3: completeza relacional**<br>• **Alto:** se cada slot da grade identifica sem ambiguidade dia, turno, aula, disciplina, turma e sala/sede.<br>• **Baixo:** se há slots órfãos ou turmas sem indicação de sede para cálculo de deslocamento. |
+| **Avaliações da comunidade** | Dificuldade (1–3) e comentário por disciplina (*futuro*) | **d4: Credibilidade / Autenticidade** | **a4: prova de vínculo**<br>• **Alto:** se a avaliação está atrelada a um RA autenticado pela submissão do histórico e por verificação institucional, com no máximo uma avaliação por (aluno, disciplina).<br>• **Baixo:** se a avaliação é anônima e não verificável, sujeita a spam, Sybil ou falsificação de RA. |
 
 ---
 
@@ -127,3 +158,45 @@ A interface visual adota as **10 Heurísticas de Nielsen** e princípios moderno
 7. **Estética e Design Minimalista:**
    - Eliminação de ruídos visuais e "Cara de IA" (remoção completa de emojis decorativos e fontes padrão).
    - Uso equilibrado de espaços em branco, cards com `backdrop-blur` e hierarquia tipográfica contrastando `Outfit` com `Plus Jakarta Sans`.
+
+---
+
+## 5. Arquitetura da Camada de Comunidade (Avaliações Autenticadas)
+
+> **Status:** proposta em avaliação. **Não implementar sem homologação explícita do dono**, pois cruza a regra "Sem backend" do `CLAUDE.md`/RNF02. Esta seção registra o trade-off e a recomendação para essa decisão.
+
+### 5.1 O problema e o teto de segurança
+A ideia é: cada aluno cadastra seu histórico (como já ocorre, client-side) e, em cada disciplina **concluída** — fato que se valida no próprio histórico —, ganha um botão de avaliar (dificuldade 1–3 + comentário), com a review autenticada pelo RA e redistribuída a todos.
+
+Há um limite honesto e incontornável: **o PDF do Histórico Escolar da UTFPR não possui assinatura digital verificável por terceiros.** Sem uma raiz criptográfica de confiança emitida pela instituição (SSO/OAuth institucional ou documento assinado), *qualquer* afirmação puramente client-side sobre "sou o RA X e passei na disciplina Y" é forjável — o cliente pode simplesmente mentir no `POST`. Portanto:
+- **Não é possível** autenticar o RA de forma forte *sem* que algo saia do navegador **e** sem uma âncora institucional.
+- O que é possível é elevar drasticamente o **custo de abuso** e obter segurança pragmática "boa o suficiente" com degradação graciosa.
+
+### 5.2 A âncora recomendada: verificação por e-mail institucional (anti-Sybil)
+Em vez de tentar provar o RA a partir do PDF, ancore a identidade no **e-mail institucional** (`@alunos.utfpr.edu.br`) via *magic-link*/OTP:
+- Prova **vínculo institucional** sem o aluno digitar senha em lugar nenhum (não coletamos credencial).
+- É o freio anti-Sybil: cada identidade falsa exigiria um e-mail institucional distinto, o que exige estar matriculado.
+- O histórico local continua provando *quais* disciplinas o aluno concluiu; o e-mail prova *que ele é um aluno real da UTFPR*. A conjunção das duas dá: "um aluno verificado afirma ter concluído a disciplina X e a avalia".
+
+### 5.3 Minimização de dados (RNF06) — o que trafega
+Ler avaliações é anônimo e não exige nada. **Apenas para contribuir** o aluno se verifica uma vez. Por review, o cliente envia somente:
+`{ codigoDisciplina, dificuldade(1–3), comentario, tokenVinculo }`.
+- **Nunca** trafegam: RA em claro, notas, CR, nome, ou o PDF.
+- **Anti-duplicação sem rastrear o RA:** derive no cliente um slot idempotente `slot = HMAC(tokenVinculoDoUsuario, codigoDisciplina)`. O servidor impõe **uma review por (usuário verificado, disciplina)** (upsert), sem nunca conhecer o RA.
+- *Dial de privacidade opcional:* para o servidor **gatear** que só se avalia disciplina realmente cursada, o cliente pode divulgar apenas o **conjunto de códigos concluídos** (sem notas/nomes/RA). Isso vaza a lista de matérias feitas — custo de privacidade ajustável; se recusado, o "cursei de fato" volta a ser auto-declarado e a moderação assume esse papel.
+
+### 5.4 Camadas anti-abuso (defesa em profundidade)
+1. **Verificação institucional** = raiz anti-Sybil (identidades custam caro).
+2. **Uma review por (usuário, disciplina)** = anti-spam estrutural (upsert idempotente).
+3. **Rate limiting + fila de moderação** (automática e/ou manual) = anti-flood e anti-abuso textual.
+4. **Segregação de camadas:** avaliar *dificuldade da disciplina* é de baixo risco; comentários *direcionados a professores* (TASK-08) carregam risco de difamação/LGPD e ficam em camada separada, com moderação reforçada.
+
+### 5.5 Infraestrutura sugerida
+- **Recomendado — BaaS gerenciado mínimo:** **Supabase** (magic-link/OTP e Row-Level Security nativos, Postgres) ou **Cloudflare Workers + D1/KV** (edge, mais enxuto e com hash do e-mail feito na hora para descartar o e-mail cru — mais privativo). Preserva o espírito "sem servidor para manter"; o histórico continua 100% client-side.
+- **Alternativa zero-backend real:** se a linha "sem backend" for inegociável, avaliações compartilhadas robustas **não são viáveis**; recai-se no modelo *Git-como-banco* (reviews via PR/GitHub App a um repositório curado, identidade GitHub, moderadas) — casa com a TASK-10, mas **não** autentica RA.
+
+### 5.6 Repositório público vs privado — não muda a segurança
+Tornar o **repositório privado não ajuda** neste problema: a segurança depende do *runtime* (servidor + cliente), não da visibilidade do código-fonte. O front é código que roda no navegador do usuário — segredos jamais moram nele; segredos vivem apenas em variáveis de ambiente do BaaS (server-side), fora do Git. **Recomendação:** manter o repositório público (preserva o ethos open-source) e nunca versionar segredo algum.
+
+### 5.7 Conformidade (LGPD)
+Avaliações atreladas a vínculo institucional são tratamento de dado pessoal: exigem **consentimento explícito**, **finalidade declarada** e **minimização** — exatamente o que a arquitetura acima persegue ao não trafegar RA/notas/nome e ao descartar o e-mail após derivar o hash de unicidade.

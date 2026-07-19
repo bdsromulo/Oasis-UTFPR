@@ -13,13 +13,19 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 - `[x]` **Motor de Elegibilidade ("Posso Cursar"):** Verificação de pré-requisitos cumpridos em tempo real para liberação de matrícula nas turmas ofertadas em `2026-1`.
 - `[x]` **Motor de Grade e Choques (`motor/grade.ts`):** Detecção de colisões no mesmo slot (`M1..N5`) e detecção de conflitos de deslocamento físico no mesmo turno entre sedes distintas (`Centro`, `Ecoville`, `Neoville`).
 - `[x]` **Exportador de Relatório para Matrícula:** Botão de cópia no formato de códigos limpos para digitação rápida no Portal do Aluno.
+- `[x]` **Motor de Gamificação e Simulação de Impacto da Grade (`motor/progressoGrade.ts`):** Para cada disciplina adicionada à grade em construção, calcula em tempo real o *impulso* que ela dá a cada categoria curricular (Obrigatórias/1º Estrato, 2º Estrato, Ciclo de Humanidades, Trilhas do 3º Estrato, Eletivas, Extensão e Estágio), cruzando `cumpridoBase` (histórico) com o `previewCarga` da grade para exibir o `cumpridoSimulado` — transformando a montagem da grade em avanço visível de integralização.
 
 ### Interface Visual e Experiência do Usuário (UI/UX)
 - `[x]` **Repaginada Visual Completa (Remoção da "Cara de IA"):** Subscrição integral de todos os emojis decorativos e fontes padrão de sistema por uma identidade de produto digital de alta fidelidade.
 - `[x]` **Tipografia Personalizada:** Integração com Google Fonts utilizando **`Outfit`** (`--font-display`) para cabeçalhos e **`Plus Jakarta Sans`** (`--font-sans`) para o corpo e números.
 - `[x]` **Biblioteca Vetorial de Ícones (`src/ui/icons.tsx`):** Criação de ícones minimalistas (estilo Lucide, `stroke-width: 1.75`) e da representação vetorial geométrica oficial da **Logo da UTFPR** (`LogoUTFPR`) para o cabeçalho.
 - `[x]` **Suporte a Modo Claro e Escuro (`index.css`):** Tokens Tailwind v4 estruturados (`--color-utfpr-*`, `bg-zinc-50 dark:bg-zinc-950`).
-- `[x]` **Suíte de Testes Vitest Completa:** `9/9 passed`, validando tanto cenários sintéticos complexos quanto os históricos reais locais dos mantenedores.
+- `[x]` **Suíte de Testes Vitest Completa:** `11/11 passed` (5 sintéticos em CI + 6 com históricos reais locais, com skip automático em CI), validando tanto cenários sintéticos complexos quanto os históricos reais dos mantenedores.
+
+### Segurança e Privacidade (Hardening)
+- `[x]` **Auto-hospedagem de Fontes (Zero CDN Externo):** Substituição do `<link>` do Google Fonts por pacotes `@fontsource` empacotados no bundle (`Outfit` + `Plus Jakarta Sans`), eliminando a única requisição de rede externa e o vazamento de IP/referer ao Google — coerência real com o discurso de privacidade absoluta.
+- `[x]` **Content-Security-Policy no Build de Produção:** Plugin do Vite injeta uma CSP restritiva (`default-src 'self'`, sem `unsafe-eval`) apenas no build, calculando automaticamente o hash SHA-256 do script inline de tema para nunca dessincronizar. Verificada em runtime (fontes, worker do pdf.js e script anti-flicker sem violações).
+- `[x]` **Modo Privado de Sessão:** Toggle em Configurações que passa a guardar o histórico apenas em `sessionStorage` (apagado ao fechar a aba) em vez de `localStorage`, protegendo dados em máquina compartilhada; migração automática ao alternar.
 
 ---
 
@@ -70,6 +76,13 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 
 - `[ ]` **TASK-08 — Seção de Feedbacks, Acervo e Documentações de Professores:**
   - Dentro da página própria da disciplina/turma, abrir espaço (via repositório auxiliar ou marcações locais) para agregar documentações antigas, ementas detalhadas e feedbacks construtivos da vivência dos estudantes.
+  - **Governança:** avaliações direcionadas a professores são camada distinta e mais sensível (risco de difamação/LGPD) da avaliação de dificuldade da disciplina descrita na TASK-13 — exigem moderação reforçada e devem ser mantidas separadas.
+
+- `[ ]` **TASK-13 — Sistema de Avaliações da Comunidade por Disciplina (Dificuldade + Comentário):**
+  - Em cada disciplina já **concluída** pelo aluno (validada no próprio histórico local), expor um botão *Avaliar*: nota de **dificuldade de 1 a 3 estrelas** e comentário textual opcional. A informação agregada (dificuldade média + comentários) é redistribuída a todos os usuários e exibida na página da disciplina (TASK-07).
+  - **Autenticação por vínculo:** cada review é atrelada ao RA do aluno, autenticado pela submissão do próprio histórico + prova de vínculo institucional, com no máximo **uma avaliação por (aluno, disciplina)** (upsert idempotente), inibindo spam e Sybil.
+  - **Decisão de infraestrutura pendente (viola RNF02 — "Sem backend" até decisão explícita do dono):** o compartilhamento de reviews entre usuários exige *alguma* camada compartilhada. Ver seção dedicada em `Estrategia.md` (§5 — Arquitetura da Camada de Comunidade) com o trade-off de privacidade/segurança e a recomendação de backend gerenciado mínimo (BaaS) + verificação por e-mail institucional. Nenhuma linha de backend é escrita antes da homologação do dono.
+  - **Minimização de dados (RNF06):** nunca enviar à rede o RA em claro, notas, CR, nome ou o PDF; enviar apenas o mínimo indispensável (código da disciplina, dificuldade, comentário e um token de vínculo derivado).
 - `[ ]` **TASK-09 — Catálogo Colaborativo de Eletivas e Matérias Externas:**
   - Mapear histórico de alunos fundadores (Yago, Rômulo, Namie) e identificar disciplinas cursadas em outros cursos da UTFPR que foram validadas como Eletivas ou Extensão para BSI, recomendando-as para futuros estudantes.
 - `[ ]` **TASK-10 — Portal de Administração (Repositório / Subdomínio Dedicado):**
