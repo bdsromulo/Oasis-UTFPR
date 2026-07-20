@@ -95,13 +95,13 @@ export function App() {
   const [preferencias, setPreferencias] = useState<Preferencias>(() => {
     try {
       const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS) ?? "null");
-      return salvo || { tema: "sistema", layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis" };
+      return salvo || { tema: "sistema", layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis", semestreAtivo: "2026-2" };
     } catch {
-      return { tema: "sistema", layout: "oasis" };
+      return { tema: "sistema", layout: "oasis", semestreAtivo: "2026-2" };
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
-  const semestreAtivo = preferencias.semestreAtivo || "2026-1";
+  const semestreAtivo = preferencias.semestreAtivo || "2026-2";
 
   const todasOfertas: Record<string, OfertaSemestre> = useMemo(() => {
     const o20261 = turmas20261Json as unknown as OfertaSemestre;
@@ -124,14 +124,12 @@ export function App() {
   }, []);
 
   const oferta = useMemo<OfertaSemestre>(() => {
-    return todasOfertas[semestreAtivo] || todasOfertas["2026-1"];
+    return todasOfertas[semestreAtivo] || todasOfertas["2026-2"];
   }, [semestreAtivo, todasOfertas]);
 
   // 2026.2 não tem PDF oficial de turmas: roda com dados simulados a partir de 2025.2
   const ehPrevia =
-    preferencias.modoPlanejamento === "previa" ||
-    (preferencias.modoPlanejamento !== "corrido" &&
-      (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"));
+    semestreAtivo === "2026-2" || oferta.semestre === "2026-2";
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
@@ -156,9 +154,9 @@ export function App() {
     } catch {}
     try {
       const gradeAtual = JSON.parse(localStorage.getItem(CHAVE_GRADE) ?? "[]");
-      return { "2026-1": { A: gradeAtual } };
+      return { "2026-2": { A: gradeAtual } };
     } catch {
-      return { "2026-1": { A: [] } };
+      return { "2026-2": { A: [] } };
     }
   });
 
@@ -175,7 +173,7 @@ export function App() {
         return { "2026-1": salvoV1 };
       }
     } catch {}
-    return { "2026-1": {} };
+    return { "2026-2": {} };
   });
 
   const cestaGrades = useMemo(() => {
@@ -375,7 +373,7 @@ export function App() {
     setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
     setGradeAtiva("A");
     setSelecao([]);
-    setPreferencias({ tema: "sistema", layout: "oasis" });
+    setPreferencias({ tema: "sistema", layout: "oasis", semestreAtivo: "2026-2" });
     setLayout("oasis");
     setAba("planejamento");
     setAbaPlanejamento("cursar");
@@ -622,18 +620,18 @@ export function App() {
                           }`}
                         />
                         <select
-                          value={preferencias.semestreAtivo || "2026-1"}
+                          value={semestreAtivo}
                           onChange={(e) => mudarSemestre(e.target.value)}
                           className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
                         >
                           <option value="2026-2" className="bg-white text-emerald-700 font-bold dark:bg-zinc-900 dark:text-emerald-400">
                             2026.2 (Prévia)
                           </option>
-                          <option value="2026-1" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-                            2026.1
+                          <option value="2026-1" className="bg-white text-orange-600 font-bold dark:bg-zinc-900 dark:text-orange-400">
+                            2026.1 (Passado)
                           </option>
-                          <option value="2025-2" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-                            2025.2
+                          <option value="2025-2" className="bg-white text-orange-600 font-bold dark:bg-zinc-900 dark:text-orange-400">
+                            2025.2 (Passado)
                           </option>
                         </select>
                         <span className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] opacity-70">▾</span>
@@ -785,8 +783,8 @@ export function App() {
             )}
           </div>
 
-          {/* sidebar de feedback contínuo: visível nas abas Situação e em Planejamento/Posso Cursar */}
-          {(aba === "situacao" || (aba === "planejamento" && abaPlanejamento === "cursar")) && (
+          {/* sidebar de feedback contínuo: visível na aba de Planejamento/Posso Cursar */}
+          {aba === "planejamento" && abaPlanejamento === "cursar" && (
             <aside className="sticky top-4 self-start hidden w-60 shrink-0 lg:block">
               <MiniGrade
                 oferta={oferta}
@@ -859,7 +857,7 @@ export function App() {
       />
 
       {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta) */}
-      {(aba === "situacao" || (aba === "planejamento" && abaPlanejamento === "cursar")) && (
+      {aba === "planejamento" && abaPlanejamento === "cursar" && (
         <>
           <div className="fixed bottom-4 left-4 right-4 z-40 lg:hidden">
             <div className="flex items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-900/90 p-3.5 px-5 shadow-2xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-950/90 text-white">

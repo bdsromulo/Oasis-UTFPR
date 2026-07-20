@@ -439,7 +439,7 @@ export function TelaGrade(props: {
 
   const semestresParaImportacao = useMemo(() => {
     if (!props.todasCestasPorSemestre) return [];
-    const semestreAtual = props.semestreAtivo || "2026-1";
+    const semestreAtual = props.semestreAtivo || "2026-2";
     const chavesNoStorage = Object.keys(props.todasCestasPorSemestre);
     const conhecidos = ["2026-2", "2026-1", "2025-2"];
     const todas = Array.from(new Set([...conhecidos, ...chavesNoStorage])).filter(
@@ -542,7 +542,7 @@ export function TelaGrade(props: {
     setConfirmacaoSobreescreverImportacao(false);
   }
 
-  const importacaoBloqueada = (props.semestreAtivo || "2026-1") !== "2026-2" && props.oferta.semestre !== "2026-2" && props.oferta.semestre !== "2026.2";
+  const importacaoBloqueada = (props.semestreAtivo || "2026-2") !== "2026-2" && props.oferta.semestre !== "2026-2" && props.oferta.semestre !== "2026.2";
   const chavesGrades = props.cestaGrades ? Object.keys(props.cestaGrades).sort() : ["A"];
   const barraAbas = props.cestaGrades && props.onMudarGradeAtiva && (
     <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-3 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
@@ -650,7 +650,7 @@ export function TelaGrade(props: {
                     Importar Matérias de Outro Semestre
                   </h2>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                    Selecione o período de origem e a grade desejada para copiar para {props.semestreAtivo || "2026-1"}
+                    Selecione o período de origem e a grade desejada para copiar para {props.semestreAtivo || "2026-2"}
                   </p>
                 </div>
               </div>
@@ -672,7 +672,7 @@ export function TelaGrade(props: {
               <div className="flex items-start gap-3 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-4 text-xs text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/40 dark:text-amber-200">
                 <span className="text-base shrink-0 mt-0.5">ℹ️</span>
                 <p className="leading-relaxed">
-                  <strong>Regra de compatibilidade:</strong> Só serão importadas as matérias que permaneceram exatamente iguais em horário e professor na oferta de {props.semestreAtivo || "2026-1"}. Turmas que sofreram alteração na carga horária, dias/horários ou docente serão sinalizadas como incompatíveis e não serão trazidas.
+                  <strong>Regra de compatibilidade:</strong> Só serão importadas as matérias que permaneceram exatamente iguais em horário e professor na oferta de {props.semestreAtivo || "2026-2"}. Turmas que sofreram alteração na carga horária, dias/horários ou docente serão sinalizadas como incompatíveis e não serão trazidas.
                 </p>
               </div>
 
@@ -783,7 +783,7 @@ export function TelaGrade(props: {
                                 <span>✓ Compatível</span>
                               </span>
                             ) : item.existeNoAlvo ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-bold text-amber-700 dark:bg-amber-500/20 dark:text-amber-300" title={`Esta turma ou matéria mudou de horário/professor no semestre ${props.semestreAtivo || "2026-1"}`}>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-bold text-amber-700 dark:bg-amber-500/20 dark:text-amber-300" title={`Esta turma ou matéria mudou de horário/professor no semestre ${props.semestreAtivo || "2026-2"}`}>
                                 <span>⚠️ Mudou no atual</span>
                               </span>
                             ) : (

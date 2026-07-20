@@ -16,6 +16,7 @@ export interface OpcoesSugestaoGrade {
   trilhasExcluidas?: string[];
   semHumanidades?: boolean;
   semTrilhas?: boolean;
+  semEletivas?: boolean;
   priorizarExtensionistas?: boolean;
 }
 
@@ -242,12 +243,17 @@ export function gerarSugestaoGrade(
         .reduce((acc, t) => acc + Math.max(0, t.chExigida - t.cump), 0)
     : 180;
 
+  const chFaltanteEletivas = perfil
+    ? (perfil.eletivas?.chFaltante ?? Math.max(0, (perfil.eletivas?.chTotal ?? 120) - (perfil.eletivas?.chValidada ?? 0)))
+    : 120;
+
   // Inicializar seleção e contadores de carga horária a partir da seleção inicial (se houver)
   const selecaoFinal: SelecaoTurma[] = selecaoInicial ? [...selecaoInicial] : [];
   let chTotalAlocada = 0;
   let chAlocadaHumanidades = 0;
   let chAlocadaEstrato2 = 0;
   let chAlocadaTrilhas = 0;
+  let chAlocadaEletivas = 0;
 
   for (const s of selecaoFinal) {
     const dm = matriz?.disciplinas.find((x) => x.codigo === s.codDisciplina);
@@ -257,6 +263,7 @@ export function gerarSugestaoGrade(
     chTotalAlocada += h;
     if (c === 1161) chAlocadaHumanidades += h;
     else if (c === 1159) chAlocadaEstrato2 += h;
+    else if (c === 1199 || (!dm && dOf)) chAlocadaEletivas += h;
     else if (c !== null && c !== 1160) chAlocadaTrilhas += h;
   }
 
@@ -272,11 +279,17 @@ export function gerarSugestaoGrade(
       e.disciplina.conjunto !== null &&
       e.disciplina.conjunto !== 1159 &&
       e.disciplina.conjunto !== 1160 &&
-      e.disciplina.conjunto !== 1161
+      e.disciplina.conjunto !== 1161 &&
+      e.disciplina.conjunto !== 1199 &&
+      e.categoria !== "eletiva"
     ) {
       if (opcoes.semTrilhas) return false;
       if (opcoes.trilhasExcluidas && opcoes.trilhasExcluidas.includes(String(e.disciplina.conjunto))) return false;
       if (chFaltanteTrilhas <= 0) return false;
+    }
+    if (e.disciplina.conjunto === 1199 || e.categoria === "eletiva") {
+      if (opcoes.semEletivas) return false;
+      if (chFaltanteEletivas <= 0) return false;
     }
     return true;
   });
@@ -330,7 +343,15 @@ export function gerarSugestaoGrade(
       c !== 1159 &&
       c !== 1160 &&
       c !== 1161 &&
+      c !== 1199 &&
+      item.elegivel.categoria !== "eletiva" &&
       chAlocadaTrilhas >= chFaltanteTrilhas
+    ) {
+      continue;
+    }
+    if (
+      (c === 1199 || item.elegivel.categoria === "eletiva") &&
+      chAlocadaEletivas >= chFaltanteEletivas
     ) {
       continue;
     }
@@ -380,6 +401,8 @@ export function gerarSugestaoGrade(
         chAlocadaHumanidades += item.elegivel.disciplina.horas.total;
       } else if (c === 1159) {
         chAlocadaEstrato2 += item.elegivel.disciplina.horas.total;
+      } else if (c === 1199 || item.elegivel.categoria === "eletiva") {
+        chAlocadaEletivas += item.elegivel.disciplina.horas.total;
       } else if (c !== null && c !== 1160) {
         chAlocadaTrilhas += item.elegivel.disciplina.horas.total;
       }

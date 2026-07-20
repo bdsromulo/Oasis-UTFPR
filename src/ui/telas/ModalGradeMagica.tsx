@@ -60,6 +60,7 @@ export function ModalSugestaoGrade({
   // Checkboxes de restrição/prioridade
   const [semHumanidades, setSemHumanidades] = useState(false);
   const [semTrilhas, setSemTrilhas] = useState(false);
+  const [semEletivas, setSemEletivas] = useState(false);
   const [priorizarExtensionistas, setPriorizarExtensionistas] = useState(false);
 
   const [confirmacaoExistentesAberta, setConfirmacaoExistentesAberta] = useState(false);
@@ -185,6 +186,7 @@ export function ModalSugestaoGrade({
         trilhasExcluidas: trilhasExcluidas.map((t) => t.conjunto),
         semHumanidades,
         semTrilhas,
+        semEletivas,
         priorizarExtensionistas,
       },
       sobrescrever ? [] : (confirmacaoExistentesAberta ? selecaoAtual : undefined),
@@ -225,6 +227,7 @@ export function ModalSugestaoGrade({
     const outrosFiltros: string[] = [];
     if (semHumanidades) outrosFiltros.push("Sem Optativas de Humanidades");
     if (semTrilhas) outrosFiltros.push("Sem Trilhas");
+    if (semEletivas) outrosFiltros.push("Sem Eletivas");
     if (priorizarExtensionistas) outrosFiltros.push("Priorizando Extensionistas");
 
     setConfirmacaoExistentesAberta(false);
@@ -815,6 +818,25 @@ export function ModalSugestaoGrade({
                       />
                       <span className="flex items-center gap-1">
                         Não quero Trilhas <span className="text-[10px] text-zinc-400">ⓘ</span>
+                      </span>
+                    </label>
+
+                    <label
+                      title="Desconsidera matérias eletivas ou disciplinas fora da grade na montagem da sugestão"
+                      className={`flex items-center gap-2.5 rounded-xl border p-2.5 text-xs font-semibold cursor-pointer transition-colors ${
+                        semEletivas
+                          ? "border-red-500/60 bg-red-500/10 text-red-900 dark:text-red-200 shadow-2xs"
+                          : "border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={semEletivas}
+                        onChange={(e) => setSemEletivas(e.target.checked)}
+                        className="accent-red-500 rounded"
+                      />
+                      <span className="flex items-center gap-1">
+                        Não quero Eletivas <span className="text-[10px] text-zinc-400">ⓘ</span>
                       </span>
                     </label>
 
