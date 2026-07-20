@@ -14,6 +14,21 @@ const RE_NUCLEO =
 const RE_CODIGO = /^[A-Z]{2,4}[0-9][A-Z0-9]{1,3}$|^[A-Z]{3,5}[0-9]{2}[A-Z0-9]?$/;
 const RE_TURMA = /^[A-Z]\d{2}$/;
 
+// A tabela "Detalhes das Disciplinas Eletivas" tem schema próprio, diferente do das
+// obrigatórias/optativas:
+//   Período País [Instituição] [Disciplina] [Turma] CHT [CHEXT] Nota Freq Per Ano
+//   [NF x CH] Situação Validado
+// Turma, CHEXT e "NF x CH" aparecem ou não conforme o histórico, então o núcleo é
+// ancorado no trecho estável (CHT..Ano) somado ao Sim/Não do fim da linha.
+// O lookbehind é essencial: sem ele, os dígitos de uma turma ("S73") seriam lidos
+// como CHT e a carga sairia errada.
+const RE_NUCLEO_ELETIVA =
+  /(?<![A-Za-z0-9])(\d{1,3})\s+(?:(\d{1,3})\s+)?([\d,]+|\*)\s+([\d,]+|\*)\s+([12])\s+(20\d{2})\b/;
+const RE_VALIDADO = /\b(Sim|Não)\s*$/;
+// o código raramente cai na linha-núcleo; costuma vir num fragmento "CODIGO - Nome",
+// às vezes com o nome quebrado para a linha seguinte (daí o fim de linha aceito)
+const RE_CODIGO_ELETIVA = /\b([A-Z]{2,5}[0-9][A-Z0-9]{0,3})\s*-(?:\s|$)/;
+
 function ehCodigo(tok: string): boolean {
   return (
     tok.length >= 5 &&
@@ -110,6 +125,7 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     | "optativas"
     | "resumoOptativas"
     | "eletivas"
+    | "eletivasDetalhe"
     | "faltantes"
     | "dependencias"
     | "matriculadas"
@@ -117,6 +133,8 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
   let secao: Secao = "nenhuma";
   // linhas de cursadas acumuladas por seção de origem
   const cursadasLinhas: { texto: string; origem: "obrigatoria" | "optativa" }[] = [];
+  // a tabela de eletivas é acumulada à parte: schema e segmentação são próprios
+  const eletivasLinhas: string[] = [];
 
   for (const l of linhas) {
     // transições de seção (a ordem importa: cabeçalhos mais específicos primeiro)
@@ -125,7 +143,7 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     if (/Resumo Optativas/.test(l)) { secao = "resumoOptativas"; continue; }
     if (/Detalhes das Optativas Cursadas/.test(l)) { secao = "nenhuma"; continue; }
     if (/Detalhamento do Conjunto/.test(l)) { secao = "resumoOptativas"; continue; }
-    if (/Detalhes das Disciplinas Eletivas/.test(l)) { secao = "nenhuma"; continue; }
+    if (/Detalhes das Disciplinas Eletivas/.test(l)) { secao = "eletivasDetalhe"; continue; }
     if (/Resumo Eletiva/.test(l)) { secao = "eletivas"; continue; }
     if (/Atividade Extensionista|Componentes Curriculares/.test(l)) { secao = "nenhuma"; }
     if (/Disciplinas Obrigatórias Faltantes/.test(l)) { secao = "faltantes"; continue; }
@@ -146,6 +164,9 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
         break;
       case "optativas":
         cursadasLinhas.push({ texto: l, origem: "optativa" });
+        break;
+      case "eletivasDetalhe":
+        eletivasLinhas.push(l);
         break;
       case "resumoOptativas": {
         const m = l.match(
@@ -260,6 +281,56 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
       cht: parseInt(m[2]),
       semestre: parseInt(m[6]),
       ano: parseInt(m[7]),
+    } satisfies DisciplinaCursada);
+  });
+
+  // ---------- eletivas: tabela própria ----------
+  // Guarda só as validadas: uma eletiva com Validado="Não" ou é reprovação ou teve o
+  // crédito convalidado numa obrigatória (o caso real observado), e nos dois casos a
+  // carga já está contabilizada em outro lugar. A CH de eletivas do aluno continua
+  // vindo exclusivamente do "Resumo Eletiva" — a soma desta lista pode ultrapassar o
+  // teto do curso e não serve como carga.
+  const nucleosEletiva: number[] = [];
+  eletivasLinhas.forEach((l, i) => {
+    if (RE_VALIDADO.test(l) && RE_NUCLEO_ELETIVA.test(l)) nucleosEletiva.push(i);
+  });
+  nucleosEletiva.forEach((idx, k) => {
+    const ini = k === 0 ? 0 : nucleosEletiva[k - 1] + 1;
+    const fim = k + 1 < nucleosEletiva.length ? nucleosEletiva[k + 1] : eletivasLinhas.length;
+    const linhaNucleo = eletivasLinhas[idx];
+    const antes = eletivasLinhas.slice(ini, idx);
+    const depois = eletivasLinhas.slice(idx + 1, fim);
+    const m = linhaNucleo.match(RE_NUCLEO_ELETIVA)!;
+
+    // O fragmento "CODIGO - Nome" sempre cai na linha-núcleo ou ACIMA dela. Procurar
+    // abaixo faria uma linha sem código identificável roubar o da linha seguinte —
+    // melhor um aviso alto do que uma eletiva atribuída ao código errado.
+    let codigo: string | null = null;
+    for (const linha of [linhaNucleo, ...antes]) {
+      const mc = linha.match(RE_CODIGO_ELETIVA);
+      if (mc && ehCodigo(mc[1])) {
+        codigo = mc[1];
+        break;
+      }
+    }
+    if (!codigo) {
+      avisos.push(`eletivas: linha sem código identificável: "${linhaNucleo.slice(0, 80)}"`);
+      return;
+    }
+    if (!/Sim\s*$/.test(linhaNucleo)) return;
+
+    perfil.cursadas.push({
+      codigo,
+      // igual às demais cursadas: o nome sai do código (matriz ou pool de eletivas)
+      nome: "",
+      situacao: acharSituacao([linhaNucleo, ...antes, ...depois]) ?? "aprovado",
+      origem: "eletiva",
+      validado: true,
+      media: num(m[3]),
+      frequencia: num(m[4]),
+      cht: parseInt(m[1]),
+      semestre: parseInt(m[5]),
+      ano: parseInt(m[6]),
     } satisfies DisciplinaCursada);
   });
 

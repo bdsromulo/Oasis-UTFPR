@@ -7,6 +7,7 @@ import { extrairLinhas } from "../src/domain/historico/extrair-linhas";
 import { parseHistorico } from "../src/domain/historico/parser";
 import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
+import { nomeDeEletiva } from "../src/domain/eletivas";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
 import turmasJson from "../data/turmas/2026-1.json";
@@ -94,6 +95,19 @@ describe.skipIf(!existsSync(CASOS[0].arquivo))("fatos específicos: Rômulo", ()
     expect(perfil.eletivas?.chFaltante).toBe(0);
     expect(perfil.extensao?.chFaltante).toBe(270);
   });
+
+  it("eletivas fora da matriz entram individualmente, sem virar carga", async () => {
+    const perfil = await carregar(CASOS[0].arquivo);
+    const eletivas = perfil.cursadas.filter((c) => c.origem === "eletiva");
+    expect(eletivas.map((c) => c.codigo).sort()).toEqual(["EEX11", "FI71S", "FI72N", "MA72A"]);
+    // nome quebrado em 4 pedaços no PDF: o código é o que importa, a pool resolve o nome
+    expect(nomeDeEletiva("EEX11")).toContain("Laboratório");
+    expect(eletivas.find((c) => c.codigo === "EEX11")).toMatchObject({ cht: 45, media: 8.9 });
+    // as 4 somam 195h, mas o teto da matriz é 105h: a carga vem do Resumo, não da soma
+    expect(eletivas.reduce((s, c) => s + (c.cht ?? 0), 0)).toBe(195);
+    expect(perfil.eletivas?.chValidada).toBe(105);
+    expect(perfil.resumoGeral?.eletivas.aprovada).toBe(105);
+  });
 });
 
 describe.skipIf(!existsSync(CASOS[1].arquivo))("fatos específicos: Namie", () => {
@@ -108,6 +122,18 @@ describe.skipIf(!existsSync(CASOS[1].arquivo))("fatos específicos: Namie", () =
     // cancelamento seguido de aprovação (ICSG20)
     expect(perfil.aprovadas.has("ICSG20")).toBe(true);
     expect(perfil.eletivas?.chFaltante).toBe(45);
+  });
+
+  it("eletiva validada é lida; a convalidada em obrigatória fica de fora", async () => {
+    const perfil = await carregar(CASOS[1].arquivo);
+    const eletivas = perfil.cursadas.filter((c) => c.origem === "eletiva");
+    // GEE74F é eletiva genuína (Validado=Sim) e precisa constar como cursada, não
+    // apenas em `aprovadas` — era o que a fazia aparecer como não concluída
+    expect(eletivas.map((c) => c.codigo)).toEqual(["GEE74F"]);
+    expect(eletivas[0]).toMatchObject({ cht: 60, media: 10, ano: 2026, semestre: 1 });
+    // GE71A tem Validado=Não: virou a obrigatória GEE7A1 por convalidação
+    expect(eletivas.some((c) => c.codigo === "GE71A")).toBe(false);
+    expect(perfil.cursadas.find((c) => c.codigo === "GEE7A1")?.situacao).toBe("consignado");
   });
 });
 

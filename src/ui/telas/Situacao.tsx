@@ -1,6 +1,7 @@
 import { useMemo, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 import { montarPainel } from "../../domain/motor/situacao";
+import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Card } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
@@ -98,7 +99,9 @@ export function TelaSituacao(props: {
     for (const c of perfil.cursadas) {
       if (c.situacao !== "aprovado" && c.situacao !== "consignado" && c.situacao !== "dispensado") continue;
       const dm = matriz.disciplinas.find((d) => d.codigo === c.codigo);
-      const item = { codigo: c.codigo, nome: dm ? dm.nome : c.nome, cht: c.cht || (dm ? dm.horas.total : null) };
+      // eletiva de outro curso não está na matriz: o nome vem da pool de eletivas
+      const nome = dm ? dm.nome : nomeDeEletiva(c.codigo) ?? c.nome;
+      const item = { codigo: c.codigo, nome, cht: c.cht || (dm ? dm.horas.total : null) };
 
       if (dm && dm.horas.chext > 0) {
         mapa.extensao.push(item);
@@ -142,8 +145,17 @@ export function TelaSituacao(props: {
   const qtdEstagio = (estagio1 ? 1 : 0) + (estagio2 ? 1 : 0);
 
   const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
+  // A carga aprovada sai do Quadro Resumo do histórico, que já aplica os tetos por
+  // categoria — eletivas, por exemplo, param no teto da matriz mesmo quando o aluno
+  // cursou mais horas do que ele. Somar as cursadas devolveria um número acima do
+  // oficial. A soma só é usada como fallback em histórico sem Quadro Resumo.
   const horasAprovadasGlobal = useMemo(() => {
     if (!perfil) return 0;
+    const resumo = perfil.resumoGeral;
+    if (resumo) {
+      const oficial = resumo.obrigatorias.aprovada + resumo.optativas.aprovada + resumo.eletivas.aprovada;
+      return Math.min(oficial, horasTotalPPC);
+    }
     let soma = 0;
     for (const c of perfil.cursadas) {
       if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {

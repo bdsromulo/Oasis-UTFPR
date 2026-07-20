@@ -101,8 +101,15 @@ export interface DisciplinaCursada {
   codigo: string;
   nome: string;
   situacao: Situacao;
-  /** "obrigatoria" | "optativa" (2º estrato/trilhas/humanidades) */
-  origem: "obrigatoria" | "optativa";
+  /** "obrigatoria" | "optativa" (2º estrato/trilhas/humanidades) | "eletiva" */
+  origem: "obrigatoria" | "optativa" | "eletiva";
+  /**
+   * Só para origem "eletiva": coluna "Validado" da tabela de eletivas. O parser
+   * guarda apenas as validadas — uma eletiva não validada é reprovação ou teve o
+   * crédito consumido por convalidação numa obrigatória, e em nenhum dos casos
+   * conta como eletiva.
+   */
+  validado?: boolean;
   media: number | null;
   frequencia: number | null;
   cht: number | null;

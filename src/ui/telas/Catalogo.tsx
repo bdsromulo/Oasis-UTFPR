@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
+import type { DisciplinaMatriz, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
+import { POOL_ELETIVAS } from "../../domain/eletivas";
 import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
@@ -53,14 +54,22 @@ export function TelaCatalogo(props: {
       return { titulo: "Extensão Universitária", cumprido: painel.extensao.cumprido, exigido: painel.extensao.exigido };
     }
     if (categoria === "todas") {
+      const exigido = matriz.cargas.ch_total_ppc || 3200;
+      // mesma regra do Painel: o Quadro Resumo é a fonte, porque já aplica os tetos
+      // por categoria (a soma das cursadas pode ultrapassar o oficial nas eletivas)
+      const resumo = props.perfil?.resumoGeral;
       let soma = 0;
-      for (const c of props.perfil?.cursadas ?? []) {
-        if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") soma += c.cht || 0;
+      if (resumo) {
+        soma = resumo.obrigatorias.aprovada + resumo.optativas.aprovada + resumo.eletivas.aprovada;
+      } else {
+        for (const c of props.perfil?.cursadas ?? []) {
+          if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") soma += c.cht || 0;
+        }
       }
       return {
         titulo: "Progresso Geral do Curso",
-        cumprido: Math.min(soma, matriz.cargas.ch_total_ppc || 3200),
-        exigido: matriz.cargas.ch_total_ppc || 3200,
+        cumprido: Math.min(soma, exigido),
+        exigido,
       };
     }
     return null;
@@ -83,7 +92,7 @@ export function TelaCatalogo(props: {
 
     const codigosOfertados = new Set(oferta.disciplinas.map((d) => d.codigo));
 
-    return matriz.disciplinas.map((dm) => {
+    const itensMatriz = matriz.disciplinas.map((dm) => {
       const nomeNorm = normNome(dm.nome);
 
       let cursada = mapaCursadas.get(dm.codigo);
@@ -142,6 +151,44 @@ export function TelaCatalogo(props: {
         categoria: cat,
       };
     });
+
+    // Eletivas cursadas que não existem na matriz 981 (o caso comum: vêm de outros
+    // cursos) entram como itens próprios, com o nome resolvido pela pool. Sem isso
+    // elas ficariam invisíveis, já que o catálogo percorre só a matriz.
+    const naMatriz = new Set(matriz.disciplinas.map((d) => d.codigo));
+    const extras = (perfil?.cursadas ?? [])
+      .filter((c) => c.origem === "eletiva" && !naMatriz.has(c.codigo) && POOL_ELETIVAS[c.codigo])
+      .map((c) => {
+        const daPool = POOL_ELETIVAS[c.codigo];
+        const disciplina: DisciplinaMatriz = {
+          codigo: c.codigo,
+          nome: daPool.nome,
+          periodo: 0,
+          conjunto: 1199,
+          modelo: "Eletiva",
+          aulas_semanais: { teoricas: 0, praticas: 0, total: 0, aps: 0, apcc: 0 },
+          horas: { ad: 0, chext: 0, chead: 0, total: c.cht || daPool.ch || 0 },
+          prerequisitos: [],
+          equivalentes: [],
+        };
+        return {
+          disciplina,
+          concluida: true,
+          matriculada: false,
+          dependencia: false,
+          cursada: {
+            situacao: c.situacao,
+            media: c.media,
+            freq: c.frequencia,
+            cht: c.cht || 0,
+            origem: c.origem,
+          },
+          temOferta: false,
+          categoria: "eletivas" as CategoriaCatalogo,
+        };
+      });
+
+    return [...itensMatriz, ...extras];
   }, [matriz, perfil, oferta]);
 
   // Filtragem da busca e status

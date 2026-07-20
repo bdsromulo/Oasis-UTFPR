@@ -49,6 +49,25 @@ const LINHAS = [
   "1161 Optativas Do Ciclo De Humanidades 3 6 9 135 0 135 0",
   "1160 (*) Terceiro Estrato - Trilhas Em Computação 4 8 23 345 0 Faltantes 0",
   "1165 Banco De Dados 4 8 6 90 0 90 0",
+  // tabela de eletivas: as 3 variações de schema observadas nos históricos reais
+  "Detalhes das Disciplinas Eletivas",
+  "CHT CHEXT Freq. Per. NF x",
+  "Período(0) Instituição País Disciplina Turma Observação Nota Ano Situação Validado",
+  // (a) sem turma e sem CHEXT, com o código quebrado na linha de cima
+  "XXA11 - Eletiva Fora Da",
+  "Universidade",
+  "Matriz Aprovado Por",
+  "5 Tecnológica Federal BR Curitiba 45 8,9 93,8 1 2026 Sim",
+  "do Paraná (UTFPR) Nota/Frequência",
+  // (b) com turma, CHEXT e NF x CH — a turma S73 não pode ser lida como CH
+  "Universidade Tecnológica YY72B - Eletiva Da",
+  "5 BR Curitiba S73 60 0 10,0 94,1 1 2026 600 Aprovado Por Nota/Frequência Sim",
+  "Federal do Paraná (UTFPR) Matriz",
+  // (c) não validada: crédito convalidado numa obrigatória, não conta como eletiva
+  "Universidade Tecnológica ZZ73C - Eletiva",
+  "3 BR Curitiba S73 60 10,0 100,0 2 2024 600 Docente Exemplo Não",
+  "Federal do Paraná (UTFPR) Convalidada",
+  "(0) Período da disciplina na matriz (1) Carga Horária Total - (2) Frequência - % - (3) Período",
   "Resumo Eletiva (Carga horária total)",
   "Eletiva 105 4 8 4 0 105 0",
   "Atividade Extensionista",
@@ -80,8 +99,26 @@ describe("histórico sintético", () => {
     expect(perfil.coefAbsoluto).toBeCloseTo(0.8);
   });
 
+  it("eletivas: só as validadas entram, com a CH da coluna certa", () => {
+    const eletivas = perfil.cursadas.filter((c) => c.origem === "eletiva");
+    expect(eletivas.map((c) => c.codigo)).toEqual(["XXA11", "YY72B"]);
+    // ZZ73C tem Validado="Não" (crédito convalidado numa obrigatória) e fica de fora
+    expect(perfil.aprovadas.has("ZZ73C")).toBe(false);
+    // código quebrado na linha acima do núcleo é recuperado
+    expect(perfil.aprovadas.has("XXA11")).toBe(true);
+    expect(eletivas[0]).toMatchObject({ cht: 45, media: 8.9, ano: 2026, semestre: 1 });
+    // a turma "S73" não pode virar CH: o CHT correto é 60, não 73
+    expect(eletivas[1]).toMatchObject({ cht: 60, media: 10, frequencia: 94.1 });
+  });
+
+  it("eletivas não alteram a carga: a CH continua vindo do Resumo", () => {
+    // as duas eletivas validadas somam 105h, mas o Resumo do fixture diz 0 cursada
+    expect(perfil.eletivas).toMatchObject({ chCursadaAprovada: 0, chFaltante: 105 });
+    expect(perfil.resumoGeral?.eletivas).toMatchObject({ aprovada: 0 });
+  });
+
   it("cursadas: situações e recuperação de reprovação", () => {
-    expect(perfil.cursadas.length).toBe(7);
+    expect(perfil.cursadas.filter((c) => c.origem !== "eletiva").length).toBe(7);
     // o "Dispensado" do ENADE vizinho não pode contaminar a situação da ICSD20
     expect(perfil.cursadas.find((c) => c.codigo === "ICSD20")?.situacao).toBe("aprovado");
     expect(perfil.aprovadas.has("ICSD20")).toBe(true);

@@ -15,6 +15,9 @@ import { TelaConfiguracoes, type Preferencias } from "./telas/Configuracoes";
 import { MiniGrade, type PreviewTurma } from "./MiniGrade";
 import { ModalGradeMagica } from "./telas/ModalGradeMagica";
 import { Botao, Badge } from "./componentes";
+import { SidebarNavegacao, type AbaPrincipal } from "./SidebarNavegacao";
+import { TelaSimuladorFormatura } from "./telas/TelaSimuladorFormatura";
+import { TelaAmigosMatch } from "./telas/TelaAmigosMatch";
 import {
   LogoUTFPR,
   IconUser,
@@ -33,7 +36,7 @@ export interface SelecaoTurma {
   codTurma: string;
 }
 
-type AbaPrincipal = "situacao" | "planejamento" | "catalogo";
+type AbaSituacao = "painel" | "catalogo" | "trilhas";
 type AbaPlanejamento = "cursar" | "grade";
 type Layout = "oasis" | "gnh";
 
@@ -47,6 +50,11 @@ const CHAVE_CHECKIN = "oasis.checkin.v1";
 const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
 const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
 const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
+
+// Previsão de Formatura ainda não foi validada contra casos reais: fica bloqueada na
+// navegação lateral e o render é guardado aqui também, para não vazar por estado
+// antigo. Trocar para true quando a funcionalidade estiver pronta.
+const SIMULADOR_LIBERADO: boolean = false;
 
 // Modo privado: quando ativo, o histórico é guardado apenas em sessionStorage
 // (some ao fechar a aba/navegador) em vez de localStorage — útil em máquina
@@ -78,6 +86,7 @@ export function App() {
     () => localStorage.getItem(CHAVE_CHECKIN) === "true",
   );
   const [aba, setAba] = useState<AbaPrincipal>(() => (lerPerfil() ? "situacao" : "planejamento"));
+  const [abaSituacao, setAbaSituacao] = useState<AbaSituacao>("painel");
   const [abaPlanejamento, setAbaPlanejamento] = useState<AbaPlanejamento>("cursar");
   const [categoriaCatalogo, setCategoriaCatalogo] = useState<CategoriaCatalogo>("todas");
   const [layout, setLayout] = useState<Layout>(
@@ -117,6 +126,12 @@ export function App() {
   const oferta = useMemo<OfertaSemestre>(() => {
     return todasOfertas[semestreAtivo] || todasOfertas["2026-1"];
   }, [semestreAtivo, todasOfertas]);
+
+  // 2026.2 não tem PDF oficial de turmas: roda com dados simulados a partir de 2025.2
+  const ehPrevia =
+    preferencias.modoPlanejamento === "previa" ||
+    (preferencias.modoPlanejamento !== "corrido" &&
+      (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"));
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
@@ -327,6 +342,20 @@ export function App() {
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
     setAba("situacao");
+    setAbaSituacao("painel");
+  }
+
+  // O semestre é um contexto de PLANEJAMENTO, não um modo global do site: ele troca
+  // as turmas ofertadas e a cesta de grades em montagem, mas não mexe no histórico,
+  // no progresso nem no coeficiente — esses vêm do PDF e são sempre o presente real.
+  function mudarSemestre(novoSem: string) {
+    setPreferencias({ ...preferencias, semestreAtivo: novoSem });
+    const novaCesta = todasCestasPorSemestre[novoSem] || { A: [] };
+    const chaves = Object.keys(novaCesta);
+    const abaDestino = chaves.includes(gradeAtiva) ? gradeAtiva : chaves[0] || "A";
+    setGradeAtiva(abaDestino);
+    localStorage.setItem(CHAVE_GRADE_ATIVA, abaDestino);
+    setSelecao(novaCesta[abaDestino] || []);
   }
 
   function handleContinuarSemRegistro(dados: DadosCheckin) {
@@ -366,16 +395,6 @@ export function App() {
     setAbaPlanejamento("cursar");
   }
 
-  const abasPrincipal = useMemo(
-    () =>
-      [
-        ["situacao", "Minha Situação"],
-        ["planejamento", "Planejamento de Matrícula"],
-        ["catalogo", "Catálogo de Matérias"],
-      ] as [AbaPrincipal, string][],
-    [],
-  );
-
   return (
     <div className="mx-auto max-w-6xl px-4 pb-20 pt-6">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/80 pb-6 dark:border-zinc-800/80">
@@ -386,47 +405,6 @@ export function App() {
               <h1 className="font-display text-2xl font-black tracking-tight leading-none">
                 <span className="text-utfpr-600 dark:text-utfpr-500">Oásis</span> UTFPR
               </h1>
-              <label
-                className={`relative inline-flex items-center gap-1.5 rounded-md border pl-2.5 pr-4 py-0.5 font-mono text-xs font-bold transition-colors cursor-pointer shadow-2xs select-none ${
-                  preferencias.modoPlanejamento === "previa" || (preferencias.modoPlanejamento !== "corrido" && (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"))
-                    ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
-                    : "border-orange-500/40 bg-orange-500/15 text-orange-700 dark:text-orange-300 hover:bg-orange-500/25"
-                }`}
-                title="Selecione o período letivo para simulação e consulta de turmas"
-              >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${
-                    preferencias.modoPlanejamento === "previa" || (preferencias.modoPlanejamento !== "corrido" && (preferencias.semestreAtivo === "2026-2" || oferta.semestre === "2026-2"))
-                      ? "bg-emerald-500"
-                      : "bg-orange-500"
-                  }`}
-                />
-                <select
-                  value={preferencias.semestreAtivo || "2026-1"}
-                  onChange={(e) => {
-                    const novoSem = e.target.value;
-                    setPreferencias({ ...preferencias, semestreAtivo: novoSem });
-                    const novaCesta = todasCestasPorSemestre[novoSem] || { A: [] };
-                    const chaves = Object.keys(novaCesta);
-                    const abaDestino = chaves.includes(gradeAtiva) ? gradeAtiva : (chaves[0] || "A");
-                    setGradeAtiva(abaDestino);
-                    localStorage.setItem(CHAVE_GRADE_ATIVA, abaDestino);
-                    setSelecao(novaCesta[abaDestino] || []);
-                  }}
-                  className="bg-transparent font-mono text-xs font-bold focus:outline-none cursor-pointer appearance-none text-current"
-                >
-                  <option value="2026-2" className="bg-white text-emerald-700 font-bold dark:bg-zinc-900 dark:text-emerald-400">
-                    2026.2 (Prévia)
-                  </option>
-                  <option value="2026-1" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-                    2026.1
-                  </option>
-                  <option value="2025-2" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-                    2025.2
-                  </option>
-                </select>
-                <span className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] opacity-70">▾</span>
-              </label>
             </div>
             <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               Sistemas de Informação · Câmpus Curitiba · Matriz 981
@@ -448,6 +426,7 @@ export function App() {
                 return (
                   <button
                     key={op.id}
+                    type="button"
                     onClick={() => setPreferencias({ ...preferencias, tema: op.id })}
                     title={op.rotulo}
                     className={`flex items-center justify-center rounded-[10px] p-2 transition-colors ${
@@ -523,45 +502,16 @@ export function App() {
         />
       ) : (
         <div className="flex items-start gap-6">
-          {/* coluna principal */}
-          <div className="min-w-0 flex-1">
-            <nav className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-3xl border-2 border-zinc-200/90 bg-white/90 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/90">
-              <div className="flex flex-1 gap-2 min-w-[280px]">
-                {abasPrincipal.map(([id, rotulo]) => {
-                  const ativo = aba === id;
-                  const bloqueado = id === "situacao" && !perfil;
-                  return (
-                    <button
-                      key={id}
-                      disabled={bloqueado}
-                      title={
-                        bloqueado
-                          ? "Abra as configurações e carregue seu histórico escolar (PDF) para desbloquear a análise da sua situação curricular."
-                          : undefined
-                      }
-                      onClick={() => {
-                        if (!bloqueado) setAba(id);
-                      }}
-                      className={`inline-flex flex-1 cursor-pointer items-center justify-center gap-2.5 rounded-2xl px-5 py-3 font-display text-sm sm:text-base font-black transition-all duration-200 ${
-                        bloqueado
-                          ? "opacity-50 cursor-not-allowed bg-transparent text-zinc-400 dark:text-zinc-600"
-                          : ativo
-                            ? "bg-zinc-900 text-utfpr-400 shadow-lg ring-2 ring-utfpr-500/40 dark:bg-zinc-800 dark:text-utfpr-400"
-                            : "bg-zinc-100/80 text-zinc-700 hover:bg-utfpr-50 hover:text-zinc-950 hover:border-utfpr-300 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white border border-transparent"
-                      }`}
-                    >
-                      {id === "situacao" && (
-                        bloqueado ? <span title="Desbloqueie carregando o histórico">🔒</span> : <IconUser className="h-4 w-4 sm:h-5 sm:w-5" />
-                      )}
-                      {id === "planejamento" && <IconBookOpen className="h-4 w-4 sm:h-5 sm:w-5" />}
-                      {id === "catalogo" && <IconCalendar className="h-4 w-4 sm:h-5 sm:w-5" />}
-                      <span>{rotulo}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </nav>
+          {/* Menu Lateral (Sidebar Desktop / Mobile Drawer) */}
+          <SidebarNavegacao
+            abaAtiva={aba}
+            onSelecionarAba={setAba}
+            temPerfil={!!perfil}
+            qtdTurmasSelecao={selecao.length}
+          />
 
+          {/* coluna principal */}
+          <div className="min-w-0 flex-1 w-full">
             {perfil && perfil.avisos.length > 0 && (
               <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-sm text-amber-800 dark:border-amber-800/80 dark:bg-amber-950/60 dark:text-amber-200">
                 <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
@@ -573,29 +523,129 @@ export function App() {
             )}
 
             {aba === "situacao" && (
-              <TelaSituacao
-                perfil={perfil}
-                matriz={matriz}
-                onAbrirConfiguracoes={() => setModalConfigAberto(true)}
-                onAbrirCatalogo={(cat) => {
-                  setCategoriaCatalogo(cat);
-                  setAba("catalogo");
-                }}
-              />
-            )}
+              <div className="space-y-6">
+                {/* Sub-navegação em Minha Situação: Resumo, Catálogo e Trilhas */}
+                <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "painel" as const, rotulo: "Painel Geral", icone: <IconUser className="h-4 w-4" /> },
+                      { id: "catalogo" as const, rotulo: "Catálogo", icone: <IconCalendar className="h-4 w-4" /> },
+                      { id: "trilhas" as const, rotulo: "Árvore & Trilhas", icone: <span>⚡</span> },
+                    ].map((op) => {
+                      const ativo = abaSituacao === op.id;
+                      return (
+                        <button
+                          key={op.id}
+                          type="button"
+                          onClick={() => setAbaSituacao(op.id)}
+                          className={`flex items-center justify-center gap-2 rounded-2xl py-3 px-3 font-display text-xs sm:text-sm font-black transition-all cursor-pointer ${
+                            ativo
+                              ? "bg-zinc-900 text-utfpr-400 shadow-md ring-2 ring-utfpr-500/40 dark:bg-zinc-800 dark:text-utfpr-400"
+                              : "bg-zinc-50/90 text-zinc-700 hover:bg-utfpr-50 dark:bg-zinc-800/60 dark:text-zinc-300"
+                          }`}
+                        >
+                          {op.icone}
+                          <span className="truncate">{op.rotulo}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-            {aba === "catalogo" && (
-              <TelaCatalogo
-                perfil={perfil}
-                matriz={matriz}
-                oferta={oferta}
-                categoriaInicial={categoriaCatalogo}
-                onVoltar={() => setAba("situacao")}
-              />
+                {abaSituacao === "painel" && (
+                  <TelaSituacao
+                    perfil={perfil}
+                    matriz={matriz}
+                    onAbrirConfiguracoes={() => setModalConfigAberto(true)}
+                    onAbrirCatalogo={(cat) => {
+                      setCategoriaCatalogo(cat);
+                      setAbaSituacao("catalogo");
+                    }}
+                  />
+                )}
+
+                {abaSituacao === "catalogo" && (
+                  <TelaCatalogo
+                    perfil={perfil}
+                    matriz={matriz}
+                    oferta={oferta}
+                    categoriaInicial={categoriaCatalogo}
+                    onVoltar={() => setAbaSituacao("painel")}
+                  />
+                )}
+
+                {abaSituacao === "trilhas" && (
+                  <div className="rounded-3xl border-2 border-zinc-200/90 bg-white/90 p-8 text-center shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/90 space-y-4">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-utfpr-500/20 text-3xl">
+                      ⚡
+                    </div>
+                    <h3 className="font-display text-xl font-black text-zinc-900 dark:text-white">
+                      Árvore Curricular & Board de Trilhas
+                    </h3>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
+                      Esta visualização em árvore interativa (similar a diagramas de circuitos de eletrônica) com o fluxo de pré-requisitos e trilhas estará disponível em breve no Oásis.
+                    </p>
+                    <div className="pt-2">
+                      <Botao onClick={() => setAbaSituacao("painel")} variante="neutro" classe="!px-4 !py-2 !text-xs">
+                        Voltar ao Painel Geral
+                      </Botao>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {aba === "planejamento" && (
               <div className="space-y-6">
+                {/* Contexto de matrícula: o período escolhido vale para as turmas
+                    listadas e para a grade em montagem — e só para isso. */}
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 rounded-3xl border-2 border-zinc-200/90 bg-white/95 px-4 py-3 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-utfpr-500/20 text-lg">
+                      <IconCalendar className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
+                    </span>
+                    <div className="min-w-0">
+                      <div className="font-display text-[11px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        Montando grade para
+                      </div>
+                      <label
+                        className={`relative mt-0.5 inline-flex items-center gap-1.5 rounded-lg border pl-2.5 pr-5 py-0.5 font-mono text-sm font-bold transition-colors cursor-pointer shadow-2xs select-none ${
+                          ehPrevia
+                            ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
+                            : "border-orange-500/40 bg-orange-500/15 text-orange-700 dark:text-orange-300 hover:bg-orange-500/25"
+                        }`}
+                        title="Período letivo usado para listar turmas e montar a grade"
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${
+                            ehPrevia ? "bg-emerald-500" : "bg-orange-500"
+                          }`}
+                        />
+                        <select
+                          value={preferencias.semestreAtivo || "2026-1"}
+                          onChange={(e) => mudarSemestre(e.target.value)}
+                          className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
+                        >
+                          <option value="2026-2" className="bg-white text-emerald-700 font-bold dark:bg-zinc-900 dark:text-emerald-400">
+                            2026.2 (Prévia)
+                          </option>
+                          <option value="2026-1" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+                            2026.1
+                          </option>
+                          <option value="2025-2" className="bg-white text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+                            2025.2
+                          </option>
+                        </select>
+                        <span className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] opacity-70">▾</span>
+                      </label>
+                    </div>
+                  </div>
+                  <p className="max-w-xs text-[11px] font-medium leading-snug text-zinc-500 dark:text-zinc-400">
+                    Vale para as turmas e para a grade desta aba. Seu histórico, progresso e
+                    coeficiente continuam no período atual.
+                  </p>
+                </div>
+
                 {/* Sub-navegação totalizando o cabeçalho, com ícones e texto maiores e coloridos */}
                 <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2.5 shadow-lg backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
                   <div className="grid grid-cols-2 gap-3">
@@ -709,6 +759,29 @@ export function App() {
                   />
                 )}
               </div>
+            )}
+
+            {aba === "simulador" && SIMULADOR_LIBERADO && (
+              <TelaSimuladorFormatura
+                perfil={perfil}
+                matriz={matriz}
+                semestreAtivo={semestreAtivo}
+              />
+            )}
+
+            {aba === "match" && (
+              <TelaAmigosMatch
+                perfil={perfil}
+                selecao={selecao}
+                oferta={oferta}
+                matriz={matriz}
+                onAdicionarOuTrocarTurma={(codDisciplina, codTurma) => {
+                  setSelecao((prev) => {
+                    const semEssa = prev.filter((i) => i.codDisciplina !== codDisciplina);
+                    return [...semEssa, { codDisciplina, codTurma }];
+                  });
+                }}
+              />
             )}
           </div>
 
