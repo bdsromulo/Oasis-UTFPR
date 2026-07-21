@@ -204,6 +204,46 @@ describe("simulação de formatura", () => {
     }
   });
 
+  it("nunca enche uma trilha além do teto que ela contribui", () => {
+    // Regressão: o guloso enfiava uma 3ª disciplina numa trilha já em 60h, e o
+    // aluno cursava 120h onde só 90h contam para as 345h do 3º estrato — uma
+    // matéria inteira a mais no plano, contra a premissa de cursar só o mínimo.
+    // Aluno sem nenhuma trilha feita é o caso que expõe o problema.
+    const aprovadas = new Set<string>(
+      matriz.disciplinas
+        .filter((d) => d.conjunto === null && !d.codigo.startsWith("ENADE"))
+        .filter((d) => !["ICSX30", "ICSX40", "ICSX41", "ICSS30"].includes(d.codigo))
+        .map((d) => d.codigo),
+    );
+    const perfil = perfilFake({
+      aprovadas,
+      resumoConjuntos: [
+        conjunto("1159", "Segundo Estrato", 360, 180),
+        conjunto("1161", "Humanidades", 135, 45),
+      ],
+      resumoGeral: {
+        obrigatorias: { total: 2005, aprovada: 1440, faltante: 565 },
+        optativas: { total: 840, aprovada: 0, faltante: 840 },
+        eletivas: { total: 105, aprovada: 105, faltante: 0 },
+      },
+    });
+
+    for (const ritmo of [4, 5, 6]) {
+      const r = simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial: "2026-2" });
+      const porTrilha = new Map<number, number>();
+      for (const s of r.semestres) {
+        for (const d of s.disciplinas) {
+          if (d.categoria !== "trilhas" || d.conjunto === null) continue;
+          porTrilha.set(d.conjunto, (porTrilha.get(d.conjunto) ?? 0) + d.horas);
+        }
+      }
+      for (const [conj, horas] of porTrilha) {
+        const teto = matriz.conjuntos[String(conj)]?.ch ?? 90;
+        expect(horas, `ritmo ${ritmo}: trilha ${conj} recebeu ${horas}h para um teto de ${teto}h`).toBeLessThanOrEqual(teto);
+      }
+    }
+  });
+
   it("não ocupa vaga de aula com estágio nem atividades complementares", () => {
     const aprovadas = new Set<string>(
       matriz.disciplinas

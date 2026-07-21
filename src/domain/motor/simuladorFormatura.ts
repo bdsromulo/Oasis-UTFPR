@@ -312,6 +312,18 @@ export function simularFormatura(
   const falta = (cat: IdCategoria) =>
     Math.max(0, exigido[cat] - cumprido[cat] - planejado[cat]);
 
+  /**
+   * Horas de uma disciplina de trilha que efetivamente contam para as 345h do
+   * 3º estrato. O que passa do teto da própria trilha (90h) é estudo que não
+   * aproxima da formatura.
+   */
+  const contribuicaoTrilha = (d: DisciplinaMatriz): number => {
+    const conj = d.conjunto!;
+    const teto = matriz.conjuntos[String(conj)]?.ch ?? 90;
+    const antes = horasPorTrilha.get(conj) ?? 0;
+    return Math.min(antes + d.horas.total, teto) - Math.min(antes, teto);
+  };
+
   const pendentes = new Set(candidatas.map((d) => d.codigo));
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
   const periodoAluno = perfil?.periodo ?? 1;
@@ -369,12 +381,16 @@ export function simularFormatura(
       const hA = altura(a.codigo);
       const hB = altura(b.codigo);
       if (hA !== hB) return hB - hA;
-      // 3. trilha mais perto de fechar primeiro: terminar uma trilha aberta rende
-      //    mais horas contáveis do que espalhar por trilhas novas
+      // 3. entre trilhas: primeiro a que aproveita todas as horas (não estoura o
+      //    teto da trilha) e, em empate, a trilha mais perto de fechar
       if (catA === "trilhas" && catB === "trilhas") {
+        const desperdicioA = a.horas.total - contribuicaoTrilha(a);
+        const desperdicioB = b.horas.total - contribuicaoTrilha(b);
+        if (desperdicioA !== desperdicioB) return desperdicioA - desperdicioB;
+
         const faltaTrilha = (d: DisciplinaMatriz) => {
-          const exig = matriz.conjuntos[String(d.conjunto)]?.ch ?? 90;
-          return Math.max(0, exig - (horasPorTrilha.get(d.conjunto!) ?? 0));
+          const teto = matriz.conjuntos[String(d.conjunto)]?.ch ?? 90;
+          return Math.max(0, teto - (horasPorTrilha.get(d.conjunto!) ?? 0));
         };
         const fA = faltaTrilha(a);
         const fB = faltaTrilha(b);
@@ -403,12 +419,22 @@ export function simularFormatura(
       // aproxima da formatura — e a premissa é cursar só o mínimo.
       let contribui = d.horas.total;
       if (cat === "trilhas") {
-        const conj = d.conjunto!;
-        const exigidoTrilha = matriz.conjuntos[String(conj)]?.ch ?? 90;
-        const antes = horasPorTrilha.get(conj) ?? 0;
-        contribui = Math.min(antes + d.horas.total, exigidoTrilha) - Math.min(antes, exigidoTrilha);
+        contribui = contribuicaoTrilha(d);
         if (contribui <= 0) continue;
-        horasPorTrilha.set(conj, antes + d.horas.total);
+        // Se esta disciplina desperdiça horas (estoura o teto da trilha) e ainda
+        // existe candidata que aproveita tudo, fica para depois. Sem esta guarda
+        // o guloso enfia uma 3ª disciplina numa trilha já em 60h — o aluno cursa
+        // 120h onde só 90h contam e acaba com uma matéria a mais no plano.
+        if (contribui < d.horas.total) {
+          const temAlternativaSemDesperdicio = elegiveis.some((outra) => {
+            if (outra === d || !pendentes.has(outra.codigo)) return false;
+            if (categoriaDe(outra) !== "trilhas") return false;
+            const c = contribuicaoTrilha(outra);
+            return c > 0 && c === outra.horas.total;
+          });
+          if (temAlternativaSemDesperdicio) continue;
+        }
+        horasPorTrilha.set(d.conjunto!, (horasPorTrilha.get(d.conjunto!) ?? 0) + d.horas.total);
       }
 
       escolhidas.push({
