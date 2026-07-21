@@ -18,6 +18,7 @@ import { Botao, Badge } from "./componentes";
 import { SidebarNavegacao, type AbaPrincipal } from "./SidebarNavegacao";
 import { TelaSimuladorFormatura } from "./telas/TelaSimuladorFormatura";
 import { TelaAmigosMatch } from "./telas/TelaAmigosMatch";
+import { TelaFluxograma } from "./telas/TelaFluxograma";
 import {
   LogoUTFPR,
   IconUser,
@@ -573,22 +574,11 @@ export function App() {
                 )}
 
                 {abaSituacao === "trilhas" && (
-                  <div className="rounded-3xl border-2 border-zinc-200/90 bg-white/90 p-8 text-center shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/90 space-y-4">
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-utfpr-500/20 text-3xl">
-                      ⚡
-                    </div>
-                    <h3 className="font-display text-xl font-black text-zinc-900 dark:text-white">
-                      Árvore Curricular & Board de Trilhas
-                    </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
-                      Esta visualização em árvore interativa (similar a diagramas de circuitos de eletrônica) com o fluxo de pré-requisitos e trilhas estará disponível em breve no Oásis.
-                    </p>
-                    <div className="pt-2">
-                      <Botao onClick={() => setAbaSituacao("painel")} variante="neutro" classe="!px-4 !py-2 !text-xs">
-                        Voltar ao Painel Geral
-                      </Botao>
-                    </div>
-                  </div>
+                  <TelaFluxograma
+                    matriz={matriz}
+                    perfil={perfil}
+                    ofertas={[todasOfertas["2025-2"], todasOfertas["2026-1"]]}
+                  />
                 )}
               </div>
             )}
