@@ -53,10 +53,10 @@ const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
 const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
 const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 
-// Previsão de Formatura ainda não foi validada contra casos reais: fica bloqueada na
-// navegação lateral e o render é guardado aqui também, para não vazar por estado
-// antigo. Trocar para true quando a funcionalidade estiver pronta.
-const SIMULADOR_LIBERADO: boolean = false;
+// A previsão foi validada contra históricos reais da matriz 981 e passou a
+// respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
+// na oferta — está liberada na navegação lateral.
+const SIMULADOR_LIBERADO: boolean = true;
 
 // Modo privado: quando ativo, o histórico é guardado apenas em sessionStorage
 // (some ao fechar a aba/navegador) em vez de localStorage — útil em máquina
@@ -754,6 +754,7 @@ export function App() {
               <TelaSimuladorFormatura
                 perfil={perfil}
                 matriz={matriz}
+                ofertas={[todasOfertas["2025-2"], todasOfertas["2026-1"]]}
                 semestreAtivo={semestreAtivo}
               />
             )}
