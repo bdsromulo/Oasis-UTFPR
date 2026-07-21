@@ -17,8 +17,10 @@ export interface CategoriaSimples {
   id: string;
   /** conjunto correspondente na matriz */
   conjunto: number;
-  /** rótulo curto, como aparece para o aluno */
+  /** rótulo curto, para chips e listagens */
   rotulo: string;
+  /** rótulo por extenso, para títulos de card e resumo de grade */
+  rotuloLongo: string;
 }
 
 export interface DescricaoCurso {
@@ -34,6 +36,13 @@ export interface DescricaoCurso {
   trilhasExigidas: number;
   /** categorias de conjunto único, fora do bloco de trilhas */
   categorias: CategoriaSimples[];
+  /** título do bloco que agrega todas as trilhas, no resumo de grade */
+  rotuloBlocoTrilhas: string;
+  /**
+   * Sufixo aplicado ao nome de cada trilha. Na BSI as trilhas são o 3º estrato
+   * e o painel diz isso; em Eng. Comp. não há estratos, e o nome vai puro.
+   */
+  sufixoTrilha: string;
   /**
    * Conjuntos que contam para o agregador mas não são trilha validável.
    * Em Eng. Comp., 973 "Optativas Isoladas" soma para as 270h sem nunca
@@ -47,12 +56,14 @@ export const BSI_981: DescricaoCurso = {
   agregadorTrilhas: 1160,
   trilhasExigidas: 3,
   categorias: [
-    { id: "segundoEstrato", conjunto: 1159, rotulo: "2º estrato" },
-    { id: "humanidades", conjunto: 1161, rotulo: "humanidades" },
+    { id: "segundoEstrato", conjunto: 1159, rotulo: "2º estrato", rotuloLongo: "2º Estrato" },
+    { id: "humanidades", conjunto: 1161, rotulo: "humanidades", rotuloLongo: "Ciclo de Humanidades" },
     // a matriz declara a pool de eletivas como conjunto; sem listá-la aqui ela
     // seria confundida com trilha, virando uma 13ª no painel do 3º estrato
-    { id: "eletivas", conjunto: 1199, rotulo: "eletiva" },
+    { id: "eletivas", conjunto: 1199, rotulo: "eletiva", rotuloLongo: "Eletivas" },
   ],
+  rotuloBlocoTrilhas: "Trilhas em Computação (3º Estrato - Geral)",
+  sufixoTrilha: " (3º Estrato)",
   naoValidaveis: [],
 };
 
@@ -63,6 +74,8 @@ export const ENG_COMP_844: DescricaoCurso = {
   // Eng. Comp. não tem estratos nem ciclo de humanidades: todo o bloco
   // optativo é trilha ou optativa isolada.
   categorias: [],
+  rotuloBlocoTrilhas: "Optativas em Trilhas e Isoladas",
+  sufixoTrilha: "",
   naoValidaveis: [973],
 };
 

@@ -5,6 +5,7 @@ import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
 
 export function renderizarTextoComCodigos(texto: string, matriz: Matriz) {
   const partes = texto.split(/([A-Z]{2,5}\d{1,4}[A-Z]?)/g);
@@ -109,11 +110,11 @@ export function TelaSituacao(props: {
 
       if (c.origem === "obrigatoria" || (dm && dm.conjunto === null)) {
         mapa.obrigatorias.push(item);
-      } else if (dm && dm.conjunto === 1159) {
+      } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
         mapa.segundoEstrato.push(item);
-      } else if (dm && dm.conjunto === 1161) {
+      } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         mapa.humanidades.push(item);
-      } else if (dm && dm.conjunto && dm.conjunto >= 1162 && dm.conjunto <= 1173) {
+      } else if (dm && ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
         const key = String(dm.conjunto);
         if (!mapa[key]) mapa[key] = [];
         mapa[key].push(item);

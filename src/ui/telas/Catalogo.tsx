@@ -5,6 +5,7 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
 
 function normNome(nome: string): string {
   return nome
@@ -131,11 +132,11 @@ export function TelaCatalogo(props: {
       let cat: CategoriaCatalogo = "eletivas";
       if (dm.conjunto === null) {
         cat = "obrigatorias";
-      } else if (dm.conjunto === 1159) {
+      } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
         cat = "segundoEstrato";
-      } else if (dm.conjunto === 1161) {
+      } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         cat = "humanidades";
-      } else if (dm.conjunto >= 1162 && dm.conjunto <= 1173) {
+      } else if (ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
         cat = "trilhas";
       } else if (dm.horas.chext > 0) {
         cat = "extensao";
@@ -164,7 +165,7 @@ export function TelaCatalogo(props: {
           codigo: c.codigo,
           nome: daPool.nome,
           periodo: 0,
-          conjunto: 1199,
+          conjunto: descricaoDoCurso(matriz).categorias.find((c) => c.id === "eletivas")?.conjunto ?? null,
           modelo: "Eletiva",
           aulas_semanais: { teoricas: 0, praticas: 0, total: 0, aps: 0, apcc: 0 },
           horas: { ad: 0, chext: 0, chead: 0, total: c.cht || daPool.ch || 0 },

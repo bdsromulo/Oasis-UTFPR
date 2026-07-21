@@ -3,6 +3,7 @@ import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma } from "../../do
 import { gerarSugestaoGrade, type OpcoesSugestaoGrade } from "../../domain/motor/grade-magica";
 import { Botao } from "../componentes";
 import { IconWarning } from "../icons";
+import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 export interface ModalSugestaoGradeProps {
   aberto: boolean;
@@ -118,22 +119,17 @@ export function ModalSugestaoGrade({
 
   const listaTrilhasDisponiveis = useMemo(() => {
     const vistos = new Map<string, string>();
+    const curso = descricaoDoCurso(matriz ?? 981);
     if (matriz && matriz.conjuntos) {
       for (const [cod, c] of Object.entries(matriz.conjuntos)) {
-        if (cod !== "1159" && cod !== "1160" && cod !== "1161") {
+        if (ehTrilha(curso, cod)) {
           vistos.set(cod, c.nome);
         }
       }
     }
     if (matriz && matriz.disciplinas) {
       for (const d of matriz.disciplinas) {
-        if (
-          d.conjunto !== null &&
-          d.conjunto !== 1159 &&
-          d.conjunto !== 1160 &&
-          d.conjunto !== 1161 &&
-          !vistos.has(String(d.conjunto))
-        ) {
+        if (ehTrilha(curso, d.conjunto) && !vistos.has(String(d.conjunto))) {
           const nome = matriz.conjuntos[String(d.conjunto)]?.nome ?? `Trilha ${d.conjunto}`;
           vistos.set(String(d.conjunto), nome);
         }

@@ -3,6 +3,7 @@ import matrizJson from "../data/matriz-981.json";
 import turmas20261 from "../data/turmas/2026-1.json";
 import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis } from "../src/domain/motor/elegiveis";
+import { calcularProgressoMateria, calcularResumoProgressoGrade } from "../src/domain/motor/progressoGrade";
 import type { Matriz, OfertaSemestre, PerfilAluno, ResumoConjunto } from "../src/domain/tipos";
 
 /**
@@ -134,5 +135,54 @@ describe("regressão BSI — rótulo de categoria em elegíveis", () => {
     if (!daTrilha) return; // nem toda oferta tem trilha
     expect((daTrilha as any).categoria).not.toMatch(/^\d+$/);
     expect((daTrilha as any).categoria.length).toBeGreaterThan(3);
+  });
+});
+
+describe("regressão BSI — progresso por categoria na grade", () => {
+  const perfil = perfilCompleto();
+
+  it("classifica cada categoria com a chave e o rótulo de hoje", () => {
+    const casos: [string, string, string][] = [
+      // código, categoriaId esperado, trecho do nome
+      ["ICSD20", "obrigatorias", "Obrigatórias"],
+      ["ICSA31", "1159", "2º Estrato"],
+      ["FCH7HB", "1161", "Humanidades"],
+      ["ICSB41", "1165", "Banco"],
+    ];
+    for (const [codigo, id, trecho] of casos) {
+      const d = matriz.disciplinas.find((x) => x.codigo === codigo);
+      if (!d) continue;
+      const info = calcularProgressoMateria(d.codigo, d.nome, d.horas.total, perfil, matriz);
+      expect(info.categoriaId, `${codigo}: categoriaId`).toBe(id);
+      expect(info.categoriaNome, `${codigo}: nome`).toContain(trecho);
+    }
+  });
+
+  it("marca a trilha com o sufixo de estrato da BSI", () => {
+    const d = matriz.disciplinas.find((x) => x.conjunto === 1165)!;
+    const info = calcularProgressoMateria(d.codigo, d.nome, d.horas.total, perfil, matriz);
+    expect(info.categoriaNome).toContain("(3º Estrato)");
+  });
+
+  it("agrega o bloco de trilhas com as 345h da matriz", () => {
+    const itens = matriz.disciplinas
+      .filter((d) => d.conjunto === 1165)
+      .slice(0, 2)
+      .map((d) => ({ disciplina: { codigo: d.codigo, nome: d.nome, horas: d.horas } })) as any;
+    const resumo = calcularResumoProgressoGrade(itens, perfil, matriz);
+    const geral = resumo.find((r) => r.categoriaId === "trilhas_geral");
+    expect(geral, "bloco trilhas_geral sumiu").toBeDefined();
+    expect(geral!.exigido).toBe(345);
+    expect(geral!.categoriaNome).toContain("3º Estrato");
+  });
+
+  it("mantém a ordem das categorias principais", () => {
+    const resumo = calcularResumoProgressoGrade([], perfil, matriz);
+    const ids = resumo.map((r) => r.categoriaId);
+    for (const esperado of ["obrigatorias", "1159", "1161", "trilhas_geral", "eletivas", "extensao"]) {
+      expect(ids, `sumiu a categoria ${esperado}`).toContain(esperado);
+    }
+    expect(ids.indexOf("obrigatorias")).toBeLessThan(ids.indexOf("1159"));
+    expect(ids.indexOf("1161")).toBeLessThan(ids.indexOf("trilhas_geral"));
   });
 });
