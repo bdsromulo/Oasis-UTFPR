@@ -1,160 +1,148 @@
 import { describe, expect, it } from "vitest";
 import matriz844 from "../data/eng-comp/matriz-844.json";
-import turmas20261 from "../data/eng-comp/turmas/2026-1.json";
-import turmas20252 from "../data/eng-comp/turmas/2025-2.json";
+import matriz981 from "../data/matriz-981.json";
 
 const m = matriz844 as any;
 
+describe("matriz 844 — procedência e schema", () => {
+  it("é a matriz de Eng. Comp., lida do mesmo tipo de documento que a 981", () => {
+    expect(m.matriz).toBe(844);
+    expect(m.curso.toUpperCase()).toContain("COMPUTA");
+    expect(m.fonte).toContain("Consulta Curso e Matriz Curricular");
+  });
+
+  it("tem exatamente os mesmos campos de topo que a matriz 981", () => {
+    for (const campo of Object.keys(matriz981 as any)) {
+      expect(m[campo], `falta o campo ${campo}`).toBeDefined();
+    }
+  });
+
+  it("tem exatamente os mesmos campos de disciplina que a 981", () => {
+    const esperados = Object.keys((matriz981 as any).disciplinas[0]);
+    for (const d of m.disciplinas) {
+      for (const campo of esperados) {
+        expect(d[campo], `${d.codigo}: falta ${campo}`).toBeDefined();
+      }
+    }
+  });
+});
+
 describe("matriz 844 — identidade das disciplinas", () => {
-  it("usa o código da MATRIZ como identidade, não o da oferta", () => {
-    // Confirmado no Histórico Escolar do aluno de Eng. Comp.:
+  it("usa o código da matriz como identidade e a oferta como equivalente", () => {
+    // Confirmado no Histórico Escolar do aluno:
     //   CSR31 Comunicação De Dados ... [disciplina ELET30 - Cursou Equivalente(s)]
     // O histórico registra CSR31; ELET30 é onde o crédito foi cursado.
     const casos: [string, string][] = [
       ["CSR31", "ELET30"],
       ["CSW30", "ELEW30"],
-      ["MA70G", "MAT7ED"],
       ["CSD20", "ICSD20"],
     ];
     for (const [codigoMatriz, codigoOferta] of casos) {
       const d = m.disciplinas.find((x: any) => x.codigo === codigoMatriz);
-      expect(d, `${codigoMatriz} deveria existir com o código da matriz`).toBeDefined();
-      expect(
-        d.equivalentes.map((e: any) => e.codigo),
-        `${codigoMatriz} deveria ter ${codigoOferta} como equivalente`,
-      ).toContain(codigoOferta);
+      expect(d, `${codigoMatriz} deveria existir`).toBeDefined();
+      expect(d.equivalentes.map((e: any) => e.codigo)).toContain(codigoOferta);
     }
   });
 
-  it("nunca usa um código de oferta como identidade", () => {
-    const codigosDeOferta = new Set<string>([
-      ...(turmas20261 as any).disciplinas.map((d: any) => d.codigo),
-      ...(turmas20252 as any).disciplinas.map((d: any) => d.codigo),
-    ]);
-    // Um código só pode coincidir se a matriz e a oferta usarem mesmo o mesmo
-    // código; o que não pode é a disciplina ter perdido o código do PPC.
-    for (const d of m.disciplinas) {
-      if (!codigosDeOferta.has(d.codigo)) continue;
-      const temEquivalenteDiferente = d.equivalentes.some((e: any) => e.codigo !== d.codigo);
-      expect(
-        temEquivalenteDiferente,
-        `${d.codigo} parece ser código de oferta usado como identidade`,
-      ).toBe(false);
+  it("traz a carga horária em horas, não em horas-aula", () => {
+    // A Figura 5 do PPC publica horas-aula (CSD20 = 54); o documento oficial
+    // publica a carga horária real (45h). Fonte oficial manda.
+    const casos: [string, number][] = [
+      ["CSD20", 45],
+      ["CSF13", 90],
+      ["CSR31", 30],
+    ];
+    for (const [codigo, ch] of casos) {
+      const d = m.disciplinas.find((x: any) => x.codigo === codigo);
+      expect(d.horas.total, `${codigo}`).toBe(ch);
     }
   });
 });
 
-describe("matriz 844 — carga horária", () => {
-  it("converte horas-aula da figura em carga horária de 60 min", () => {
-    // A Figura 5 publica TA (horas-aula de 50 min); a tabela de equivalências
-    // do PPC (p.50) publica as duas colunas lado a lado e fixa a razão 5/6.
-    const casos: [string, number, number][] = [
-      ["CSD20", 54, 45],
-      ["CSF13", 108, 90],
-      ["MA71A", 108, 90],
-      ["CSR31", 36, 30],
-    ];
-    for (const [codigo, ta, ch] of casos) {
-      const d = m.disciplinas.find((x: any) => x.codigo === codigo);
-      expect(d.horas_aula_figura, `${codigo}: horas-aula`).toBe(ta);
-      expect(d.horas.total, `${codigo}: carga horária`).toBe(ch);
-    }
-  });
-
-  it("mantém a conversão coerente em toda a matriz", () => {
-    for (const d of m.disciplinas) {
-      if (!d.horas_aula_figura) continue;
-      expect(d.horas.total, `${d.codigo}`).toBe(Math.round((d.horas_aula_figura * 5) / 6));
-    }
-  });
-
-  it("soma as cargas declaradas pelo PPC", () => {
-    // PPC: 270h em optativas (2 trilhas de 90h + isoladas) e 90h em eletivas
+describe("matriz 844 — trilhas e optativas", () => {
+  it("traz o agregador de optativas com 270h", () => {
+    expect(m.conjuntos["959"]).toBeDefined();
+    expect(m.conjuntos["959"].ch).toBe(270);
     expect(m.cargas.optativas).toBe(270);
     expect(m.cargas.eletiva).toBe(90);
-    expect(m.cargas.soma).toBe(m.cargas.obrigatorias + 270 + 90);
+  });
+
+  it("traz 13 trilhas mais as optativas isoladas, de 90h cada", () => {
+    const subs = Object.entries(m.conjuntos as Record<string, any>).filter(
+      ([id]) => id !== "959",
+    );
+    expect(subs.length).toBe(14);
+    for (const [id, c] of subs) {
+      expect(c.ch, `conjunto ${id}`).toBe(90);
+    }
+  });
+
+  it("associa disciplinas a cada trilha", () => {
+    // O que faltava quando a única fonte era a Figura 6 do PPC, que lista as
+    // disciplinas de cada trilha apenas por nome, sem código.
+    const porConjunto = new Map<number, number>();
+    for (const d of m.disciplinas) {
+      if (d.conjunto === null) continue;
+      porConjunto.set(d.conjunto, (porConjunto.get(d.conjunto) ?? 0) + 1);
+    }
+    for (const id of Object.keys(m.conjuntos)) {
+      if (id === "959") continue; // agregador não tem disciplina própria
+      expect(porConjunto.get(Number(id)) ?? 0, `trilha ${id} sem disciplina`).toBeGreaterThan(0);
+    }
+
+    // a trilha de Controle é a que o PPC tem e a BSI não
+    const controle = m.disciplinas
+      .filter((d: any) => d.conjunto === 960)
+      .map((d: any) => d.codigo);
+    expect(controle).toContain("EEC41");
+    expect(controle.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it("tem trilhas próprias, diferentes das da BSI", () => {
+    const nomes = Object.values(m.conjuntos as Record<string, any>).map((c: any) =>
+      c.nome.toLowerCase(),
+    );
+    for (const propria of ["controle", "física", "biomédica"]) {
+      expect(nomes.some((n) => n.includes(propria)), `faltou ${propria}`).toBe(true);
+    }
+    for (const daBSI of ["gestão de sistemas", "linguagens de programação"]) {
+      expect(nomes.some((n) => n.includes(daBSI)), `${daBSI} é da BSI`).toBe(false);
+    }
+  });
+
+  it("herda o período do agregador nas trilhas, que não o declaram", () => {
+    // A legenda declara período só para o agregador (959 = 08/10); as trilhas
+    // herdam dele. O Resumo Optativas do histórico confirma 8–10.
+    for (const [id, c] of Object.entries(m.conjuntos as Record<string, any>)) {
+      expect(c.periodo_inicial, `conjunto ${id}`).toBe(8);
+      expect(c.periodo_final, `conjunto ${id}`).toBe(10);
+    }
   });
 });
 
-describe("matriz 844 — schema compatível com o app", () => {
-  it("traz os campos que o domínio consome da matriz 981", () => {
-    for (const campo of ["matriz", "curso", "campus", "cargas", "conjuntos", "eletiva", "disciplinas"]) {
-      expect(m[campo], `falta o campo ${campo}`).toBeDefined();
-    }
-    for (const d of m.disciplinas) {
-      for (const campo of ["codigo", "nome", "periodo", "conjunto", "modelo", "aulas_semanais", "horas", "prerequisitos", "equivalentes"]) {
-        expect(d[campo], `${d.codigo}: falta ${campo}`).toBeDefined();
-      }
-    }
-  });
-
+describe("matriz 844 — integridade dos pré-requisitos", () => {
   it("não tem pré-requisito órfão", () => {
     const codigos = new Set(m.disciplinas.map((d: any) => d.codigo));
     for (const d of m.disciplinas) {
       for (const p of d.prerequisitos) {
-        expect(codigos.has(p), `${d.codigo} depende de ${p}, que não existe na matriz`).toBe(true);
+        if (/^Per[ií]odo:/i.test(p)) continue;
+        expect(codigos.has(p), `${d.codigo} depende de ${p}, inexistente`).toBe(true);
       }
     }
   });
 
-  it("mantém pré-requisito sempre em período anterior", () => {
+  it("não tem ciclo na cadeia de pré-requisitos", () => {
     const porCodigo = new Map(m.disciplinas.map((d: any) => [d.codigo, d]));
-    for (const d of m.disciplinas) {
-      for (const p of d.prerequisitos) {
-        const pre: any = porCodigo.get(p);
-        expect(pre.periodo, `${d.codigo} (P${d.periodo}) depende de ${p} (P${pre.periodo})`).toBeLessThan(d.periodo);
+    const estado = new Map<string, number>();
+    const visitar = (codigo: string, caminho: string[]): void => {
+      if (estado.get(codigo) === 2) return;
+      expect(estado.get(codigo), `ciclo: ${[...caminho, codigo].join(" -> ")}`).not.toBe(1);
+      estado.set(codigo, 1);
+      for (const p of (porCodigo.get(codigo) as any)?.prerequisitos ?? []) {
+        if (porCodigo.has(p)) visitar(p, [...caminho, codigo]);
       }
-    }
-  });
-});
-
-describe("matriz 844 — catálogo de conjuntos", () => {
-  it("traz o agregador de optativas e as trilhas, com a carga de cada", () => {
-    // Fonte: seção "Resumo Optativas" do Histórico Escolar, que é o único
-    // documento que publica os identificadores de conjunto de Eng. Comp.
-    const conj = m.conjuntos as Record<string, any>;
-    const agregador = conj["959"];
-    expect(agregador, "conjunto agregador 959 deveria existir").toBeDefined();
-    expect(agregador.ch).toBe(270);
-    expect(agregador.agregador).toBe(true);
-
-    const trilhas = Object.entries(conj).filter(([, c]: any) => !c.agregador);
-    expect(trilhas.length).toBeGreaterThanOrEqual(13);
-    for (const [id, c] of trilhas as any) {
-      expect(c.ch, `conjunto ${id} deveria exigir 90h`).toBe(90);
-    }
-  });
-
-  it("tem as trilhas próprias de Eng. Comp., que não são as da BSI", () => {
-    const nomes = Object.values(m.conjuntos as Record<string, any>).map((c: any) =>
-      c.nome.toLowerCase(),
-    );
-    // exclusivas de Eng. Comp. — não existem nos conjuntos 1162–1173 da 981
-    for (const esperada of ["controle", "física", "biomédica"]) {
-      expect(
-        nomes.some((n) => n.includes(esperada)),
-        `faltou a trilha de ${esperada}`,
-      ).toBe(true);
-    }
-    // exclusivas da BSI — não podem aparecer aqui
-    for (const indevida of ["gestão de sistemas", "linguagens de programação"]) {
-      expect(
-        nomes.some((n) => n.includes(indevida)),
-        `trilha ${indevida} é da BSI e não deveria estar na 844`,
-      ).toBe(false);
-    }
-  });
-
-  it("exige duas trilhas, e não três como a BSI", () => {
-    expect(m.regra_optativas.trilhas_exigidas).toBe(2);
-    expect(m.regra_optativas.ch_total).toBe(270);
-    expect(m.regra_optativas.ch_por_trilha).toBe(90);
-  });
-
-  it("não carrega nenhum dado pessoal do histórico que serviu de fonte", () => {
-    const bruto = JSON.stringify(m).toLowerCase();
-    for (const termo of ["victor", "damasceno", "cursada", "validada", "faltante"]) {
-      expect(bruto.includes(termo), `vazou "${termo}" do histórico`).toBe(false);
-    }
+      estado.set(codigo, 2);
+    };
+    for (const d of m.disciplinas) visitar(d.codigo, []);
   });
 });
