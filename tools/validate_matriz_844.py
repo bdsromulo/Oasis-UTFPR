@@ -11,8 +11,11 @@ E4. Não há ciclo na cadeia de pré-requisitos.
 E5. Período entre 1 e 10.
 E6. Coordenada da figura ("P.L") é única e o P bate com o período da coluna.
 
-A1. Disciplina sem código confirmado no Portal é AVISO, não erro: pode ser
-    disciplina sem oferta no semestre lido. Fica registrada para auditoria.
+E7. A carga horária vem da conversão TA * 5/6 (hora-aula de 50 min). Deve ser
+    múltipla de 15 e coerente com o total de horas-aula da figura.
+
+A1. Disciplina sem equivalente na oferta é AVISO, não erro: pode simplesmente
+    não ter sido ofertada nos semestres lidos. Fica registrada para auditoria.
 A2. Disciplina sem carga horária é AVISO: as células de Atividades
     Complementares e Estágio são desenhadas fora do padrão na figura.
 
@@ -56,9 +59,19 @@ def validar(dados: dict) -> tuple[list[str], list[str]]:
                     f"(P{por_codigo[p]['periodo']}), que não é anterior"
                 )
 
+        # E7 — coerência da conversão de horas-aula para carga horária
+        ta = d.get("horas_aula_figura")
+        if ta:
+            esperado = round(ta * 5 / 6)
+            if d["horas"]["total"] != esperado:
+                erros.append(
+                    f"E7: {d['codigo']} tem {d['horas']['total']}h para {ta} horas-aula "
+                    f"(esperado {esperado}h)"
+                )
+
         # A1 / A2
-        if not d.get("codigo_confirmado", True):
-            avisos.append(f"A1: {d['codigo']} ({d['nome']}) sem código confirmado no Portal")
+        if not d.get("equivalentes"):
+            avisos.append(f"A1: {d['codigo']} ({d['nome']}) sem equivalente na oferta")
         if not d["horas"].get("total"):
             avisos.append(f"A2: {d['codigo']} ({d['nome']}) sem carga horária")
 
@@ -81,18 +94,18 @@ def validar(dados: dict) -> tuple[list[str], list[str]]:
         visitar(d["codigo"], [])
 
     # E6
-    coords = [d["coord"] for d in disciplinas if d.get("coord")]
+    coords = [d["coord_figura"] for d in disciplinas if d.get("coord_figura")]
     for coord, n in Counter(coords).items():
         if n > 1:
             erros.append(f"E6: coordenada {coord} usada por {n} disciplinas")
     for d in disciplinas:
-        if not d.get("coord"):
+        if not d.get("coord_figura"):
             continue
-        periodo_coord = int(str(d["coord"]).split(".")[0])
+        periodo_coord = int(str(d["coord_figura"]).split(".")[0])
         if periodo_coord != d["periodo"]:
             erros.append(
                 f"E6: {d['codigo']} está na coluna do período {d['periodo']} "
-                f"mas a coordenada da figura diz {d['coord']}"
+                f"mas a coordenada da figura diz {d['coord_figura']}"
             )
 
     return erros, avisos
