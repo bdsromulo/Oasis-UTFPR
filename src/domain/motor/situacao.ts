@@ -2,6 +2,7 @@
 // Os números por conjunto vêm do próprio histórico (fonte oficial consolidada);
 // a matriz entra para nomear, ordenar e detectar inconsistências.
 import type { Matriz, PerfilAluno, ResumoConjunto } from "../tipos";
+import { descricaoDoCurso, trilhasDaMatriz } from "../cursos";
 
 export interface ProgressoConjunto {
   conjunto: string;
@@ -41,11 +42,11 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
       `histórico é da matriz ${perfil.matriz}, mas a plataforma cobre a matriz ${matriz.matriz}`,
     );
   }
+  const curso = descricaoDoCurso(matriz);
   const por = new Map(perfil.resumoConjuntos.map((r) => [r.conjunto, r]));
   const trilhas: ProgressoConjunto[] = [];
-  for (const [cod, conj] of Object.entries(matriz.conjuntos)) {
-    const numCod = Number(cod);
-    if (numCod < 1162 || numCod > 1173) continue;
+  for (const cod of trilhasDaMatriz(matriz, curso)) {
+    const conj = matriz.conjuntos[cod];
     const r = por.get(cod);
     trilhas.push(
       r
@@ -55,12 +56,17 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
   }
   trilhas.sort((a, b) => b.cumprido - a.cumprido || a.nome.localeCompare(b.nome));
 
-  const r1159 = por.get("1159");
-  const r1161 = por.get("1161");
+  // categorias de conjunto único variam por curso: a BSI tem 2º estrato e
+  // humanidades, Eng. Comp. não tem nenhuma das duas
+  const porId = new Map(
+    curso.categorias.map((c) => [c.id, por.get(String(c.conjunto))] as const),
+  );
+  const rSegundo = porId.get("segundoEstrato");
+  const rHumanidades = porId.get("humanidades");
   return {
     obrigatorias: perfil.resumoGeral?.obrigatorias ?? null,
-    segundoEstrato: r1159 ? prog(r1159, false) : null,
-    humanidades: r1161 ? prog(r1161, false) : null,
+    segundoEstrato: rSegundo ? prog(rSegundo, false) : null,
+    humanidades: rHumanidades ? prog(rHumanidades, false) : null,
     trilhas,
     trilhasValidadas: trilhas.filter((t) => t.validado).length,
     eletivas: perfil.eletivas

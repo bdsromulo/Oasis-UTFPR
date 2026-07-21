@@ -14,7 +14,31 @@ export interface LinhaPdf {
 interface Item {
   x: number;
   y: number;
+  largura: number;
   str: string;
+}
+
+/**
+ * Espaço horizontal, em pontos, a partir do qual dois trechos de texto contíguos
+ * são considerados palavras separadas.
+ *
+ * Juntar tudo com espaço quebra PDFs que emitem o acento como item próprio: o
+ * Histórico Escolar de Eng. de Computação sai como "Disciplinas Obrigat ó rias",
+ * e nenhum rótulo de seção casa. Os de BSI não têm o problema porque gravam a
+ * letra acentuada num item só — por isso o defeito passou despercebido.
+ */
+const LACUNA_DE_ESPACO = 0.6;
+
+/** Junta os trechos de uma linha, inserindo espaço só onde havia lacuna. */
+function juntarTrechos(itens: Item[]): string {
+  let texto = "";
+  let fimAnterior: number | null = null;
+  for (const item of itens) {
+    if (fimAnterior !== null && item.x - fimAnterior > LACUNA_DE_ESPACO) texto += " ";
+    texto += item.str;
+    fimAnterior = item.x + item.largura;
+  }
+  return texto.replace(/\s+/g, " ").trim();
 }
 
 export async function extrairLinhas(dados: ArrayBuffer): Promise<LinhaPdf[]> {
@@ -26,7 +50,12 @@ export async function extrairLinhas(dados: ArrayBuffer): Promise<LinhaPdf[]> {
     const itens: Item[] = [];
     for (const it of conteudo.items) {
       if (!("str" in it) || !it.str.trim()) continue;
-      itens.push({ x: it.transform[4], y: it.transform[5], str: it.str });
+      itens.push({
+        x: it.transform[4],
+        y: it.transform[5],
+        largura: "width" in it && typeof it.width === "number" ? it.width : 0,
+        str: it.str,
+      });
     }
     // agrupa por y (tolerância 2.5pt), topo da página primeiro
     itens.sort((a, b) => b.y - a.y || a.x - b.x);
@@ -34,10 +63,7 @@ export async function extrairLinhas(dados: ArrayBuffer): Promise<LinhaPdf[]> {
     const fecha = () => {
       if (!atual.length) return;
       atual.sort((a, b) => a.x - b.x);
-      linhas.push({
-        pagina: p,
-        texto: atual.map((i) => i.str).join(" ").replace(/\s+/g, " ").trim(),
-      });
+      linhas.push({ pagina: p, texto: juntarTrechos(atual) });
       atual = [];
     };
     for (const it of itens) {

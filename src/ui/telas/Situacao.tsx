@@ -5,6 +5,7 @@ import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
 
 export function renderizarTextoComCodigos(texto: string, matriz: Matriz) {
   const partes = texto.split(/([A-Z]{2,5}\d{1,4}[A-Z]?)/g);
@@ -109,11 +110,11 @@ export function TelaSituacao(props: {
 
       if (c.origem === "obrigatoria" || (dm && dm.conjunto === null)) {
         mapa.obrigatorias.push(item);
-      } else if (dm && dm.conjunto === 1159) {
+      } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
         mapa.segundoEstrato.push(item);
-      } else if (dm && dm.conjunto === 1161) {
+      } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         mapa.humanidades.push(item);
-      } else if (dm && dm.conjunto && dm.conjunto >= 1162 && dm.conjunto <= 1173) {
+      } else if (dm && ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
         const key = String(dm.conjunto);
         if (!mapa[key]) mapa[key] = [];
         mapa[key].push(item);
@@ -124,25 +125,25 @@ export function TelaSituacao(props: {
     return mapa;
   }, [perfil, matriz]);
 
-  const estagio1 = useMemo(() => {
-    if (!perfil) return false;
-    return perfil.cursadas.some(
-      (c) =>
-        (c.codigo === "ICSX51" || c.nome.toLowerCase().includes("estágio 1") || c.nome.toLowerCase().includes("estagio 1")) &&
-        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
-    );
-  }, [perfil]);
+  // Os estágios variam por curso: BSI tem dois de 200h, Eng. Comp. um de 400h.
+  const estagios = useMemo(() => {
+    const doCurso = descricaoDoCurso(matriz).estagios;
+    const concluida = (c: { situacao: string }) =>
+      c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado";
+    return doCurso.map((e) => ({
+      ...e,
+      feito: Boolean(
+        perfil?.cursadas.some(
+          (c) =>
+            (c.codigo === e.codigo ||
+              c.nome.toLowerCase().includes(e.rotulo.toLowerCase())) &&
+            concluida(c),
+        ),
+      ),
+    }));
+  }, [perfil, matriz]);
 
-  const estagio2 = useMemo(() => {
-    if (!perfil) return false;
-    return perfil.cursadas.some(
-      (c) =>
-        (c.codigo === "ICSX52" || c.nome.toLowerCase().includes("estágio 2") || c.nome.toLowerCase().includes("estagio 2")) &&
-        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
-    );
-  }, [perfil]);
-
-  const qtdEstagio = (estagio1 ? 1 : 0) + (estagio2 ? 1 : 0);
+  const qtdEstagio = estagios.filter((e) => e.feito).length;
 
   const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
   // A carga aprovada sai do Quadro Resumo do histórico, que já aplica os tetos por
@@ -185,9 +186,16 @@ export function TelaSituacao(props: {
   const painel = montarPainel(perfil, matriz);
   const obr = painel.obrigatorias;
 
-  // Cálculo de totais e excedentes das Trilhas no 3º Estrato (exigência total do 3º estrato: 345h)
+  // A exigência do bloco de trilhas varia por curso: BSI pede 3 trilhas dentro
+  // de 345h; Eng. Comp. pede 2 dentro de 270h. Ambos saem da descrição do curso
+  // e do conjunto agregador da matriz.
   const somaCumpridoTrilhas = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
-  const totalExigido3Estrato = 345;
+  const cursoDesc = descricaoDoCurso(matriz);
+  const totalExigido3Estrato =
+    (cursoDesc.agregadorTrilhas
+      ? matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch
+      : undefined) ?? 345;
+  const trilhasExigidas = cursoDesc.trilhasExigidas;
   const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
 
   return (
@@ -340,44 +348,34 @@ export function TelaSituacao(props: {
             <div className="mb-2 flex items-baseline justify-between">
               <span className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                 Estágio {qtdEstagio}
-                <span className="font-sans text-sm font-normal text-zinc-400"> / 2</span>
+                <span className="font-sans text-sm font-normal text-zinc-400"> / {estagios.length}</span>
               </span>
-              {qtdEstagio === 2 && (
+              {qtdEstagio === estagios.length && estagios.length > 0 && (
                 <Badge tom="ok" icon={<IconCheck className="h-3.5 w-3.5" />}>
                   concluído
                 </Badge>
               )}
             </div>
 
-            {/* 2 blocos grossos tipo Stories do Instagram */}
+            {/* um bloco por estágio exigido pelo curso */}
             <div className="flex items-center gap-2 pt-1">
-              <div className="flex-1 space-y-1">
-                <div
-                  className={`h-3.5 rounded-full transition-colors ${
-                    estagio1
-                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
-                      : "bg-zinc-200/80 dark:bg-zinc-800"
-                  }`}
-                />
-                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Estágio 1 (200h)
-                </span>
-              </div>
-              <div className="flex-1 space-y-1">
-                <div
-                  className={`h-3.5 rounded-full transition-colors ${
-                    estagio2
-                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
-                      : "bg-zinc-200/80 dark:bg-zinc-800"
-                  }`}
-                />
-                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Estágio 2 (200h)
-                </span>
-              </div>
+              {estagios.map((e) => (
+                <div key={e.codigo} className="flex-1 space-y-1">
+                  <div
+                    className={`h-3.5 rounded-full transition-colors ${
+                      e.feito
+                        ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
+                        : "bg-zinc-200/80 dark:bg-zinc-800"
+                    }`}
+                  />
+                  <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    {e.rotulo} ({e.ch}h)
+                  </span>
+                </div>
+              ))}
             </div>
             <div className="mt-3 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Estágio supervisionado obrigatório para conclusão do BSI
+              Estágio supervisionado obrigatório para a conclusão do curso
             </div>
           </div>
 
@@ -411,17 +409,17 @@ export function TelaSituacao(props: {
             <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
               <div>
                 <h2 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  Trilhas em Computação (3º Estrato)
+                  {cursoDesc.rotuloBlocoTrilhas}
                 </h2>
                 <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  Cumprimento total no 3º estrato. Exigência do curso: validação integral de <strong>3 trilhas distintas</strong> (mínimo de 345h).
+                  Exigência do curso: validação integral de <strong>{trilhasExigidas} trilhas distintas</strong>, com mínimo de {totalExigido3Estrato}h no total.
                 </p>
               </div>
               <Badge
-                tom={painel.trilhasValidadas >= 3 ? "ok" : "acento"}
+                tom={painel.trilhasValidadas >= trilhasExigidas ? "ok" : "acento"}
                 classe="px-3 py-1 text-xs font-bold shrink-0"
               >
-                {painel.trilhasValidadas} de 3 trilhas validadas
+                {painel.trilhasValidadas} de {trilhasExigidas} trilhas validadas
               </Badge>
             </div>
 
@@ -440,7 +438,7 @@ export function TelaSituacao(props: {
                 <div className="mb-1 flex items-baseline justify-between">
                   <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Trilhas Concluídas:</span>
                   <span className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                    {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ 3</span>
+                    {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ {trilhasExigidas}</span>
                   </span>
                 </div>
                 <Barra valor={painel.trilhasValidadas} max={3} destaque={painel.trilhasValidadas > 0} />

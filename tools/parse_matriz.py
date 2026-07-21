@@ -40,7 +40,33 @@ HEADER_MARKS = ("teóricas", "práticas", "requisito(s)", "Equivalentes", "APCC"
                 "Consulta", "Câmpus:", "Curso(s):", "Versão", "primir", "(CHEAD)",
                 "Curricular", "Grupo")
 
+# Deslocamento horizontal do documento em relação às fronteiras medidas acima.
+# O PDF da matriz de Eng. Comp. tem o mesmo layout do de BSI, porém deslocado
+# ~2pt — o bastante para o código da disciplina cair na coluna [OPT] e o parser
+# não achar disciplina nenhuma. Em vez de duplicar COLS por curso, calibramos
+# pelo âncora "Turmas", que aparece sob a coluna de código em todos eles.
+X_TURMAS_REFERENCIA = 102.9
+_offset = 0.0
+
+
+def calibrar(paginas) -> float:
+    """Mede o deslocamento do documento pela posição do âncora 'Turmas'."""
+    xs = [
+        w["x0"]
+        for pagina in paginas
+        for w in pagina.extract_words()
+        if w["text"] == "Turmas"
+    ]
+    if not xs:
+        return 0.0
+    # moda arredondada: robusta a uma ocorrência fora de lugar
+    from collections import Counter
+    modal = Counter(round(x, 1) for x in xs).most_common(1)[0][0]
+    return modal - X_TURMAS_REFERENCIA
+
+
 def col_of(x):
+    x -= _offset
     for name, a, b in COLS:
         if a <= x < b:
             return name
@@ -56,8 +82,13 @@ def group_rows(words, tol=3.5):
     return [sorted(ws, key=lambda w: w["x0"]) for _, ws in rows]
 
 def parse():
+    global _offset
     blocks, buf, footer_lines, in_footer = [], [], [], False
     with pdfplumber.open(PDF) as pdf:
+        _offset = calibrar(pdf.pages)
+        cabecalho_texto = pdf.pages[0].extract_text() or ""
+        if abs(_offset) > 0.05:
+            print(f"calibração: documento deslocado {_offset:+.1f}pt", file=sys.stderr)
         for page in pdf.pages:
             for ws in group_rows(page.extract_words()):
                 line = " ".join(w["text"] for w in ws)
@@ -112,7 +143,7 @@ def parse():
                                      "cht": int(chts[i]) if i < len(chts) else None,
                                      "grupo": grupo})
         opt = None
-        m = re.search(r"\[(\d{4})\]", " ".join(cells.get("opt", [])))
+        m = re.search(r"\[(\d{3,4})\]", " ".join(cells.get("opt", [])))
         if m:
             opt = int(m.group(1))
         per_vals = [t for t in cells.get("periodo", []) if re.match(r"^\d$", t)]
@@ -147,22 +178,53 @@ def parse():
         "ch_total_ppc": fnum("CHTOTALPPC"),
     }
     conjuntos = {}
-    for m in re.finditer(r"\[(\d{4})\]\s*(.+?)\s*-\s*Créditos:.*?(?:Período inicial/final:\s*(\d+)/(\d+).*?)?Carga [Hh]orária:?\s*0*(\d+)(?:-\s*Carga horária semanal:\s*(\d+))?", foot):
+    for m in re.finditer(r"\[(\d{3,4})\]\s*(.+?)\s*-\s*Créditos:.*?(?:Período inicial/final:\s*(\d+)/(\d+).*?)?Carga [Hh]orária:?\s*0*(\d+)(?:-\s*Carga horária semanal:\s*(\d+))?", foot):
         conjuntos[m.group(1)] = {
             "nome": m.group(2).strip(),
-            "periodo_inicial": int(m.group(3)) if m.group(3) else 4,
-            "periodo_final": int(m.group(4)) if m.group(4) else 8,
+            # Trilha não declara período na legenda; herda do conjunto
+            # agregador que a precede (BSI: 1160 = 04/08; Eng. Comp.: 959 =
+            # 08/10). Ver ajuste logo abaixo do laço.
+            "periodo_inicial": int(m.group(3)) if m.group(3) else None,
+            "periodo_final": int(m.group(4)) if m.group(4) else None,
             "ch": int(m.group(5)),
             "ch_semanal": int(m.group(6)) if m.group(6) else None,
         }
+    # A legenda declara período para os conjuntos agregadores, mas não para as
+    # trilhas — que herdam o do agregador ao qual pertencem. Identificamos o
+    # agregador pelo NOME, não pela ordem numérica: em BSI o 1161 (Humanidades,
+    # 03/06) fica entre o 1160 (Trilhas, 04/08) e as trilhas 1162+, então
+    # "o anterior" daria o período errado.
+    #   BSI:        1160 "Terceiro Estrato - Trilhas Em Computação"  -> 04/08
+    #   Eng. Comp.:  959 "Optativas"                                 -> 08/10
+    agregador = None
+    for c in conjuntos.values():
+        if c["periodo_inicial"] is None:
+            continue
+        nome = c["nome"].lower()
+        if "trilha" in nome:
+            agregador = c  # o mais específico vence
+            break
+        if "optativa" in nome and agregador is None:
+            agregador = c
+    padrao = (agregador["periodo_inicial"], agregador["periodo_final"]) if agregador else (4, 8)
+    for c in conjuntos.values():
+        if c["periodo_inicial"] is None:
+            c["periodo_inicial"], c["periodo_final"] = padrao
+
     m = re.search(r"Eletiva - Carga horária total:\s*(\d+).*?Período inicial/final:\s*(\d+)/(\d+).*?Pré-Requisito \(Período Inicial\):\s*(\d+)", foot)
     eletiva = ({"ch": int(m.group(1)), "periodo_inicial": int(m.group(2)),
                 "periodo_final": int(m.group(3)), "prereq_periodo": int(m.group(4))} if m else None)
 
+    # cabeçalho: "Curso(s): Eng De Computação (212)" / "Matriz: 844 - ..."
+    cab = cabecalho_texto
+    mm = re.search(r"Matriz:\s*(\d+)", cab)
+    mc = re.search(r"Curso\(s\):\s*(.+)", cab)
+    mcamp = re.search(r"C[âa]mpus:\s*(.+)", cab)
+
     return {
-        "matriz": 981,
-        "curso": "BACHARELADO EM SISTEMAS DE INFORMAÇÃO (236)",
-        "campus": "Curitiba",
+        "matriz": int(mm.group(1)) if mm else 981,
+        "curso": (mc.group(1).strip().upper() if mc else "BACHARELADO EM SISTEMAS DE INFORMAÇÃO (236)"),
+        "campus": (mcamp.group(1).strip() if mcamp else "Curitiba"),
         "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
         "cargas": cargas,
         "conjuntos": conjuntos,

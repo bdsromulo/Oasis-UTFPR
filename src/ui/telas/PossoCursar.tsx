@@ -14,6 +14,7 @@ import { Badge, Botao, Card, MenuOrdenacao, BalaoProgressoHover, useIsMobile } f
 import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
 import { IconPlus, IconTrash, IconCheck, IconWarning, IconFilter } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
 
 type Grupo = "todas" | "obrigatorias" | "estrato2" | "trilhas" | "humanidades";
 
@@ -28,8 +29,10 @@ const GRUPOS: [Grupo, string][] = [
 function grupoDe(e: Elegivel): Grupo {
   const c = e.disciplina.conjunto;
   if (c === null) return "obrigatorias";
-  if (c === 1159) return "estrato2";
-  if (c === 1161) return "humanidades";
+  const curso = descricaoDoCurso(981);
+  const cat = categoriaSimples(curso, c);
+  if (cat?.id === "segundoEstrato") return "estrato2";
+  if (cat?.id === "humanidades") return "humanidades";
   return "trilhas";
 }
 
@@ -339,7 +342,7 @@ export function TelaPossoCursar(props: {
     const m = new Map<string, { cursada: number; exigida: number }>();
     if (!perfil) return m;
     for (const r of perfil.resumoConjuntos) {
-      if (!["1159", "1160", "1161"].includes(r.conjunto)) {
+      if (ehTrilha(descricaoDoCurso(matriz), r.conjunto)) {
         m.set(r.conjunto, { cursada: r.chCursadaAprovada, exigida: r.chObrigatoria });
       }
     }

@@ -1,4 +1,5 @@
 import type { DisciplinaMatriz, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
 
 /**
  * Simulador de formatura.
@@ -150,13 +151,14 @@ export interface ResultadoSimulacao {
  */
 export const TRILHAS_EXIGIDAS = 3;
 
-const CATEGORIA_POR_CONJUNTO: Record<number, IdCategoria> = { 1159: "segundoEstrato", 1161: "humanidades" };
-
-function categoriaDe(d: DisciplinaMatriz): IdCategoria | null {
+function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): IdCategoria | null {
   if (d.conjunto === null) return "obrigatorias";
-  if (CATEGORIA_POR_CONJUNTO[d.conjunto]) return CATEGORIA_POR_CONJUNTO[d.conjunto];
-  if (d.conjunto >= 1162 && d.conjunto <= 1173) return "trilhas";
-  return null; // 1199 (pool de eletivas) é tratado à parte
+  const curso = descricaoDoCurso(matriz);
+  const simples = categoriaSimples(curso, d.conjunto);
+  // a pool de eletivas é tratada à parte, como vaga genérica
+  if (simples) return simples.id === "eletivas" ? null : (simples.id as IdCategoria);
+  if (ehTrilha(curso, d.conjunto)) return "trilhas";
+  return null;
 }
 
 /** Estágio e atividades complementares não são turma: não disputam vaga na grade. */
@@ -194,19 +196,21 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
   // cursadas em três trilhas (90h cada), devem ser cursadas 75h" — essas 75h
   // podem cair numa trilha já completa ou espalhadas por outras. O agregado do
   // conjunto 1160 no histórico confirma: soma as horas cruas, sem teto.
-  const agregado1160 = porConjunto.get("1160")?.chCursadaAprovada;
-  let trilhas = agregado1160 ?? 0;
-  if (agregado1160 === undefined) {
+  const curso = descricaoDoCurso(matriz);
+  const agregado = curso.agregadorTrilhas
+    ? porConjunto.get(String(curso.agregadorTrilhas))?.chCursadaAprovada
+    : undefined;
+  let trilhas = agregado ?? 0;
+  if (agregado === undefined) {
     for (const cod of Object.keys(matriz.conjuntos)) {
-      const n = Number(cod);
-      if (n >= 1162 && n <= 1173) trilhas += somaConjunto(cod);
+      if (ehTrilha(curso, cod)) trilhas += somaConjunto(cod);
     }
   }
 
   return {
     obrigatorias: perfil.resumoGeral?.obrigatorias.aprovada ?? 0,
-    segundoEstrato: somaConjunto("1159"),
-    humanidades: somaConjunto("1161"),
+    segundoEstrato: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "segundoEstrato")?.conjunto)),
+    humanidades: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "humanidades")?.conjunto)),
     trilhas,
     eletivas: perfil.eletivas ? perfil.eletivas.chTotal - perfil.eletivas.chFaltante : 0,
   };
@@ -232,6 +236,7 @@ export function simularFormatura(
   const { ritmo, semestreInicial } = opcoes;
   const horizonte = opcoes.horizonte ?? 20;
   const saz = inferirSazonalidade(ofertas);
+  const cursoDesc = descricaoDoCurso(matriz);
   const avisos: string[] = [];
 
   const aprovadas = new Set<string>(perfil ? perfil.aprovadas : []);
@@ -248,9 +253,9 @@ export function simularFormatura(
 
   const exigido: Record<IdCategoria, number> = {
     obrigatorias: matriz.cargas.obrigatorias,
-    segundoEstrato: matriz.conjuntos["1159"]?.ch ?? 360,
-    humanidades: matriz.conjuntos["1161"]?.ch ?? 135,
-    trilhas: matriz.conjuntos["1160"]?.ch ?? 345,
+    segundoEstrato: matriz.conjuntos[String(cursoDesc.categorias.find((c: { id: string }) => c.id === "segundoEstrato")?.conjunto)]?.ch ?? 360,
+    humanidades: matriz.conjuntos[String(cursoDesc.categorias.find((c: { id: string }) => c.id === "humanidades")?.conjunto)]?.ch ?? 135,
+    trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
     eletivas: matriz.cargas.eletiva,
   };
 
@@ -260,7 +265,7 @@ export function simularFormatura(
   const candidatas = matriz.disciplinas.filter((d) => {
     if (d.codigo.startsWith("ENADE")) return false;
     if (aprovadas.has(d.codigo)) return false;
-    const cat = categoriaDe(d);
+    const cat = categoriaDe(d, matriz);
     if (cat === null) return false;
     if (cat !== "obrigatorias" && saz.de(d.codigo) === "sem_oferta") return false;
     return true;
@@ -320,7 +325,7 @@ export function simularFormatura(
   if (perfil) {
     for (const r of perfil.resumoConjuntos) {
       const n = Number(r.conjunto);
-      if (n >= 1162 && n <= 1173) horasPorTrilha.set(n, r.chCursadaAprovada);
+      if (ehTrilha(cursoDesc, n)) horasPorTrilha.set(n, r.chCursadaAprovada);
     }
   }
 
@@ -375,14 +380,14 @@ export function simularFormatura(
 
     const disponiveisPorTrilha = new Map<number, number>();
     for (const d of candidatas) {
-      if (categoriaDe(d) !== "trilhas" || !alcancavel(d)) continue;
+      if (categoriaDe(d, matriz) !== "trilhas" || !alcancavel(d)) continue;
       const c = d.conjunto!;
       disponiveisPorTrilha.set(c, (disponiveisPorTrilha.get(c) ?? 0) + d.horas.total);
     }
 
     const conjuntosTrilha = Object.keys(matriz.conjuntos)
       .map(Number)
-      .filter((n) => n >= 1162 && n <= 1173);
+      .filter((n) => ehTrilha(cursoDesc, n));
 
     const viaveis = conjuntosTrilha
       .map((conj) => {
@@ -421,7 +426,7 @@ export function simularFormatura(
       falta("humanidades") === 0 &&
       !faltaTerceiroEstrato() &&
       eletivasPendentes === 0 &&
-      ![...pendentes].some((c) => categoriaDe(porCodigo.get(c)!) === "obrigatorias");
+      ![...pendentes].some((c) => categoriaDe(porCodigo.get(c)!, matriz) === "obrigatorias");
     if (tudoFechado) break;
 
     const semestrePar = ehSemestrePar(semestreAtual);
@@ -431,7 +436,7 @@ export function simularFormatura(
     const elegiveis = [...pendentes]
       .map((c) => porCodigo.get(c)!)
       .filter((d) => {
-        const cat = categoriaDe(d)!;
+        const cat = categoriaDe(d, matriz)!;
         // categoria já fechada: não se cursa além do mínimo
         if (cat === "trilhas") {
           if (!faltaTerceiroEstrato()) return false;
@@ -458,8 +463,8 @@ export function simularFormatura(
     }
 
     elegiveis.sort((a, b) => {
-      const catA = categoriaDe(a)!;
-      const catB = categoriaDe(b)!;
+      const catA = categoriaDe(a, matriz)!;
+      const catB = categoriaDe(b, matriz)!;
       // 1. obrigatórias primeiro: são todas exigidas e destravam o resto
       const obrA = catA === "obrigatorias" ? 1 : 0;
       const obrB = catB === "obrigatorias" ? 1 : 0;
@@ -495,7 +500,7 @@ export function simularFormatura(
     let vagas = ritmo;
 
     for (const d of elegiveis) {
-      const cat = categoriaDe(d)!;
+      const cat = categoriaDe(d, matriz)!;
       const consome = ocupaVaga(d);
       if (consome && vagas <= 0) continue;
       if (cat !== "obrigatorias" && cat !== "trilhas" && falta(cat) === 0) continue;
@@ -569,7 +574,7 @@ export function simularFormatura(
   }
 
   const obrigatoriasRestantes = [...pendentes].filter(
-    (c) => categoriaDe(porCodigo.get(c)!) === "obrigatorias",
+    (c) => categoriaDe(porCodigo.get(c)!, matriz) === "obrigatorias",
   );
   const fechou =
     obrigatoriasRestantes.length === 0 &&

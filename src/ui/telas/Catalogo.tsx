@@ -5,6 +5,7 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
 
 function normNome(nome: string): string {
   return nome
@@ -45,7 +46,10 @@ export function TelaCatalogo(props: {
     }
     if (categoria === "trilhas") {
       const soma = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
-      return { titulo: "Trilhas em Computação (3º Estrato)", cumprido: soma, exigido: 345 };
+      const cd = descricaoDoCurso(matriz);
+      const exigidoTrilhas =
+        (cd.agregadorTrilhas ? matriz.conjuntos[String(cd.agregadorTrilhas)]?.ch : undefined) ?? 345;
+      return { titulo: cd.rotuloBlocoTrilhas, cumprido: soma, exigido: exigidoTrilhas };
     }
     if (categoria === "eletivas" && painel.eletivas) {
       return { titulo: "Eletivas", cumprido: painel.eletivas.cumprido, exigido: painel.eletivas.exigido };
@@ -131,11 +135,11 @@ export function TelaCatalogo(props: {
       let cat: CategoriaCatalogo = "eletivas";
       if (dm.conjunto === null) {
         cat = "obrigatorias";
-      } else if (dm.conjunto === 1159) {
+      } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
         cat = "segundoEstrato";
-      } else if (dm.conjunto === 1161) {
+      } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         cat = "humanidades";
-      } else if (dm.conjunto >= 1162 && dm.conjunto <= 1173) {
+      } else if (ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
         cat = "trilhas";
       } else if (dm.horas.chext > 0) {
         cat = "extensao";
@@ -164,7 +168,7 @@ export function TelaCatalogo(props: {
           codigo: c.codigo,
           nome: daPool.nome,
           periodo: 0,
-          conjunto: 1199,
+          conjunto: descricaoDoCurso(matriz).categorias.find((c) => c.id === "eletivas")?.conjunto ?? null,
           modelo: "Eletiva",
           aulas_semanais: { teoricas: 0, praticas: 0, total: 0, aps: 0, apcc: 0 },
           horas: { ad: 0, chext: 0, chead: 0, total: c.cht || daPool.ch || 0 },
@@ -368,12 +372,12 @@ export function TelaCatalogo(props: {
                 Visão Geral das Trilhas de Aprofundamento (3º Estrato)
               </h3>
               <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                Para completar o 3º estrato, o estudante precisa validar pelo menos <strong>3 trilhas distintas</strong> (cada uma somando a carga horária exigida do conjunto).
+                O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} trilhas distintas</strong> (cada uma somando a carga horária exigida do conjunto).
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Badge tom={painel.trilhasValidadas >= 3 ? "ok" : "acento"} classe="text-sm px-3 py-1 font-bold">
-                {painel.trilhasValidadas} de 3 trilhas concluídas
+              <Badge tom={painel.trilhasValidadas >= descricaoDoCurso(matriz).trilhasExigidas ? "ok" : "acento"} classe="text-sm px-3 py-1 font-bold">
+                {painel.trilhasValidadas} de {descricaoDoCurso(matriz).trilhasExigidas} trilhas concluídas
               </Badge>
             </div>
           </div>

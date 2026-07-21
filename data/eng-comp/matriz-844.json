@@ -1,0 +1,7779 @@
+{
+ "matriz": 844,
+ "curso": "ENG DE COMPUTAÇÃO (212)",
+ "campus": "Curitiba",
+ "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
+ "cargas": {
+  "obrigatorias": 3460,
+  "optativas": 270,
+  "extensao": 0,
+  "eletiva": 90,
+  "soma": 3820,
+  "soma_sem_ext": 3820,
+  "chext_disc_obrigatorias": null,
+  "chext_disc_optativas": 300,
+  "ch_total_ppc": 3820
+ },
+ "conjuntos": {
+  "959": {
+   "nome": "Optativas",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 270,
+   "ch_semanal": 18
+  },
+  "960": {
+   "nome": "Trilha Em Controle",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "961": {
+   "nome": "Trilha Em Processamento Gráfico",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "962": {
+   "nome": "Trilhas Em Sistemas Inteligentes",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "963": {
+   "nome": "Trilha Em Algoritmos E Complexidade",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "964": {
+   "nome": "Trilha Em Redes De Computadores",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "965": {
+   "nome": "Trilha Em Engenharia De Software",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "966": {
+   "nome": "Trilha Em Otim, Mod Analíticos E Simul",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "967": {
+   "nome": "Trilha Em Física",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "968": {
+   "nome": "Trilha Em Banco De Dados",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "969": {
+   "nome": "Trilha Em Interação Hum-Comp",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "970": {
+   "nome": "Trilha Em Engenharia Biomédica",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "971": {
+   "nome": "Trilha Em Sistemas Embarcados",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "972": {
+   "nome": "Trilha Em Desenv Bas Em Plataforma",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  },
+  "973": {
+   "nome": "Optativas Isoladas",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": null
+  }
+ },
+ "eletiva": null,
+ "disciplinas": [
+  {
+   "codigo": "CSD20",
+   "nome": "Introdução À Lógica Para A Computação",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 844,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSD20",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF61B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSF13",
+   "nome": "Fundamentos De Programação 1",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 3,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSF13",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "IF61C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI71S",
+   "nome": "Física Teórica A",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 9,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FI71M",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71Z",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7F1",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA71A",
+   "nome": "Cálculo Diferencial E Integral 1",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MA61A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA71Z",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MAT7C1",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA71B",
+   "nome": "Geometria Analítica E Álgebra Linear",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MA61B",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA71I",
+     "cht": 45,
+     "grupo": "10"
+    },
+    {
+     "codigo": "MA71Y",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE20",
+   "nome": "Técnicas De Programação",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSF13"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA72I",
+     "cht": 60,
+     "grupo": "10"
+    },
+    {
+     "codigo": "MAT7AL",
+     "cht": 60,
+     "grupo": "99"
+    },
+    {
+     "codigo": "MAT7GA",
+     "cht": 60,
+     "grupo": "99"
+    },
+    {
+     "codigo": "ICSE20",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF62C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSF20",
+   "nome": "Estrutura De Dados 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSF13"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSF20",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF62E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSX53",
+   "nome": "Atividades Complementares Complementares",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Atividades",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 180
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EEX11",
+   "nome": "Introdução À Práticas De Laboratório Em",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELE11",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX10",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI72N",
+   "nome": "Eletricidade E Eletrônica Física Experimental 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FI71S",
+    "MA71A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI61A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI62A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71A",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI72S",
+   "nome": "Física Teórica B",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 9,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI71S",
+    "MA71A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI71Y",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72B",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7E1",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72M",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72Z",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7F2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA72A",
+   "nome": "Cálculo Diferencial E Integral 2",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA71A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA62A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA72H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA75D",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB70C",
+   "nome": "Química",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB64A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70D",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70I",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSF30",
+   "nome": "Estrutura De Dados 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSF20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "QBI7QE",
+     "cht": 30,
+     "grupo": "40"
+    },
+    {
+     "codigo": "QBI7QT",
+     "cht": 60,
+     "grupo": "40"
+    },
+    {
+     "codigo": "ICSF30",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF63C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEB21",
+   "nome": "Eletricidade",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "FI72S",
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL63A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "EL72F",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEB20",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEX21",
+   "nome": "Oficina De Integração 1",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EEX11"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELP21",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELE41",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX20",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELX91",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI73S",
+   "nome": "Física Teórica C",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 9,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI72S",
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI73M",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7F3",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA70G",
+   "nome": "Equações Diferenciais Ordinárias",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA71B",
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI74K",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA63B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA70B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA70H",
+   "nome": "Probabilidade E Estatística",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA70Z",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MAT7ED",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EST70A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EST70C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA65A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA73A",
+   "nome": "Cálculo Diferencial E Integral 3",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA70F",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA63A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD21",
+   "nome": "Matemática Discreta",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSD20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD21",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF63E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEB22",
+   "nome": "Circuitos Elétricos",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EEB21",
+    "FI73S"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL64F",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "EL73F",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEB21",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEB31",
+   "nome": "Circuitos Digitais",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 12,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "EEB21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELP32",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "EL65A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "EL75F",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEB30",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEF11",
+   "nome": "Desenho Técnico",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELF41",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "EL62A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELB13",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF10",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEQ31",
+   "nome": "Análise De Sistemas Lineares",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 10,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "MA70G",
+    "MA73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL65D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELB66",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEQ30",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI74N",
+   "nome": "Física Experimental 2",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FI73S",
+    "MA73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FIS7E2",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI74S",
+   "nome": "Física Teórica D",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 9,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI73S",
+    "MA73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI74M",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7F4",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA30",
+   "nome": "Projeto E Análise De Algoritmos",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSD21",
+    "CSF30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA30",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF64C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB30",
+   "nome": "Introdução A Banco De Dados",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSD21",
+    "CSE20",
+    "CSF30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF65E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG20",
+   "nome": "Análise E Projeto De Sistemas",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSG20",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF65D",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR31",
+   "nome": "Comunicação De Dados",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "EEQ31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELET30",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW30",
+   "nome": "Arquitetura E Organização De Computadores",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSF20",
+    "EEB31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL66C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF61",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEE31",
+   "nome": "Eletrônica Geral 1",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEB22"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL65E",
+     "cht": 120,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEE30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET74C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEF21",
+   "nome": "Desenho Técnico Aplicado",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "EEF11",
+    "EEX11"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL74H",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELB23",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF20",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70G",
+   "nome": "Sociologia",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES71D",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7SA",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA31",
+   "nome": "Teoria Da Computação",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSA30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA31",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF65C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE30",
+   "nome": "Engenharia De Software",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSO30",
+   "nome": "Sistemas Operacionais",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF66",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSO30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW40",
+   "nome": "Sistemas Microcontrolados",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEB31",
+    "EEE31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL66A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF52",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSX54",
+   "nome": "Estágio Supervisionado",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 400
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EEE32",
+   "nome": "Eletrônica Geral 2",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE31",
+    "MA73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL66E",
+     "cht": 120,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEE31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP61",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEX22",
+   "nome": "Oficina De Integração 2",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELE64",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX21",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI30",
+   "nome": "Sistemas Inteligentes",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSA30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI30",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF67D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR30",
+   "nome": "Redes De Computadores",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSO30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR30",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW41",
+   "nome": "Sistemas Embarcados",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL68E",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW32",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF74",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW42",
+   "nome": "Lógica Reconfigurável",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELW74",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL68A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW33",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTE3",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC21",
+   "nome": "Controle 1",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE32",
+    "EEQ31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL66F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL76A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEC20",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEQ32",
+   "nome": "Processamento Digital De Sinais",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EEQ31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF62",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET76H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL66D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEQ31",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF51",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70P",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ES70G"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FCH7FA",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSS30",
+   "nome": "Sistemas Distribuídos",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSO30",
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSS30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF67C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC31",
+   "nome": "Laboratório De Controle Discreto",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "EEC21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL67F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEC30",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEX23",
+   "nome": "Oficina De Integração 3",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EEX22"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF72",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET77H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX22",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GE70D",
+   "nome": "Economia",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GE60D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7E3",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW48",
+   "nome": "Laboratório De Processamento Digital De Sinais",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEQ32"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6EA",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW49",
+   "nome": "Lógica Programável E Vhdl",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEB31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6EC",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC41",
+   "nome": "Controle Supervisório",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL68F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC42",
+   "nome": "Controle Inteligente",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EEC43",
+   "nome": "Identificação De Sistemas",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTE10",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC44",
+   "nome": "Controle 3",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6AC",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEC45",
+   "nome": "Controle 4",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EEC46",
+   "nome": "Controle À Eventos Discretos",
+   "periodo": 8,
+   "conjunto": 960,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6AF",
+     "cht": 72,
+     "grupo": null
+    },
+    {
+     "codigo": "EL76B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF81",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV30",
+   "nome": "Processamento Digital De Imagens",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSF30",
+    "MA71B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSV30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF69D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BM",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV40",
+   "nome": "Computação Gráfica",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSV40",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AF",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV41",
+   "nome": "Introdução À Visão Computacional",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSV41",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BJ",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV42",
+   "nome": "Tópicos Avançados Em Processamento Gráfico",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSV43",
+   "nome": "Processamento Digital De Imagens 2",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF6BN",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV45",
+   "nome": "Reconhecimento De Padrões Em Imagens",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSV45",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSV50",
+   "nome": "Computação Gráfica 2",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSV52",
+   "nome": "Visão Computacional",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSV53",
+   "nome": "Fundamentos Do Processamento De Imagens Médicas",
+   "periodo": 8,
+   "conjunto": 961,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSV30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSI31",
+   "nome": "Ciências Das Redes",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI31",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI41",
+   "nome": "Redes Neurais",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI41",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AJ",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI42",
+   "nome": "Meta-Heuristicas Inspiradas Em Inteligência Coletiva",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSI51",
+   "nome": "Computação Evolucionária",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI51",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AC",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI52",
+   "nome": "Inteligência Artificial Distribuída",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI52",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF68D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI53",
+   "nome": "Mineração De Dados",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI53",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI54",
+   "nome": "Ontologias",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI54",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6CD",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI55",
+   "nome": "Sistemas Autônomos Inteligentes",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI55",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BQ",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI56",
+   "nome": "Sistemas Fuzzy",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI56",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AK",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI57",
+   "nome": "Introdução Às Ciências Cognitivas",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSD21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI57",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSI58",
+   "nome": "Data Mining",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30",
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSI58",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ICSIX0",
+   "nome": "Inteligência Artificial E Sociedade",
+   "periodo": 8,
+   "conjunto": 962,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSA40",
+   "nome": "Algoritmos E Complexidade",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA46",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AT",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA41",
+   "nome": "Complexidade Computacional",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA41",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA42",
+   "nome": "Teoria Dos Grafos",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA48",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AV",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA43",
+   "nome": "Computação Quântica",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA47",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BB",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA44",
+   "nome": "Introdução À Criptografia",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA30",
+    "MA71B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA49",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6CL",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSA45",
+   "nome": "Geometria Computacional",
+   "periodo": 8,
+   "conjunto": 963,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA30",
+    "MA71B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSA4A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR20",
+   "nome": "Cabeamento Estruturado",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF6AO",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR40",
+   "nome": "Redes E Sistemas De Comunicação Móveis",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR40",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AI",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR41",
+   "nome": "Oficina De Redes",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR41",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF67B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR42",
+   "nome": "Infraestrutura De Lans Hierarquicas",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR42",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AP",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR43",
+   "nome": "Infraestrutura De Wans",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR43",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BP",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR44",
+   "nome": "Segurança De Redes E Sistemas",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR44",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF68E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR45",
+   "nome": "Projeto De Infraestrutura De Redes",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR45",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR46",
+   "nome": "Roteamento E Qualidade De Serviços Em Redes",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR46",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6CF",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR47",
+   "nome": "Redes Sem Fio",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR47",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR48",
+   "nome": "Simulação E Análise De Desempenho De Redes De",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSR48",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSR53",
+   "nome": "Computadores Comunicações Sem Fio",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6BF",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTB3",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELER50",
+   "nome": "Simulações De Sistemas De Comunicações",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ET7GL",
+   "nome": "Laboratório De Redes De Sensores Sem Fio",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT7EC",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ET7GM",
+   "nome": "Redes De Sensores Sem Fio",
+   "periodo": 8,
+   "conjunto": 964,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT7EB",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE40",
+   "nome": "Engenharia De Software 2",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE40",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66G",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE41",
+   "nome": "Engenharia De Requisitos",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE41",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE42",
+   "nome": "Metodologias Ágeis Para O Desenvolvimento De",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE42",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BL",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE43",
+   "nome": "Software Testes, Verificação E Validação De Sistemas",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE43",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BT",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE44",
+   "nome": "Sistemas Legados",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE44",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF65F",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE45",
+   "nome": "Modelagem De Software",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE45",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE46",
+   "nome": "Métricas E Estimativas De Software",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE46",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE47",
+   "nome": "Gerência De Projetos",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE47",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF67G",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSE48",
+   "nome": "Qualidade De Software",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSE48",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM30",
+   "nome": "Desenvolvimento Integrado De Sistemas",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSB30",
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSM31",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL75H",
+   "nome": "Engenharia De Sistemas",
+   "periodo": 8,
+   "conjunto": 965,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE30",
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEW40",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN7AB",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTE1",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD40",
+   "nome": "Simulação De Eventos Discretos",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF6AL",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD41",
+   "nome": "Programação Matemática",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSA30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL68G",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL6AA",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTE2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD42",
+   "nome": "Simulação De Sistemas Biológicos E Sociais",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSF30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD41",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BO",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSD42",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AQ",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD43",
+   "nome": "Simulação De Eventos Discretos",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD43",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD45",
+   "nome": "Modelagem E Avaliação De Sistemas",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSG20",
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD45",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF67F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD47",
+   "nome": "Otimização De Sistemas",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD47",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD52",
+   "nome": "Introdução À Computação Científica",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSD21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD52",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD55",
+   "nome": "Métodos Estocásticos",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSD50",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSD57",
+   "nome": "Métodos Formais Ii",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSD58",
+   "nome": "Tópicos Especiais Em Telemática Iii",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSR30",
+    "MA70H"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MA70C",
+   "nome": "Cálculo Numérico",
+   "periodo": 8,
+   "conjunto": 966,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSF13",
+    "MA71B",
+    "MA72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA63C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MAT7N1",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEL51",
+   "nome": "Fotônica",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "FI73S"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEY43",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI70A",
+   "nome": "Mecânica Geral 1",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI71S",
+    "MA71B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CC73A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "COC73F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI62B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI70B",
+   "nome": "Mecânica Geral 2",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI70A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI63B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI70D",
+   "nome": "Fenômenos De Transporte 1",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FI72S"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI65C",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FI66A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME65G",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI70E",
+   "nome": "Fenômenos De Transporte 2",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "FI70D"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT74A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI65C",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FI67A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI77B",
+   "nome": "Ótica",
+   "periodo": 8,
+   "conjunto": 967,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "FI73S"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ME66F",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "FI67C",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FI76G",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB40",
+   "nome": "Bibliotecas Digitais",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF6CI",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB41",
+   "nome": "Banco De Dados 2",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB41",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66E",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB42",
+   "nome": "Computação Baseada Em Dados",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSB43",
+   "nome": "Tópicos Em Banco De Dados",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 8
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSB50",
+   "nome": "Banco De Dados",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB50",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB51",
+   "nome": "Recuperação Inteligente De Informações",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB51",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSB59",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AH",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB52",
+   "nome": "Data Warehousing",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB52",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB53",
+   "nome": "Introdução A Ciências De Dados",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30",
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB53",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSB56",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB54",
+   "nome": "Introduction To Data Science",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30",
+    "MA70H"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB54",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSB57",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ICSB55",
+   "nome": "Ciência De Dados E Multidisciplinaridade",
+   "periodo": 8,
+   "conjunto": 968,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSH30",
+   "nome": "Introdução À Interação Humano- Computador",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSE20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSH31",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF63F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF63O",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH41",
+   "nome": "Avaliação Em Interação Humano- Computador",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSH41",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH42",
+   "nome": "Acessibilidade E Inclusão Digital",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSHX0",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH43",
+   "nome": "Trabalho Cooperativo Apoiado Por Computador",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSH30",
+    "ES70G"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSH43",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF68B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH44",
+   "nome": "Computação E Sociedade",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ES70G"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSHX1",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF66H",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH45",
+   "nome": "Tópicos Em Design De Interação",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSH45",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSH50",
+   "nome": "Fundamentos Em Interação",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSH51",
+   "nome": "Design De Interação",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSHX2",
+   "nome": "Computação E Pluralidade",
+   "periodo": 8,
+   "conjunto": 969,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EEY41",
+   "nome": "Engenharia Biomédica",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "EEC21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL68D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTA1",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEY42",
+   "nome": "Bioengenharia",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE32"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6DA",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTA2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEY43",
+   "nome": "Engenharia Médica",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE32"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6DB",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTA3",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEY44",
+   "nome": "Engenharia Clínica",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE32"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6DC",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTA4",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEY51",
+   "nome": "Instrumentação E Transdução Biomédica I",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEE32"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTA6",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEY52",
+   "nome": "Instrumentação E Transdução Biomédica Ii",
+   "periodo": 8,
+   "conjunto": 970,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTA7",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW43",
+   "nome": "Arquitetura Avançada De Computadores",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSW44",
+   "nome": "Arquitetura De Computadores Paralelos",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSW45",
+   "nome": "Robótica Móvel",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSF30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSW45",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW46",
+   "nome": "Engenharia De Sistemas Aplicada A Sistemas",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSO30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSW46",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW47",
+   "nome": "Ciberfísicos Sistemas De Tempo Real",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSO30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSW47",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW55",
+   "nome": "Tópicos Avançados Em Sistemas Embarcados",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSW41"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EES41",
+   "nome": "Introdução À Microeletrônica",
+   "periodo": 8,
+   "conjunto": 971,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSW40"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6EB",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM40",
+   "nome": "Html/Css",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSM49",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM41",
+   "nome": "Desenvolvimento De Aplicações Web",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30",
+    "CSE20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF6AE",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM42",
+   "nome": "Infraestrutura Para Tecnologia De Informação",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSM42",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AN",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM43",
+   "nome": "Programação Para Dispositivos Móveis E Sem Fio",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSE20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSM46",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6AG",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM44",
+   "nome": "Web Design",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 4,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "DI84D",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "DIN83A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSM45",
+   "nome": "Computação Em Nuvem",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSM45",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "DI84D",
+   "nome": "Web Design",
+   "periodo": 8,
+   "conjunto": 972,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "DIN83A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSB55",
+   "nome": "Ciência De Dados E Multidisciplinaridade",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CSG41",
+   "nome": "Tecnologias Da Informação Aplicada À Gestão",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSG41",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG42",
+   "nome": "Gestão Do Conhecimento",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GE60J",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ICSG42",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG43",
+   "nome": "Sistemas De Apoio À Decisão",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSI30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "IF67E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG44",
+   "nome": "Informática Em Saúde",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSG44",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BF",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG45",
+   "nome": "Sistemas De Informação Em Saúde",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSG45",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG47",
+   "nome": "Inteligência Coletiva E Redes Sociais Eletrônicas",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 6,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSG47",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG48",
+   "nome": "Modelagem De Processos De Negócios",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSG48",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSG70",
+   "nome": "Sistemas De Informação E Organizações",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSG70",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSL40",
+   "nome": "Estrutura De Linguagens De Programação",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSL40",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSL41",
+   "nome": "Construção De Compiladores",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSL41",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSU40",
+   "nome": "Desenvolvimento De Objetos De Aprendizagem",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSH30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSU40",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSU41",
+   "nome": "Design Instrucional",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSU41",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSU42",
+   "nome": "Informática Na Educação",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSU42",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSU43",
+   "nome": "Introdução À Educação À Distância",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSU43",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSU44",
+   "nome": "Sistemas Hipermidia Adaptativos",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "CSG20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSU44",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSW56",
+   "nome": "Programação Orientada A Notificações",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ICSI59",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ED70T",
+   "nome": "Libras A",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ED60F",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ED70G",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ED70V",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ED70U",
+   "nome": "Libras B",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 4
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ED70T"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EDU70J",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ED60G",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ED70H",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL64B",
+   "nome": "Eletromagnetismo",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FI73S",
+    "MA73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELB52",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET64C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET74E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL65B",
+   "nome": "Propagação De Ondas E Guias",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EL64B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL65F",
+   "nome": "Sensores E Atuadores",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEB22",
+    "EEC21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELP62",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL66B",
+   "nome": "Linhas De Transmissão E Antenas",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EL65B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELP64",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6AE",
+   "nome": "Introdução À Robótica",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EEC21"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTE4",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6BA",
+   "nome": "Comunicações Ópticas",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EL65B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTB4",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6BB",
+   "nome": "Processamento Da Informação",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL6BC",
+   "nome": "Tópicos Em Comunicações",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30",
+    "CSR31",
+    "EL66B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTB6",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6BD",
+   "nome": "Sistemas De Comunicação 1",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30",
+    "CSR31",
+    "EL66B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELTB1",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6BE",
+   "nome": "Sistemas De Comunicação 2",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30",
+    "CSR31",
+    "EL66B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL6CA",
+   "nome": "Gestão Da Qualidade",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA70H"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL6CB",
+   "nome": "Gestão De Projetos Tecnológicos",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB92",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL6CC",
+   "nome": "Gestão Estratégica De Tecnologia E Inovação",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL6CD",
+   "nome": "Confiabilidade",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MA70H"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL6EE",
+   "nome": "Fabricação Eletrônica",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH03",
+   "nome": "Design Thinking Para Desenvolvimento De Novos Produtos",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 3,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELSC01",
+   "nome": "Smart Challenges",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 120,
+    "chead": 90,
+    "total": 120
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELSP01",
+   "nome": "Smart Projects",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 120,
+    "chead": 90,
+    "total": 120
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ES70B",
+   "nome": "Psicologia Aplicada Ao Trabalho",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ES70P"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ES65A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES72C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7PA",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70J",
+   "nome": "A Presença Africana No Brasil: Tecnologia E",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60E",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES72E",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7XC",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70N",
+   "nome": "Trabalho História Da Técnica E Da Tecnologia",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60F",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES70S",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ES81A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "Teoria Das Ciências Humanas",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FCH7HA",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "Metropolização Contemporânea: Tecnologia E",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "Território História Geral Da Economia",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "Tecnologia, Trabalho E Saúde",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "Tecnopolíticas Da Sociedade Contemporânea",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GE70F",
+   "nome": "Gestão De Pessoas",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GE60B",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7G1",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "IF6BV",
+   "nome": "Compiladores",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSA31"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "IF6CJ",
+   "nome": "Bigdata - Processamento E Análise De Dados Em",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30",
+    "CSE20"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB61",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "IF6CK",
+   "nome": "Grande Escala Servidores E Aplicações Para Linux",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSR30"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "IF6CM",
+   "nome": "Nosql - Bancos De Dados Não Relacionais",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "CSB30"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSB60",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "LEM701",
+   "nome": "Francês Para Fins Acadêmicos Dd 1",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM702",
+   "nome": "Francês Para Fins Acadêmicos Dd 2",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM703",
+   "nome": "Francês Para Fins Acadêmicos Dd 3",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MA7AV",
+   "nome": "Tópicos Matemáticos Para Engenheiros",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QB70F",
+   "nome": "Desenvolvimento Sustentável",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB60E",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB74I",
+   "nome": "Ecologia",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB51F",
+     "cht": 32,
+     "grupo": null
+    },
+    {
+     "codigo": "QB60B",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70K",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB7AH",
+   "nome": "Educação Ambiental",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB77U",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "QB56F",
+     "cht": 32,
+     "grupo": null
+    },
+    {
+     "codigo": "QB60C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70L",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB7AI",
+   "nome": "Energia E Meio Ambiente",
+   "periodo": 8,
+   "conjunto": 973,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB54B",
+     "cht": 32,
+     "grupo": null
+    },
+    {
+     "codigo": "QB60D",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSX42",
+   "nome": "Trabalho De Conclusão De Curso 1",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 8,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "EEX22"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSXG0",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GE70H",
+   "nome": "Gestão Financeira",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GE60C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GE60H",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7F1",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB70E",
+   "nome": "Ciências Do Ambiente",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB60A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70J",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "QBI7CA",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CSX43",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "periodo": null,
+   "conjunto": null,
+   "modelo": "Trabalho De Conclusão",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 36,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "CSX42"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSXG1",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EEF31",
+   "nome": "Ética, Profissão E Cidadania",
+   "periodo": null,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 4,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELEF30",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELO91",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ET70H",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": null,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "IF60A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
+   "periodo": null,
+   "conjunto": null,
+   "modelo": "Enade Ingressante",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ]
+}

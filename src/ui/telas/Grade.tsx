@@ -17,6 +17,7 @@ import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGr
 import { Badge, Botao, Card, BarraProgressoComPreview, BalaoProgressoHover } from "../componentes";
 import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
+import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
   [2, "Segunda"],
@@ -208,17 +209,19 @@ function SecaoResumoImpactoGrade(props: {
 
   if (resumos.length === 0) return null;
 
-  const resumosNormaisPrimeiraParte = resumos.filter((r) =>
-    ["obrigatorias", "1159", "1161"].includes(r.categoriaId)
-  );
+  // categorias principais: obrigatórias mais as de conjunto único do curso
+  const cursoAtual = descricaoDoCurso(props.matriz ?? 981);
+  const chavesPrincipais = [
+    "obrigatorias",
+    ...cursoAtual.categorias.filter((c) => c.id !== "eletivas").map((c) => String(c.conjunto)),
+  ];
+  const resumosNormaisPrimeiraParte = resumos.filter((r) => chavesPrincipais.includes(r.categoriaId));
   const resumoTrilhasGeral = resumos.find((r) => r.categoriaId === "trilhas_geral");
-  const resumosSubTrilhas = resumos.filter(
-    (r) => !isNaN(Number(r.categoriaId)) && Number(r.categoriaId) >= 1162 && Number(r.categoriaId) <= 1173
-  );
+  const resumosSubTrilhas = resumos.filter((r) => ehTrilha(cursoAtual, r.categoriaId));
   const resumosNormaisSegundaParte = resumos.filter(
     (r) =>
-      !["obrigatorias", "1159", "1161", "trilhas_geral"].includes(r.categoriaId) &&
-      !(!isNaN(Number(r.categoriaId)) && Number(r.categoriaId) >= 1162 && Number(r.categoriaId) <= 1173)
+      ![...chavesPrincipais, "trilhas_geral"].includes(r.categoriaId) &&
+      !ehTrilha(cursoAtual, r.categoriaId)
   );
 
   return (

@@ -1,4 +1,5 @@
 import type { DisciplinaMatriz, Matriz } from "../tipos";
+import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
 
 /**
  * Monta os dois boards do fluxograma de progressão do curso, já com as posições
@@ -78,8 +79,9 @@ export interface Board {
 }
 
 function grupoDe(d: DisciplinaMatriz): GrupoCor {
-  if (d.conjunto === 1159) return "segundoEstrato";
-  if (d.conjunto && d.conjunto >= 1162 && d.conjunto <= 1173) return "trilha";
+  const curso = descricaoDoCurso(981);
+  if (categoriaSimples(curso, d.conjunto)?.id === "segundoEstrato") return "segundoEstrato";
+  if (ehTrilha(curso, d.conjunto)) return "trilha";
   const m = (d.modelo || "").toLowerCase();
   if (m.includes("básica") || m.includes("basica") || m.includes("cient")) return "basica";
   if (m.includes("human")) return "humanistica";
@@ -154,7 +156,9 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   const ehEnade = (c: string) => c.startsWith("ENADE");
 
   const obrigatorias = matriz.disciplinas.filter((d) => d.conjunto === null && !ehEnade(d.codigo));
-  const segundoEstrato = matriz.disciplinas.filter((d) => d.conjunto === 1159);
+  const curso = descricaoDoCurso(matriz);
+  const conjSegundoEstrato = curso.categorias.find((c) => c.id === "segundoEstrato")?.conjunto ?? null;
+  const segundoEstrato = matriz.disciplinas.filter((d) => d.conjunto === conjSegundoEstrato);
   const renderizadas = [...obrigatorias, ...segundoEstrato];
   const porCodigo = new Map(renderizadas.map((d) => [d.codigo, d]));
 
@@ -269,7 +273,7 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
 
   const trilhas = Object.entries(matriz.conjuntos)
-    .filter(([id]) => Number(id) >= 1162 && Number(id) <= 1173)
+    .filter(([id]) => ehTrilha(descricaoDoCurso(matriz), id))
     .map(([id, c]) => ({ id: Number(id), nome: c.nome }))
     .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
 

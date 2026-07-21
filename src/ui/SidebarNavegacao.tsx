@@ -33,32 +33,32 @@ export function SidebarNavegacao({
   };
 
   const itens: ItemNav[] = [
-        {
-          id: "situacao",
-          rotulo: "Minha Situação",
-          subrotulo: "Resumo, Catálogo e Trilhas",
-          bloqueado: !temPerfil,
-          motivoBloqueio: EXIGE_HISTORICO,
-          icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
-        },
-        {
-          id: "planejamento",
-          rotulo: "Planejamento",
-          subrotulo: "Grade & Matérias Abertas",
-          bloqueado: false,
-          icone: <IconBookOpen className="h-5 w-5 shrink-0" />,
-          badge: qtdTurmasSelecao > 0 ? qtdTurmasSelecao : undefined,
-        },
-        {
-          // a projeção parte das horas já cumpridas: sem histórico ela apenas
-          // reprojetaria o curso inteiro do zero, o que não informa nada
-          id: "simulador",
-          rotulo: "Simulador de Formatura",
-          subrotulo: "Previsão & Linha do Tempo",
-          bloqueado: !temPerfil,
-          motivoBloqueio: EXIGE_HISTORICO,
-          icone: !temPerfil ? <span>🔒</span> : <span>🎓</span>,
-        },
+    {
+      id: "situacao",
+      rotulo: "Minha Situação",
+      subrotulo: "Resumo, Catálogo e Trilhas",
+      bloqueado: !temPerfil,
+      motivoBloqueio: EXIGE_HISTORICO,
+      icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
+    },
+    {
+      id: "planejamento",
+      rotulo: "Planejamento",
+      subrotulo: "Grade & Matérias Abertas",
+      bloqueado: false,
+      icone: <IconBookOpen className="h-5 w-5 shrink-0" />,
+      badge: qtdTurmasSelecao > 0 ? qtdTurmasSelecao : undefined,
+    },
+    {
+      // a projeção parte das horas já cumpridas: sem histórico ela apenas
+      // reprojetaria o curso inteiro do zero, o que não informa nada
+      id: "simulador",
+      rotulo: "Simulador de Formatura",
+      subrotulo: "Previsão & Linha do Tempo",
+      bloqueado: !temPerfil,
+      motivoBloqueio: EXIGE_HISTORICO,
+      icone: !temPerfil ? <span>🔒</span> : <span>🎓</span>,
+    },
     {
       id: "match",
       rotulo: "Oásis Match",
