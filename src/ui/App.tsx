@@ -18,6 +18,7 @@ import { Botao, Badge } from "./componentes";
 import { SidebarNavegacao, type AbaPrincipal } from "./SidebarNavegacao";
 import { TelaSimuladorFormatura } from "./telas/TelaSimuladorFormatura";
 import { TelaAmigosMatch } from "./telas/TelaAmigosMatch";
+import { TelaGestaoInformacao } from "./telas/TelaGestaoInformacao";
 import {
   LogoUTFPR,
   IconUser,
@@ -766,6 +767,8 @@ export function App() {
                 semestreAtivo={semestreAtivo}
               />
             )}
+
+            {aba === "gi" && <TelaGestaoInformacao />}
 
             {aba === "match" && (
               <TelaAmigosMatch
