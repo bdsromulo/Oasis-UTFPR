@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IconBookOpen, IconUser } from "./icons";
 
-export type AbaPrincipal = "situacao" | "planejamento" | "simulador" | "match" | "gi";
+export type AbaPrincipal = "situacao" | "planejamento" | "simulador" | "match";
 
 interface SidebarNavegacaoProps {
   abaAtiva: AbaPrincipal;
@@ -9,6 +9,10 @@ interface SidebarNavegacaoProps {
   temPerfil: boolean;
   qtdTurmasSelecao: number;
 }
+
+/** Mensagem única para tudo que depende do Histórico Escolar. */
+const EXIGE_HISTORICO =
+  "Requer o seu Histórico Escolar. Importe o PDF nas Configurações para liberar.";
 
 export function SidebarNavegacao({
   abaAtiva,
@@ -18,29 +22,43 @@ export function SidebarNavegacao({
 }: SidebarNavegacaoProps) {
   const [colapsado, setColapsado] = useState(false);
 
-  const itens: { id: AbaPrincipal; rotulo: string; subrotulo?: string; bloqueado: boolean; motivoBloqueio?: string; icone: React.ReactNode; badge?: string | number }[] = [
-    {
-      id: "situacao",
-      rotulo: "Minha Situação",
-      subrotulo: "Resumo, Catálogo e Trilhas",
-      bloqueado: !temPerfil,
-      icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
-    },
-    {
-      id: "planejamento",
-      rotulo: "Planejamento",
-      subrotulo: "Grade & Matérias Abertas",
-      bloqueado: false,
-      icone: <IconBookOpen className="h-5 w-5 shrink-0" />,
-      badge: qtdTurmasSelecao > 0 ? qtdTurmasSelecao : undefined,
-    },
-    {
-      id: "simulador",
-      rotulo: "Simulador de Formatura",
-      subrotulo: "Previsão & Linha do Tempo",
-      bloqueado: false,
-      icone: <span>🎓</span>,
-    },
+  type ItemNav = {
+    id: AbaPrincipal;
+    rotulo: string;
+    subrotulo?: string;
+    bloqueado: boolean;
+    motivoBloqueio?: string;
+    icone: React.ReactNode;
+    badge?: string | number;
+  };
+
+  const itens: ItemNav[] = [
+        {
+          id: "situacao",
+          rotulo: "Minha Situação",
+          subrotulo: "Resumo, Catálogo e Trilhas",
+          bloqueado: !temPerfil,
+          motivoBloqueio: EXIGE_HISTORICO,
+          icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
+        },
+        {
+          id: "planejamento",
+          rotulo: "Planejamento",
+          subrotulo: "Grade & Matérias Abertas",
+          bloqueado: false,
+          icone: <IconBookOpen className="h-5 w-5 shrink-0" />,
+          badge: qtdTurmasSelecao > 0 ? qtdTurmasSelecao : undefined,
+        },
+        {
+          // a projeção parte das horas já cumpridas: sem histórico ela apenas
+          // reprojetaria o curso inteiro do zero, o que não informa nada
+          id: "simulador",
+          rotulo: "Simulador de Formatura",
+          subrotulo: "Previsão & Linha do Tempo",
+          bloqueado: !temPerfil,
+          motivoBloqueio: EXIGE_HISTORICO,
+          icone: !temPerfil ? <span>🔒</span> : <span>🎓</span>,
+        },
     {
       id: "match",
       rotulo: "Oásis Match",
@@ -48,13 +66,6 @@ export function SidebarNavegacao({
       bloqueado: false,
       icone: <span>🤝</span>,
       badge: "P2P",
-    },
-    {
-      id: "gi",
-      rotulo: "Gestão da Informação",
-      subrotulo: "Modelagem GI do projeto",
-      bloqueado: false,
-      icone: <span>🗂️</span>,
     },
   ];
 

@@ -17,15 +17,31 @@ export interface DadosCheckin {
   matriz: string;
 }
 
+/** Matriz vigente de cada curso coberto pela plataforma. */
+const MATRIZ_DO_CURSO: Record<string, { numero: string; rotulo: string; nota: string }> = {
+  "bsi-981": {
+    numero: "981",
+    rotulo: "Matriz 981 (Nova)",
+    nota: "Vigente para ingressantes a partir de 2023. Carga total de 3.240h com divisão por estratos.",
+  },
+  "eng-comp": {
+    numero: "844",
+    rotulo: "Matriz 844 (Antiga)",
+    nota: "Protótipo. Estrutura extraída da Figura 5 do PPC; sem estratos e sem exigência de trilhas como na BSI.",
+  },
+};
+
 export function TelaCheckin(props: {
-  onProcessarArquivo: (file: File) => void;
+  onProcessarArquivo: (file: File, dados: DadosCheckin) => void;
   onContinuarSemRegistro: (dados: DadosCheckin) => void;
+  onAbrirGestaoInformacao: () => void;
   carregando: boolean;
   erro: string | null;
 }) {
   const [campus, setCampus] = useState("curitiba");
   const [curso, setCurso] = useState("bsi-981");
-  const matriz = "981";
+  const infoMatriz = MATRIZ_DO_CURSO[curso] ?? MATRIZ_DO_CURSO["bsi-981"];
+  const matriz = infoMatriz.numero;
   const [buscaCampus, setBuscaCampus] = useState("");
   const [buscaCurso, setBuscaCurso] = useState("");
   const [openCampus, setOpenCampus] = useState(false);
@@ -42,12 +58,21 @@ export function TelaCheckin(props: {
   const listaCursos = [
     { id: "bsi-981", nome: "Bacharelado em Sistemas de Informação (BSI)", nomeCurto: "BSI", disponivel: true },
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
-    { id: "eng-comp", nome: "Engenharia de Computação", nomeCurto: "Eng. Computação", disponivel: false },
+    { id: "eng-comp", nome: "Engenharia de Computação (Matriz 844)", nomeCurto: "Eng. Computação", disponivel: false },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 pt-4">
+      {/* A modelagem de GI é sobre o projeto, não sobre o aluno: fica acessível
+          aqui, antes de escolher entre importar o histórico ou entrar sem ele. */}
+      <div className="flex justify-end">
+        <Botao variante="sutil" onClick={props.onAbrirGestaoInformacao} classe="!text-xs">
+          <span>🗂️</span>
+          <span>Gestão da Informação</span>
+        </Botao>
+      </div>
+
       <div className="text-center space-y-3">
         <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-utfpr-500/15 text-utfpr-600 dark:bg-utfpr-500/10 dark:text-utfpr-400 mb-1">
           <LogoUTFPR className="w-12 h-12" />
@@ -212,11 +237,11 @@ export function TelaCheckin(props: {
               onClick={() => setOpenMatriz(!openMatriz)}
               className="w-full flex items-center justify-between gap-2 rounded-xl border border-zinc-200/90 bg-zinc-50/80 px-3.5 py-2.5 text-left text-xs font-semibold text-zinc-800 shadow-2xs transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
             >
-              <span className="truncate font-display font-bold text-sm">
-                Matriz 981 (Nova)
-              </span>
+              <span className="truncate font-display font-bold text-sm">{infoMatriz.rotulo}</span>
               <div className="flex items-center gap-2 shrink-0">
-                <Badge tom="ok">Vigente</Badge>
+                <Badge tom={curso === "eng-comp" ? "aviso" : "ok"}>
+                  {curso === "eng-comp" ? "Protótipo" : "Vigente"}
+                </Badge>
                 <span className="text-zinc-400 text-[10px]">{openMatriz ? "▲" : "▼"}</span>
               </div>
             </button>
@@ -225,13 +250,13 @@ export function TelaCheckin(props: {
               <div className="absolute left-0 right-0 z-20 mt-1.5 rounded-xl border border-zinc-200/90 bg-white p-3 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="font-display font-bold text-sm text-zinc-900 dark:text-zinc-100">
-                    Matriz 981 (Nova)
+                    {infoMatriz.rotulo}
                   </span>
-                  <Badge tom="ok">Vigente</Badge>
+                  <Badge tom={curso === "eng-comp" ? "aviso" : "ok"}>
+                    {curso === "eng-comp" ? "Protótipo" : "Vigente"}
+                  </Badge>
                 </div>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                  Vigente para ingressantes a partir de 2023. Carga total de 3.240h com divisão por estratos.
-                </p>
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{infoMatriz.nota}</p>
               </div>
             )}
           </div>
@@ -267,7 +292,10 @@ export function TelaCheckin(props: {
                 type="file"
                 accept="application/pdf"
                 className="hidden"
-                onChange={(e) => e.target.files?.[0] && props.onProcessarArquivo(e.target.files[0])}
+                onChange={(e) =>
+                  e.target.files?.[0] &&
+                  props.onProcessarArquivo(e.target.files[0], { campus, curso, matriz })
+                }
               />
             </label>
           </div>

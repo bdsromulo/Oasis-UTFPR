@@ -92,3 +92,12 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 - `[ ]` **TASK-12 — Linha do Tempo Curricular e Análise de Progressão Longitudinal (Comparativo Multi-Histórico):**
   - Permitir que o estudante armazene mais de um Histórico Escolar (`perfil`) localmente em `localStorage`/`IndexedDB`, criando uma linha do tempo/histórico temporal de emissões (`[Histórico 2024.2] -> [Histórico 2025.1] -> [Histórico 2026.1]`).
   - Implementar tela ou modal de **Relatório de Progressão**, calculando e visualizando graficamente a variação longitudinal de Coeficiente de Rendimento (CR Absoluto/Normalizado), evolução de carga horária concluída por estrato e avanço nas trilhas semestre a semestre, sem expor nenhum dado à rede.
+- `[ ]` **TASK-14 — Validador de Turmas Independente da Fonte:**
+  - O `tools/validate_turmas.py` confere o JSON gerado **contra o PDF de origem**, então não roda em oferta que não veio de PDF. É o caso das turmas de Eng. Comp. de 2025.2, extraídas do backup HTML do Grade na Hora por `tools/parse_gnh_html.py`: hoje esse arquivo entra em `data/` sem rede de proteção.
+  - Escrever validador de **invariantes estruturais**, que valha para qualquer JSON de turmas independentemente da fonte (PDF, JSON da API do GNH ou HTML salvo): dia entre 2 e 7, turno em `M/T/N`, aula em faixa válida, sede reconhecida, código de turma único por disciplina, nenhuma turma com duas aulas no mesmo dia/turno/aula, e disciplina sem turma sinalizada.
+  - Distinguir **erro** de **aviso**: turma sem horário é legítima em TCC e disciplinas a distância (12 casos observados em Eng. Comp. 2025.2), enquanto dia/turno inválido é erro.
+
+- `[ ]` **TASK-15 — Alinhar e Retificar a Exibição de CR Absoluto e CR Normalizado:**
+  - No cabeçalho de *Minha Situação*, CR Absoluto e CR Normalizado aparecem lado a lado sem explicar a diferença entre eles nem por que divergem tanto (ex.: `0.7583` contra `0.5653` no mesmo histórico), e com pesos visuais diferentes — o CR Absoluto vem destacado em amarelo e o Normalizado em cor neutra, sugerindo hierarquia que não existe.
+  - Padronizar o tratamento visual dos dois, deixar explícito qual é usado na **priorização de vagas na matrícula**, e explicar em tooltip como cada um é calculado.
+  - Conferir os dois números contra o Histórico Escolar oficial antes de qualquer ajuste de layout: a retificação é de **exibição**, e o valor exibido tem de continuar sendo exatamente o que o Portal informa.

@@ -103,6 +103,7 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [giAberta, setGiAberta] = useState(false);
   const semestreAtivo = preferencias.semestreAtivo || "2026-2";
 
   const todasOfertas: Record<string, OfertaSemestre> = useMemo(() => {
@@ -311,11 +312,21 @@ export function App() {
     localStorage.setItem(CHAVE_LAYOUT, preferencias.layout);
   }, [preferencias]);
 
-  async function processarArquivo(arq: File) {
+  async function processarArquivo(arq: File, dados?: DadosCheckin) {
     setCarregando(true);
     setErro(null);
     try {
       const p = await analisarPDFParaPreview(arq);
+      // o curso escolhido no check-in precisa ser guardado também neste caminho,
+      // senão quem importa o PDF cai sempre na navegação da BSI
+      if (dados) {
+        setPreferencias((prefs) => ({
+          ...prefs,
+          campus: dados.campus,
+          curso: dados.curso,
+          matriz: dados.matriz,
+        }));
+      }
       confirmarNovoPerfil(p);
     } catch (e) {
       setErro(e instanceof Error ? e.message : String(e));
@@ -492,11 +503,22 @@ export function App() {
         </div>
       )}
 
-      {/* Se não tem perfil nem fez checkin (ou trocou de usuário), mostra Checkin */}
-      {!perfil && !checkinConcluido ? (
+      {/* Gestão da Informação é material sobre o projeto, não sobre o aluno:
+          abre a partir do check-in, sem exigir histórico nem entrar na sessão. */}
+      {giAberta ? (
+        <div className="space-y-5">
+          <Botao variante="sutil" onClick={() => setGiAberta(false)}>
+            <span>←</span>
+            <span>Voltar ao início</span>
+          </Botao>
+          <TelaGestaoInformacao />
+        </div>
+      ) : !perfil && !checkinConcluido ? (
+        /* Se não tem perfil nem fez checkin (ou trocou de usuário), mostra Checkin */
         <TelaCheckin
           onProcessarArquivo={processarArquivo}
           onContinuarSemRegistro={handleContinuarSemRegistro}
+          onAbrirGestaoInformacao={() => setGiAberta(true)}
           carregando={carregando}
           erro={erro}
         />
@@ -522,7 +544,7 @@ export function App() {
               </div>
             )}
 
-            {aba === "situacao" && (
+            {aba === "situacao" && perfil && (
               <div className="space-y-6">
                 {/* Sub-navegação em Minha Situação: Resumo, Catálogo e Trilhas */}
                 <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
@@ -750,7 +772,7 @@ export function App() {
               </div>
             )}
 
-            {aba === "simulador" && SIMULADOR_LIBERADO && (
+            {aba === "simulador" && SIMULADOR_LIBERADO && perfil && (
               <TelaSimuladorFormatura
                 perfil={perfil}
                 matriz={matriz}
@@ -758,8 +780,6 @@ export function App() {
                 semestreAtivo={semestreAtivo}
               />
             )}
-
-            {aba === "gi" && <TelaGestaoInformacao />}
 
             {aba === "match" && (
               <TelaAmigosMatch
