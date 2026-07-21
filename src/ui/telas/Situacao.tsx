@@ -186,9 +186,16 @@ export function TelaSituacao(props: {
   const painel = montarPainel(perfil, matriz);
   const obr = painel.obrigatorias;
 
-  // Cálculo de totais e excedentes das Trilhas no 3º Estrato (exigência total do 3º estrato: 345h)
+  // A exigência do bloco de trilhas varia por curso: BSI pede 3 trilhas dentro
+  // de 345h; Eng. Comp. pede 2 dentro de 270h. Ambos saem da descrição do curso
+  // e do conjunto agregador da matriz.
   const somaCumpridoTrilhas = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
-  const totalExigido3Estrato = 345;
+  const cursoDesc = descricaoDoCurso(matriz);
+  const totalExigido3Estrato =
+    (cursoDesc.agregadorTrilhas
+      ? matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch
+      : undefined) ?? 345;
+  const trilhasExigidas = cursoDesc.trilhasExigidas;
   const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
 
   return (
@@ -412,17 +419,17 @@ export function TelaSituacao(props: {
             <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-100 pb-3 dark:border-zinc-800">
               <div>
                 <h2 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  Trilhas em Computação (3º Estrato)
+                  {cursoDesc.rotuloBlocoTrilhas}
                 </h2>
                 <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  Cumprimento total no 3º estrato. Exigência do curso: validação integral de <strong>3 trilhas distintas</strong> (mínimo de 345h).
+                  Exigência do curso: validação integral de <strong>{trilhasExigidas} trilhas distintas</strong>, com mínimo de {totalExigido3Estrato}h no total.
                 </p>
               </div>
               <Badge
-                tom={painel.trilhasValidadas >= 3 ? "ok" : "acento"}
+                tom={painel.trilhasValidadas >= trilhasExigidas ? "ok" : "acento"}
                 classe="px-3 py-1 text-xs font-bold shrink-0"
               >
-                {painel.trilhasValidadas} de 3 trilhas validadas
+                {painel.trilhasValidadas} de {trilhasExigidas} trilhas validadas
               </Badge>
             </div>
 
@@ -441,7 +448,7 @@ export function TelaSituacao(props: {
                 <div className="mb-1 flex items-baseline justify-between">
                   <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Trilhas Concluídas:</span>
                   <span className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                    {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ 3</span>
+                    {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ {trilhasExigidas}</span>
                   </span>
                 </div>
                 <Barra valor={painel.trilhasValidadas} max={3} destaque={painel.trilhasValidadas > 0} />

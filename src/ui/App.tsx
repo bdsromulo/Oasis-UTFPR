@@ -515,7 +515,7 @@ export function App() {
             onSelecionarAba={setAba}
             temPerfil={!!perfil}
             qtdTurmasSelecao={selecao.length}
-            curso={cursoAtivo}
+
           />
 
           {/* coluna principal */}

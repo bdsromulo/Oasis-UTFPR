@@ -84,3 +84,43 @@ describe("regressão: a BSI não muda com a busca por equivalente", () => {
     expect(dependem).toHaveLength(0);
   });
 });
+
+describe("resumo do histórico de Eng. Comp.", () => {
+  // Formatos reais observados nos dois históricos de Eng. Comp. disponíveis.
+  // Sem dado pessoal: só as linhas de resumo, que são estrutura de curso.
+  const linhaConjunto =
+    /^(\d{3,4})\s+(?:\(\*\)\s+)?(.+?)\s+(\d{1,2})\s+(\d{1,2})\s+([\d,]+)\s+(\d+)\s+(\d+)\s+(Faltantes|\d+)(?:\s+(\d+))?$/;
+  const linhaEletiva = /^Eletiva\s+(\d+)\s+\d{1,2}\s+\d{1,2}\s+(?:\d+\s+)?(\d+)\s+(\d+)\s+(\d+)$/;
+
+  it("lê conjunto de 3 dígitos e período final de 2", () => {
+    const m = "959 (*) Optativas 8 10 18 270 180 Faltantes 90".match(linhaConjunto);
+    expect(m).not.toBeNull();
+    expect(m![1]).toBe("959");
+    expect(m![4]).toBe("10"); // período final
+    expect(m![6]).toBe("270"); // CH obrigatória
+  });
+
+  it("continua lendo o formato da BSI, de 4 dígitos", () => {
+    const m = "1159 Segundo Estrato 3 6 24 360 225 135 0".match(linhaConjunto);
+    expect(m).not.toBeNull();
+    expect(m![1]).toBe("1159");
+    expect(m![9]).toBe("0");
+  });
+
+  it("tolera a última coluna ausente, que às vezes vai para outra linha", () => {
+    const m = "966 Trilha Em Otim, Mod Analíticos E Simul 8 10 2 90 0 90".match(linhaConjunto);
+    expect(m).not.toBeNull();
+    expect(m![6]).toBe("90");
+    expect(m![9]).toBeUndefined();
+  });
+
+  it("lê a linha de eletiva dos dois cursos, com e sem a coluna CHS", () => {
+    const bsi = "Eletiva 105 4 8 4 195 0 105".match(linhaEletiva);
+    expect(bsi).not.toBeNull();
+    expect([bsi![1], bsi![2], bsi![3], bsi![4]]).toEqual(["105", "195", "0", "105"]);
+
+    const eng = "Eletiva 90 8 10 30 60 30".match(linhaEletiva);
+    expect(eng).not.toBeNull();
+    expect([eng![1], eng![2], eng![3], eng![4]]).toEqual(["90", "30", "60", "30"]);
+  });
+});

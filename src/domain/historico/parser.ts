@@ -169,23 +169,44 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
         eletivasLinhas.push(l);
         break;
       case "resumoOptativas": {
+        // BSI: "1159 Segundo Estrato 3 6 24 360 225 135 0"
+        // Eng. Comp.: "959 (*) Optativas 8 10 18 270 180 Faltantes 90"
+        // O identificador tem 3 ou 4 dígitos e o período final chega a 10.
+        //
+        // A última coluna (CH Validada) é opcional porque nem sempre chega junto
+        // da linha: em alguns PDFs ela é renderizada com um deslocamento vertical
+        // e o agrupamento por Y a manda para uma linha própria. Sem tolerar isso,
+        // um histórico de Eng. Comp. inteiro sai com zero conjuntos.
         const m = l.match(
-          /^(\d{4})\s+(?:\(\*\)\s+)?(.+?)\s+(\d)\s+(\d)\s+([\d,]+)\s+(\d+)\s+(\d+)\s+(Faltantes|\d+)\s+(\d+)$/,
+          /^(\d{3,4})\s+(?:\(\*\)\s+)?(.+?)\s+(\d{1,2})\s+(\d{1,2})\s+([\d,]+)\s+(\d+)\s+(\d+)\s+(Faltantes|\d+)(?:\s+(\d+))?$/,
         );
         if (m) {
+          const chObrigatoria = parseInt(m[6]);
+          const chFaltante = m[8] === "Faltantes" ? ("faltantes" as const) : parseInt(m[8]);
+          // sem a coluna, o conjunto conta como validado quando nada falta
+          const chValidada =
+            m[9] !== undefined
+              ? parseInt(m[9])
+              : chFaltante === 0
+                ? chObrigatoria
+                : 0;
           perfil.resumoConjuntos.push({
             conjunto: m[1],
             nome: m[2].trim(),
-            chObrigatoria: parseInt(m[6]),
+            chObrigatoria,
             chCursadaAprovada: parseInt(m[7]),
-            chFaltante: m[8] === "Faltantes" ? "faltantes" : parseInt(m[8]),
-            chValidada: parseInt(m[9]),
+            chFaltante,
+            chValidada,
           } satisfies ResumoConjunto);
         }
         break;
       }
       case "eletivas": {
-        const m = l.match(/^Eletiva\s+(\d+)\s+\d+\s+\d+\s+\d+\s+(\d+)\s+(\d+)\s+(\d+)$/);
+        // BSI:        "Eletiva 105 4 8 4 195 0 105"  (traz a coluna CHS)
+        // Eng. Comp.: "Eletiva 90 8 10 30 60 30"     (não traz)
+        const m = l.match(
+          /^Eletiva\s+(\d+)\s+\d{1,2}\s+\d{1,2}\s+(?:\d+\s+)?(\d+)\s+(\d+)\s+(\d+)$/,
+        );
         if (m) {
           perfil.eletivas = {
             chTotal: parseInt(m[1]),
