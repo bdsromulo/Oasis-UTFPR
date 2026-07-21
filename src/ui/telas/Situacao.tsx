@@ -125,25 +125,25 @@ export function TelaSituacao(props: {
     return mapa;
   }, [perfil, matriz]);
 
-  const estagio1 = useMemo(() => {
-    if (!perfil) return false;
-    return perfil.cursadas.some(
-      (c) =>
-        (c.codigo === "ICSX51" || c.nome.toLowerCase().includes("estágio 1") || c.nome.toLowerCase().includes("estagio 1")) &&
-        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
-    );
-  }, [perfil]);
+  // Os estágios variam por curso: BSI tem dois de 200h, Eng. Comp. um de 400h.
+  const estagios = useMemo(() => {
+    const doCurso = descricaoDoCurso(matriz).estagios;
+    const concluida = (c: { situacao: string }) =>
+      c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado";
+    return doCurso.map((e) => ({
+      ...e,
+      feito: Boolean(
+        perfil?.cursadas.some(
+          (c) =>
+            (c.codigo === e.codigo ||
+              c.nome.toLowerCase().includes(e.rotulo.toLowerCase())) &&
+            concluida(c),
+        ),
+      ),
+    }));
+  }, [perfil, matriz]);
 
-  const estagio2 = useMemo(() => {
-    if (!perfil) return false;
-    return perfil.cursadas.some(
-      (c) =>
-        (c.codigo === "ICSX52" || c.nome.toLowerCase().includes("estágio 2") || c.nome.toLowerCase().includes("estagio 2")) &&
-        (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado"),
-    );
-  }, [perfil]);
-
-  const qtdEstagio = (estagio1 ? 1 : 0) + (estagio2 ? 1 : 0);
+  const qtdEstagio = estagios.filter((e) => e.feito).length;
 
   const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
   // A carga aprovada sai do Quadro Resumo do histórico, que já aplica os tetos por
@@ -348,44 +348,34 @@ export function TelaSituacao(props: {
             <div className="mb-2 flex items-baseline justify-between">
               <span className="font-display text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                 Estágio {qtdEstagio}
-                <span className="font-sans text-sm font-normal text-zinc-400"> / 2</span>
+                <span className="font-sans text-sm font-normal text-zinc-400"> / {estagios.length}</span>
               </span>
-              {qtdEstagio === 2 && (
+              {qtdEstagio === estagios.length && estagios.length > 0 && (
                 <Badge tom="ok" icon={<IconCheck className="h-3.5 w-3.5" />}>
                   concluído
                 </Badge>
               )}
             </div>
 
-            {/* 2 blocos grossos tipo Stories do Instagram */}
+            {/* um bloco por estágio exigido pelo curso */}
             <div className="flex items-center gap-2 pt-1">
-              <div className="flex-1 space-y-1">
-                <div
-                  className={`h-3.5 rounded-full transition-colors ${
-                    estagio1
-                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
-                      : "bg-zinc-200/80 dark:bg-zinc-800"
-                  }`}
-                />
-                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Estágio 1 (200h)
-                </span>
-              </div>
-              <div className="flex-1 space-y-1">
-                <div
-                  className={`h-3.5 rounded-full transition-colors ${
-                    estagio2
-                      ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
-                      : "bg-zinc-200/80 dark:bg-zinc-800"
-                  }`}
-                />
-                <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Estágio 2 (200h)
-                </span>
-              </div>
+              {estagios.map((e) => (
+                <div key={e.codigo} className="flex-1 space-y-1">
+                  <div
+                    className={`h-3.5 rounded-full transition-colors ${
+                      e.feito
+                        ? "bg-gradient-to-r from-utfpr-500 to-amber-500 shadow-xs"
+                        : "bg-zinc-200/80 dark:bg-zinc-800"
+                    }`}
+                  />
+                  <span className="block text-[10px] font-bold text-center uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    {e.rotulo} ({e.ch}h)
+                  </span>
+                </div>
+              ))}
             </div>
             <div className="mt-3 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Estágio supervisionado obrigatório para conclusão do BSI
+              Estágio supervisionado obrigatório para a conclusão do curso
             </div>
           </div>
 

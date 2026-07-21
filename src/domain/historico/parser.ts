@@ -9,8 +9,11 @@
 //  - Anomalia não explicada vira aviso no perfil — erro alto > erro silencioso.
 import type { DisciplinaCursada, PerfilAluno, ResumoConjunto, Situacao } from "../tipos";
 
+// O primeiro campo aceita 3 dígitos porque a carga horária pode passar de 99:
+// o Estágio Supervisionado de Eng. Comp. tem 400h, e com o limite de 2 dígitos a
+// linha inteira deixava de casar — a disciplina sumia do histórico em silêncio.
 const RE_NUCLEO =
-  /(?:^|\s)(\d{1,2})\s+(\d{1,3})\s+(\d{1,3})\s+([\d,]+|\*)\s+([\d,]+|\*)\s+([12])\s*(20\d{2})/;
+  /(?:^|\s)(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})\s+([\d,]+|\*)\s+([\d,]+|\*)\s+([12])\s*(20\d{2})/;
 const RE_CODIGO = /^[A-Z]{2,4}[0-9][A-Z0-9]{1,3}$|^[A-Z]{3,5}[0-9]{2}[A-Z0-9]?$/;
 const RE_TURMA = /^[A-Z]\d{2}$/;
 

@@ -36,6 +36,11 @@ export interface DescricaoCurso {
   trilhasExigidas: number;
   /** categorias de conjunto único, fora do bloco de trilhas */
   categorias: CategoriaSimples[];
+  /**
+   * Estágio curricular, que varia em quantidade e carga por curso: a BSI tem
+   * dois de 200h, Eng. Comp. tem um único de 400h.
+   */
+  estagios: { codigo: string; rotulo: string; ch: number }[];
   /** título do bloco que agrega todas as trilhas, no resumo de grade */
   rotuloBlocoTrilhas: string;
   /**
@@ -62,6 +67,10 @@ export const BSI_981: DescricaoCurso = {
     // seria confundida com trilha, virando uma 13ª no painel do 3º estrato
     { id: "eletivas", conjunto: 1199, rotulo: "eletiva", rotuloLongo: "Eletivas" },
   ],
+  estagios: [
+    { codigo: "ICSX51", rotulo: "Estágio 1", ch: 200 },
+    { codigo: "ICSX52", rotulo: "Estágio 2", ch: 200 },
+  ],
   rotuloBlocoTrilhas: "Trilhas em Computação (3º Estrato - Geral)",
   sufixoTrilha: " (3º Estrato)",
   naoValidaveis: [],
@@ -74,6 +83,7 @@ export const ENG_COMP_844: DescricaoCurso = {
   // Eng. Comp. não tem estratos nem ciclo de humanidades: todo o bloco
   // optativo é trilha ou optativa isolada.
   categorias: [],
+  estagios: [{ codigo: "CSX54", rotulo: "Estágio Supervisionado", ch: 400 }],
   rotuloBlocoTrilhas: "Optativas em Trilhas e Isoladas",
   sufixoTrilha: "",
   naoValidaveis: [973],
