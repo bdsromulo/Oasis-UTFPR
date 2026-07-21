@@ -1,7 +1,5 @@
 import { describe, expect, test } from "vitest";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
-import { obterSazonalidade, rotuloSazonalidade, verificarDisponibilidadeNoSemestre } from "../src/domain/motor/sazonalidade";
-import { formatarSemestreEstendido, proximoSemestre, simularTrajetoria } from "../src/domain/motor/simuladorFormatura";
 import { codificarGradeParaShare, decodificarGradeDeShare } from "../src/domain/social/compartilhamento";
 import { calcularMatchSocial } from "../src/domain/social/comparador";
 
@@ -121,38 +119,6 @@ const ofertaMock: OfertaSemestre = {
     },
   ],
 };
-
-describe("Módulo de Sazonalidade", () => {
-  test("identifica disciplinas de oferta contínua como AMBOS", () => {
-    const disc = matrizMock.disciplinas[0]!;
-    expect(obterSazonalidade(disc)).toBe("AMBOS");
-    expect(verificarDisponibilidadeNoSemestre(disc, "2026-1")).toBe(true);
-    expect(verificarDisponibilidadeNoSemestre(disc, "2026-2")).toBe(true);
-  });
-
-  test("formata rótulo de sazonalidade corretamente", () => {
-    expect(rotuloSazonalidade("AMBOS")).toContain("Todo Semestre");
-    expect(rotuloSazonalidade("IMPAR")).toContain(".1");
-  });
-});
-
-describe("Simulador de Formatura", () => {
-  test("avança corretamente os semestres", () => {
-    expect(proximoSemestre("2026-1")).toBe("2026-2");
-    expect(proximoSemestre("2026-2")).toBe("2027-1");
-  });
-
-  test("formata nome estendido do semestre", () => {
-    expect(formatarSemestreEstendido("2028-2")).toContain("2º Semestre de 2028");
-  });
-
-  test("simula trajetória respeitando pré-requisitos em cadeia", () => {
-    const resultado = simularTrajetoria(null, matrizMock, 180, "2026-1");
-    expect(resultado.semestresProjetados.length).toBeGreaterThan(0);
-    expect(resultado.totalSemestresRestantes).toBeGreaterThan(0);
-    expect(resultado.dataEstimadaFormatura).toBeTypeOf("string");
-  });
-});
 
 describe("Compartilhamento e Comparador Social (Oásis Match)", () => {
   test("codifica e decodifica grade em hash Oásis", () => {

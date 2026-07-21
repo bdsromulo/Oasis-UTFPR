@@ -38,12 +38,8 @@ export function SidebarNavegacao({
       id: "simulador",
       rotulo: "Simulador de Formatura",
       subrotulo: "Previsão & Linha do Tempo",
-      // em desenvolvimento: a previsão ainda não foi validada contra casos reais,
-      // então fica bloqueada para todos — inclusive com histórico importado
-      bloqueado: true,
-      motivoBloqueio: "Em desenvolvimento. A previsão de formatura ainda está sendo validada e será liberada em uma próxima versão.",
-      icone: <span>🔒</span>,
-      badge: "Em breve",
+      bloqueado: false,
+      icone: <span>🎓</span>,
     },
     {
       id: "match",
