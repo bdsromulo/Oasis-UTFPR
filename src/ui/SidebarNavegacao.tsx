@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IconBookOpen, IconUser } from "./icons";
 
-export type AbaPrincipal = "situacao" | "planejamento" | "simulador" | "match";
+export type AbaPrincipal = "situacao" | "planejamento" | "simulador" | "match" | "gi";
 
 interface SidebarNavegacaoProps {
   abaAtiva: AbaPrincipal;
@@ -52,6 +52,13 @@ export function SidebarNavegacao({
       bloqueado: false,
       icone: <span>🤝</span>,
       badge: "P2P",
+    },
+    {
+      id: "gi",
+      rotulo: "Gestão da Informação",
+      subrotulo: "Modelagem GI do projeto",
+      bloqueado: false,
+      icone: <span>🗂️</span>,
     },
   ];
 
