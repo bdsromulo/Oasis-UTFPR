@@ -60,6 +60,81 @@ export function Barra(props: { valor: number; max: number; cor?: string; classe?
   );
 }
 
+/**
+ * Rosca de progresso: o mesmo dado da <Barra>, porém com o percentual legível no
+ * centro. O traço é desenhado por stroke-dasharray sobre um círculo, começando às
+ * 12h (rotação de -90°), sem dependência de biblioteca de gráficos.
+ */
+export function Rosca(props: {
+  valor: number;
+  max: number;
+  tamanho?: number;
+  espessura?: number;
+  cor?: string;
+  rotuloCentro?: ReactNode;
+  legenda?: ReactNode;
+  classe?: string;
+}) {
+  const tamanho = props.tamanho ?? 128;
+  const espessura = props.espessura ?? 12;
+  const fracao = props.max > 0 ? Math.min(1, Math.max(0, props.valor / props.max)) : 0;
+  const pct = Math.round(fracao * 100);
+
+  const raio = (tamanho - espessura) / 2;
+  const circunferencia = 2 * Math.PI * raio;
+  const centro = tamanho / 2;
+  const completo = fracao >= 1;
+
+  return (
+    <div className={`flex items-center gap-4 ${props.classe ?? ""}`}>
+      <div className="relative shrink-0" style={{ width: tamanho, height: tamanho }}>
+        <svg
+          width={tamanho}
+          height={tamanho}
+          viewBox={`0 0 ${tamanho} ${tamanho}`}
+          role="img"
+          aria-label={`Progresso: ${pct}% (${props.valor} de ${props.max})`}
+          className="-rotate-90"
+        >
+          <circle
+            cx={centro}
+            cy={centro}
+            r={raio}
+            fill="none"
+            strokeWidth={espessura}
+            className="stroke-zinc-200/80 dark:stroke-zinc-800/80"
+          />
+          <circle
+            cx={centro}
+            cy={centro}
+            r={raio}
+            fill="none"
+            strokeWidth={espessura}
+            strokeLinecap="round"
+            strokeDasharray={circunferencia}
+            strokeDashoffset={circunferencia * (1 - fracao)}
+            className={`transition-all duration-500 ${
+              props.cor ?? (completo ? "stroke-emerald-500" : "stroke-utfpr-500")
+            }`}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="font-display text-2xl font-black leading-none tracking-tight text-zinc-900 dark:text-zinc-100">
+            {pct}
+            <span className="text-sm font-bold text-zinc-400">%</span>
+          </span>
+          {props.rotuloCentro && (
+            <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              {props.rotuloCentro}
+            </span>
+          )}
+        </div>
+      </div>
+      {props.legenda && <div className="min-w-0">{props.legenda}</div>}
+    </div>
+  );
+}
+
 export function Botao(props: {
   children: ReactNode;
   onClick?: (e?: any) => void;
