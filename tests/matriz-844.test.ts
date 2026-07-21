@@ -107,3 +107,54 @@ describe("matriz 844 — schema compatível com o app", () => {
     }
   });
 });
+
+describe("matriz 844 — catálogo de conjuntos", () => {
+  it("traz o agregador de optativas e as trilhas, com a carga de cada", () => {
+    // Fonte: seção "Resumo Optativas" do Histórico Escolar, que é o único
+    // documento que publica os identificadores de conjunto de Eng. Comp.
+    const conj = m.conjuntos as Record<string, any>;
+    const agregador = conj["959"];
+    expect(agregador, "conjunto agregador 959 deveria existir").toBeDefined();
+    expect(agregador.ch).toBe(270);
+    expect(agregador.agregador).toBe(true);
+
+    const trilhas = Object.entries(conj).filter(([, c]: any) => !c.agregador);
+    expect(trilhas.length).toBeGreaterThanOrEqual(13);
+    for (const [id, c] of trilhas as any) {
+      expect(c.ch, `conjunto ${id} deveria exigir 90h`).toBe(90);
+    }
+  });
+
+  it("tem as trilhas próprias de Eng. Comp., que não são as da BSI", () => {
+    const nomes = Object.values(m.conjuntos as Record<string, any>).map((c: any) =>
+      c.nome.toLowerCase(),
+    );
+    // exclusivas de Eng. Comp. — não existem nos conjuntos 1162–1173 da 981
+    for (const esperada of ["controle", "física", "biomédica"]) {
+      expect(
+        nomes.some((n) => n.includes(esperada)),
+        `faltou a trilha de ${esperada}`,
+      ).toBe(true);
+    }
+    // exclusivas da BSI — não podem aparecer aqui
+    for (const indevida of ["gestão de sistemas", "linguagens de programação"]) {
+      expect(
+        nomes.some((n) => n.includes(indevida)),
+        `trilha ${indevida} é da BSI e não deveria estar na 844`,
+      ).toBe(false);
+    }
+  });
+
+  it("exige duas trilhas, e não três como a BSI", () => {
+    expect(m.regra_optativas.trilhas_exigidas).toBe(2);
+    expect(m.regra_optativas.ch_total).toBe(270);
+    expect(m.regra_optativas.ch_por_trilha).toBe(90);
+  });
+
+  it("não carrega nenhum dado pessoal do histórico que serviu de fonte", () => {
+    const bruto = JSON.stringify(m).toLowerCase();
+    for (const termo of ["victor", "damasceno", "cursada", "validada", "faltante"]) {
+      expect(bruto.includes(termo), `vazou "${termo}" do histórico`).toBe(false);
+    }
+  });
+});

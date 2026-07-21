@@ -13,15 +13,132 @@
   "ch_total_ppc": 3240
  },
  "conjuntos": {
-  "OPT": {
-   "nome": "Optativas (Trilhas e Isoladas)",
+  "959": {
+   "nome": "Optativas",
    "ch": 270,
-   "trilhas_exigidas": 2,
-   "ch_por_trilha": 90,
-   "periodo_inicial": 7,
+   "periodo_inicial": 8,
    "periodo_final": 10,
-   "ch_semanal": null
+   "ch_semanal": 18,
+   "agregador": true
+  },
+  "960": {
+   "nome": "Trilha Em Controle",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "961": {
+   "nome": "Trilha Em Processamento Gráfico",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "962": {
+   "nome": "Trilhas Em Sistemas Inteligentes",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "963": {
+   "nome": "Trilha Em Algoritmos E Complexidade",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "964": {
+   "nome": "Trilha Em Redes De Computadores",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "965": {
+   "nome": "Trilha Em Engenharia De Software",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "966": {
+   "nome": "Trilha Em Otim, Mod Analíticos E Simul",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "967": {
+   "nome": "Trilha Em Física",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "968": {
+   "nome": "Trilha Em Banco De Dados",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "969": {
+   "nome": "Trilha Em Interação Hum-Comp",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "970": {
+   "nome": "Trilha Em Engenharia Biomédica",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "971": {
+   "nome": "Trilha Em Sistemas Embarcados",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "972": {
+   "nome": "Trilha Em Desenv Bas Em Plataforma",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
+  },
+  "973": {
+   "nome": "Optativas Isoladas",
+   "ch": 90,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch_semanal": 2,
+   "agregador": false
   }
+ },
+ "regra_optativas": {
+  "conjunto_agregador": "959",
+  "ch_total": 270,
+  "trilhas_exigidas": 2,
+  "ch_por_trilha": 90
  },
  "eletiva": {
   "ch": 90,

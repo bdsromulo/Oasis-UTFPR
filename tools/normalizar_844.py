@@ -18,21 +18,17 @@ Entradas:
 
 Saída: matriz-844.json no formato de `Matriz` (src/domain/tipos.ts).
 
---------------------------------------------------------------------------
-LIMITE CONHECIDO DA FONTE — composição das trilhas
---------------------------------------------------------------------------
-A Figura 6 do PPC lista as trilhas e as disciplinas de cada uma **apenas por
-nome**: não há um único código de disciplina na figura. Por isso `conjuntos`
-sai com as categorias agregadas que o PPC declara em texto (optativas e
-eletivas), sem a composição disciplina-a-disciplina de cada trilha.
+O catálogo de trilhas vem de `conjuntos-844.json`, extraído da seção "Resumo
+Optativas" do Histórico Escolar por `tools/extrair_conjuntos_844.py` — a Figura 6
+do PPC não serve, porque lista as trilhas só por nome, sem código nem
+identificador de conjunto.
 
-Consequência prática: dá para montar Planejamento e progresso de obrigatórias,
-mas não progresso por trilha. Resolver isso exige casar os nomes da Figura 6
-contra a oferta de turmas — trabalho à parte, com a mesma fragilidade de
-casamento por nome já vista aqui.
+LIMITE QUE PERMANECE: sabemos quais trilhas existem e quanto cada uma exige, mas
+não quais disciplinas compõem cada trilha. O histórico só associa disciplina a
+trilha para as que o aluno cursou. A composição completa exigiria outra fonte.
 
 Uso:
-    python tools/normalizar_844.py <matriz_ppc.json> <saida.json> <turmas1.json> [turmas2.json ...]
+    python tools/normalizar_844.py <matriz_ppc.json> <conjuntos.json> <saida.json> <turmas1.json> [turmas2.json ...]
 """
 
 from __future__ import annotations
@@ -94,14 +90,16 @@ EQUIVALENCIAS_MANUAIS: dict[str, str] = {
 
 
 def main() -> int:
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 5:
         print(__doc__)
         return 1
-    ppc_path, saida_path = sys.argv[1], sys.argv[2]
-    turmas_paths = sys.argv[3:]
+    ppc_path, conjuntos_path, saida_path = sys.argv[1], sys.argv[2], sys.argv[3]
+    turmas_paths = sys.argv[4:]
 
     with open(ppc_path, encoding="utf-8") as f:
         ppc = json.load(f)
+    with open(conjuntos_path, encoding="utf-8") as f:
+        catalogo = json.load(f)["conjuntos"]
 
     ofertas = []
     for caminho in turmas_paths:
@@ -195,18 +193,30 @@ def main() -> int:
             "soma": ch_obrigatorias + CH_OPTATIVAS + CH_ELETIVAS,
             "ch_total_ppc": ch_obrigatorias + CH_OPTATIVAS + CH_ELETIVAS,
         },
-        # Sem composição por trilha (ver limite acima): ficam as categorias
-        # agregadas que o PPC declara em texto.
+        # Catálogo oficial de conjuntos, vindo do Resumo Optativas do histórico.
+        # O agregador (959) carrega a exigência total; os demais são as trilhas
+        # e as optativas isoladas, de 90h cada.
         "conjuntos": {
-            "OPT": {
-                "nome": "Optativas (Trilhas e Isoladas)",
-                "ch": CH_OPTATIVAS,
-                "trilhas_exigidas": TRILHAS_EXIGIDAS,
-                "ch_por_trilha": CH_POR_TRILHA,
-                "periodo_inicial": 7,
-                "periodo_final": 10,
-                "ch_semanal": None,
+            ident: {
+                "nome": c["nome"],
+                "ch": c["ch"],
+                "periodo_inicial": c["periodo_inicial"],
+                "periodo_final": c["periodo_final"],
+                "ch_semanal": c["ch_semanal"],
+                "agregador": c["agregador"],
             }
+            for ident, c in sorted(catalogo.items())
+        },
+        # O PPC exige duas trilhas completas; o próprio histórico confirma, ao
+        # dizer que a carga restante é recalculada "quando 2 das subáreas
+        # for(em) validada(s)".
+        "regra_optativas": {
+            "conjunto_agregador": next(
+                (k for k, c in catalogo.items() if c["agregador"]), None
+            ),
+            "ch_total": CH_OPTATIVAS,
+            "trilhas_exigidas": TRILHAS_EXIGIDAS,
+            "ch_por_trilha": CH_POR_TRILHA,
         },
         "eletiva": {
             "ch": CH_ELETIVAS,
