@@ -2,7 +2,7 @@ import { useMemo, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 import { montarPainel } from "../../domain/motor/situacao";
 import { nomeDeEletiva } from "../../domain/eletivas";
-import { Badge, Barra, Card } from "../componentes";
+import { Badge, Barra, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
 
@@ -238,16 +238,28 @@ export function TelaSituacao(props: {
           </div>
         </div>
 
-        <div className="w-full lg:flex-1 lg:min-w-[240px] lg:max-w-md">
-          <div className="mb-1.5 flex items-baseline justify-between text-xs">
-            <span className="font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Progresso Geral do Curso
-            </span>
-            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">
-              {horasAprovadasGlobal} <span className="text-zinc-400 font-normal">/ {horasTotalPPC}h</span>
-            </span>
-          </div>
-          <Barra valor={horasAprovadasGlobal} max={horasTotalPPC} />
+        <div className="w-full lg:w-auto lg:shrink-0">
+          <Rosca
+            valor={horasAprovadasGlobal}
+            max={horasTotalPPC}
+            tamanho={116}
+            espessura={11}
+            rotuloCentro="do curso"
+            legenda={
+              <div>
+                <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Progresso Geral do Curso
+                </span>
+                <div className="mt-1 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+                  {horasAprovadasGlobal}
+                  <span className="font-sans text-xs font-semibold text-zinc-400"> / {horasTotalPPC}h</span>
+                </div>
+                <p className="mt-1 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+                  Faltam {Math.max(0, horasTotalPPC - horasAprovadasGlobal)}h para a integralização
+                </p>
+              </div>
+            }
+          />
         </div>
       </div>
 
