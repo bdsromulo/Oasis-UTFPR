@@ -180,67 +180,73 @@ describe("simulação de formatura", () => {
     }
   });
 
-  it("conta no máximo a exigência de cada trilha para o total do 3º estrato", () => {
-    const r = simularFormatura(perfilFimDeCurso(), matriz, ofertas, {
-      ritmo: 6,
-      semestreInicial: "2026-2",
+  it("conta TODAS as horas de trilha para as 345h, sem teto por trilha", () => {
+    // O 3º estrato não tem teto de contagem por trilha: quem cursa 120h numa
+    // trilha de 90h leva as 120h para as 345h. As 90h são o limiar para VALIDAR
+    // a trilha, coisa diferente — PPC p.101 ("270h em três trilhas + 75h", que
+    // podem cair em trilha já completa ou espalhadas). O próprio histórico
+    // confirma: o agregado do conjunto 1160 soma as horas cruas.
+    const perfil = perfilFake({
+      resumoConjuntos: [
+        conjunto("1160", "Terceiro Estrato", 345, 225),
+        conjunto("1164", "Desenvolvimento Baseado Em Plataformas", 90, 60),
+        conjunto("1165", "Banco De Dados", 90, 120),
+        conjunto("1171", "Sistemas Embarcados E Robótica", 90, 45),
+      ],
     });
-    const porTrilha = new Map<number, number>();
-    for (const s of r.semestres) {
-      for (const d of s.disciplinas) {
-        if (d.categoria !== "trilhas" || d.conjunto === null) continue;
-        porTrilha.set(d.conjunto, (porTrilha.get(d.conjunto) ?? 0) + d.horas);
-      }
-    }
-    // nenhuma trilha recebe disciplina depois de já ter fechado as próprias horas
-    for (const [conj, horas] of porTrilha) {
-      const exig = matriz.conjuntos[String(conj)]?.ch ?? 90;
-      const jaTinha =
-        perfilFimDeCurso().resumoConjuntos.find((c) => c.conjunto === String(conj))
-          ?.chCursadaAprovada ?? 0;
-      // a última disciplina pode ultrapassar, mas não se começa uma já fechada
-      expect(jaTinha, `trilha ${conj} já estava fechada`).toBeLessThan(exig);
-      expect(horas).toBeGreaterThan(0);
-    }
+    const r = simularFormatura(perfil, matriz, ofertas, { ritmo: 5, semestreInicial: "2026-2" });
+    const trilhas = r.requisitos.find((q) => q.id === "trilhas")!;
+    // 60 + 120 + 45 = 225, e não 60 + 90 + 45 = 195 que um teto por trilha daria
+    expect(trilhas.cumprido).toBe(225);
   });
 
-  it("nunca enche uma trilha além do teto que ela contribui", () => {
-    // Regressão: o guloso enfiava uma 3ª disciplina numa trilha já em 60h, e o
-    // aluno cursava 120h onde só 90h contam para as 345h do 3º estrato — uma
-    // matéria inteira a mais no plano, contra a premissa de cursar só o mínimo.
-    // Aluno sem nenhuma trilha feita é o caso que expõe o problema.
-    const aprovadas = new Set<string>(
-      matriz.disciplinas
-        .filter((d) => d.conjunto === null && !d.codigo.startsWith("ENADE"))
-        .filter((d) => !["ICSX30", "ICSX40", "ICSX41", "ICSS30"].includes(d.codigo))
-        .map((d) => d.codigo),
-    );
-    const perfil = perfilFake({
-      aprovadas,
-      resumoConjuntos: [
-        conjunto("1159", "Segundo Estrato", 360, 180),
-        conjunto("1161", "Humanidades", 135, 45),
-      ],
-      resumoGeral: {
-        obrigatorias: { total: 2005, aprovada: 1440, faltante: 565 },
-        optativas: { total: 840, aprovada: 0, faltante: 840 },
-        eletivas: { total: 105, aprovada: 105, faltante: 0 },
-      },
-    });
-
+  it("exige 3 trilhas validadas além do total de horas", () => {
+    // As duas condições são independentes: 3 trilhas validadas somam 270h (menos
+    // que 345), e dá para ter 345h espalhadas sem validar trilha nenhuma.
+    const perfil = perfilFimDeCurso();
     for (const ritmo of [4, 5, 6]) {
       const r = simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial: "2026-2" });
-      const porTrilha = new Map<number, number>();
+      expect(r.semestreFormatura, `ritmo ${ritmo} não fechou`).not.toBeNull();
+
+      const horasPorTrilha = new Map<number, number>();
+      for (const c of perfil.resumoConjuntos) {
+        const n = Number(c.conjunto);
+        if (n >= 1162 && n <= 1173) horasPorTrilha.set(n, c.chCursadaAprovada);
+      }
       for (const s of r.semestres) {
         for (const d of s.disciplinas) {
           if (d.categoria !== "trilhas" || d.conjunto === null) continue;
-          porTrilha.set(d.conjunto, (porTrilha.get(d.conjunto) ?? 0) + d.horas);
+          horasPorTrilha.set(d.conjunto, (horasPorTrilha.get(d.conjunto) ?? 0) + d.horas);
         }
       }
-      for (const [conj, horas] of porTrilha) {
-        const teto = matriz.conjuntos[String(conj)]?.ch ?? 90;
-        expect(horas, `ritmo ${ritmo}: trilha ${conj} recebeu ${horas}h para um teto de ${teto}h`).toBeLessThanOrEqual(teto);
-      }
+      const validadas = [...horasPorTrilha.entries()].filter(
+        ([conj, horas]) => horas >= (matriz.conjuntos[String(conj)]?.ch ?? 90),
+      ).length;
+      expect(validadas, `ritmo ${ritmo}: só ${validadas} trilhas validadas`).toBeGreaterThanOrEqual(
+        r.trilhasExigidas,
+      );
+
+      const trilhas = r.requisitos.find((q) => q.id === "trilhas")!;
+      expect(trilhas.cumprido + trilhas.planejado).toBeGreaterThanOrEqual(trilhas.exigido);
+    }
+  });
+
+  it("concentra o esforço no número de trilhas exigido, sem espalhar", () => {
+    // Regressão: perseguindo as 3 trilhas validadas, o guloso espalhava
+    // disciplina por trilha nova e nenhuma fechava as 90h — chegou a planejar
+    // 615h para uma exigência de 345h. As trilhas-alvo são escolhidas antes de
+    // montar os semestres, então o plano não toca em mais trilhas que o preciso.
+    const perfil = perfilFimDeCurso();
+    for (const ritmo of [4, 5, 6]) {
+      const r = simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial: "2026-2" });
+      const tocadas = new Set(
+        r.semestres.flatMap((s) =>
+          s.disciplinas.filter((d) => d.categoria === "trilhas").map((d) => d.conjunto),
+        ),
+      );
+      expect(tocadas.size, `ritmo ${ritmo} espalhou por ${tocadas.size} trilhas`).toBeLessThanOrEqual(
+        r.trilhasExigidas,
+      );
     }
   });
 

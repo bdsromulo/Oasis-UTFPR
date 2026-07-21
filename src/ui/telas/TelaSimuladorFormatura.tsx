@@ -311,9 +311,25 @@ export function TelaSimuladorFormatura(props: {
 
       {resultado.trilhasFechadas.length > 0 && (
         <section className="rounded-2xl border border-indigo-300/60 bg-indigo-50/60 p-4 dark:border-indigo-800/60 dark:bg-indigo-950/30">
-          <h3 className="font-display text-xs font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
-            Trilhas fechadas na projeção
-          </h3>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="font-display text-xs font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
+              Trilhas validadas ao fim da projeção
+            </h3>
+            <span
+              className={`rounded-lg px-2 py-0.5 font-mono text-xs font-black ${
+                resultado.trilhasFechadas.length >= resultado.trilhasExigidas
+                  ? "bg-emerald-500/20 text-emerald-800 dark:text-emerald-300"
+                  : "bg-red-500/20 text-red-800 dark:text-red-300"
+              }`}
+            >
+              {resultado.trilhasFechadas.length} de {resultado.trilhasExigidas}
+            </span>
+          </div>
+          <p className="mt-1 text-[11px] leading-snug text-indigo-900/70 dark:text-indigo-200/70">
+            O 3º estrato tem duas exigências independentes: {resultado.trilhasExigidas} trilhas
+            validadas (90h cada) e 345h no total. As horas que passam das 90h de uma trilha continuam
+            contando para as 345h.
+          </p>
           <ul className="mt-2 flex flex-wrap gap-2">
             {resultado.trilhasFechadas.map((t) => (
               <li
