@@ -27,7 +27,7 @@ const MATRIZ_DO_CURSO: Record<string, { numero: string; rotulo: string; nota: st
   "eng-comp": {
     numero: "844",
     rotulo: "Matriz 844 (Antiga)",
-    nota: "Protótipo. Estrutura extraída da Figura 5 do PPC; sem estratos e sem exigência de trilhas como na BSI.",
+    nota: "Sem estratos: a formação optativa é 270h em trilhas e isoladas, com 2 trilhas completas, mais 90h de eletivas.",
   },
 };
 
@@ -58,7 +58,7 @@ export function TelaCheckin(props: {
   const listaCursos = [
     { id: "bsi-981", nome: "Bacharelado em Sistemas de Informação (BSI)", nomeCurto: "BSI", disponivel: true },
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
-    { id: "eng-comp", nome: "Engenharia de Computação (Matriz 844)", nomeCurto: "Eng. Computação", disponivel: false },
+    { id: "eng-comp", nome: "Engenharia de Computação (Matriz 844)", nomeCurto: "Eng. Computação", disponivel: true },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
 

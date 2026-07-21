@@ -8,6 +8,8 @@ interface SidebarNavegacaoProps {
   onSelecionarAba: (aba: AbaPrincipal) => void;
   temPerfil: boolean;
   qtdTurmasSelecao: number;
+  /** curso escolhido no check-in; define quais abas fazem sentido */
+  curso?: string;
 }
 
 /** Mensagem única para tudo que depende do Histórico Escolar. */
@@ -19,8 +21,12 @@ export function SidebarNavegacao({
   onSelecionarAba,
   temPerfil,
   qtdTurmasSelecao,
+  curso,
 }: SidebarNavegacaoProps) {
   const [colapsado, setColapsado] = useState(false);
+  // O leitor de histórico ainda só entende o formato da BSI: em Eng. Comp. as
+  // telas que dependem dele ficam de fora até o parser cobrir o curso.
+  const historicoSuportado = curso !== "eng-comp";
 
   type ItemNav = {
     id: AbaPrincipal;
@@ -37,8 +43,10 @@ export function SidebarNavegacao({
           id: "situacao",
           rotulo: "Minha Situação",
           subrotulo: "Resumo, Catálogo e Trilhas",
-          bloqueado: !temPerfil,
-          motivoBloqueio: EXIGE_HISTORICO,
+          bloqueado: !temPerfil || !historicoSuportado,
+          motivoBloqueio: historicoSuportado
+            ? EXIGE_HISTORICO
+            : "A leitura do Histórico Escolar de Eng. de Computação ainda está em desenvolvimento.",
           icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
         },
         {
@@ -55,9 +63,11 @@ export function SidebarNavegacao({
           id: "simulador",
           rotulo: "Simulador de Formatura",
           subrotulo: "Previsão & Linha do Tempo",
-          bloqueado: !temPerfil,
-          motivoBloqueio: EXIGE_HISTORICO,
-          icone: !temPerfil ? <span>🔒</span> : <span>🎓</span>,
+          bloqueado: !temPerfil || !historicoSuportado,
+          motivoBloqueio: historicoSuportado
+            ? EXIGE_HISTORICO
+            : "A projeção depende do histórico, cuja leitura para Eng. de Computação ainda está em desenvolvimento.",
+          icone: !temPerfil || !historicoSuportado ? <span>🔒</span> : <span>🎓</span>,
         },
     {
       id: "match",

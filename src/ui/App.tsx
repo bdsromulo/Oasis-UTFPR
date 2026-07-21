@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Matriz, OfertaSemestre, PerfilAluno } from "../domain/tipos";
+import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
 import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
-import matrizJson from "../../data/matriz-981.json";
-import turmas20261Json from "../../data/turmas/2026-1.json";
-import turmas20252Json from "../../data/turmas/2025-2.json";
+import { dadosDoCurso, semestresDoCurso } from "../domain/dadosCurso";
 import { TelaSituacao } from "./telas/Situacao";
 import { TelaPossoCursar } from "./telas/PossoCursar";
 import { TelaGrade } from "./telas/Grade";
@@ -30,8 +28,6 @@ import {
   IconSun,
   IconMoon,
 } from "./icons";
-
-const matriz = matrizJson as unknown as Matriz;
 
 export interface SelecaoTurma {
   codDisciplina: string;
@@ -104,35 +100,24 @@ export function App() {
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
-  const semestreAtivo = preferencias.semestreAtivo || "2026-2";
+  const cursoAtivo = preferencias.curso ?? "bsi-981";
+  const dadosCurso = useMemo(() => dadosDoCurso(cursoAtivo), [cursoAtivo]);
+  const matriz = dadosCurso.matriz;
+  const todasOfertas = dadosCurso.ofertas;
+  const semestresDisponiveis = useMemo(() => semestresDoCurso(dadosCurso), [dadosCurso]);
 
-  const todasOfertas: Record<string, OfertaSemestre> = useMemo(() => {
-    const o20261 = turmas20261Json as unknown as OfertaSemestre;
-    const o20252 = turmas20252Json as unknown as OfertaSemestre;
-    const o20262: OfertaSemestre = {
-      ...o20252,
-      semestre: "2026-2",
-      fonte: "Simulação Prévia (baseada nas ofertas de 2025.2)",
-      disciplinas: o20252.disciplinas.filter(
-        (d) =>
-          d.codigo !== "ICSH41" &&
-          !d.nome.toLowerCase().includes("avaliação em interação humano-computador")
-      ),
-    };
-    return {
-      "2026-1": o20261,
-      "2025-2": o20252,
-      "2026-2": o20262,
-    };
-  }, []);
+  // o semestre guardado pode ser de outro curso: cai no padrão se não existir
+  const semestreAtivo =
+    preferencias.semestreAtivo && todasOfertas[preferencias.semestreAtivo]
+      ? preferencias.semestreAtivo
+      : dadosCurso.semestrePadrao;
 
-  const oferta = useMemo<OfertaSemestre>(() => {
-    return todasOfertas[semestreAtivo] || todasOfertas["2026-2"];
-  }, [semestreAtivo, todasOfertas]);
+  const oferta = useMemo<OfertaSemestre>(
+    () => todasOfertas[semestreAtivo] ?? todasOfertas[dadosCurso.semestrePadrao],
+    [semestreAtivo, todasOfertas, dadosCurso],
+  );
 
-  // 2026.2 não tem PDF oficial de turmas: roda com dados simulados a partir de 2025.2
-  const ehPrevia =
-    semestreAtivo === "2026-2" || oferta.semestre === "2026-2";
+  const ehPrevia = dadosCurso.semestresPrevia.includes(semestreAtivo);
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
@@ -482,7 +467,7 @@ export function App() {
       </header>
 
       {/* Banner de Aviso: 2026.2 Dados Simulados */}
-      {(oferta.semestre === "2026-2" || oferta.semestre === "2026.2" || preferencias.semestreAtivo === "2026-2") && (
+      {ehPrevia && (
         <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-3.5">
@@ -530,6 +515,7 @@ export function App() {
             onSelecionarAba={setAba}
             temPerfil={!!perfil}
             qtdTurmasSelecao={selecao.length}
+            curso={cursoAtivo}
           />
 
           {/* coluna principal */}
@@ -600,7 +586,7 @@ export function App() {
                   <TelaFluxograma
                     matriz={matriz}
                     perfil={perfil}
-                    ofertas={[todasOfertas["2025-2"], todasOfertas["2026-1"]]}
+                    ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                   />
                 )}
               </div>
@@ -637,15 +623,22 @@ export function App() {
                           onChange={(e) => mudarSemestre(e.target.value)}
                           className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
                         >
-                          <option value="2026-2" className="bg-white text-emerald-700 font-bold dark:bg-zinc-900 dark:text-emerald-400">
-                            2026.2 (Prévia)
-                          </option>
-                          <option value="2026-1" className="bg-white text-orange-600 font-bold dark:bg-zinc-900 dark:text-orange-400">
-                            2026.1 (Passado)
-                          </option>
-                          <option value="2025-2" className="bg-white text-orange-600 font-bold dark:bg-zinc-900 dark:text-orange-400">
-                            2025.2 (Passado)
-                          </option>
+                          {semestresDisponiveis.map((sem) => {
+                            const previa = dadosCurso.semestresPrevia.includes(sem);
+                            return (
+                              <option
+                                key={sem}
+                                value={sem}
+                                className={`bg-white font-bold dark:bg-zinc-900 ${
+                                  previa
+                                    ? "text-emerald-700 dark:text-emerald-400"
+                                    : "text-orange-600 dark:text-orange-400"
+                                }`}
+                              >
+                                {sem.replace("-", ".")} ({previa ? "Prévia" : "Passado"})
+                              </option>
+                            );
+                          })}
                         </select>
                         <span className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] opacity-70">▾</span>
                       </label>
@@ -776,7 +769,7 @@ export function App() {
               <TelaSimuladorFormatura
                 perfil={perfil}
                 matriz={matriz}
-                ofertas={[todasOfertas["2025-2"], todasOfertas["2026-1"]]}
+                ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                 semestreAtivo={semestreAtivo}
               />
             )}

@@ -69,16 +69,32 @@ export function buscarOfertaParaPlanejamento(
   d: DisciplinaMatriz,
   ofertadas: Map<string, DisciplinaOfertada>,
 ): DisciplinaOfertada | null {
-  const direta = ofertadas.get(d.codigo);
-  if (!direta) return null;
-  const turmasDiretas = direta.turmas
-    .filter((t) => t.horarios && t.horarios.length > 0)
-    .map((t) => ({ ...t, codDisciplinaOriginal: d.codigo, codTurmaOriginal: t.codigo }));
-  if (turmasDiretas.length === 0) return null;
-  return {
-    ...direta,
-    turmas: turmasDiretas,
-  };
+  // A oferta pode estar sob o código do equivalente, e não sob o da matriz.
+  // Em Eng. Comp. isso é a regra, não a exceção: a matriz identifica a
+  // disciplina por CSD20 e o Portal abre a turma como ICSD20 — 84 das 236
+  // disciplinas só têm turma por essa via. Sem procurar o equivalente, elas
+  // apareceriam sem turma e a turma viria numa segunda linha duplicada.
+  // A lista de equivalentes é histórica: traz códigos de matrizes antigas e de
+  // outros cursos junto com o da oferta atual. Pegar o primeiro que tiver turma
+  // erra — EEQ31 tem [EL65D, ELB66, ELEQ30] e só ELEQ30 é "Análise de Sistemas
+  // Lineares". Por isso o equivalente de mesmo NOME tem prioridade; o primeiro
+  // com turma fica como último recurso.
+  const equivalentes = (d.equivalentes ?? []).map((e) => e.codigo);
+  const comMesmoNome = equivalentes.filter(
+    (codigo) => ofertadas.get(codigo) && normNome(ofertadas.get(codigo)!.nome) === normNome(d.nome),
+  );
+  const candidatos = [d.codigo, ...comMesmoNome, ...equivalentes];
+
+  for (const codigo of candidatos) {
+    const encontrada = ofertadas.get(codigo);
+    if (!encontrada) continue;
+    const turmas = encontrada.turmas
+      .filter((t) => t.horarios && t.horarios.length > 0)
+      .map((t) => ({ ...t, codDisciplinaOriginal: codigo, codTurmaOriginal: t.codigo }));
+    if (turmas.length === 0) continue;
+    return { ...encontrada, turmas };
+  }
+  return null;
 }
 
 /** Todas as disciplinas da matriz ainda não cumpridas e disciplinas ofertadas no semestre, com estado de liberação e oferta. */
@@ -96,9 +112,13 @@ export function listarElegiveis(
     if (d.codigo.startsWith("ENADE")) continue;
     if (cumpre(d.codigo, perfil, matriz)) continue;
     codigosAdicionados.add(d.codigo);
+    const ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, ofertadas);
+    // quando a turma veio pelo equivalente, esse código já foi consumido: sem
+    // isto ele reapareceria adiante como uma segunda linha para a mesma matéria
+    if (ofertaDaDisciplina) codigosAdicionados.add(ofertaDaDisciplina.codigo);
     out.push({
       disciplina: d,
-      oferta: buscarOfertaParaPlanejamento(d, ofertadas),
+      oferta: ofertaDaDisciplina,
       categoria: categoriaDe(d, matriz),
       motivoBloqueio: bloqueio(d, perfil, matriz),
       jaMatriculada: matriculadas.has(d.codigo),
