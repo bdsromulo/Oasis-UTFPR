@@ -6,11 +6,10 @@ import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
  * calculadas — a tela só desenha o que sai daqui.
  *
  * Board "obrigatorias": roster oficial da matriz. As obrigatórias ocupam uma
- * coluna por período; o 2º estrato vai para uma faixa própria abaixo, porque na
- * matriz todas figuram no 3º período mas são cursáveis do 3º ao 6º — empilhá-las
- * na coluna 3 distorceria a leitura do fluxo.
+ * coluna por período. Quando a matriz declara um segundo estrato, ele vai para
+ * uma faixa própria abaixo para não distorcer a leitura do fluxo.
  *
- * Board "trilhas": uma raia por trilha do 3º estrato, contendo apenas disciplinas
+ * Board "trilhas": uma raia por trilha do curso, contendo apenas disciplinas
  * que efetivamente abriram em algum semestre conhecido. Pré-requisitos que moram
  * fora da raia (obrigatórias, 2º estrato) entram como nós fantasma na coluna 0,
  * para que a árvore não comece no ar.
@@ -78,8 +77,8 @@ export interface Board {
   altura: number;
 }
 
-function grupoDe(d: DisciplinaMatriz): GrupoCor {
-  const curso = descricaoDoCurso(981);
+function grupoDe(d: DisciplinaMatriz, matriz: Matriz): GrupoCor {
+  const curso = descricaoDoCurso(matriz);
   if (categoriaSimples(curso, d.conjunto)?.id === "segundoEstrato") return "segundoEstrato";
   if (ehTrilha(curso, d.conjunto)) return "trilha";
   const m = (d.modelo || "").toLowerCase();
@@ -133,6 +132,7 @@ function ordenarPorBaricentro(
 
 function noDe(
   d: DisciplinaMatriz,
+  matriz: Matriz,
   opts: { id?: string; externo?: boolean; grupo?: GrupoCor } = {},
 ): NoFluxo {
   const exig = d.prerequisitos.map(periodoExigido).find((v): v is number => v !== null) ?? null;
@@ -142,7 +142,7 @@ function noDe(
     nome: d.nome,
     periodo: d.periodo,
     horas: d.horas.total,
-    grupo: opts.grupo ?? grupoDe(d),
+    grupo: opts.grupo ?? grupoDe(d, matriz),
     externo: opts.externo ?? false,
     exigePeriodo: exig,
     x: 0,
@@ -158,11 +158,13 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   const obrigatorias = matriz.disciplinas.filter((d) => d.conjunto === null && !ehEnade(d.codigo));
   const curso = descricaoDoCurso(matriz);
   const conjSegundoEstrato = curso.categorias.find((c) => c.id === "segundoEstrato")?.conjunto ?? null;
-  const segundoEstrato = matriz.disciplinas.filter((d) => d.conjunto === conjSegundoEstrato);
+  const segundoEstrato = conjSegundoEstrato === null
+    ? []
+    : matriz.disciplinas.filter((d) => d.conjunto === conjSegundoEstrato);
   const renderizadas = [...obrigatorias, ...segundoEstrato];
   const porCodigo = new Map(renderizadas.map((d) => [d.codigo, d]));
 
-  const nos: NoFluxo[] = renderizadas.map((d) => noDe(d));
+  const nos: NoFluxo[] = renderizadas.map((d) => noDe(d, matriz));
   const nosPorId = new Map(nos.map((n) => [n.id, n]));
 
   const prereqsPorNo = new Map<string, string[]>();
@@ -176,9 +178,9 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   // --- faixa 1: obrigatórias, coluna = período ---
   const periodos = [...new Set(obrigatorias.map((d) => d.periodo))].sort((a, b) => a - b);
   const colunasObr = new Map<number, string[]>();
-  for (const per of periodos) {
+  for (const [indice, per] of periodos.entries()) {
     colunasObr.set(
-      per,
+      indice,
       obrigatorias
         .filter((d) => d.periodo === per)
         .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"))
@@ -187,12 +189,41 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   }
   ordenarPorBaricentro(colunasObr, prereqsPorNo);
 
+  // A matriz 844 tem alguns pré-requisitos cuja coluna declarada é posterior à
+  // da dependente. A posição precisa respeitar a cadeia, não só o período bruto.
+  const colunaDe = new Map<string, number>();
+  for (const [col, ids] of colunasObr) for (const id of ids) colunaDe.set(id, col);
+  for (let passada = 0; passada < obrigatorias.length; passada++) {
+    let mudou = false;
+    for (const [codigo, pais] of prereqsPorNo) {
+      if (!colunaDe.has(codigo)) continue;
+      const maiorPai = Math.max(-1, ...pais.map((p) => colunaDe.get(p) ?? -1));
+      const atual = colunaDe.get(codigo)!;
+      if (maiorPai >= atual) {
+        colunaDe.set(codigo, maiorPai + 1);
+        mudou = true;
+      }
+    }
+    if (!mudou) break;
+  }
+
+  const colunasReais = new Map<number, string[]>();
+  for (const d of obrigatorias) {
+    const col = colunaDe.get(d.codigo) ?? 0;
+    if (!colunasReais.has(col)) colunasReais.set(col, []);
+    colunasReais.get(col)!.push(d.codigo);
+  }
+  for (const ids of colunasReais.values()) {
+    ids.sort((a, b) => nosPorId.get(a)!.nome.localeCompare(nosPorId.get(b)!.nome, "pt-BR"));
+  }
+  ordenarPorBaricentro(colunasReais, prereqsPorNo);
+
   let maxLinhasObr = 0;
-  for (const [per, ids] of colunasObr) {
+  for (const [col, ids] of colunasReais) {
     maxLinhasObr = Math.max(maxLinhasObr, ids.length);
     ids.forEach((id, i) => {
       const n = nosPorId.get(id)!;
-      n.x = xDaColuna(periodos.indexOf(per));
+      n.x = xDaColuna(col);
       n.y = PADDING + ALTURA_CABECALHO_FAIXA + i * (ALTURA_NO + GAP_Y);
     });
   }
@@ -200,12 +231,9 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   const alturaFaixaObr =
     ALTURA_CABECALHO_FAIXA + maxLinhasObr * (ALTURA_NO + GAP_Y) + PADDING / 2;
 
-  // --- faixa 2: 2º estrato, coluna = profundidade após os pré-requisitos ---
+  // --- faixa 2 (quando houver): 2º estrato, coluna = profundidade após os pré-requisitos ---
   // A coluna é a do período do pré-requisito mais tardio, para a aresta continuar
   // sempre da esquerda para a direita.
-  const colunaDe = new Map<string, number>();
-  for (const [per, ids] of colunasObr) for (const id of ids) colunaDe.set(id, periodos.indexOf(per));
-
   const colunasEst2 = new Map<number, string[]>();
   for (const d of segundoEstrato) {
     const colsPais = (prereqsPorNo.get(d.codigo) ?? [])
@@ -235,38 +263,45 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
     ALTURA_CABECALHO_FAIXA + maxLinhasEst2 * (ALTURA_NO + GAP_Y) + PADDING / 2;
 
   const totalColunas = Math.max(
-    periodos.length,
+    ...[...colunasReais.keys()].map((c) => c + 1),
     ...[...colunasEst2.keys()].map((c) => c + 1),
     1,
   );
 
+  const faixas: FaixaFluxo[] = [
+    {
+      id: "obrigatorias",
+      rotulo: curso.matriz === 981 ? "Obrigatórias — 1º Estrato" : "Obrigatórias",
+      subrotulo: "Uma coluna por período previsto na matriz",
+      y: PADDING,
+      altura: alturaFaixaObr,
+    },
+  ];
+  if (segundoEstrato.length > 0) {
+    faixas.push({
+      id: "segundoEstrato",
+      rotulo: "2º Estrato",
+      subrotulo: "Cursáveis após seus pré-requisitos",
+      y: yFaixaEst2,
+      altura: alturaFaixaEst2,
+    });
+  }
+
   return {
     nos,
     arestas,
-    faixas: [
-      {
-        id: "obrigatorias",
-        rotulo: "Obrigatórias — 1º Estrato",
-        subrotulo: "Uma coluna por período previsto na matriz",
-        y: PADDING,
-        altura: alturaFaixaObr,
-      },
-      {
-        id: "segundoEstrato",
-        rotulo: "2º Estrato",
-        subrotulo: "Cursáveis do 3º ao 6º período · posicionadas após seus pré-requisitos",
-        y: yFaixaEst2,
-        altura: alturaFaixaEst2,
-      },
-    ],
-    colunas: periodos.map((p, i) => ({ rotulo: `${p}º período`, x: xDaColuna(i) })),
+    faixas,
+    colunas: Array.from({ length: totalColunas }, (_, i) => ({
+      rotulo: periodos[i] ? `${periodos[i]}º período` : "Etapa adicional",
+      x: xDaColuna(i),
+    })),
     largura: xDaColuna(totalColunas - 1) + LARGURA_NO + PADDING,
-    altura: yFaixaEst2 + alturaFaixaEst2 + PADDING,
+    altura: segundoEstrato.length > 0 ? yFaixaEst2 + alturaFaixaEst2 + PADDING : PADDING + alturaFaixaObr + PADDING,
   };
 }
 
 /**
- * Board das trilhas do 3º estrato, restrito às disciplinas efetivamente abertas.
+ * Board das trilhas do curso, restrito às disciplinas efetivamente abertas.
  * @param codigosAbertos códigos que apareceram na oferta de algum semestre conhecido
  */
 export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>): Board {
@@ -308,10 +343,10 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
 
     for (const codigo of fantasmas) {
       const d = porCodigo.get(codigo)!;
-      nos.push(noDe(d, { id: idNo(codigo), externo: true, grupo: "externo" }));
+      nos.push(noDe(d, matriz, { id: idNo(codigo), externo: true, grupo: "externo" }));
       prereqsPorNo.set(idNo(codigo), []);
     }
-    for (const d of daTrilha) nos.push(noDe(d, { id: idNo(d.codigo), grupo: "trilha" }));
+    for (const d of daTrilha) nos.push(noDe(d, matriz, { id: idNo(d.codigo), grupo: "trilha" }));
 
     for (const [para, pais] of prereqsPorNo) {
       for (const de of pais) arestas.push({ id: `${de}->${para}`, de, para });

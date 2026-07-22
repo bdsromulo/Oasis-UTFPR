@@ -24,12 +24,13 @@ export interface OpcoesSugestaoGrade {
 export type OpcoesGradeMagica = OpcoesSugestaoGrade;
 
 /**
- * Retorna o peso de prioridade da turma para alunos de BSI:
+ * Retorna o peso de prioridade da turma quando a oferta usa a convenção BSI:
  * - Prioridade 1 (Exclusivamente S73): +100 pontos
  * - Prioridade 2 (Exclusivamente S71): +30 pontos (reduzido mas relevante)
  * - Outras (Sem prioridade): +5 pontos
  */
-export function calcularPesoPrioridadeTurma(turma: Turma): number {
+export function calcularPesoPrioridadeTurma(turma: Turma, usarPrioridadeBsi = true): number {
+  if (!usarPrioridadeBsi) return 0;
   const cod = turma.codigo.toUpperCase();
   if (cod.startsWith("S73") || cod.includes("-S73")) {
     return 100; // Prioridade 1
@@ -202,7 +203,7 @@ export function calcularScoreBalanceamento(
  * Algoritmo da Sugestão de Grade:
  * Monta automaticamente a grade ideal para o aluno maximizando carga horária e avanço no curso,
  * respeitando restrições de turno, pré-requisitos, choques de horário e exclusões personalizadas,
- * e aplicando o peso correto de prioridade entre S73 (Prio 1) e S71 (Prio 2).
+ * e, quando aplicável à matriz, aplicando a prioridade entre turmas.
  */
 export function gerarSugestaoGrade(
   perfil: PerfilAluno | null,
@@ -220,15 +221,23 @@ export function gerarSugestaoGrade(
   const cjAgregador = curso.agregadorTrilhas;
   const cjEletivas = curso.categorias.find((c) => c.id === "eletivas")?.conjunto ?? null;
 
-  const resumoHumanidades = perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjHumanidades));
-  const chFaltanteHumanidades = resumoHumanidades
-    ? Math.max(0, resumoHumanidades.chObrigatoria - resumoHumanidades.chCursadaAprovada)
-    : (matriz.conjuntos[String(cjHumanidades)]?.ch ?? 135);
+  const resumoHumanidades = cjHumanidades === null
+    ? undefined
+    : perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjHumanidades));
+  const chFaltanteHumanidades = cjHumanidades === null
+    ? 0
+    : resumoHumanidades
+      ? Math.max(0, resumoHumanidades.chObrigatoria - resumoHumanidades.chCursadaAprovada)
+      : (matriz.conjuntos[String(cjHumanidades)]?.ch ?? 0);
 
-  const resumoSegundoEstrato = perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjSegundoEstrato));
-  const chFaltanteEstrato2 = resumoSegundoEstrato
-    ? Math.max(0, resumoSegundoEstrato.chObrigatoria - resumoSegundoEstrato.chCursadaAprovada)
-    : (matriz.conjuntos[String(cjSegundoEstrato)]?.ch ?? 360);
+  const resumoSegundoEstrato = cjSegundoEstrato === null
+    ? undefined
+    : perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjSegundoEstrato));
+  const chFaltanteEstrato2 = cjSegundoEstrato === null
+    ? 0
+    : resumoSegundoEstrato
+      ? Math.max(0, resumoSegundoEstrato.chObrigatoria - resumoSegundoEstrato.chCursadaAprovada)
+      : (matriz.conjuntos[String(cjSegundoEstrato)]?.ch ?? 0);
 
   const trilhasNoPerfil = perfil
     ? Object.entries(matriz.conjuntos)
@@ -240,7 +249,7 @@ export function gerarSugestaoGrade(
         })
     : [];
   const trilhasValidadasCount = trilhasNoPerfil.filter((t) => t.validado).length;
-  const trilhasAlvo = Math.max(0, 2 - trilhasValidadasCount);
+  const trilhasAlvo = Math.max(0, curso.trilhasExigidas - trilhasValidadasCount);
   const trilhasPendentes = trilhasNoPerfil
     .filter((t) => !t.validado)
     .sort((a, b) => b.cump - a.cump);
@@ -248,11 +257,14 @@ export function gerarSugestaoGrade(
     ? trilhasPendentes
         .slice(0, trilhasAlvo)
         .reduce((acc, t) => acc + Math.max(0, t.chExigida - t.cump), 0)
-    : 180;
+    : Object.entries(matriz.conjuntos)
+        .filter(([cod]) => ehTrilha(curso, cod))
+        .slice(0, curso.trilhasExigidas)
+        .reduce((acc, [, conj]) => acc + conj.ch, 0);
 
   const chFaltanteEletivas = perfil
     ? (perfil.eletivas?.chFaltante ?? Math.max(0, (perfil.eletivas?.chTotal ?? 120) - (perfil.eletivas?.chValidada ?? 0)))
-    : 120;
+    : matriz.cargas.eletiva;
 
   // Inicializar seleção e contadores de carga horária a partir da seleção inicial (se houver)
   const selecaoFinal: SelecaoTurma[] = selecaoInicial ? [...selecaoInicial] : [];
@@ -268,9 +280,9 @@ export function gerarSugestaoGrade(
     const h = dm ? dm.horas.total : ((dOf?.aulas_semanais_presenciais || 4) * 15);
     const c = dm?.conjunto ?? null;
     chTotalAlocada += h;
-    if (c === cjHumanidades) chAlocadaHumanidades += h;
-    else if (c === cjSegundoEstrato) chAlocadaEstrato2 += h;
-    else if (c === cjEletivas || (!dm && dOf)) chAlocadaEletivas += h;
+    if (cjHumanidades !== null && c === cjHumanidades) chAlocadaHumanidades += h;
+    else if (cjSegundoEstrato !== null && c === cjSegundoEstrato) chAlocadaEstrato2 += h;
+    else if ((cjEletivas !== null && c === cjEletivas) || (!dm && dOf)) chAlocadaEletivas += h;
     else if (ehTrilha(curso, c)) chAlocadaTrilhas += h;
   }
 
@@ -279,9 +291,9 @@ export function gerarSugestaoGrade(
     if (e.motivoBloqueio || !e.oferta || e.oferta.turmas.length === 0) return false;
     if (selecaoFinal.some((s) => s.codDisciplina === e.disciplina.codigo)) return false;
     if (disciplinaEstaExcluida(e.disciplina, opcoes.disciplinasExcluidas)) return false;
-    if (opcoes.semHumanidades && e.disciplina.conjunto === cjHumanidades) return false;
-    if (e.disciplina.conjunto === cjHumanidades && chFaltanteHumanidades <= 0) return false;
-    if (e.disciplina.conjunto === cjSegundoEstrato && chFaltanteEstrato2 <= 0) return false;
+    if (cjHumanidades !== null && opcoes.semHumanidades && e.disciplina.conjunto === cjHumanidades) return false;
+    if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades && chFaltanteHumanidades <= 0) return false;
+    if (cjSegundoEstrato !== null && e.disciplina.conjunto === cjSegundoEstrato && chFaltanteEstrato2 <= 0) return false;
     if (
       e.disciplina.conjunto !== null &&
       e.disciplina.conjunto !== cjSegundoEstrato &&
@@ -294,7 +306,7 @@ export function gerarSugestaoGrade(
       if (opcoes.trilhasExcluidas && opcoes.trilhasExcluidas.includes(String(e.disciplina.conjunto))) return false;
       if (chFaltanteTrilhas <= 0) return false;
     }
-    if (e.disciplina.conjunto === cjEletivas || e.categoria === "eletiva") {
+    if ((cjEletivas !== null && e.disciplina.conjunto === cjEletivas) || e.categoria === "eletiva") {
       if (opcoes.semEletivas) return false;
       if (chFaltanteEletivas <= 0) return false;
     }
@@ -314,14 +326,14 @@ export function gerarSugestaoGrade(
     }
 
     // Reduzir ligeiramente a prioridade inicial de humanidades frente a disciplinas técnicas/obrigatórias
-    if (e.disciplina.conjunto === cjHumanidades) pts -= 15;
+    if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades) pts -= 15;
 
     // Filtrar e pontuar as turmas válidas dessa disciplina
     const turmasValidas = e.oferta!.turmas
       .filter((t) => !turmaViolaTurnos(t, opcoes) && !turmaViolaSedes(t, opcoes) && !turmaViolaProfessores(t, opcoes))
       .map((t) => ({
         turma: t,
-        pontos: calcularPesoPrioridadeTurma(t),
+        pontos: calcularPesoPrioridadeTurma(t, curso.matriz === 981),
       }))
       .sort((a, b) => b.pontos - a.pontos);
 
@@ -343,8 +355,8 @@ export function gerarSugestaoGrade(
     if (chTotalAlocada + item.elegivel.disciplina.horas.total > 405) continue;
 
     const c = item.elegivel.disciplina.conjunto;
-    if (c === cjHumanidades && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
-    if (c === cjSegundoEstrato && chAlocadaEstrato2 >= chFaltanteEstrato2) continue;
+    if (cjHumanidades !== null && c === cjHumanidades && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
+    if (cjSegundoEstrato !== null && c === cjSegundoEstrato && chAlocadaEstrato2 >= chFaltanteEstrato2) continue;
     if (
       c !== null &&
       c !== cjSegundoEstrato &&
@@ -357,7 +369,7 @@ export function gerarSugestaoGrade(
       continue;
     }
     if (
-      (c === cjEletivas || item.elegivel.categoria === "eletiva") &&
+      ((cjEletivas !== null && c === cjEletivas) || item.elegivel.categoria === "eletiva") &&
       chAlocadaEletivas >= chFaltanteEletivas
     ) {
       continue;
@@ -404,11 +416,11 @@ export function gerarSugestaoGrade(
         codTurma: melhorTurma.codigo,
       });
       chTotalAlocada += item.elegivel.disciplina.horas.total;
-      if (c === cjHumanidades) {
+      if (cjHumanidades !== null && c === cjHumanidades) {
         chAlocadaHumanidades += item.elegivel.disciplina.horas.total;
-      } else if (c === cjSegundoEstrato) {
+      } else if (cjSegundoEstrato !== null && c === cjSegundoEstrato) {
         chAlocadaEstrato2 += item.elegivel.disciplina.horas.total;
-      } else if (c === cjEletivas || item.elegivel.categoria === "eletiva") {
+      } else if ((cjEletivas !== null && c === cjEletivas) || item.elegivel.categoria === "eletiva") {
         chAlocadaEletivas += item.elegivel.disciplina.horas.total;
       } else if (ehTrilha(curso, c)) {
         chAlocadaTrilhas += item.elegivel.disciplina.horas.total;

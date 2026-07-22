@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import matrizJson from "../data/matriz-981.json";
+import matrizEngCompJson from "../data/eng-comp/matriz-844.json";
 import turmas20252 from "../data/turmas/2025-2.json";
 import turmas20261 from "../data/turmas/2026-1.json";
 import {
@@ -13,6 +14,7 @@ import {
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 
 const matriz = matrizJson as unknown as Matriz;
+const matrizEngComp = matrizEngCompJson as unknown as Matriz;
 const ofertas = [turmas20252, turmas20261] as unknown as OfertaSemestre[];
 const abertos = codigosOfertados(ofertas);
 
@@ -100,6 +102,24 @@ describe("board de obrigatórias", () => {
       expect(n.y, `${n.codigo} fora da faixa`).toBeGreaterThanOrEqual(faixa.y);
       expect(n.y + ALTURA_NO).toBeLessThanOrEqual(faixa.y + faixa.altura);
     }
+  });
+});
+
+describe("board de obrigatórias — Eng. Comp.", () => {
+  const board = montarBoardObrigatorias(matrizEngComp);
+
+  it("não duplica obrigatórias como um 2º estrato inexistente", () => {
+    const obrigatorias = matrizEngComp.disciplinas.filter(
+      (d) => d.conjunto === null && !d.codigo.startsWith("ENADE"),
+    );
+    expect(board.nos).toHaveLength(obrigatorias.length);
+    expect(board.faixas).toHaveLength(1);
+    expect(board.faixas[0]?.rotulo).toBe("Obrigatórias");
+    expect(board.nos.some((n) => n.grupo === "segundoEstrato")).toBe(false);
+  });
+
+  it("continua respeitando as invariantes de desenho", () => {
+    conferirInvariantes(board);
   });
 });
 

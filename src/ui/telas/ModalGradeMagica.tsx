@@ -158,6 +158,7 @@ export function ModalSugestaoGrade({
   const bloqueiaConfirmacaoSede = !sedeCentro && !sedeEcoville && !sedeNeoville;
   const bloqueiaConfirmacao = bloqueiaConfirmacaoTurno || bloqueiaConfirmacaoSede || !matriz;
   const temExtensao = exigeExtensao(matriz);
+  const temHumanidades = descricaoDoCurso(matriz ?? 981).categorias.some((c) => c.id === "humanidades");
 
   function handleGerar(sobrescrever: boolean = false) {
     if (bloqueiaConfirmacao || !matriz) return;
@@ -181,7 +182,7 @@ export function ModalSugestaoGrade({
         disciplinasExcluidas,
         professoresExcluidos,
         trilhasExcluidas: trilhasExcluidas.map((t) => t.conjunto),
-        semHumanidades,
+        semHumanidades: temHumanidades && semHumanidades,
         semTrilhas,
         semEletivas,
         priorizarExtensionistas: temExtensao && priorizarExtensionistas,
@@ -222,7 +223,7 @@ export function ModalSugestaoGrade({
     }
 
     const outrosFiltros: string[] = [];
-    if (semHumanidades) outrosFiltros.push("Sem Optativas de Humanidades");
+    if (temHumanidades && semHumanidades) outrosFiltros.push("Sem Optativas de Humanidades");
     if (semTrilhas) outrosFiltros.push("Sem Trilhas");
     if (semEletivas) outrosFiltros.push("Sem Eletivas");
     if (priorizarExtensionistas) outrosFiltros.push("Priorizando Extensionistas");
@@ -246,7 +247,7 @@ export function ModalSugestaoGrade({
               <span>✨</span> Sugestão de Grade
             </h3>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              O motor Oásis analisa seu progresso e sugere a grade ideal, respeitando pré-requisitos, exclusões e prioridade entre turmas S73 (Prio 1) e S71 (Prio 2).
+              O motor Oásis analisa seu progresso e sugere uma grade compatível, respeitando pré-requisitos, exclusões, turnos, sedes e conflitos de horário.
             </p>
           </div>
           <button
@@ -590,12 +591,12 @@ export function ModalSugestaoGrade({
                 {/* Excluir Professores */}
                 <div className="space-y-2.5 border-t border-zinc-200/60 pt-4 dark:border-zinc-800">
                   <div className="flex items-center justify-between">
-                    <label
+                    {temHumanidades && <label
                       title="Evita que turmas ministradas ou co-ministradas por estes docentes sejam sugeridas na grade"
                       className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 cursor-help"
                     >
                       Excluir Professores {professoresExcluidos.length > 0 ? `(${professoresExcluidos.length})` : ""} <span className="text-[10px] font-normal text-zinc-400">ⓘ</span>
-                    </label>
+                    </label>}
                     {!modoBuscaProf && (
                       <button
                         type="button"

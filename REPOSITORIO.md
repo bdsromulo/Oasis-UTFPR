@@ -23,7 +23,7 @@ Este documento é o **contrato de trabalho e manual canônico de arquitetura** p
 
 ## 1. O que é o projeto e Metodologia de Desenvolvimento
 
-O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente desenvolvida por alunos para alunos do curso de **Bacharelado em Sistemas de Informação (BSI) da UTFPR Câmpus Curitiba, matriz 981**. Permite que o estudante acompanhe sua situação curricular (concluídas, pendentes, coeficientes), verifique o que pode cursar, monte a grade horária ideal e confira trilhas e horas extensionistas.
+O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matriz 981)** e à **Engenharia de Computação (matriz 844)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de BSI se aplica a outro curso.
 
 ### Metodologia e Escalação de Trabalho
 Atualmente, o projeto adota uma metodologia de **Desenvolvimento Ágil Individual com Vibe Coding / IA Assistida (Antigravity & Claude Code)**. Para garantir escalabilidade e transição suave para **trabalho grupal de mantenedores no futuro**, a documentação é dividida em **três documentos canônicos especializados**:
@@ -50,15 +50,17 @@ oasis-utfpr/
 ├── CLAUDE.md                 # Resumo rápido de diretrizes para IAs
 ├── index.html                # Ponto de entrada web (carrega fontes Outfit/Plus Jakarta Sans)
 ├── data/                     # JSONs canônicos servidos à aplicação estática
-│   ├── matriz-981.json       # Matriz curricular de BSI 981 (150 disciplinas categorizadas)
-│   └── turmas/               # Ofertas semestrais de disciplinas e horários
+│   ├── matriz-981.json       # Matriz curricular de BSI 981
+│   ├── turmas/               # Ofertas semestrais de BSI
 │       ├── 2026-1.json       # Oferta primária gerada via PDF do Portal do Aluno
 │       └── 2025-2.json       # Oferta secundária (Grade na Hora)
+│   └── eng-comp/             # Matriz 844 e ofertas de Engenharia de Computação
 ├── tools/                    # Pipeline de extração e validação de dados em Python 3
 │   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-981.json
 │   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
 │   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
+│   ├── validate_turmas_estrutura.py # Invariantes independentes da fonte
 │   └── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
 ├── src/                      # Código fonte da aplicação web (Vite + React 19 + TypeScript)
 │   ├── index.css             # Tokens Tailwind v4 e estilos base (--color-utfpr-*)
@@ -86,7 +88,7 @@ Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não im
 
 1. **Camada 1 — Dados e Pipeline (`data/` + `tools/`):**
    - Extração posicional por colunas (`COLS`) no `parse_turmas_pdf.py` a partir do PDF oficial.
-   - Auditoria rigorosa nos validadores: **Regras R1 a R7** para turmas e **M1 a M7** para matriz.
+   - Auditoria rigorosa: `validate_turmas.py` cruza a oferta com PDF; `validate_turmas_estrutura.py` protege qualquer fonte de oferta. O validador de matriz atual ainda é específico da 981.
 
 2. **Camada 2 — Domínio (`src/domain/`):**
    - `historico/parser.ts`: Transforma texto extraído em `PerfilAluno` (identificando matérias aprovadas por equivalência, aproveitamento ou notas).
@@ -118,6 +120,7 @@ npm run build
 
 # Validação do pipeline de dados (quando atualizar PDFs de turmas ou matriz)
 python tools/validate_turmas.py "Turmas Abertas - Portal do Aluno UTFPR.pdf" data/turmas/2026-1.json
+python tools/validate_turmas_estrutura.py data/eng-comp/turmas/2025-2.json
 python tools/validate_matriz.py
 ```
 

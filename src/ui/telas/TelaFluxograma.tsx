@@ -10,6 +10,7 @@ import {
   type GrupoCor,
   type NoFluxo,
 } from "../../domain/motor/fluxograma";
+import { descricaoDoCurso } from "../../domain/cursos";
 
 type AbaBoard = "obrigatorias" | "trilhas";
 
@@ -88,6 +89,7 @@ export function TelaFluxograma(props: {
   perfil: PerfilAluno | null;
 }) {
   const { matriz, ofertas, perfil } = props;
+  const curso = descricaoDoCurso(matriz);
   const [abaBoard, setAbaBoard] = useState<AbaBoard>("obrigatorias");
   const [busca, setBusca] = useState("");
   const [selecionado, setSelecionado] = useState<string | null>(null);
@@ -232,8 +234,8 @@ export function TelaFluxograma(props: {
       <div className="grid grid-cols-2 gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
         {(
           [
-            { id: "obrigatorias" as const, rotulo: "Obrigatórias & 2º Estrato", icone: "🎓", qtd: boardObr.nos.length },
-            { id: "trilhas" as const, rotulo: "Trilhas do 3º Estrato", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
+            { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: "🎓", qtd: boardObr.nos.length },
+            { id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
           ]
         ).map((op) => {
           const ativo = abaBoard === op.id;
@@ -264,9 +266,8 @@ export function TelaFluxograma(props: {
 
       {abaBoard === "trilhas" && (
         <p className="rounded-2xl border border-indigo-300/70 bg-indigo-50/70 px-4 py-3 text-xs font-medium leading-relaxed text-indigo-900 dark:border-indigo-800/70 dark:bg-indigo-950/40 dark:text-indigo-200">
-          Este board mostra apenas disciplinas de trilha que <strong>efetivamente abriram</strong> em
-          2025.2 ou 2026.1 — trilhas sem oferta conhecida não aparecem. Blocos tracejados são
-          pré-requisitos que vivem fora da trilha (obrigatórias ou 2º estrato).
+          Este board mostra apenas disciplinas de trilha que <strong>efetivamente abriram</strong> em {ofertas.map((o) => o.semestre.replace("-", ".")).join(" ou ")} — trilhas sem oferta conhecida não aparecem. Blocos tracejados são
+          pré-requisitos que vivem fora da trilha.
         </p>
       )}
 
