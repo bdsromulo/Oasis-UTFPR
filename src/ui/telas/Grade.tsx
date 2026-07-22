@@ -103,7 +103,7 @@ function CardResumoCategoria({ r, isSubTrilha }: { r: ResumoCategoriaGrade; isSu
           <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-500/15 border border-amber-500/30 p-2.5 text-[11px] font-bold text-amber-900 dark:text-amber-200">
             <span className="text-sm shrink-0 mt-0.5">⭐️</span>
             <span>
-              Trilha já completa ({r.cumpridoBase}/{r.exigido}h)! As <strong className="font-mono text-amber-700 dark:text-amber-300">+{r.impulsoGrade}h</strong> contam como <strong className="underline decoration-amber-500">horas excedentes</strong> para o 3º Estrato/Eletivas.
+              Trilha já completa ({r.cumpridoBase}/{r.exigido}h)! As <strong className="font-mono text-amber-700 dark:text-amber-300">+{r.impulsoGrade}h</strong> contam como <strong className="underline decoration-amber-500">horas excedentes</strong> no bloco optativo do curso.
             </span>
           </div>
         )}
@@ -282,7 +282,7 @@ function SecaoResumoImpactoGrade(props: {
                   <div className="mt-3 space-y-1.5">
                     <div className="flex items-baseline justify-between text-xs">
                       <span className="font-medium text-zinc-600 dark:text-zinc-400">
-                        Progresso Total (3 Trilhas): <strong className="text-zinc-900 dark:text-zinc-100">{resumoTrilhasGeral.cumpridoBase}h</strong>
+                        Progresso Total: <strong className="text-zinc-900 dark:text-zinc-100">{resumoTrilhasGeral.cumpridoBase}h</strong>
                         {resumoTrilhasGeral.impulsoGrade > 0 && (
                           <span className="text-utfpr-600 dark:text-utfpr-400 font-bold"> +{resumoTrilhasGeral.impulsoGrade}h</span>
                         )}
@@ -337,7 +337,7 @@ function SecaoResumoImpactoGrade(props: {
                     </span>
                   </div>
                   <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
-                    As 3 trilhas com maior carga somam para as 345h obrigatórias do estrato
+                    As horas das trilhas selecionadas contam para a carga optativa exigida pelo curso
                   </span>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

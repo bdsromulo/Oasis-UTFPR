@@ -403,7 +403,7 @@ export function App() {
               </h1>
             </div>
             <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Sistemas de Informação · Câmpus Curitiba · Matriz 981
+              {dadosCurso.rotulo} · Câmpus Curitiba · Matriz {matriz.matriz}
             </p>
           </div>
         </div>
@@ -965,7 +965,7 @@ export function App() {
       )}
 
       <footer className="mt-20 border-t border-zinc-200/80 pt-6 pb-24 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
-        Projeto acadêmico independente desenvolvido por e para estudantes de BSI — não oficial. Sempre verifique e confirme seus dados no Portal do Aluno da UTFPR.
+        Projeto acadêmico independente desenvolvido por e para estudantes da UTFPR — não oficial. Sempre verifique e confirme seus dados no Portal do Aluno da UTFPR.
       </footer>
     </div>
   );

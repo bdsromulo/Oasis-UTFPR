@@ -18,18 +18,10 @@ import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/curso
 
 type Grupo = "todas" | "obrigatorias" | "estrato2" | "trilhas" | "humanidades";
 
-const GRUPOS: [Grupo, string][] = [
-  ["todas", "Todas"],
-  ["obrigatorias", "Obrigatórias"],
-  ["estrato2", "2º Estrato"],
-  ["trilhas", "Trilhas"],
-  ["humanidades", "Humanidades"],
-];
-
-function grupoDe(e: Elegivel): Grupo {
+function grupoDe(e: Elegivel, matriz: Matriz): Grupo {
   const c = e.disciplina.conjunto;
   if (c === null) return "obrigatorias";
-  const curso = descricaoDoCurso(981);
+  const curso = descricaoDoCurso(matriz);
   const cat = categoriaSimples(curso, c);
   if (cat?.id === "segundoEstrato") return "estrato2";
   if (cat?.id === "humanidades") return "humanidades";
@@ -329,6 +321,14 @@ export function TelaPossoCursar(props: {
   const [soLiberadas, setSoLiberadas] = useState(true);
   const [grupo, setGrupo] = useState<Grupo>("todas");
   const [trilha, setTrilha] = useState<string>("todas");
+  const curso = descricaoDoCurso(matriz);
+  const grupos = useMemo<[Grupo, string][]>(() => [
+    ["todas", "Todas"],
+    ["obrigatorias", "Obrigatórias"],
+    ...curso.categorias.filter((c) => c.id === "segundoEstrato").map(() => ["estrato2", "2º Estrato"] as [Grupo, string]),
+    ["trilhas", "Trilhas"],
+    ...curso.categorias.filter((c) => c.id === "humanidades").map(() => ["humanidades", "Humanidades"] as [Grupo, string]),
+  ], [curso]);
 
   const elegiveis = useMemo(
     () => listarElegiveis(perfil, matriz, oferta),
@@ -352,7 +352,7 @@ export function TelaPossoCursar(props: {
   const trilhasDisponiveis = useMemo(() => {
     const vistos = new Map<string, string>(); // conjunto -> nome
     for (const e of elegiveis) {
-      if (grupoDe(e) === "trilhas") {
+      if (grupoDe(e, matriz) === "trilhas") {
         vistos.set(String(e.disciplina.conjunto), e.categoria);
       }
     }
@@ -376,7 +376,7 @@ export function TelaPossoCursar(props: {
         return false;
       }
       // 3. Grupo curricular
-      if (grupo !== "todas" && grupoDe(e) !== grupo) {
+      if (grupo !== "todas" && grupoDe(e, matriz) !== grupo) {
         return false;
       }
       if (grupo === "trilhas" && trilha !== "todas" && String(e.disciplina.conjunto) !== trilha) {
@@ -502,7 +502,7 @@ export function TelaPossoCursar(props: {
               }}
               className="cursor-pointer rounded-xl border border-zinc-300 bg-white px-3.5 py-2 font-display text-xs font-bold text-zinc-900 shadow-2xs transition-all focus:border-utfpr-500 focus:outline-none focus:ring-2 focus:ring-utfpr-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-utfpr-400 min-w-[200px]"
             >
-              {GRUPOS.map(([id, rotulo]) => (
+              {grupos.map(([id, rotulo]) => (
                 <option key={id} value={id}>
                   {rotulo === "todas" ? "Todas as Categorias" : rotulo}
                 </option>

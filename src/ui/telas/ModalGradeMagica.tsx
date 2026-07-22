@@ -3,7 +3,7 @@ import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma } from "../../do
 import { gerarSugestaoGrade, type OpcoesSugestaoGrade } from "../../domain/motor/grade-magica";
 import { Botao } from "../componentes";
 import { IconWarning } from "../icons";
-import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
+import { descricaoDoCurso, ehTrilha, exigeExtensao } from "../../domain/cursos";
 
 export interface ModalSugestaoGradeProps {
   aberto: boolean;
@@ -157,6 +157,7 @@ export function ModalSugestaoGrade({
   const bloqueiaConfirmacaoTurno = naoManha && naoTarde && naoNoite;
   const bloqueiaConfirmacaoSede = !sedeCentro && !sedeEcoville && !sedeNeoville;
   const bloqueiaConfirmacao = bloqueiaConfirmacaoTurno || bloqueiaConfirmacaoSede || !matriz;
+  const temExtensao = exigeExtensao(matriz);
 
   function handleGerar(sobrescrever: boolean = false) {
     if (bloqueiaConfirmacao || !matriz) return;
@@ -183,7 +184,7 @@ export function ModalSugestaoGrade({
         semHumanidades,
         semTrilhas,
         semEletivas,
-        priorizarExtensionistas,
+        priorizarExtensionistas: temExtensao && priorizarExtensionistas,
       },
       sobrescrever ? [] : (confirmacaoExistentesAberta ? selecaoAtual : undefined),
     );
@@ -494,12 +495,12 @@ export function ModalSugestaoGrade({
                 {/* Excluir Disciplinas */}
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <label
+                    {temExtensao && <label
                       title="Evita que as disciplinas selecionadas sejam sugeridas na montagem automática da grade"
                       className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 cursor-help"
                     >
                       Excluir Disciplinas {disciplinasExcluidas.length > 0 ? `(${disciplinasExcluidas.length})` : ""} <span className="text-[10px] font-normal text-zinc-400">ⓘ</span>
-                    </label>
+                    </label>}
                     {!modoBuscaDisc && (
                       <button
                         type="button"

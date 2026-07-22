@@ -220,7 +220,7 @@ export function TelaSituacao(props: {
             <div className="mt-0.5 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
               {perfil.periodo ? `${perfil.periodo}º Período` : "Em Curso"}
               <span className="ml-2 font-sans text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                ({perfil.ingresso ? `Ingresso: ${perfil.ingresso}` : "Matriz 981"})
+                ({perfil.ingresso ? `Ingresso: ${perfil.ingresso}` : `Matriz ${matriz.matriz}`})
               </span>
             </div>
           </div>
@@ -274,7 +274,7 @@ export function TelaSituacao(props: {
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {obr && (
           <CardProgresso
-            titulo="Obrigatórias (1º estrato)"
+            titulo={descricaoDoCurso(matriz).matriz === 981 ? "Obrigatórias (1º estrato)" : "Obrigatórias"}
             cumprido={obr.aprovada}
             exigido={obr.total}
             concluidas={concluidasMapa.obrigatorias}

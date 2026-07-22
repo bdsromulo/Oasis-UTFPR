@@ -326,9 +326,9 @@ export function TelaSimuladorFormatura(props: {
             </span>
           </div>
           <p className="mt-1 text-[11px] leading-snug text-indigo-900/70 dark:text-indigo-200/70">
-            O 3º estrato tem duas exigências independentes: {resultado.trilhasExigidas} trilhas
-            validadas (90h cada) e 345h no total. As horas que passam das 90h de uma trilha continuam
-            contando para as 345h.
+            O bloco optativo exige {resultado.trilhasExigidas} trilhas validadas e a carga horária
+            total definida pela matriz. Horas acima do mínimo de uma trilha continuam contando para
+            esse bloco.
           </p>
           <ul className="mt-2 flex flex-wrap gap-2">
             {resultado.trilhasFechadas.map((t) => (

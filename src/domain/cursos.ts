@@ -136,3 +136,8 @@ export function rotuloDoConjunto(
   if (simples) return simples.rotulo;
   return matriz.conjuntos[String(conjunto)]?.nome ?? String(conjunto);
 }
+
+/** A extensão curricular só é uma exigência quando a própria matriz a declara. */
+export function exigeExtensao(matriz: Matriz | null | undefined): boolean {
+  return (matriz?.cargas.extensao ?? 0) > 0;
+}

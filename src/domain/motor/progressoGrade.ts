@@ -1,7 +1,7 @@
 import type { DisciplinaMatriz, Matriz, PerfilAluno } from "../tipos";
 import { normNome } from "./elegiveis";
 import type { ItemGrade } from "./grade";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
+import { descricaoDoCurso, ehTrilha, categoriaSimples, exigeExtensao } from "../cursos";
 
 export interface DadosProgressoCategoria {
   categoriaId: string;
@@ -86,7 +86,7 @@ export function calcularProgressoMateria(
   const cjEletivas = curso.categorias.find((c) => c.id === "eletivas")?.conjunto ?? null;
 
   let categoriaId = "obrigatorias";
-  let categoriaNome = "Obrigatórias (1º Estrato)";
+  let categoriaNome = curso.matriz === 981 ? "Obrigatórias (1º Estrato)" : "Obrigatórias";
   let exigido = 1815;
   let cumpridoBase = 0;
 
@@ -109,14 +109,14 @@ export function calcularProgressoMateria(
       );
     }
     cumpridoBase = (est1 ? 200 : 0) + (est2 ? 200 : 0);
-  } else if (chext > 0 && conjunto === cjEletivas) {
+  } else if (exigeExtensao(matriz) && chext > 0 && conjunto === cjEletivas) {
     categoriaId = "extensao";
     categoriaNome = "Extensão Universitária";
     exigido = perfil?.extensao?.chTotal ?? 320;
     cumpridoBase = perfil?.extensao?.chCursada ?? 0;
   } else if (conjunto === null || (!d && !chext)) {
     categoriaId = "obrigatorias";
-    categoriaNome = "Obrigatórias (1º Estrato)";
+    categoriaNome = curso.matriz === 981 ? "Obrigatórias (1º Estrato)" : "Obrigatórias";
     exigido = perfil?.resumoGeral?.obrigatorias?.total ?? matriz?.cargas?.obrigatorias ?? 1815;
     cumpridoBase = perfil?.resumoGeral?.obrigatorias?.aprovada ?? 0;
   } else if (catSimples && catSimples.id !== "eletivas") {
@@ -192,7 +192,7 @@ export function calcularResumoProgressoGrade(
     }
   > = {
     obrigatorias: {
-      nome: "Obrigatórias (1º Estrato)",
+      nome: curso.matriz === 981 ? "Obrigatórias (1º Estrato)" : "Obrigatórias",
       exigido: perfil?.resumoGeral?.obrigatorias?.total ?? matriz?.cargas?.obrigatorias ?? 1815,
       cumpridoBase: perfil?.resumoGeral?.obrigatorias?.aprovada ?? 0,
       impulsoGrade: 0,
@@ -221,14 +221,17 @@ export function calcularResumoProgressoGrade(
       impulsoGrade: 0,
       disciplinas: [],
     },
-    extensao: {
+  };
+
+  if (exigeExtensao(matriz)) {
+    categoriasMapa.extensao = {
       nome: "Extensão Universitária",
-      exigido: perfil?.extensao?.chTotal ?? 320,
+      exigido: perfil?.extensao?.chTotal ?? matriz?.cargas.extensao ?? 0,
       cumpridoBase: perfil?.extensao?.chCursada ?? 0,
       impulsoGrade: 0,
       disciplinas: [],
-    },
-  };
+    };
+  }
 
   // categorias de conjunto único declaradas pelo curso (BSI tem 2º estrato e
   // humanidades; Eng. Comp. não tem nenhuma)
@@ -301,7 +304,7 @@ export function calcularResumoProgressoGrade(
       }
       categoriasMapa[catId].impulsoGrade += acrescimo;
       categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
-    } else if (catId === "extensao") {
+    } else if (catId === "extensao" && categoriasMapa.extensao) {
       categoriasMapa.extensao.impulsoGrade += acrescimo;
       categoriasMapa.extensao.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
     } else if (catId === "estagio") {
@@ -328,7 +331,7 @@ export function calcularResumoProgressoGrade(
     ...curso.categorias.filter((c) => c.id !== "eletivas").map((c) => String(c.conjunto)),
     "trilhas_geral",
     "eletivas",
-    "extensao",
+    ...(exigeExtensao(matriz) ? ["extensao"] : []),
   ];
   const todasChaves = new Set([...chavesOrdem, ...Object.keys(categoriasMapa)]);
 

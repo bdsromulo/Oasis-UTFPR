@@ -5,7 +5,7 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
+import { descricaoDoCurso, ehTrilha, categoriaSimples, exigeExtensao } from "../../domain/cursos";
 
 function normNome(nome: string): string {
   return nome
@@ -276,14 +276,15 @@ export function TelaCatalogo(props: {
     return { total, concluidas, abertas, semoferta };
   }, [itensDisciplinas, categoria]);
 
+  const curso = descricaoDoCurso(matriz);
   const categoriasOpcoes: [CategoriaCatalogo, string][] = [
     ["todas", "Todas as Disciplinas"],
-    ["obrigatorias", "1º Estrato (Obrigatórias)"],
-    ["segundoEstrato", "2º Estrato"],
-    ["humanidades", "Ciclo de Humanidades"],
-    ["trilhas", "Trilhas em Computação (3º Estrato)"],
+    ["obrigatorias", curso.matriz === 981 ? "1º Estrato (Obrigatórias)" : "Obrigatórias"],
+    ...curso.categorias.filter((c) => c.id === "segundoEstrato").map(() => ["segundoEstrato", "2º Estrato"] as [CategoriaCatalogo, string]),
+    ...curso.categorias.filter((c) => c.id === "humanidades").map(() => ["humanidades", "Ciclo de Humanidades"] as [CategoriaCatalogo, string]),
+    ["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"],
     ["eletivas", "Eletivas"],
-    ["extensao", "Extensão"],
+    ...(exigeExtensao(matriz) ? [["extensao", "Extensão"] as [CategoriaCatalogo, string]] : []),
   ];
 
   return (
@@ -369,7 +370,7 @@ export function TelaCatalogo(props: {
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-200/60 pb-4 dark:border-zinc-800/60">
             <div>
               <h3 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                Visão Geral das Trilhas de Aprofundamento (3º Estrato)
+                Visão Geral das Trilhas de Aprofundamento
               </h3>
               <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
                 O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} trilhas distintas</strong> (cada uma somando a carga horária exigida do conjunto).

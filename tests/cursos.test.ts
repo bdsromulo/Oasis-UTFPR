@@ -6,6 +6,7 @@ import {
   ENG_COMP_844,
   descricaoDoCurso,
   ehTrilha,
+  exigeExtensao,
   rotuloDoConjunto,
   trilhasDaMatriz,
 } from "../src/domain/cursos";
@@ -65,5 +66,10 @@ describe("descrição de curso", () => {
     expect(ehTrilha(BSI_981, 1165)).toBe(true);
     expect(ehTrilha(ENG_COMP_844, 959)).toBe(false);
     expect(ehTrilha(ENG_COMP_844, 960)).toBe(true);
+  });
+
+  it("só habilita extensão para a matriz que a exige", () => {
+    expect(exigeExtensao(bsi)).toBe(true);
+    expect(exigeExtensao(engComp)).toBe(false);
   });
 });
