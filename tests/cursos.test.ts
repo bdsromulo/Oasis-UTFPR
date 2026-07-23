@@ -4,6 +4,7 @@ import matriz844 from "../data/eng-comp/matriz-844.json";
 import {
   BSI_981,
   ENG_COMP_844,
+  contaNoBlocoOptativo,
   descricaoDoCurso,
   ehTrilha,
   exigeExtensao,
@@ -66,6 +67,13 @@ describe("descrição de curso", () => {
     expect(ehTrilha(BSI_981, 1165)).toBe(true);
     expect(ehTrilha(ENG_COMP_844, 959)).toBe(false);
     expect(ehTrilha(ENG_COMP_844, 960)).toBe(true);
+  });
+
+  it("contabiliza optativas isoladas nas 270h sem validá-las como trilha", () => {
+    expect(contaNoBlocoOptativo(ENG_COMP_844, 960)).toBe(true);
+    expect(contaNoBlocoOptativo(ENG_COMP_844, 973)).toBe(true);
+    expect(ehTrilha(ENG_COMP_844, 973)).toBe(false);
+    expect(contaNoBlocoOptativo(ENG_COMP_844, 959)).toBe(false);
   });
 
   it("só habilita extensão para a matriz que a exige", () => {

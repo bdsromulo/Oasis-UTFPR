@@ -81,6 +81,12 @@ export function dadosDoCurso(id: string | undefined | null): DadosCurso {
   return CURSOS.find((c) => c.id === id) ?? BSI;
 }
 
+/** Curso coberto correspondente à matriz detectada no histórico. */
+export function dadosDoCursoPorMatriz(matriz: number | null | undefined): DadosCurso | null {
+  if (matriz === null || matriz === undefined) return null;
+  return CURSOS.find((c) => c.matriz.matriz === matriz) ?? null;
+}
+
 /** Semestres que o curso oferece, do mais recente para o mais antigo. */
 export function semestresDoCurso(curso: DadosCurso): string[] {
   return Object.keys(curso.ofertas).sort().reverse();

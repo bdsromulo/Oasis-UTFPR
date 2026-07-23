@@ -1,13 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import {
   formatarSemestre,
   formatarSemestreExtenso,
+  proximoSemestre,
   rotuloSazonalidade,
   simularFormatura,
   type IdCategoria,
   type Requisito,
 } from "../../domain/motor/simuladorFormatura";
+import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 import { Barra, Card } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 
@@ -86,7 +88,16 @@ export function TelaSimuladorFormatura(props: {
 }) {
   const { perfil, matriz, ofertas } = props;
   const [ritmo, setRitmo] = useState(5);
-  const [semestreInicial, setSemestreInicial] = useState("2026-2");
+  const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
+  const curso = descricaoDoCurso(matriz);
+  const semestresIniciais = useMemo(() => {
+    const segundo = proximoSemestre(props.semestreAtivo);
+    return [props.semestreAtivo, segundo, proximoSemestre(segundo)];
+  }, [props.semestreAtivo]);
+
+  useEffect(() => {
+    setSemestreInicial(props.semestreAtivo);
+  }, [props.semestreAtivo]);
 
   const resultado = useMemo(
     () => simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial }),
@@ -179,7 +190,7 @@ export function TelaSimuladorFormatura(props: {
             onChange={(e) => setSemestreInicial(e.target.value)}
             className="mt-2 h-9 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 font-mono text-sm font-bold text-zinc-900 outline-none focus:border-utfpr-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
-            {["2026-2", "2027-1", "2027-2"].map((s) => (
+            {semestresIniciais.map((s) => (
               <option key={s} value={s}>
                 {formatarSemestre(s)}
               </option>
@@ -283,7 +294,10 @@ export function TelaSimuladorFormatura(props: {
                       <span
                         className={`rounded-md border px-1.5 py-0.5 font-display text-[10px] font-black ${CORES_CATEGORIA[d.categoria].chip}`}
                       >
-                        {ROTULO_CURTO[d.categoria]}
+                        {d.categoria === "trilhas" &&
+                        !ehTrilha(curso, d.conjunto)
+                          ? "Optativa isolada"
+                          : ROTULO_CURTO[d.categoria]}
                       </span>
                       <span className="font-mono text-[11px] text-zinc-400">{d.horas}h</span>
                       {d.sazonalidade !== "ambos" && d.ocupaVaga && (

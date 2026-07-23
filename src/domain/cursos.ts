@@ -107,6 +107,23 @@ export function ehTrilha(curso: DescricaoCurso, conjunto: number | string | null
   return !curso.categorias.some((c) => c.conjunto === n);
 }
 
+/**
+ * true quando as horas do conjunto entram no bloco optativo agregado.
+ *
+ * Em Eng. Comp., isso inclui tanto as trilhas validáveis (960..972) quanto
+ * Optativas Isoladas (973). As isoladas somam para as 270h, mas não podem ser
+ * contadas como uma das duas trilhas completas.
+ */
+export function contaNoBlocoOptativo(
+  curso: DescricaoCurso,
+  conjunto: number | string | null,
+): boolean {
+  if (conjunto === null) return false;
+  const n = Number(conjunto);
+  if (Number.isNaN(n) || n === curso.agregadorTrilhas) return false;
+  return ehTrilha(curso, n) || curso.naoValidaveis.includes(n);
+}
+
 /** Categoria simples correspondente ao conjunto, se houver. */
 export function categoriaSimples(
   curso: DescricaoCurso,

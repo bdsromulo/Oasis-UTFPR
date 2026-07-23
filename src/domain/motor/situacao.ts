@@ -19,6 +19,7 @@ export interface Painel {
   humanidades: ProgressoConjunto | null;
   trilhas: ProgressoConjunto[];
   trilhasValidadas: number;
+  blocoOptativo: { exigido: number; cumprido: number } | null;
   eletivas: { exigido: number; cumprido: number } | null;
   extensao: { exigido: number; cumprido: number } | null;
   inconsistencias: string[];
@@ -63,12 +64,29 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
   );
   const rSegundo = porId.get("segundoEstrato");
   const rHumanidades = porId.get("humanidades");
+  const resumoOptativas = perfil.resumoGeral?.optativas;
+  const resumoAgregador = curso.agregadorTrilhas
+    ? por.get(String(curso.agregadorTrilhas))
+    : undefined;
   return {
     obrigatorias: perfil.resumoGeral?.obrigatorias ?? null,
     segundoEstrato: rSegundo ? prog(rSegundo, false) : null,
     humanidades: rHumanidades ? prog(rHumanidades, false) : null,
     trilhas,
     trilhasValidadas: trilhas.filter((t) => t.validado).length,
+    blocoOptativo: curso.agregadorTrilhas
+      ? {
+          exigido:
+            (curso.matriz === 844 ? resumoOptativas?.total : undefined) ??
+            resumoAgregador?.chObrigatoria ??
+            matriz.conjuntos[String(curso.agregadorTrilhas)]?.ch ??
+            matriz.cargas.optativas,
+          cumprido:
+            (curso.matriz === 844 ? resumoOptativas?.aprovada : undefined) ??
+            resumoAgregador?.chCursadaAprovada ??
+            trilhas.reduce((total, trilha) => total + trilha.cumprido, 0),
+        }
+      : null,
     eletivas: perfil.eletivas
       ? {
           exigido: perfil.eletivas.chTotal,
@@ -76,7 +94,7 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
           cumprido: perfil.eletivas.chTotal - perfil.eletivas.chFaltante,
         }
       : null,
-    extensao: perfil.extensao
+    extensao: matriz.cargas.extensao > 0 && perfil.extensao
       ? { exigido: perfil.extensao.chTotal, cumprido: perfil.extensao.chCursada }
       : null,
     inconsistencias,

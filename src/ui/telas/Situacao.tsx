@@ -5,7 +5,11 @@ import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
+import {
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  categoriaSimples,
+} from "../../domain/cursos";
 
 export function renderizarTextoComCodigos(texto: string, matriz: Matriz) {
   const partes = texto.split(/([A-Z]{2,5}\d{1,4}[A-Z]?)/g);
@@ -114,7 +118,7 @@ export function TelaSituacao(props: {
         mapa.segundoEstrato.push(item);
       } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         mapa.humanidades.push(item);
-      } else if (dm && ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
+      } else if (dm && contaNoBlocoOptativo(descricaoDoCurso(matriz), dm.conjunto)) {
         const key = String(dm.conjunto);
         if (!mapa[key]) mapa[key] = [];
         mapa[key].push(item);
@@ -189,12 +193,14 @@ export function TelaSituacao(props: {
   // A exigência do bloco de trilhas varia por curso: BSI pede 3 trilhas dentro
   // de 345h; Eng. Comp. pede 2 dentro de 270h. Ambos saem da descrição do curso
   // e do conjunto agregador da matriz.
-  const somaCumpridoTrilhas = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
   const cursoDesc = descricaoDoCurso(matriz);
   const totalExigido3Estrato =
     (cursoDesc.agregadorTrilhas
       ? matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch
       : undefined) ?? 345;
+  const somaCumpridoTrilhas =
+    painel.blocoOptativo?.cumprido ??
+    painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
   const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
 
@@ -283,10 +289,22 @@ export function TelaSituacao(props: {
             rodape={
               perfil.obrigatoriasFaltantes.length ? (
                 <div className="flex flex-wrap items-center gap-1.5 leading-relaxed">
-                  <span className="font-bold text-zinc-700 dark:text-zinc-300">Pendente:</span>
+                  <span className="font-bold text-zinc-700 dark:text-zinc-300">
+                    {perfil.obrigatoriasFaltantes.length === 1
+                      ? "1 pendente:"
+                      : `${perfil.obrigatoriasFaltantes.length} pendentes:`}
+                  </span>
                   {renderizarTextoComCodigos(
-                    perfil.obrigatoriasFaltantes.map((f) => f.codigo).join(", "),
+                    perfil.obrigatoriasFaltantes
+                      .slice(0, 3)
+                      .map((f) => f.codigo)
+                      .join(", "),
                     matriz
+                  )}
+                  {perfil.obrigatoriasFaltantes.length > 3 && (
+                    <span className="font-semibold text-zinc-500 dark:text-zinc-400">
+                      … e mais {perfil.obrigatoriasFaltantes.length - 3}
+                    </span>
                   )}
                 </div>
               ) : (
@@ -413,6 +431,8 @@ export function TelaSituacao(props: {
                 </h2>
                 <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                   Exigência do curso: validação integral de <strong>{trilhasExigidas} trilhas distintas</strong>, com mínimo de {totalExigido3Estrato}h no total.
+                  {cursoDesc.naoValidaveis.length > 0 &&
+                    " As optativas isoladas também somam para o total, mas não validam uma trilha."}
                 </p>
               </div>
               <Badge
@@ -426,7 +446,9 @@ export function TelaSituacao(props: {
             <div className="grid gap-6 sm:grid-cols-3">
               <div>
                 <div className="mb-1 flex items-baseline justify-between">
-                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">Total Cursado no Estrato:</span>
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                    {cursoDesc.matriz === 981 ? "Total cursado no estrato:" : "Total cursado no bloco optativo:"}
+                  </span>
                   <span className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-100">
                     {somaCumpridoTrilhas} <span className="font-sans text-xs font-normal text-zinc-400">/ {totalExigido3Estrato}h</span>
                   </span>
@@ -441,7 +463,7 @@ export function TelaSituacao(props: {
                     {painel.trilhasValidadas} <span className="font-sans text-xs font-normal text-zinc-400">/ {trilhasExigidas}</span>
                   </span>
                 </div>
-                <Barra valor={painel.trilhasValidadas} max={3} destaque={painel.trilhasValidadas > 0} />
+                <Barra valor={painel.trilhasValidadas} max={trilhasExigidas} destaque={painel.trilhasValidadas > 0} />
               </div>
 
               <div className="flex flex-col justify-between rounded-xl bg-zinc-50 p-3 border border-zinc-200/60 dark:bg-zinc-800/50 dark:border-zinc-700/60">

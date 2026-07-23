@@ -10,7 +10,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 
 ### Requisitos Funcionais (RF)
 - `[x]` **RF01 — Ingestão de Histórico Escolar em PDF:** Permitir o upload e processamento local de arquivos PDF do Histórico Escolar emitidos pelo Portal do Aluno da UTFPR sem envio para servidores externos.
-- `[x]` **RF02 — Cálculo e Apresentação de Progresso Curricular:** Calcular e exibir o progresso em horas e créditos dos estratos curriculares da Matriz 981 (Obrigatórias, 2º Estrato, Ciclo de Humanidades, Eletivas e Horas de Extensão).
+- `[x]` **RF02 — Cálculo e Apresentação de Progresso Curricular:** Calcular e exibir as categorias da matriz ativa: estratos, humanidades e extensão na BSI 981; obrigatórias, 270h optativas (duas trilhas completas mais optativas isoladas), eletivas e estágio na Engenharia de Computação 844.
 - `[x]` **RF03 — Identificação de Disciplinas Elegíveis ("Posso Cursar"):** Cruzar disciplinas aprovadas com os pré-requisitos da matriz e turmas abertas do semestre para listar o que o aluno está liberado a cursar.
 - `[x]` **RF04 — Montagem de Grade Horária e Detecção de Conflitos:** Permitir selecionar turmas e identificar em tempo real choques de horários e conflitos de deslocamento entre sedes (Centro, Ecoville, Neoville) em um mesmo turno.
 - `[x]` **RF05 — Gerador de Relatório de Matrícola:** Copiar lista de códigos de turmas selecionadas formatadas para facilidade de digitação/busca durante a abertura da matrícula no Portal.
@@ -18,7 +18,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RF07 — Check-in e Modo Sem Submissão (Onboarding Resumido):** Permitir que o usuário utilize a plataforma sem submeter seu histórico (modo estilo *Grade na Hora*), selecionando previamente Câmpus, Curso e Matriz.
 - `[x]` **RF08 — Feedbacks e Tooltips Visuais de Disciplinas:** Exibir o nome completo da disciplina em um tooltip ou revelação instantânea ao passar o mouse sobre códigos (ex.: `ICSW31`) e permitir inspecionar matérias concluídas em cada card de progresso via botões unificados de "Exibir Lista".
 - `[/]` **RF09 — Página/Modal Detalhado de Disciplina:** Apresentar painel focado por disciplina contendo turmas abertas, histórico temporal de ofertas ("1º/2º Semestre do Ano"), horários típicos, professores e prioridade de vagas para BSI.
-- `[ ]` **RF10 — Computação de Disciplinas Externas como Eletivas:** Mapear disciplinas de outros cursos cursadas por alunos de BSI e sugeri-las em catálogo colaborativo de eletivas/extensão.
+- `[/]` **RF10 — Computação de Disciplinas Externas:** A ligação oficial entre oferta externa e matriz já é feita por código, equivalência ou nome, preservando a categoria correta (trilha, optativa isolada ou eletiva). Permanece futuro o catálogo colaborativo de sugestões da comunidade.
 - `[ ]` **RF11 — Linha do Tempo Curricular e Análise de Progressão Longitudinal (Comparativo Multi-Histórico):** Armazenamento de sucessivos históricos escolares no armazenamento local do navegador para medir progressão de créditos e variação temporal do Coeficiente de Rendimento (CR) e conclusão de trilhas.
 - `[x]` **RF12 — Estados e Modos de Planejamento do Semestre:** Suporte aos dois estados essenciais de uso: a) *Prévia de Matrícula (Oficial)* para o período que antecede e sucede a matrícula com base nos dados reais divulgados; b) *Período Corrido de Semestre (Simulação)* para organização durante o semestre vigente hipotetizando ofertas similares.
 - `[x]` **RF13 — Edição Contínua e Remoção Rápida na Grade (Loop Estilo GNH):** Botão "X" instantâneo revelado no hover de cada disciplina na minigrade lateral, no modal da grade completa e nos blocos da tabela visual de horários para remoção em um único clique sem perda de contexto.
@@ -41,7 +41,7 @@ A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônico
 
 ### 2.1 PEN — Planejamento Estratégico de Negócios
 - **1.1 Análise do Cenário Atendido:** O Portal do Aluno da UTFPR apresenta interfaces fragmentadas, relatórios densos em texto (PDFs multicolecionados) e ausência de simulação preditiva de grade que alerte sobre choques de horários e deslocamento inter-sedes em tempo hábil durante o curto período de matrícula.
-- **1.2 Definição de Objetivos:** Reduzir a carga cognitiva e o tempo gasto pelo estudante de BSI na tomada de decisão curricular de dias/horas para menos de 2 minutos, garantindo 100% de conformidade com a Matriz 981.
+- **1.2 Definição de Objetivos:** Reduzir a carga cognitiva e o tempo gasto por estudantes de BSI e Engenharia de Computação na tomada de decisão curricular, respeitando as diferenças entre as matrizes 981 e 844.
 - **1.3 Definição da Estratégia:** Atuar como camada de inteligência e consolidação visual local sobre os documentos brutos da instituição, democratizando o acesso às regras de progressão sem competir com os sistemas oficiais de registro de notas.
 
 ### 2.2 PETI — Planejamento Estratégico de TI
@@ -56,16 +56,16 @@ A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônico
 
 ### 2.3 Processo de GI — Ciclo de Vida da Informação
 
-O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de BSI** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo, futuro) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
+O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de BSI ou Engenharia de Computação** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo, futuro) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
 
 #### 3.1 Determinação das Exigências — *quem precisa de qual informação, e quando*
 
 | Quem? | Informação Exigida | Quando? |
 | :--- | :--- | :--- |
-| **Aluno de BSI** | Quanto falta para integralizar cada estrato (obrigatórias, 2º estrato, humanidades, trilhas, eletivas, extensão, estágio)? Qual meu Coeficiente de Rendimento absoluto e normalizado? | Contínuo; pico ao fim do semestre |
-| **Aluno de BSI** | Quais disciplinas estou liberado a cursar (pré-requisitos cumpridos × oferta do semestre)? | Períodos de matrícula e rematrícula |
-| **Aluno de BSI** | Há choque de horário ou conflito de deslocamento entre sedes (Centro/Ecoville/Neoville) na grade que estou montando? Quanto esta grade me faz avançar? | Período de matrícula |
-| **Aluno de BSI** | Qual a dificuldade percebida e a experiência de quem já cursou uma dada disciplina/turma? | Antes de escolher turmas |
+| **Aluno dos cursos atendidos** | Quanto falta para integralizar cada categoria da sua matriz? Qual meu Coeficiente de Rendimento absoluto e normalizado? | Contínuo; pico ao fim do semestre |
+| **Aluno dos cursos atendidos** | Quais disciplinas estou liberado a cursar (pré-requisitos cumpridos × oferta do semestre)? | Períodos de matrícula e rematrícula |
+| **Aluno dos cursos atendidos** | Há choque de horário ou conflito de deslocamento entre sedes (Centro/Ecoville/Neoville) na grade que estou montando? Quanto esta grade me faz avançar? | Período de matrícula |
+| **Aluno dos cursos atendidos** | Qual a dificuldade percebida e a experiência de quem já cursou uma dada disciplina/turma? | Antes de escolher turmas |
 | **Aluno Contribuidor** | Quais das minhas disciplinas concluídas posso avaliar, e como registrar dificuldade e comentário de forma autenticada? | Após concluir a disciplina |
 | **Mantenedores** | Quais turmas foram abertas no semestre? A matriz sofreu alteração? Há avaliações da comunidade pendentes de moderação? | Semestral; contínuo para moderação |
 
@@ -73,8 +73,8 @@ O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canôn
 
 | Informação exigida | Dado a ser obtido | Fonte do dado |
 | :--- | :--- | :--- |
-| **Matriz curricular vigente (981)** | Disciplinas, período, conjunto/estrato, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → `data/matriz-981.json` |
-| **Oferta de turmas do semestre** | Códigos de turma, horários (turno M/T/N + slot), sede/sala, professores e prioridade BSI (S73 P1, S71 P2) | PDF oficial de Turmas Abertas — Portal do Aluno → `data/turmas/<sem>.json` |
+| **Matrizes curriculares atendidas (981 e 844)** | Disciplinas, período, conjunto/categoria, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → `data/matriz-981.json` e `data/eng-comp/matriz-844.json` |
+| **Oferta de turmas do semestre** | Códigos de turma, horários (turno M/T/N + slot), sede/sala, professores e prioridades de curso | PDF oficial de Turmas Abertas — Portal do Aluno → `data/turmas/<sem>.json` e `data/eng-comp/turmas/<sem>.json` |
 | **Progresso individual do aluno** | RA, disciplinas cursadas, notas, frequência, status (aprovado/equivalência/aproveitamento/dependência) e créditos | Histórico Escolar em PDF — **processado 100% no navegador, sem trânsito em rede** |
 | **Avaliação de disciplina pela comunidade** | Nível de dificuldade (1–3), comentário textual, código da disciplina e token de prova de vínculo | Submissão autenticada do Aluno Contribuidor (e-mail institucional + histórico validado localmente) — *futuro, ver §5* |
 

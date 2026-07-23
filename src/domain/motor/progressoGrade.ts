@@ -1,7 +1,13 @@
 import type { DisciplinaMatriz, Matriz, PerfilAluno } from "../tipos";
 import { normNome } from "./elegiveis";
 import type { ItemGrade } from "./grade";
-import { descricaoDoCurso, ehTrilha, categoriaSimples, exigeExtensao } from "../cursos";
+import {
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  ehTrilha,
+  categoriaSimples,
+  exigeExtensao,
+} from "../cursos";
 
 export interface DadosProgressoCategoria {
   categoriaId: string;
@@ -125,10 +131,12 @@ export function calcularProgressoMateria(
     const r = perfil?.resumoConjuntos.find((x) => x.conjunto === categoriaId);
     exigido = r?.chObrigatoria ?? matriz?.conjuntos?.[categoriaId]?.ch ?? 0;
     cumpridoBase = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
-  } else if (ehTrilha(curso, conjunto)) {
+  } else if (contaNoBlocoOptativo(curso, conjunto)) {
     categoriaId = String(conjunto);
-    const nomeTrilha = matriz?.conjuntos?.[categoriaId]?.nome ?? "Trilha";
-    categoriaNome = `${nomeTrilha}${curso.sufixoTrilha}`;
+    const nomeConjunto = matriz?.conjuntos?.[categoriaId]?.nome ?? "Optativa";
+    categoriaNome = ehTrilha(curso, conjunto)
+      ? `${nomeConjunto}${curso.sufixoTrilha}`
+      : nomeConjunto;
     const r = perfil?.resumoConjuntos.find((x) => x.conjunto === categoriaId);
     exigido = r?.chObrigatoria ?? matriz?.conjuntos?.[categoriaId]?.ch ?? 115;
     cumpridoBase = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
@@ -203,11 +211,22 @@ export function calcularResumoProgressoGrade(
       exigido: chExigidaTrilhas,
       cumpridoBase: (() => {
         if (!perfil || !matriz) return 0;
+        if (curso.matriz === 844 && perfil.resumoGeral?.optativas) {
+          return Math.min(perfil.resumoGeral.optativas.aprovada, chExigidaTrilhas);
+        }
+        const agregado = curso.agregadorTrilhas
+          ? perfil.resumoConjuntos.find(
+              (x) => x.conjunto === String(curso.agregadorTrilhas),
+            )
+          : undefined;
+        if (agregado) {
+          return Math.min(agregado.chCursadaAprovada, chExigidaTrilhas);
+        }
         let soma = 0;
         for (const cod of Object.keys(matriz.conjuntos)) {
-          if (!ehTrilha(curso, cod)) continue;
+          if (!contaNoBlocoOptativo(curso, cod)) continue;
           const r = perfil.resumoConjuntos.find((x) => x.conjunto === cod);
-          if (r) soma += Math.min(r.chCursadaAprovada, r.chObrigatoria);
+          if (r) soma += r.chCursadaAprovada;
         }
         return Math.min(soma, chExigidaTrilhas);
       })(),
@@ -289,7 +308,7 @@ export function calcularResumoProgressoGrade(
     } else if (categoriasMapa[catId] && curso.categorias.some((c) => String(c.conjunto) === catId)) {
       categoriasMapa[catId].impulsoGrade += acrescimo;
       categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
-    } else if (ehTrilha(curso, catId)) {
+    } else if (contaNoBlocoOptativo(curso, catId)) {
       categoriasMapa.trilhas_geral.impulsoGrade += acrescimo;
       categoriasMapa.trilhas_geral.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
 
@@ -341,7 +360,13 @@ export function calcularResumoProgressoGrade(
     if (!c) continue;
     const ehPrincipal = chavesOrdem.includes(chave);
     const ehSubTrilha = ehTrilha(curso, chave);
-    if (!ehPrincipal && c.impulsoGrade === 0 && c.disciplinas.length === 0 && (!ehSubTrilha || c.cumpridoBase === 0)) continue;
+    const ehSubBlocoOptativo = contaNoBlocoOptativo(curso, chave);
+    if (
+      !ehPrincipal &&
+      c.impulsoGrade === 0 &&
+      c.disciplinas.length === 0 &&
+      (!ehSubBlocoOptativo || c.cumpridoBase === 0)
+    ) continue;
 
     const cumpridoSimulado = c.cumpridoBase + c.impulsoGrade;
     let statusTexto = "";

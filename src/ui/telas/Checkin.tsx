@@ -239,9 +239,7 @@ export function TelaCheckin(props: {
             >
               <span className="truncate font-display font-bold text-sm">{infoMatriz.rotulo}</span>
               <div className="flex items-center gap-2 shrink-0">
-                <Badge tom={curso === "eng-comp" ? "aviso" : "ok"}>
-                  {curso === "eng-comp" ? "Protótipo" : "Vigente"}
-                </Badge>
+                <Badge tom="ok">Disponível</Badge>
                 <span className="text-zinc-400 text-[10px]">{openMatriz ? "▲" : "▼"}</span>
               </div>
             </button>
@@ -252,9 +250,7 @@ export function TelaCheckin(props: {
                   <span className="font-display font-bold text-sm text-zinc-900 dark:text-zinc-100">
                     {infoMatriz.rotulo}
                   </span>
-                  <Badge tom={curso === "eng-comp" ? "aviso" : "ok"}>
-                    {curso === "eng-comp" ? "Protótipo" : "Vigente"}
-                  </Badge>
+                  <Badge tom="ok">Disponível</Badge>
                 </div>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{infoMatriz.nota}</p>
               </div>
@@ -277,7 +273,7 @@ export function TelaCheckin(props: {
               </div>
               <p className="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
                 Importe seu PDF emitido pelo Portal do Aluno. A plataforma calcula suas horas cumpridas
-                por estrato, valida pré-requisitos automaticamente em <strong>Matérias Abertas</strong> e
+                por categoria curricular, valida pré-requisitos automaticamente em <strong>Matérias Abertas</strong> e
                 alerta sobre pendências na sua grade.
               </p>
               <div className="rounded-xl bg-white/80 p-3 text-[11px] text-zinc-500 border border-zinc-200/60 dark:bg-zinc-900/80 dark:border-zinc-800">

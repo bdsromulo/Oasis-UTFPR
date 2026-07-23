@@ -1,5 +1,10 @@
 import type { DisciplinaMatriz, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
+import {
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  ehTrilha,
+  categoriaSimples,
+} from "../cursos";
 
 /**
  * Simulador de formatura.
@@ -144,26 +149,19 @@ export interface ResultadoSimulacao {
   trilhasExigidas: number;
 }
 
-/**
- * Trilhas que o curso exige validar integralmente (90h cada). O PPC descreve as
- * 345h do 3º estrato como "270h em três trilhas + 75h" — logo, além do total de
- * horas, há um piso de trilhas completas.
- */
-export const TRILHAS_EXIGIDAS = 3;
-
 function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): IdCategoria | null {
   if (d.conjunto === null) return "obrigatorias";
   const curso = descricaoDoCurso(matriz);
   const simples = categoriaSimples(curso, d.conjunto);
   // a pool de eletivas é tratada à parte, como vaga genérica
   if (simples) return simples.id === "eletivas" ? null : (simples.id as IdCategoria);
-  if (ehTrilha(curso, d.conjunto)) return "trilhas";
+  if (contaNoBlocoOptativo(curso, d.conjunto)) return "trilhas";
   return null;
 }
 
 /** Estágio e atividades complementares não são turma: não disputam vaga na grade. */
 function ocupaVaga(d: DisciplinaMatriz): boolean {
-  return !/^ICSX5/.test(d.codigo);
+  return d.aulas_semanais.total > 0 && !d.codigo.startsWith("ENADE");
 }
 
 /** "Período:4" -> 4 */
@@ -200,10 +198,12 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
   const agregado = curso.agregadorTrilhas
     ? porConjunto.get(String(curso.agregadorTrilhas))?.chCursadaAprovada
     : undefined;
-  let trilhas = agregado ?? 0;
-  if (agregado === undefined) {
+  const optativasConsolidadas =
+    curso.matriz === 844 ? perfil.resumoGeral?.optativas.aprovada : undefined;
+  let trilhas = optativasConsolidadas ?? agregado ?? 0;
+  if (optativasConsolidadas === undefined && agregado === undefined) {
     for (const cod of Object.keys(matriz.conjuntos)) {
-      if (ehTrilha(curso, cod)) trilhas += somaConjunto(cod);
+      if (contaNoBlocoOptativo(curso, cod)) trilhas += somaConjunto(cod);
     }
   }
 
@@ -237,6 +237,7 @@ export function simularFormatura(
   const horizonte = opcoes.horizonte ?? 20;
   const saz = inferirSazonalidade(ofertas);
   const cursoDesc = descricaoDoCurso(matriz);
+  const trilhasExigidas = cursoDesc.trilhasExigidas;
   const avisos: string[] = [];
 
   const aprovadas = new Set<string>(perfil ? perfil.aprovadas : []);
@@ -251,10 +252,22 @@ export function simularFormatura(
   cumprido.obrigatorias =
     matriz.cargas.obrigatorias - obrigatoriasPendentes.reduce((a, d) => a + d.horas.total, 0);
 
+  const conjuntoSegundoEstrato = cursoDesc.categorias.find(
+    (c) => c.id === "segundoEstrato",
+  )?.conjunto;
+  const conjuntoHumanidades = cursoDesc.categorias.find(
+    (c) => c.id === "humanidades",
+  )?.conjunto;
   const exigido: Record<IdCategoria, number> = {
     obrigatorias: matriz.cargas.obrigatorias,
-    segundoEstrato: matriz.conjuntos[String(cursoDesc.categorias.find((c: { id: string }) => c.id === "segundoEstrato")?.conjunto)]?.ch ?? 360,
-    humanidades: matriz.conjuntos[String(cursoDesc.categorias.find((c: { id: string }) => c.id === "humanidades")?.conjunto)]?.ch ?? 135,
+    segundoEstrato:
+      conjuntoSegundoEstrato === undefined
+        ? 0
+        : matriz.conjuntos[String(conjuntoSegundoEstrato)]?.ch ?? 0,
+    humanidades:
+      conjuntoHumanidades === undefined
+        ? 0
+        : matriz.conjuntos[String(conjuntoHumanidades)]?.ch ?? 0,
     trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
     eletivas: matriz.cargas.eletiva,
   };
@@ -343,12 +356,11 @@ export function simularFormatura(
     Math.max(0, chDaTrilha(conj) - (horasPorTrilha.get(conj) ?? 0));
 
   /**
-   * O 3º estrato só fecha com AS DUAS condições: 345h no total e 3 trilhas
-   * validadas. Uma não implica a outra — dá para ter 345h espalhadas sem validar
-   * trilha nenhuma, e 3 trilhas validadas somam só 270h.
+   * O bloco optativo só fecha com as duas condições declaradas pelo curso:
+   * carga total e quantidade mínima de trilhas completas.
    */
   const faltaTerceiroEstrato = () =>
-    falta("trilhas") > 0 || trilhasValidadas() < TRILHAS_EXIGIDAS;
+    falta("trilhas") > 0 || trilhasValidadas() < trilhasExigidas;
 
   /**
    * Escolhe, ANTES de montar os semestres, em quais trilhas o aluno vai investir.
@@ -400,14 +412,14 @@ export function simularFormatura(
       // já validada primeiro, depois a que exige menos horas para fechar
       .sort((a, b) => a.restante - b.restante || b.jaTem - a.jaTem);
 
-    return new Set(viaveis.slice(0, TRILHAS_EXIGIDAS).map((t) => t.conj));
+    return new Set(viaveis.slice(0, trilhasExigidas).map((t) => t.conj));
   }
 
   const trilhasAlvo = escolherTrilhasAlvo();
-  if (trilhasAlvo.size < TRILHAS_EXIGIDAS) {
+  if (trilhasAlvo.size < trilhasExigidas) {
     avisos.push(
       `Só ${trilhasAlvo.size} trilha(s) conseguem fechar as 90h com a oferta conhecida — ` +
-        `o curso exige ${TRILHAS_EXIGIDAS}. A projeção segue, mas confira a oferta no Portal.`,
+        `o curso exige ${trilhasExigidas}. A projeção segue, mas confira a oferta no Portal.`,
     );
   }
 
@@ -440,7 +452,7 @@ export function simularFormatura(
         // categoria já fechada: não se cursa além do mínimo
         if (cat === "trilhas") {
           if (!faltaTerceiroEstrato()) return false;
-          if (!trilhasAlvo.has(d.conjunto!)) return false;
+          if (ehTrilha(cursoDesc, d.conjunto) && !trilhasAlvo.has(d.conjunto!)) return false;
         } else if (cat !== "obrigatorias" && falta(cat) === 0) {
           return false;
         }
@@ -473,11 +485,15 @@ export function simularFormatura(
       const hA = altura(a.codigo);
       const hB = altura(b.codigo);
       if (hA !== hB) return hB - hA;
-      // 3. Entre trilhas, enquanto faltarem trilhas validadas, prioriza a que
-      //    está mais perto de fechar as próprias 90h: validar 3 trilhas é
-      //    exigência à parte do total de horas, e é ela que costuma travar.
+      // 3. Entre optativas, enquanto faltarem trilhas validadas, prioriza a que
+      //    está mais perto de fechar as próprias 90h.
       if (catA === "trilhas" && catB === "trilhas") {
-        if (trilhasValidadas() < TRILHAS_EXIGIDAS) {
+        if (trilhasValidadas() < trilhasExigidas) {
+          const ehTrilhaA = ehTrilha(cursoDesc, a.conjunto);
+          const ehTrilhaB = ehTrilha(cursoDesc, b.conjunto);
+          // Optativas isoladas somam para o total, mas não ajudam a validar as
+          // duas trilhas; por isso vêm depois enquanto esse piso estiver aberto.
+          if (ehTrilhaA !== ehTrilhaB) return ehTrilhaA ? -1 : 1;
           const fA = faltaNaTrilha(a.conjunto!);
           const fB = faltaNaTrilha(b.conjunto!);
           // trilha já validada não ajuda a bater o piso de 3
@@ -505,25 +521,26 @@ export function simularFormatura(
       if (consome && vagas <= 0) continue;
       if (cat !== "obrigatorias" && cat !== "trilhas" && falta(cat) === 0) continue;
 
-      // Toda hora de trilha conta para as 345h, inclusive a que passa das 90h da
-      // própria trilha. O que faz uma disciplina ser dispensável não é estourar
-      // a trilha, e sim o 3º estrato inteiro já estar fechado.
+      // Toda optativa do bloco conta para a carga agregada. Nas trilhas, as horas
+      // acima de 90h continuam contando; nas isoladas, contam apenas no total.
       const contribui = d.horas.total;
       if (cat === "trilhas") {
         if (!faltaTerceiroEstrato()) continue;
 
         const conj = d.conjunto!;
-        // fora das trilhas-alvo o estudo não aproxima de validar as 3 exigidas
-        if (!trilhasAlvo.has(conj)) continue;
+        if (ehTrilha(cursoDesc, conj)) {
+          // fora das trilhas-alvo o estudo não aproxima de validar o piso exigido
+          if (!trilhasAlvo.has(conj)) continue;
 
-        const horasNaTrilha = horasPorTrilha.get(conj) ?? 0;
-        // Trilha já validada só recebe mais disciplina se ainda faltarem HORAS
-        // para as 345h. Sem isso, quando a trilha que falta validar não tem
-        // oferta no semestre, o motor despeja disciplina na trilha já fechada —
-        // que não valida nada nem falta hora — e o plano incha sem avançar.
-        if (horasNaTrilha >= chDaTrilha(conj) && falta("trilhas") === 0) continue;
-
-        horasPorTrilha.set(conj, horasNaTrilha + d.horas.total);
+          const horasNaTrilha = horasPorTrilha.get(conj) ?? 0;
+          // Trilha já validada só recebe mais disciplina se ainda faltarem horas
+          // no bloco agregado.
+          if (horasNaTrilha >= chDaTrilha(conj) && falta("trilhas") === 0) continue;
+          horasPorTrilha.set(conj, horasNaTrilha + d.horas.total);
+        } else if (falta("trilhas") === 0) {
+          // Optativa isolada não substitui uma trilha completa.
+          continue;
+        }
       }
 
       escolhidas.push({
@@ -591,21 +608,23 @@ export function simularFormatura(
 
   const requisitos: Requisito[] = (
     [
-      ["obrigatorias", "Obrigatórias (1º estrato)"],
+      ["obrigatorias", cursoDesc.matriz === 981 ? "Obrigatórias (1º estrato)" : "Obrigatórias"],
       ["segundoEstrato", "2º Estrato"],
       ["humanidades", "Ciclo de Humanidades"],
-      ["trilhas", "Trilhas (3º estrato)"],
+      ["trilhas", cursoDesc.matriz === 981 ? "Trilhas (3º estrato)" : "Optativas em trilhas e isoladas"],
       ["eletivas", "Eletivas"],
     ] as [IdCategoria, string][]
-  ).map(([id, nome]) => ({
-    id,
-    nome,
-    exigido: exigido[id],
-    cumprido: cumprido[id],
-    faltante: Math.max(0, exigido[id] - cumprido[id]),
-    planejado: planejado[id],
-    atendido: cumprido[id] + planejado[id] >= exigido[id],
-  }));
+  )
+    .map(([id, nome]) => ({
+      id,
+      nome,
+      exigido: exigido[id],
+      cumprido: cumprido[id],
+      faltante: Math.max(0, exigido[id] - cumprido[id]),
+      planejado: planejado[id],
+      atendido: cumprido[id] + planejado[id] >= exigido[id],
+    }))
+    .filter((requisito) => requisito.exigido > 0);
 
   const trilhasFechadas = [...horasPorTrilha.entries()]
     .filter(([conj, horas]) => horas >= (matriz.conjuntos[String(conj)]?.ch ?? 90))
@@ -622,6 +641,6 @@ export function simularFormatura(
     horasRestantes: requisitos.reduce((a, r) => a + r.faltante, 0),
     avisos,
     trilhasFechadas,
-    trilhasExigidas: TRILHAS_EXIGIDAS,
+    trilhasExigidas,
   };
 }

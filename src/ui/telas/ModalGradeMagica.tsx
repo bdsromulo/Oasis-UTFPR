@@ -329,7 +329,7 @@ export function ModalSugestaoGrade({
                 <div>
                   <div className="font-bold text-zinc-900 dark:text-zinc-100">Adiantar ao máximo</div>
                   <div className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
-                    Prioriza matérias em atraso no fluxo (1º estrato) respeitando o teto de carga horária máxima do período (até ~405h), sem limite fixo de quantidade de disciplinas nem choques.
+                    Prioriza matérias obrigatórias em atraso no fluxo, respeitando o teto de carga horária máxima do período (até ~405h), sem limite fixo de quantidade de disciplinas nem choques.
                   </div>
                 </div>
               </label>

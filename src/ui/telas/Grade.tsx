@@ -144,6 +144,7 @@ function SecaoResumoImpactoGrade(props: {
   matriz?: Matriz | null;
 }) {
   const temHistorico = Boolean(props.perfil && props.perfil.cursadas && props.perfil.cursadas.length > 0);
+  const cursoAtual = descricaoDoCurso(props.matriz ?? 981);
   const resumos = useMemo(
     () => calcularResumoProgressoGrade(props.itens, props.perfil, props.matriz),
     [props.itens, props.perfil, props.matriz]
@@ -163,7 +164,7 @@ function SecaoResumoImpactoGrade(props: {
               </h3>
             </div>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-              Confira quanto as matérias selecionadas impulsionam cada estrato do seu curso em relação ao progresso atual.
+              Confira quanto as matérias selecionadas impulsionam cada categoria do seu curso em relação ao progresso atual.
             </p>
           </div>
         </div>
@@ -184,14 +185,22 @@ function SecaoResumoImpactoGrade(props: {
 
           {/* Previews vazios com blur ao fundo */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 blur-md opacity-40 pointer-events-none select-none p-2">
-            {[
-              "Obrigatórias (1º Estrato)",
-              "2º Estrato",
-              "Ciclo de Humanidades",
-              "Trilhas em Computação (3º Estrato)",
-              "Eletivas / Atividades",
-              "Estágio / TCC"
-            ].map((titulo, i) => (
+            {(cursoAtual.matriz === 981
+              ? [
+                  "Obrigatórias (1º Estrato)",
+                  "2º Estrato",
+                  "Ciclo de Humanidades",
+                  "Trilhas em Computação (3º Estrato)",
+                  "Eletivas / Atividades",
+                  "Estágio / TCC",
+                ]
+              : [
+                  "Obrigatórias",
+                  "Optativas em Trilhas e Isoladas",
+                  "Eletivas",
+                  "Estágio / TCC",
+                ]
+            ).map((titulo, i) => (
               <div key={i} className="flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-4.5 dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <span className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">{titulo}</span>
@@ -210,7 +219,6 @@ function SecaoResumoImpactoGrade(props: {
   if (resumos.length === 0) return null;
 
   // categorias principais: obrigatórias mais as de conjunto único do curso
-  const cursoAtual = descricaoDoCurso(props.matriz ?? 981);
   const chavesPrincipais = [
     "obrigatorias",
     ...cursoAtual.categorias.filter((c) => c.id !== "eletivas").map((c) => String(c.conjunto)),
@@ -237,7 +245,7 @@ function SecaoResumoImpactoGrade(props: {
             </h3>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-            Confira quanto as matérias selecionadas impulsionam cada estrato do seu curso em relação ao progresso atual.
+            Confira quanto as matérias selecionadas impulsionam cada categoria do seu curso em relação ao progresso atual.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold">

@@ -14,7 +14,12 @@ import { Badge, Botao, Card, MenuOrdenacao, BalaoProgressoHover, useIsMobile } f
 import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
 import { IconPlus, IconTrash, IconCheck, IconWarning, IconFilter } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../../domain/cursos";
+import {
+  descricaoDoCurso,
+  ehTrilha,
+  categoriaSimples,
+  exigeExtensao,
+} from "../../domain/cursos";
 
 type Grupo = "todas" | "obrigatorias" | "estrato2" | "trilhas" | "humanidades";
 
@@ -117,7 +122,7 @@ function CardDisciplinaPossoCursar({
           </Badge>
           <Badge>{e.disciplina.periodo}º período</Badge>
           <Badge>{e.disciplina.horas.total}h</Badge>
-          {e.disciplina.horas.chext > 0 && (
+          {exigeExtensao(matriz) && e.disciplina.horas.chext > 0 && (
             <Badge>extensionista</Badge>
           )}
           {e.jaMatriculada && (
@@ -326,7 +331,7 @@ export function TelaPossoCursar(props: {
     ["todas", "Todas"],
     ["obrigatorias", "Obrigatórias"],
     ...curso.categorias.filter((c) => c.id === "segundoEstrato").map(() => ["estrato2", "2º Estrato"] as [Grupo, string]),
-    ["trilhas", "Trilhas"],
+    ["trilhas", curso.matriz === 981 ? "Trilhas" : "Optativas"],
     ...curso.categorias.filter((c) => c.id === "humanidades").map(() => ["humanidades", "Humanidades"] as [Grupo, string]),
   ], [curso]);
 
@@ -514,14 +519,18 @@ export function TelaPossoCursar(props: {
           {grupo === "trilhas" && (
             <div className="flex flex-wrap items-center gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
               <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
-                Trilha:
+                {curso.matriz === 981 ? "Trilha:" : "Grupo optativo:"}
               </span>
               <select
                 value={trilha}
                 onChange={(e) => setTrilha(e.target.value)}
                 className="cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-sm font-semibold text-zinc-800 transition-colors focus:border-utfpr-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-200"
               >
-                <option value="todas">Todas as 12 trilhas</option>
+                <option value="todas">
+                  {curso.matriz === 981
+                    ? `Todas as ${trilhasDisponiveis.length} trilhas`
+                    : "Todas as trilhas e isoladas"}
+                </option>
                 {trilhasDisponiveis.map(([conjunto, nome]) => {
                   const h = horasTrilha.get(conjunto);
                   return (

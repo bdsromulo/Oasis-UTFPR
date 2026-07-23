@@ -81,8 +81,8 @@ Requisitos das ferramentas: Python 3 + `pdfplumber`.
 
 ## Roadmap
 
-- **Consolidação multicurso** — ampliar os testes de interface e generalizar os
-  validadores de matriz para novas estruturas curriculares.
+- **Consolidação multicurso** — ampliar testes de interface e manter auditada a
+  ligação entre ofertas externas, equivalências e categorias das matrizes.
 - **Atualização semestral** — importar e homologar as ofertas oficiais de cada curso.
 - **Fase 2** — Camada de comunidade: avaliações, dicas e materiais por disciplina.
 

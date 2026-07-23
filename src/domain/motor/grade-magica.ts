@@ -1,7 +1,7 @@
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from "../tipos";
 import { listarElegiveis } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao } from "./grade";
-import { descricaoDoCurso, ehTrilha } from "../cursos";
+import { contaNoBlocoOptativo, descricaoDoCurso, ehTrilha } from "../cursos";
 
 export interface OpcoesSugestaoGrade {
   estrategia: "adiantar_maximo" | "balanceado";
@@ -261,6 +261,24 @@ export function gerarSugestaoGrade(
         .filter(([cod]) => ehTrilha(curso, cod))
         .slice(0, curso.trilhasExigidas)
         .reduce((acc, [, conj]) => acc + conj.ch, 0);
+  const chExigidaBlocoOptativo = cjAgregador
+    ? matriz.conjuntos[String(cjAgregador)]?.ch ?? matriz.cargas.optativas
+    : matriz.cargas.optativas;
+  const resumoAgregador = cjAgregador
+    ? perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjAgregador))
+    : undefined;
+  const chCumpridaBlocoOptativo =
+    (curso.matriz === 844 ? perfil?.resumoGeral?.optativas.aprovada : undefined) ??
+    resumoAgregador?.chCursadaAprovada ??
+    (perfil
+      ? perfil.resumoConjuntos
+          .filter((r) => contaNoBlocoOptativo(curso, r.conjunto))
+          .reduce((total, r) => total + r.chCursadaAprovada, 0)
+      : 0);
+  const chFaltanteBlocoOptativo = Math.max(
+    0,
+    chExigidaBlocoOptativo - chCumpridaBlocoOptativo,
+  );
 
   const chFaltanteEletivas = perfil
     ? (perfil.eletivas?.chFaltante ?? Math.max(0, (perfil.eletivas?.chTotal ?? 120) - (perfil.eletivas?.chValidada ?? 0)))
@@ -283,7 +301,7 @@ export function gerarSugestaoGrade(
     if (cjHumanidades !== null && c === cjHumanidades) chAlocadaHumanidades += h;
     else if (cjSegundoEstrato !== null && c === cjSegundoEstrato) chAlocadaEstrato2 += h;
     else if ((cjEletivas !== null && c === cjEletivas) || (!dm && dOf)) chAlocadaEletivas += h;
-    else if (ehTrilha(curso, c)) chAlocadaTrilhas += h;
+    else if (contaNoBlocoOptativo(curso, c)) chAlocadaTrilhas += h;
   }
 
   // 2. Obter todas as disciplinas elegíveis (pendentes/liberadas) respeitando se a categoria já foi concluída
@@ -294,17 +312,10 @@ export function gerarSugestaoGrade(
     if (cjHumanidades !== null && opcoes.semHumanidades && e.disciplina.conjunto === cjHumanidades) return false;
     if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades && chFaltanteHumanidades <= 0) return false;
     if (cjSegundoEstrato !== null && e.disciplina.conjunto === cjSegundoEstrato && chFaltanteEstrato2 <= 0) return false;
-    if (
-      e.disciplina.conjunto !== null &&
-      e.disciplina.conjunto !== cjSegundoEstrato &&
-      e.disciplina.conjunto !== cjAgregador &&
-      e.disciplina.conjunto !== cjHumanidades &&
-      e.disciplina.conjunto !== cjEletivas &&
-      e.categoria !== "eletiva"
-    ) {
+    if (contaNoBlocoOptativo(curso, e.disciplina.conjunto)) {
       if (opcoes.semTrilhas) return false;
       if (opcoes.trilhasExcluidas && opcoes.trilhasExcluidas.includes(String(e.disciplina.conjunto))) return false;
-      if (chFaltanteTrilhas <= 0) return false;
+      if (chFaltanteTrilhas <= 0 && chFaltanteBlocoOptativo <= 0) return false;
     }
     if ((cjEletivas !== null && e.disciplina.conjunto === cjEletivas) || e.categoria === "eletiva") {
       if (opcoes.semEletivas) return false;
@@ -358,13 +369,9 @@ export function gerarSugestaoGrade(
     if (cjHumanidades !== null && c === cjHumanidades && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
     if (cjSegundoEstrato !== null && c === cjSegundoEstrato && chAlocadaEstrato2 >= chFaltanteEstrato2) continue;
     if (
-      c !== null &&
-      c !== cjSegundoEstrato &&
-      c !== cjAgregador &&
-      c !== cjHumanidades &&
-      c !== cjEletivas &&
-      item.elegivel.categoria !== "eletiva" &&
-      chAlocadaTrilhas >= chFaltanteTrilhas
+      contaNoBlocoOptativo(curso, c) &&
+      chAlocadaTrilhas >= chFaltanteBlocoOptativo &&
+      chFaltanteTrilhas <= 0
     ) {
       continue;
     }
@@ -422,7 +429,7 @@ export function gerarSugestaoGrade(
         chAlocadaEstrato2 += item.elegivel.disciplina.horas.total;
       } else if ((cjEletivas !== null && c === cjEletivas) || item.elegivel.categoria === "eletiva") {
         chAlocadaEletivas += item.elegivel.disciplina.horas.total;
-      } else if (ehTrilha(curso, c)) {
+      } else if (contaNoBlocoOptativo(curso, c)) {
         chAlocadaTrilhas += item.elegivel.disciplina.horas.total;
       }
     }

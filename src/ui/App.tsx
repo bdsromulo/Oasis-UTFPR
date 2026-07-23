@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
 import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
-import { dadosDoCurso, semestresDoCurso } from "../domain/dadosCurso";
+import {
+  dadosDoCurso,
+  dadosDoCursoPorMatriz,
+  semestresDoCurso,
+} from "../domain/dadosCurso";
 import { TelaSituacao } from "./telas/Situacao";
 import { TelaPossoCursar } from "./telas/PossoCursar";
 import { TelaGrade } from "./telas/Grade";
@@ -100,7 +104,11 @@ export function App() {
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
-  const cursoAtivo = preferencias.curso ?? "bsi-981";
+  // Com histórico carregado, a matriz detectada no próprio PDF é a fonte de
+  // verdade do curso. Isso também corrige sessões antigas salvas como BSI por
+  // padrão apesar de conterem um histórico da matriz 844.
+  const cursoDoPerfil = dadosDoCursoPorMatriz(perfil?.matriz);
+  const cursoAtivo = cursoDoPerfil?.id ?? preferencias.curso ?? "bsi-981";
   const dadosCurso = useMemo(() => dadosDoCurso(cursoAtivo), [cursoAtivo]);
   const matriz = dadosCurso.matriz;
   const todasOfertas = dadosCurso.ofertas;
@@ -333,6 +341,17 @@ export function App() {
   }
 
   function confirmarNovoPerfil(p: PerfilAluno) {
+    const cursoDetectado = dadosDoCursoPorMatriz(p.matriz);
+    if (cursoDetectado) {
+      setPreferencias((prefs) => ({
+        ...prefs,
+        curso: cursoDetectado.id,
+        matriz: String(cursoDetectado.matriz.matriz),
+        semestreAtivo: cursoDetectado.ofertas[prefs.semestreAtivo ?? ""]
+          ? prefs.semestreAtivo
+          : cursoDetectado.semestrePadrao,
+      }));
+    }
     salvarPerfil(p, preferencias.privado);
     setPerfil(p);
     setCheckinConcluido(true);

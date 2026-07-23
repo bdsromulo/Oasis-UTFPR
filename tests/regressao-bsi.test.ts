@@ -99,6 +99,10 @@ describe("regressão BSI — painel de situação", () => {
     expect(painel.trilhasValidadas).toBe(1);
   });
 
+  it("mantém o total do 3º estrato separado das demais optativas", () => {
+    expect(painel.blocoOptativo).toEqual({ exigido: 345, cumprido: 225 });
+  });
+
   it("ordena as trilhas por carga cumprida, decrescente", () => {
     const cumpridos = painel.trilhas.map((t) => t.cumprido);
     expect([...cumpridos].sort((a, b) => b - a)).toEqual(cumpridos);

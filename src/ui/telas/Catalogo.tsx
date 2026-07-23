@@ -5,7 +5,12 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
-import { descricaoDoCurso, ehTrilha, categoriaSimples, exigeExtensao } from "../../domain/cursos";
+import {
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  categoriaSimples,
+  exigeExtensao,
+} from "../../domain/cursos";
 
 function normNome(nome: string): string {
   return nome
@@ -25,18 +30,39 @@ export function TelaCatalogo(props: {
   onVoltar?: () => void;
 }) {
   const { perfil, matriz, oferta } = props;
+  const curso = descricaoDoCurso(matriz);
   const [categoria, setCategoria] = useState<CategoriaCatalogo>(props.categoriaInicial ?? "todas");
   const [filtroPeriodo, setFiltroPeriodo] = useState<string>("todos");
-  const [filtroStatus, setFiltroStatus] = useState<"todas" | "abertas" | "semoferta" | "concluidas">("todas");
+  const [filtroStatus, setFiltroStatus] = useState<
+    "todas" | "pendentes" | "abertas" | "semoferta" | "concluidas"
+  >(props.categoriaInicial && props.categoriaInicial !== "todas" ? "pendentes" : "todas");
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
 
   const painel = useMemo(() => (perfil ? montarPainel(perfil, matriz) : null), [perfil, matriz]);
+  const periodosDisponiveis = useMemo(() => {
+    const periodosDisciplinas = matriz.disciplinas
+      .map((d) => d.periodo)
+      .filter((p): p is number => typeof p === "number" && p > 0);
+    const periodosConjuntos = Object.values(matriz.conjuntos)
+      .map((c) => c.periodo_final)
+      .filter((p): p is number => typeof p === "number" && p > 0);
+    const periodoEletivas =
+      matriz.eletiva && typeof matriz.eletiva.periodo_final === "number"
+        ? matriz.eletiva.periodo_final
+        : 0;
+    const maximo = Math.max(0, ...periodosDisciplinas, ...periodosConjuntos, periodoEletivas);
+    return Array.from({ length: maximo }, (_, indice) => indice + 1);
+  }, [matriz]);
 
   const infoProgresso = useMemo(() => {
     if (!painel) return null;
     if (categoria === "obrigatorias" && painel.obrigatorias) {
-      return { titulo: "Obrigatórias (1º estrato)", cumprido: painel.obrigatorias.aprovada, exigido: painel.obrigatorias.total };
+      return {
+        titulo: curso.matriz === 981 ? "Obrigatórias (1º estrato)" : "Obrigatórias",
+        cumprido: painel.obrigatorias.aprovada,
+        exigido: painel.obrigatorias.total,
+      };
     }
     if (categoria === "segundoEstrato" && painel.segundoEstrato) {
       return { titulo: "2º Estrato", cumprido: painel.segundoEstrato.cumprido, exigido: painel.segundoEstrato.exigido };
@@ -45,8 +71,10 @@ export function TelaCatalogo(props: {
       return { titulo: "Ciclo de Humanidades", cumprido: painel.humanidades.cumprido, exigido: painel.humanidades.exigido };
     }
     if (categoria === "trilhas") {
-      const soma = painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
-      const cd = descricaoDoCurso(matriz);
+      const soma =
+        painel.blocoOptativo?.cumprido ??
+        painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
+      const cd = curso;
       const exigidoTrilhas =
         (cd.agregadorTrilhas ? matriz.conjuntos[String(cd.agregadorTrilhas)]?.ch : undefined) ?? 345;
       return { titulo: cd.rotuloBlocoTrilhas, cumprido: soma, exigido: exigidoTrilhas };
@@ -77,7 +105,7 @@ export function TelaCatalogo(props: {
       };
     }
     return null;
-  }, [categoria, painel, props.perfil, matriz]);
+  }, [categoria, painel, props.perfil, matriz, curso]);
 
   // Mapeamento das disciplinas com status no histórico do aluno
   const itensDisciplinas = useMemo(() => {
@@ -139,7 +167,7 @@ export function TelaCatalogo(props: {
         cat = "segundoEstrato";
       } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         cat = "humanidades";
-      } else if (ehTrilha(descricaoDoCurso(matriz), dm.conjunto)) {
+      } else if (contaNoBlocoOptativo(descricaoDoCurso(matriz), dm.conjunto)) {
         cat = "trilhas";
       } else if (dm.horas.chext > 0) {
         cat = "extensao";
@@ -221,6 +249,7 @@ export function TelaCatalogo(props: {
       }
 
       if (filtroStatus === "concluidas" && !item.concluida) return false;
+      if (filtroStatus === "pendentes" && item.concluida) return false;
       if (filtroStatus === "abertas" && (item.concluida || !item.temOferta)) return false;
       if (filtroStatus === "semoferta" && (item.concluida || item.temOferta)) return false;
 
@@ -235,7 +264,7 @@ export function TelaCatalogo(props: {
 
       return true;
     });
-  }, [itensDisciplinas, categoria, filtroStatus, busca]);
+  }, [itensDisciplinas, categoria, filtroPeriodo, filtroStatus, busca]);
 
   const itensOrdenados = useMemo(() => {
     return [...itensFiltrados].sort((a, b) => {
@@ -258,6 +287,7 @@ export function TelaCatalogo(props: {
 
   const contagens = useMemo(() => {
     let total = 0;
+    let pendentes = 0;
     let concluidas = 0;
     let abertas = 0;
     let semoferta = 0;
@@ -269,14 +299,17 @@ export function TelaCatalogo(props: {
         } else if (item.categoria !== categoria) continue;
       }
       total++;
-      if (item.concluida) concluidas++;
-      else if (item.temOferta) abertas++;
-      else semoferta++;
+      if (item.concluida) {
+        concluidas++;
+      } else {
+        pendentes++;
+        if (item.temOferta) abertas++;
+        else semoferta++;
+      }
     }
-    return { total, concluidas, abertas, semoferta };
+    return { total, pendentes, concluidas, abertas, semoferta };
   }, [itensDisciplinas, categoria]);
 
-  const curso = descricaoDoCurso(matriz);
   const categoriasOpcoes: [CategoriaCatalogo, string][] = [
     ["todas", "Todas as Disciplinas"],
     ["obrigatorias", curso.matriz === 981 ? "1º Estrato (Obrigatórias)" : "Obrigatórias"],
@@ -329,14 +362,11 @@ export function TelaCatalogo(props: {
             className="flex-1 cursor-pointer rounded-xl border border-zinc-300 bg-white px-3.5 py-2 font-display text-xs font-bold text-zinc-900 shadow-2xs transition-all focus:border-utfpr-500 focus:outline-none focus:ring-2 focus:ring-utfpr-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:focus:border-utfpr-400"
           >
             <option value="todos">Todos os Períodos</option>
-            <option value="1">1º Período</option>
-            <option value="2">2º Período</option>
-            <option value="3">3º Período</option>
-            <option value="4">4º Período</option>
-            <option value="5">5º Período</option>
-            <option value="6">6º Período</option>
-            <option value="7">7º Período</option>
-            <option value="8">8º Período</option>
+            {periodosDisponiveis.map((periodo) => (
+              <option key={periodo} value={periodo}>
+                {periodo}º Período
+              </option>
+            ))}
             <option value="optativas">Optativas / Sem Período Fixo</option>
           </select>
         </div>
@@ -487,6 +517,16 @@ export function TelaCatalogo(props: {
               Todas ({contagens.total})
             </button>
             <button
+              onClick={() => setFiltroStatus("pendentes")}
+              className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
+                filtroStatus === "pendentes"
+                  ? "bg-white text-zinc-950 shadow-xs dark:bg-zinc-700 dark:text-white"
+                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+              }`}
+            >
+              Pendentes ({contagens.pendentes})
+            </button>
+            <button
               onClick={() => setFiltroStatus("abertas")}
               className={`rounded-lg px-3 py-1.5 font-display text-xs font-bold transition-all cursor-pointer ${
                 filtroStatus === "abertas"
@@ -615,10 +655,16 @@ export function TelaCatalogo(props: {
                     )}
                   </div>
                   <span className="font-mono text-[10px] text-zinc-400">
-                    {item.categoria === "obrigatorias" && "1º Estrato"}
+                    {item.categoria === "obrigatorias" &&
+                      (curso.matriz === 981 ? "1º Estrato" : "Obrigatória")}
                     {item.categoria === "segundoEstrato" && "2º Estrato"}
                     {item.categoria === "humanidades" && "Humanidades"}
-                    {item.categoria === "trilhas" && "3º Estrato"}
+                    {item.categoria === "trilhas" &&
+                      (curso.matriz === 981
+                        ? "3º Estrato"
+                        : curso.naoValidaveis.includes(Number(item.disciplina.conjunto))
+                          ? "Optativa Isolada"
+                          : "Trilha")}
                     {item.categoria === "eletivas" && "Eletiva"}
                     {item.categoria === "extensao" && "Extensão"}
                   </span>
