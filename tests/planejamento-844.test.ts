@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { parseHistorico } from "../src/domain/historico/parser";
 import { listarElegiveis, normNome } from "../src/domain/motor/elegiveis";
 import { BSI, ENG_COMP, dadosDoCurso, semestresDoCurso } from "../src/domain/dadosCurso";
 
 describe("dados por curso", () => {
   it("entrega matriz e ofertas do curso escolhido", () => {
     expect(dadosDoCurso("eng-comp").matriz.matriz).toBe(844);
+    expect(dadosDoCurso("eng-comp").rotuloCurto).toBe("Eng. Comp.");
     expect(dadosDoCurso("bsi-981").matriz.matriz).toBe(981);
     // curso desconhecido cai na BSI
     expect(dadosDoCurso("inexistente").matriz.matriz).toBe(981);
@@ -122,5 +124,36 @@ describe("resumo do histórico de Eng. Comp.", () => {
     const eng = "Eletiva 90 8 10 30 60 30".match(linhaEletiva);
     expect(eng).not.toBeNull();
     expect([eng![1], eng![2], eng![3], eng![4]]).toEqual(["90", "30", "60", "30"]);
+  });
+
+  it("preserva horas aprovadas ainda não validadas e faltantes do 10º período", () => {
+    const perfil = parseHistorico([
+      "Aluno: 0000000 - ALUNO FICTÍCIO Identidade-UF: PR",
+      "Curso: 212 - Eng De Computação Período: 10",
+      "Matriz: 844 - Matriz 3 De Eng De Computação",
+      "Disciplinas Obrigatórias Faltantes",
+      "7 EEC21 Controle 1",
+      "9 GE70H Gestão Financeira",
+      "10 CSX43 Trabalho De Conclusão De Curso 2",
+      "10 EEF31 Ética, Profissão E Cidadania",
+      "Quadro Resumo disciplinas",
+      "CHT Disciplinas Obrigatórias 3.460 3.400 3.310 150 3.310",
+      "CHT Disciplinas Optativas 270 180 90 180 180",
+      "CHT Disciplinas Eletivas 90 30 30 60 30",
+    ]);
+
+    expect(perfil.obrigatoriasFaltantes.map((item) => item.codigo)).toEqual([
+      "EEC21",
+      "GE70H",
+      "CSX43",
+      "EEF31",
+    ]);
+    expect(perfil.resumoGeral?.optativas).toEqual({
+      total: 270,
+      cursada: 180,
+      aprovada: 90,
+      faltante: 180,
+      aprovadaTotal: 180,
+    });
   });
 });

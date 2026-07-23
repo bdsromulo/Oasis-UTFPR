@@ -222,7 +222,9 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
         break;
       }
       case "faltantes": {
-        const m = l.match(/^(\d)\s+([A-Z0-9]{4,7})\s+(.+)$/);
+        // Engenharia de Computação chega ao 10º período. O padrão antigo de um
+        // único dígito descartava silenciosamente as faltantes desse período.
+        const m = l.match(/^(\d{1,2})\s+([A-Z0-9]{4,7})\s+(.+)$/);
         if (m && ehCodigo(m[2])) {
           perfil.obrigatoriasFaltantes.push({ periodo: parseInt(m[1]), codigo: m[2], nome: m[3].trim() });
         }
@@ -248,15 +250,33 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
             optativas: { total: 0, aprovada: 0, faltante: 0 },
             eletivas: { total: 0, aprovada: 0, faltante: 0 },
           };
-          perfil.resumoGeral.obrigatorias = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+          perfil.resumoGeral.obrigatorias = {
+            total: num(m[1])!,
+            cursada: num(m[2])!,
+            aprovada: num(m[3])!,
+            faltante: num(m[4])!,
+            aprovadaTotal: num(m[5])!,
+          };
         }
         m = l.match(/CHT Disciplinas Optativas\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
         if (m && perfil.resumoGeral) {
-          perfil.resumoGeral.optativas = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+          perfil.resumoGeral.optativas = {
+            total: num(m[1])!,
+            cursada: num(m[2])!,
+            aprovada: num(m[3])!,
+            faltante: num(m[4])!,
+            aprovadaTotal: num(m[5])!,
+          };
         }
         m = l.match(/CHT Disciplinas Eletivas\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
         if (m && perfil.resumoGeral) {
-          perfil.resumoGeral.eletivas = { total: num(m[1])!, aprovada: num(m[3])!, faltante: num(m[4])! };
+          perfil.resumoGeral.eletivas = {
+            total: num(m[1])!,
+            cursada: num(m[2])!,
+            aprovada: num(m[3])!,
+            faltante: num(m[4])!,
+            aprovadaTotal: num(m[5])!,
+          };
         }
         break;
       }

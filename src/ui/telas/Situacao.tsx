@@ -454,6 +454,14 @@ export function TelaSituacao(props: {
                   </span>
                 </div>
                 <Barra valor={somaCumpridoTrilhas} max={totalExigido3Estrato} />
+                {cursoDesc.matriz === 844 &&
+                  painel.blocoOptativo?.validado !== undefined && (
+                    <p className="mt-1.5 text-[10px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                      {painel.blocoOptativo.validado}h já validadas no histórico.
+                      As demais horas aprovadas passam a integralizar o bloco conforme
+                      a validação das duas trilhas obrigatórias.
+                    </p>
+                  )}
               </div>
 
               <div>

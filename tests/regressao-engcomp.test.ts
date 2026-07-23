@@ -89,6 +89,47 @@ describe("regressão Eng. Comp. — oferta e progressão optativa", () => {
     expect(painel.trilhas.some((t) => t.conjunto === "973")).toBe(false);
   });
 
+  it("separa horas aprovadas de horas validadas enquanto falta a segunda trilha", () => {
+    const perfil = perfilEngComp();
+    perfil.resumoConjuntos = [
+      conjunto("959", "Optativas", 270, 180),
+      conjunto("961", "Trilha Em Processamento Gráfico", 90, 60),
+      conjunto("963", "Trilha Em Algoritmos E Complexidade", 90, 120),
+    ];
+    perfil.resumoGeral!.optativas = {
+      total: 270,
+      cursada: 180,
+      aprovada: 90,
+      faltante: 180,
+      aprovadaTotal: 180,
+    };
+
+    const painel = montarPainel(perfil, matriz);
+    expect(painel.blocoOptativo).toEqual({
+      exigido: 270,
+      cumprido: 180,
+      validado: 90,
+    });
+    expect(painel.trilhasValidadas).toBe(1);
+
+    const progresso = calcularResumoProgressoGrade([], perfil, matriz);
+    expect(progresso.find((item) => item.categoriaId === "trilhas_geral")).toMatchObject({
+      exigido: 270,
+      cumpridoBase: 180,
+    });
+
+    const simulacao = simularFormatura(perfil, matriz, [oferta], {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 1,
+    });
+    expect(simulacao.requisitos.find((item) => item.id === "trilhas")).toMatchObject({
+      exigido: 270,
+      cumprido: 180,
+      faltante: 90,
+    });
+  });
+
   it("atribui uma isolada ao bloco optativo no impacto da grade", () => {
     const isolada = matriz.disciplinas.find((d) => d.codigo === "CSG42")!;
     const resumos = calcularResumoProgressoGrade(

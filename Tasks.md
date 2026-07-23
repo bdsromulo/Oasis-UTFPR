@@ -19,6 +19,7 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
   - As Optativas Isoladas (conjunto 973) somam para as 270h do bloco optativo, mas não validam uma das duas trilhas obrigatórias.
   - Situação, Catálogo, Grade Mágica, impacto da grade e Simulador de Formatura foram parametrizados para duas trilhas, sem estratos e sem extensão curricular.
   - O curso ativo passa a acompanhar a matriz detectada no histórico; o Catálogo deriva os períodos da matriz 844 até o 10º e abre as pendências ao clicar em “Exibir Lista”.
+  - Auditoria local contra um histórico real da 844 confirmou os totais oficiais e corrigiu dois desvios: faltantes do 10º período agora são lidas; horas optativas aprovadas são preservadas separadamente das horas já validadas pela regra das duas trilhas.
   - Regressões cobertas por `tests/regressao-engcomp.test.ts`, sem uso de histórico pessoal.
 
 ### Interface Visual e Experiência do Usuário (UI/UX)
@@ -38,6 +39,10 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 ## 2. Tarefas Pendentes (`[/]` ou `[ ]`)
 
 ### Prioridade Alta (Próximo Ciclo de Desenvolvimento)
+- `[ ]` **TASK-17 — Implementar Engenharia de Computação — Matriz 962:**
+  - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
+  - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
+  - Só habilitar a opção `962 (Nova)` no check-in depois de dados, motores e regressões estarem completos.
 - `[x]` **TASK-01 — Tela de Configurações Centralizada & Identidade Visual:**
   - `a)` Seletor explícito e sincronizado de tema: Modo Claro, Modo Escuro e Seguir Sistema (`--font-display`, script inline no `index.html` para zero flicker, e toggle interativo no Navbar e Modal).
   - `b)` Carregar histórico mais atualizado sem perder preferências de layout ou grade.
@@ -47,7 +52,7 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
   - `f)` Ícone (`favicon.svg`/`.ico`) e Logo do site monocromáticos minimalistas em linha-vetorial, substituindo o T antigo e elementos decorativos.
 - `[x]` **TASK-02 — Onboarding Resumido (Acesso Sem Submissão) e Check-in de Câmpus/Curso/Matriz:**
   - Opção na tela inicial: *"Continuar sem meus registros (Grade na Hora)"* com perfil nulo liberando todas as turmas em Modo Livre.
-  - Menu de Check-in estruturado com busca/seleção para **Câmpus** (`Curitiba`), **Curso** (`BSI`) e **Matriz** (`Matriz 981 - Nova`).
+  - Menu de Check-in estruturado com busca/seleção separada para **Câmpus**, **Curso** e **Matriz**. Engenharia aparece como `Eng. Comp.`; a 844 está disponível e a 962 fica visível como próxima matriz, ainda indisponível.
 - `[x]` **TASK-05A — Ordenação Alfabética, Toggles de Turmas e Filtro de Conflitos:**
   - Ordenação alfabética pelo nome completo da matéria tanto em *Posso Cursar* quanto em *Layout Grade na Hora*.
   - Toggles de horários por disciplina (`▼ X turmas` / `▲ ocultar`) fechados por padrão em ambas as visões para evitar poluição visual.

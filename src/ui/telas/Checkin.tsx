@@ -17,18 +17,37 @@ export interface DadosCheckin {
   matriz: string;
 }
 
-/** Matriz vigente de cada curso coberto pela plataforma. */
-const MATRIZ_DO_CURSO: Record<string, { numero: string; rotulo: string; nota: string }> = {
-  "bsi-981": {
-    numero: "981",
-    rotulo: "Matriz 981 (Nova)",
-    nota: "Vigente para ingressantes a partir de 2023. Carga total de 3.240h com divisão por estratos.",
-  },
-  "eng-comp": {
-    numero: "844",
-    rotulo: "Matriz 844 (Antiga)",
-    nota: "Sem estratos: a formação optativa é 270h em trilhas e isoladas, com 2 trilhas completas, mais 90h de eletivas.",
-  },
+interface OpcaoMatriz {
+  numero: string;
+  rotulo: string;
+  nota: string;
+  disponivel: boolean;
+}
+
+/** Matrizes conhecidas, inclusive as já anunciadas mas ainda não implementadas. */
+const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
+  "bsi-981": [
+    {
+      numero: "981",
+      rotulo: "981 (Nova)",
+      nota: "Vigente para ingressantes a partir de 2023. Carga total de 3.240h com divisão por estratos.",
+      disponivel: true,
+    },
+  ],
+  "eng-comp": [
+    {
+      numero: "844",
+      rotulo: "844 (Antiga)",
+      nota: "Implementada: 270h optativas, com 2 trilhas completas, mais 90h de eletivas.",
+      disponivel: true,
+    },
+    {
+      numero: "962",
+      rotulo: "962 (Nova)",
+      nota: "Próxima matriz de Engenharia de Computação a ser implementada.",
+      disponivel: false,
+    },
+  ],
 };
 
 export function TelaCheckin(props: {
@@ -40,8 +59,13 @@ export function TelaCheckin(props: {
 }) {
   const [campus, setCampus] = useState("curitiba");
   const [curso, setCurso] = useState("bsi-981");
-  const infoMatriz = MATRIZ_DO_CURSO[curso] ?? MATRIZ_DO_CURSO["bsi-981"];
-  const matriz = infoMatriz.numero;
+  const [matriz, setMatriz] = useState("981");
+  const matrizesDoCurso =
+    MATRIZES_DO_CURSO[curso] ?? MATRIZES_DO_CURSO["bsi-981"];
+  const infoMatriz =
+    matrizesDoCurso.find((opcao) => opcao.numero === matriz) ??
+    matrizesDoCurso.find((opcao) => opcao.disponivel) ??
+    matrizesDoCurso[0];
   const [buscaCampus, setBuscaCampus] = useState("");
   const [buscaCurso, setBuscaCurso] = useState("");
   const [openCampus, setOpenCampus] = useState(false);
@@ -58,9 +82,19 @@ export function TelaCheckin(props: {
   const listaCursos = [
     { id: "bsi-981", nome: "Bacharelado em Sistemas de Informação (BSI)", nomeCurto: "BSI", disponivel: true },
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
-    { id: "eng-comp", nome: "Engenharia de Computação (Matriz 844)", nomeCurto: "Eng. Computação", disponivel: true },
+    { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
+
+  const selecionarCurso = (id: string) => {
+    const matrizDisponivel = MATRIZES_DO_CURSO[id]?.find(
+      (opcao) => opcao.disponivel,
+    );
+    setCurso(id);
+    if (matrizDisponivel) setMatriz(matrizDisponivel.numero);
+    setOpenCurso(false);
+    setOpenMatriz(false);
+  };
 
   return (
     <div className="mx-auto max-w-4xl space-y-8 pt-4">
@@ -89,8 +123,9 @@ export function TelaCheckin(props: {
       {/* Seção 1: Check-in Institucional */}
       <Card titulo="1. Check-in e Seleção Institucional" classe="p-6 sm:p-8">
         <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-6">
-          Confirme seu câmpus, curso e matriz curricular. No momento, a plataforma opera com dados
-          canônicos do curso de <strong className="text-zinc-800 dark:text-zinc-200">Sistemas de Informação (Matriz 981) do Câmpus Curitiba</strong>. Os menus abaixo preparam a estrutura para expansão e pesquisa em futuros cursos.
+          Confirme seu câmpus, curso e matriz curricular. No Câmpus Curitiba, a plataforma atende
+          atualmente <strong className="text-zinc-800 dark:text-zinc-200">BSI 981 e Eng. Comp. 844</strong>.
+          A matriz 962 de Eng. Comp. já aparece como a próxima implementação, mas ainda não pode ser selecionada.
         </p>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -199,8 +234,7 @@ export function TelaCheckin(props: {
                       key={c.id}
                       onClick={() => {
                         if (c.disponivel) {
-                          setCurso(c.id);
-                          setOpenCurso(false);
+                          selecionarCurso(c.id);
                         }
                       }}
                       className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs transition-colors ${
@@ -237,7 +271,9 @@ export function TelaCheckin(props: {
               onClick={() => setOpenMatriz(!openMatriz)}
               className="w-full flex items-center justify-between gap-2 rounded-xl border border-zinc-200/90 bg-zinc-50/80 px-3.5 py-2.5 text-left text-xs font-semibold text-zinc-800 shadow-2xs transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
             >
-              <span className="truncate font-display font-bold text-sm">{infoMatriz.rotulo}</span>
+              <span className="truncate font-display font-bold text-sm">
+                {infoMatriz.rotulo}
+              </span>
               <div className="flex items-center gap-2 shrink-0">
                 <Badge tom="ok">Disponível</Badge>
                 <span className="text-zinc-400 text-[10px]">{openMatriz ? "▲" : "▼"}</span>
@@ -245,14 +281,45 @@ export function TelaCheckin(props: {
             </button>
 
             {openMatriz && (
-              <div className="absolute left-0 right-0 z-20 mt-1.5 rounded-xl border border-zinc-200/90 bg-white p-3 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="font-display font-bold text-sm text-zinc-900 dark:text-zinc-100">
-                    {infoMatriz.rotulo}
-                  </span>
-                  <Badge tom="ok">Disponível</Badge>
-                </div>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{infoMatriz.nota}</p>
+              <div className="absolute left-0 right-0 z-20 mt-1.5 space-y-1 rounded-xl border border-zinc-200/90 bg-white p-2 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+                {matrizesDoCurso.map((opcao) => {
+                  const selecionada = opcao.numero === matriz;
+                  return (
+                    <button
+                      key={opcao.numero}
+                      type="button"
+                      disabled={!opcao.disponivel}
+                      onClick={() => {
+                        if (!opcao.disponivel) return;
+                        setMatriz(opcao.numero);
+                        setOpenMatriz(false);
+                      }}
+                      className={`w-full rounded-lg px-2.5 py-2 text-left transition-colors ${
+                        selecionada
+                          ? "bg-utfpr-500/15 text-utfpr-700 dark:text-utfpr-400"
+                          : opcao.disponivel
+                            ? "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                            : "cursor-not-allowed text-zinc-400 opacity-65 dark:text-zinc-500"
+                      }`}
+                    >
+                      <span className="flex items-center justify-between gap-2">
+                        <span className="font-display text-sm font-bold">
+                          {opcao.rotulo}
+                        </span>
+                        {selecionada ? (
+                          <Badge tom="ok">Disponível</Badge>
+                        ) : !opcao.disponivel ? (
+                          <span className="text-[10px] font-bold uppercase tracking-wide">
+                            Próxima
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-relaxed">
+                        {opcao.nota}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>

@@ -63,7 +63,7 @@ export const BSI: DadosCurso = {
 export const ENG_COMP: DadosCurso = {
   id: "eng-comp",
   rotulo: "Engenharia de Computação",
-  rotuloCurto: "Eng. Computação",
+  rotuloCurto: "Eng. Comp.",
   matriz: matriz844Json as unknown as Matriz,
   ofertas: {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,

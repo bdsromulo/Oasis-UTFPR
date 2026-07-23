@@ -1,5 +1,6 @@
 import type { DisciplinaMatriz, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
 import {
+  cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
   descricaoDoCurso,
   ehTrilha,
@@ -199,7 +200,9 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     ? porConjunto.get(String(curso.agregadorTrilhas))?.chCursadaAprovada
     : undefined;
   const optativasConsolidadas =
-    curso.matriz === 844 ? perfil.resumoGeral?.optativas.aprovada : undefined;
+    curso.matriz === 844
+      ? cargaAprovadaBlocoOptativo(perfil, curso)
+      : undefined;
   let trilhas = optativasConsolidadas ?? agregado ?? 0;
   if (optativasConsolidadas === undefined && agregado === undefined) {
     for (const cod of Object.keys(matriz.conjuntos)) {

@@ -1,7 +1,12 @@
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from "../tipos";
 import { listarElegiveis } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao } from "./grade";
-import { contaNoBlocoOptativo, descricaoDoCurso, ehTrilha } from "../cursos";
+import {
+  cargaAprovadaBlocoOptativo,
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  ehTrilha,
+} from "../cursos";
 
 export interface OpcoesSugestaoGrade {
   estrategia: "adiantar_maximo" | "balanceado";
@@ -264,17 +269,7 @@ export function gerarSugestaoGrade(
   const chExigidaBlocoOptativo = cjAgregador
     ? matriz.conjuntos[String(cjAgregador)]?.ch ?? matriz.cargas.optativas
     : matriz.cargas.optativas;
-  const resumoAgregador = cjAgregador
-    ? perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjAgregador))
-    : undefined;
-  const chCumpridaBlocoOptativo =
-    (curso.matriz === 844 ? perfil?.resumoGeral?.optativas.aprovada : undefined) ??
-    resumoAgregador?.chCursadaAprovada ??
-    (perfil
-      ? perfil.resumoConjuntos
-          .filter((r) => contaNoBlocoOptativo(curso, r.conjunto))
-          .reduce((total, r) => total + r.chCursadaAprovada, 0)
-      : 0);
+  const chCumpridaBlocoOptativo = cargaAprovadaBlocoOptativo(perfil, curso);
   const chFaltanteBlocoOptativo = Math.max(
     0,
     chExigidaBlocoOptativo - chCumpridaBlocoOptativo,

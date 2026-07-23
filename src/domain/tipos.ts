@@ -150,9 +150,30 @@ export interface PerfilAluno {
   } | null;
   extensao: { chTotal: number; chCursada: number; chFaltante: number } | null;
   resumoGeral: {
-    obrigatorias: { total: number; aprovada: number; faltante: number };
-    optativas: { total: number; aprovada: number; faltante: number };
-    eletivas: { total: number; aprovada: number; faltante: number };
+    obrigatorias: {
+      total: number;
+      /** Coluna C: carga aprovada/validada que já integraliza o curso. */
+      aprovada: number;
+      faltante: number;
+      /** Coluna B: carga cursada, independentemente da situação. */
+      cursada?: number;
+      /** Coluna E: toda carga cursada e aprovada, ainda que aguarde validação. */
+      aprovadaTotal?: number;
+    };
+    optativas: {
+      total: number;
+      aprovada: number;
+      faltante: number;
+      cursada?: number;
+      aprovadaTotal?: number;
+    };
+    eletivas: {
+      total: number;
+      aprovada: number;
+      faltante: number;
+      cursada?: number;
+      aprovadaTotal?: number;
+    };
   } | null;
   dataEmissao?: string | null;
   periodoDocumento?: string | null;

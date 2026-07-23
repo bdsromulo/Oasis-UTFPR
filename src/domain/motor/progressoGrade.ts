@@ -2,6 +2,7 @@ import type { DisciplinaMatriz, Matriz, PerfilAluno } from "../tipos";
 import { normNome } from "./elegiveis";
 import type { ItemGrade } from "./grade";
 import {
+  cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
   descricaoDoCurso,
   ehTrilha,
@@ -211,8 +212,11 @@ export function calcularResumoProgressoGrade(
       exigido: chExigidaTrilhas,
       cumpridoBase: (() => {
         if (!perfil || !matriz) return 0;
-        if (curso.matriz === 844 && perfil.resumoGeral?.optativas) {
-          return Math.min(perfil.resumoGeral.optativas.aprovada, chExigidaTrilhas);
+        if (curso.matriz === 844) {
+          return Math.min(
+            cargaAprovadaBlocoOptativo(perfil, curso),
+            chExigidaTrilhas,
+          );
         }
         const agregado = curso.agregadorTrilhas
           ? perfil.resumoConjuntos.find(

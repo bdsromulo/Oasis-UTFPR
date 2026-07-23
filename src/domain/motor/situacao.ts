@@ -2,7 +2,11 @@
 // Os números por conjunto vêm do próprio histórico (fonte oficial consolidada);
 // a matriz entra para nomear, ordenar e detectar inconsistências.
 import type { Matriz, PerfilAluno, ResumoConjunto } from "../tipos";
-import { descricaoDoCurso, trilhasDaMatriz } from "../cursos";
+import {
+  cargaAprovadaBlocoOptativo,
+  descricaoDoCurso,
+  trilhasDaMatriz,
+} from "../cursos";
 
 export interface ProgressoConjunto {
   conjunto: string;
@@ -19,7 +23,7 @@ export interface Painel {
   humanidades: ProgressoConjunto | null;
   trilhas: ProgressoConjunto[];
   trilhasValidadas: number;
-  blocoOptativo: { exigido: number; cumprido: number } | null;
+  blocoOptativo: { exigido: number; cumprido: number; validado?: number } | null;
   eletivas: { exigido: number; cumprido: number } | null;
   extensao: { exigido: number; cumprido: number } | null;
   inconsistencias: string[];
@@ -68,6 +72,9 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
   const resumoAgregador = curso.agregadorTrilhas
     ? por.get(String(curso.agregadorTrilhas))
     : undefined;
+  const cumpridoBlocoOptativo = cargaAprovadaBlocoOptativo(perfil, curso);
+  const validadoBlocoOptativo =
+    curso.matriz === 844 ? resumoOptativas?.aprovada : undefined;
   return {
     obrigatorias: perfil.resumoGeral?.obrigatorias ?? null,
     segundoEstrato: rSegundo ? prog(rSegundo, false) : null,
@@ -82,9 +89,11 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
             matriz.conjuntos[String(curso.agregadorTrilhas)]?.ch ??
             matriz.cargas.optativas,
           cumprido:
-            (curso.matriz === 844 ? resumoOptativas?.aprovada : undefined) ??
-            resumoAgregador?.chCursadaAprovada ??
-            trilhas.reduce((total, trilha) => total + trilha.cumprido, 0),
+            cumpridoBlocoOptativo,
+          ...(validadoBlocoOptativo !== undefined &&
+          validadoBlocoOptativo !== cumpridoBlocoOptativo
+            ? { validado: validadoBlocoOptativo }
+            : {}),
         }
       : null,
     eletivas: perfil.eletivas

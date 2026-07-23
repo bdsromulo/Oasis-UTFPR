@@ -1,4 +1,4 @@
-import type { Matriz } from "./tipos";
+import type { Matriz, PerfilAluno } from "./tipos";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -122,6 +122,42 @@ export function contaNoBlocoOptativo(
   const n = Number(conjunto);
   if (Number.isNaN(n) || n === curso.agregadorTrilhas) return false;
   return ehTrilha(curso, n) || curso.naoValidaveis.includes(n);
+}
+
+/**
+ * Carga cursada e aprovada que contribui para o bloco agregado de trilhas.
+ *
+ * Na matriz 844, o Quadro Resumo só move horas para a coluna "validada" depois
+ * de completar duas trilhas. Para planejar o saldo real, usamos a coluna E
+ * (aprovada total) ou o conjunto 959, mantendo a validação de duas trilhas como
+ * requisito separado. Na BSI, o próprio agregador 1160 continua sendo a fonte.
+ */
+export function cargaAprovadaBlocoOptativo(
+  perfil: PerfilAluno | null | undefined,
+  curso: DescricaoCurso,
+): number {
+  if (!perfil) return 0;
+
+  const agregado = curso.agregadorTrilhas
+    ? perfil.resumoConjuntos.find(
+        (resumo) => resumo.conjunto === String(curso.agregadorTrilhas),
+      )
+    : undefined;
+
+  if (curso.matriz === 844) {
+    const totalAprovado = perfil.resumoGeral?.optativas.aprovadaTotal;
+    if (totalAprovado !== undefined) return totalAprovado;
+    if (agregado) return agregado.chCursadaAprovada;
+  } else if (agregado) {
+    return agregado.chCursadaAprovada;
+  }
+
+  const somaSubconjuntos = perfil.resumoConjuntos
+    .filter((resumo) => contaNoBlocoOptativo(curso, resumo.conjunto))
+    .reduce((total, resumo) => total + resumo.chCursadaAprovada, 0);
+  if (somaSubconjuntos > 0) return somaSubconjuntos;
+
+  return perfil.resumoGeral?.optativas.aprovada ?? 0;
 }
 
 /** Categoria simples correspondente ao conjunto, se houver. */

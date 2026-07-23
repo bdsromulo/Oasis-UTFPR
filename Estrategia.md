@@ -11,6 +11,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 ### Requisitos Funcionais (RF)
 - `[x]` **RF01 — Ingestão de Histórico Escolar em PDF:** Permitir o upload e processamento local de arquivos PDF do Histórico Escolar emitidos pelo Portal do Aluno da UTFPR sem envio para servidores externos.
 - `[x]` **RF02 — Cálculo e Apresentação de Progresso Curricular:** Calcular e exibir as categorias da matriz ativa: estratos, humanidades e extensão na BSI 981; obrigatórias, 270h optativas (duas trilhas completas mais optativas isoladas), eletivas e estágio na Engenharia de Computação 844.
+- `[ ]` **RF02.1 — Engenharia de Computação 962:** A matriz 962 é a próxima expansão planejada. Sua opção pode ser anunciada no seletor, mas permanece indisponível até que dados oficiais, oferta e regras próprias estejam implementados e validados.
 - `[x]` **RF03 — Identificação de Disciplinas Elegíveis ("Posso Cursar"):** Cruzar disciplinas aprovadas com os pré-requisitos da matriz e turmas abertas do semestre para listar o que o aluno está liberado a cursar.
 - `[x]` **RF04 — Montagem de Grade Horária e Detecção de Conflitos:** Permitir selecionar turmas e identificar em tempo real choques de horários e conflitos de deslocamento entre sedes (Centro, Ecoville, Neoville) em um mesmo turno.
 - `[x]` **RF05 — Gerador de Relatório de Matrícola:** Copiar lista de códigos de turmas selecionadas formatadas para facilidade de digitação/busca durante a abertura da matrícula no Portal.
