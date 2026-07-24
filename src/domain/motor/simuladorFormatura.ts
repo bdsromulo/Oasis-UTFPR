@@ -240,11 +240,15 @@ export interface OpcoesSimulacao {
  * Projeta a trajetória até a formatura.
  */
 export function simularFormatura(
-  perfil: PerfilAluno | null,
+  perfilOriginal: PerfilAluno | null,
   matriz: Matriz,
   ofertas: OfertaSemestre[],
   opcoes: OpcoesSimulacao,
 ): ResultadoSimulacao {
+  let perfil = perfilOriginal
+    ? { ...perfilOriginal, aprovadas: new Set(perfilOriginal.aprovadas) }
+    : null;
+
   const mapa = criarMapaIdentidade(matriz);
   const { ritmo, semestreInicial } = opcoes;
   const horizonte = opcoes.horizonte ?? 20;

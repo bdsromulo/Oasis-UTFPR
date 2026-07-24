@@ -1,22 +1,17 @@
 import { describe, expect, it } from "vitest";
 import matrizJson from "../data/matriz-981.json";
 import matrizEngCompJson from "../data/eng-comp/matriz-844.json";
-import turmas20252 from "../data/turmas/2025-2.json";
-import turmas20261 from "../data/turmas/2026-1.json";
 import {
   ALTURA_NO,
   LARGURA_NO,
-  codigosOfertados,
   montarBoardObrigatorias,
   montarBoardTrilhas,
   type Board,
 } from "../src/domain/motor/fluxograma";
-import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
+import type { Matriz } from "../src/domain/tipos";
 
 const matriz = matrizJson as unknown as Matriz;
 const matrizEngComp = matrizEngCompJson as unknown as Matriz;
-const ofertas = [turmas20252, turmas20261] as unknown as OfertaSemestre[];
-const abertos = codigosOfertados(ofertas);
 
 /** Invariantes que valem para qualquer board desenhável. */
 function conferirInvariantes(board: Board) {
@@ -124,34 +119,33 @@ describe("board de obrigatórias — Eng. Comp.", () => {
 });
 
 describe("board de trilhas", () => {
-  const board = montarBoardTrilhas(matriz, abertos);
+  const board = montarBoardTrilhas(matriz);
 
   it("respeita as invariantes de desenho", () => {
     conferirInvariantes(board);
   });
 
-  it("só desenha disciplinas de trilha que abriram em 2025.2 ou 2026.1", () => {
+  it("desenha todas as disciplinas de trilha", () => {
     const reais = board.nos.filter((n) => !n.externo);
     expect(reais.length).toBeGreaterThan(0);
     for (const n of reais) {
-      expect(abertos.has(n.codigo), `${n.codigo} não abriu em nenhum semestre conhecido`).toBe(true);
       const d = matriz.disciplinas.find((x) => x.codigo === n.codigo)!;
       expect(d.conjunto).toBeGreaterThanOrEqual(1162);
       expect(d.conjunto).toBeLessThanOrEqual(1173);
     }
   });
 
-  it("não cria raia para trilha sem nenhuma oferta conhecida", () => {
+  it("cria raia para todas as trilhas da matriz", () => {
     for (const faixa of board.faixas) {
       const daTrilha = matriz.disciplinas.filter(
-        (d) => d.conjunto === Number(faixa.id) && abertos.has(d.codigo),
+        (d) => d.conjunto === Number(faixa.id)
       );
       expect(daTrilha.length, `raia ${faixa.rotulo} está vazia`).toBeGreaterThan(0);
     }
 
     const trilhasComOferta = new Set(
       matriz.disciplinas
-        .filter((d) => d.conjunto && d.conjunto >= 1162 && d.conjunto <= 1173 && abertos.has(d.codigo))
+        .filter((d) => d.conjunto && d.conjunto >= 1162 && d.conjunto <= 1173)
         .map((d) => String(d.conjunto)),
     );
     expect(new Set(board.faixas.map((f) => f.id))).toEqual(trilhasComOferta);
@@ -161,7 +155,7 @@ describe("board de trilhas", () => {
     for (const faixa of board.faixas) {
       const trilha = Number(faixa.id);
       const daTrilha = matriz.disciplinas.filter(
-        (d) => d.conjunto === trilha && abertos.has(d.codigo),
+        (d) => d.conjunto === trilha
       );
       const internos = new Set(daTrilha.map((d) => d.codigo));
 

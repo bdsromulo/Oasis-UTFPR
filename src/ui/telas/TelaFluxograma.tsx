@@ -3,7 +3,6 @@ import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import {
   ALTURA_NO,
   LARGURA_NO,
-  codigosOfertados,
   montarBoardObrigatorias,
   montarBoardTrilhas,
   type Board,
@@ -85,10 +84,10 @@ function caminhoAresta(a: NoFluxo, b: NoFluxo): string {
 
 export function TelaFluxograma(props: {
   matriz: Matriz;
-  ofertas: OfertaSemestre[];
+  ofertas?: OfertaSemestre[];
   perfil: PerfilAluno | null;
 }) {
-  const { matriz, ofertas, perfil } = props;
+  const { matriz, perfil } = props;
   const curso = descricaoDoCurso(matriz);
   const [abaBoard, setAbaBoard] = useState<AbaBoard>("obrigatorias");
   const [busca, setBusca] = useState("");
@@ -98,10 +97,8 @@ export function TelaFluxograma(props: {
   const arrastando = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  const abertos = useMemo(() => codigosOfertados(ofertas), [ofertas]);
-
   const boardObr = useMemo(() => montarBoardObrigatorias(matriz), [matriz]);
-  const boardTri = useMemo(() => montarBoardTrilhas(matriz, abertos), [matriz, abertos]);
+  const boardTri = useMemo(() => montarBoardTrilhas(matriz), [matriz]);
   const board: Board = abaBoard === "obrigatorias" ? boardObr : boardTri;
 
   const nosPorId = useMemo(() => new Map(board.nos.map((n) => [n.id, n])), [board]);
@@ -266,7 +263,7 @@ export function TelaFluxograma(props: {
 
       {abaBoard === "trilhas" && (
         <p className="rounded-2xl border border-indigo-300/70 bg-indigo-50/70 px-4 py-3 text-xs font-medium leading-relaxed text-indigo-900 dark:border-indigo-800/70 dark:bg-indigo-950/40 dark:text-indigo-200">
-          Este board mostra apenas disciplinas de trilha que <strong>efetivamente abriram</strong> em {ofertas.map((o) => o.semestre.replace("-", ".")).join(" ou ")} — trilhas sem oferta conhecida não aparecem. Blocos tracejados são
+          Este board mostra a estrutura completa das trilhas. Blocos tracejados são
           pré-requisitos que vivem fora da trilha.
         </p>
       )}

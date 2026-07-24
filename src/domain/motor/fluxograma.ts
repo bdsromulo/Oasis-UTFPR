@@ -20,7 +20,7 @@ export const ALTURA_NO = 74;
 const GAP_X = 78;
 const GAP_Y = 22;
 const PADDING = 40;
-const ALTURA_CABECALHO_FAIXA = 44;
+const ALTURA_CABECALHO_FAIXA = 84;
 
 export type GrupoCor =
   | "basica"
@@ -304,7 +304,7 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
  * Board das trilhas do curso, restrito às disciplinas efetivamente abertas.
  * @param codigosAbertos códigos que apareceram na oferta de algum semestre conhecido
  */
-export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>): Board {
+export function montarBoardTrilhas(matriz: Matriz): Board {
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
 
   const trilhas = Object.entries(matriz.conjuntos)
@@ -320,9 +320,9 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
 
   for (const trilha of trilhas) {
     const daTrilha = matriz.disciplinas.filter(
-      (d) => d.conjunto === trilha.id && codigosAbertos.has(d.codigo),
+      (d) => d.conjunto === trilha.id
     );
-    if (daTrilha.length === 0) continue; // trilha sem oferta conhecida não vira raia
+    if (daTrilha.length === 0) continue; // trilha vazia não vira raia
 
     const internos = new Set(daTrilha.map((d) => d.codigo));
     const idNo = (codigo: string) => `${trilha.id}:${codigo}`;
@@ -393,7 +393,7 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
     faixas.push({
       id: String(trilha.id),
       rotulo: trilha.nome,
-      subrotulo: `${daTrilha.length} ${daTrilha.length === 1 ? "disciplina aberta" : "disciplinas abertas"} · ${matriz.conjuntos[String(trilha.id)]?.ch ?? 90}h exigidas`,
+      subrotulo: `${daTrilha.length} ${daTrilha.length === 1 ? "disciplina" : "disciplinas"} · ${matriz.conjuntos[String(trilha.id)]?.ch ?? 90}h exigidas`,
       y: yAtual,
       altura: alturaFaixa,
     });
