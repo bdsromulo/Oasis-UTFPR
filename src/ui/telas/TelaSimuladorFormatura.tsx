@@ -3,7 +3,6 @@ import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import {
   formatarSemestre,
   formatarSemestreExtenso,
-  proximoSemestre,
   rotuloSazonalidade,
   simularFormatura,
   type IdCategoria,
@@ -91,13 +90,14 @@ export function TelaSimuladorFormatura(props: {
   const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
   const curso = descricaoDoCurso(matriz);
   const semestresIniciais = useMemo(() => {
-    const segundo = proximoSemestre(props.semestreAtivo);
-    return [props.semestreAtivo, segundo, proximoSemestre(segundo)];
-  }, [props.semestreAtivo]);
+    // Por enquanto restringe o simulador a começar apenas no semestre futuro,
+    // garantindo que projeções antigas não misturem ofertas passadas.
+    return ["2026-2"];
+  }, []);
 
   useEffect(() => {
-    setSemestreInicial(props.semestreAtivo);
-  }, [props.semestreAtivo]);
+    setSemestreInicial("2026-2");
+  }, []);
 
   const resultado = useMemo(
     () => simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial }),

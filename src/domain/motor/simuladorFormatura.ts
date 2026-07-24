@@ -442,6 +442,7 @@ export function simularFormatura(
   const semestres: SemestreProjetado[] = [];
   let semestreAtual = semestreInicial;
   let eletivasPendentes = falta("eletivas");
+  let semestresSemProgresso = 0;
 
   for (let passo = 0; passo < horizonte; passo++) {
     const tudoFechado =
@@ -595,8 +596,43 @@ export function simularFormatura(
     }
 
     if (escolhidas.length === 0) {
-      semestreAtual = proximoSemestre(semestreAtual);
-      continue;
+      semestresSemProgresso++;
+      if (semestresSemProgresso >= 2) {
+        pendentes.clear();
+      }
+      if (pendentes.size === 0) {
+        let addedPlaceholder = false;
+        const addPlaceholdersFor = (cat: IdCategoria, nomeCat: string) => {
+          while (falta(cat) > 0 && vagas > 0) {
+            const horas = Math.min(falta(cat), 60);
+            escolhidas.push({
+              codigo: `PLACEHOLDER_${cat}_${falta(cat)}`,
+              nome: cat === "obrigatorias" ? `Obrigatória pendente (${horas}h)` : `Optativa de ${nomeCat} (${horas}h)`,
+              horas,
+              categoria: cat,
+              sazonalidade: "ambos",
+              ocupaVaga: true,
+              conjunto: null,
+            });
+            planejado[cat] += horas;
+            vagas--;
+            addedPlaceholder = true;
+          }
+        };
+
+        if (falta("humanidades") > 0) addPlaceholdersFor("humanidades", "Humanidades");
+        if (falta("segundoEstrato") > 0) addPlaceholdersFor("segundoEstrato", "2º Estrato");
+        if (falta("trilhas") > 0) addPlaceholdersFor("trilhas", "Trilha");
+        if (falta("obrigatorias") > 0) addPlaceholdersFor("obrigatorias", "Obrigatória");
+
+        if (!addedPlaceholder) break;
+        semestresSemProgresso = 0;
+      } else {
+        semestreAtual = proximoSemestre(semestreAtual);
+        continue;
+      }
+    } else {
+      semestresSemProgresso = 0;
     }
 
     semestres.push({
