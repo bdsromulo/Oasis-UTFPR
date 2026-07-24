@@ -50,13 +50,15 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
   ],
 };
 
-export function TelaCheckin(props: {
-  onProcessarArquivo: (file: File, dados: DadosCheckin) => void;
-  onContinuarSemRegistro: (dados: DadosCheckin) => void;
-  onAbrirGestaoInformacao: () => void;
+interface Props {
   carregando: boolean;
   erro: string | null;
-}) {
+  onProcessarArquivo: (arquivo: File, dados?: DadosCheckin) => void;
+  onContinuarSemRegistro: (dados: DadosCheckin) => void;
+  onAbrirGestaoInformacao: () => void;
+}
+
+export function TelaCheckin(props: Props) {
   const [campus, setCampus] = useState("curitiba");
   const [curso, setCurso] = useState("bsi-981");
   const [matriz, setMatriz] = useState("981");
@@ -120,12 +122,38 @@ export function TelaCheckin(props: {
         </p>
       </div>
 
-      {/* Seção 1: Check-in Institucional */}
-      <Card titulo="1. Check-in e Seleção Institucional" classe="p-6 sm:p-8">
+      {/* Seção 1: Com Histórico (Recomendado) */}
+      <Card titulo="1. Com meu Histórico (Recomendado)" classe="p-6 sm:p-8">
+        <div className="flex flex-col justify-between rounded-2xl border-2 border-utfpr-500/60 bg-utfpr-500/5 p-6 transition-all hover:border-utfpr-500 dark:bg-utfpr-500/5">
+          <div className="space-y-3">
+            <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+              Importe seu PDF emitido pelo Portal do Aluno. A plataforma identifica <strong>automaticamente seu curso e matriz</strong>, calcula as horas cumpridas, valida pré-requisitos e alerta sobre pendências.
+            </p>
+            <div className="rounded-xl bg-white/80 p-3 text-[11px] text-zinc-500 border border-zinc-200/60 dark:bg-zinc-900/80 dark:border-zinc-800">
+              🛡️ Processamento <strong>100% no seu navegador</strong>. Seus dados nunca saem da sua máquina.
+            </div>
+          </div>
+
+          <label className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-utfpr-500 py-3 font-display text-sm font-bold text-zinc-950 shadow-xs transition-all hover:bg-utfpr-400 active:scale-[0.98]">
+            <IconUpload className="w-5 h-5 shrink-0" />
+            <span>{props.carregando ? "Processando..." : "Selecionar arquivo PDF"}</span>
+            <input
+              type="file"
+              accept="application/pdf"
+              className="hidden"
+              onChange={(e) =>
+                e.target.files?.[0] &&
+                props.onProcessarArquivo(e.target.files[0])
+              }
+            />
+          </label>
+        </div>
+      </Card>
+
+      {/* Seção 2: Entrar sem Histórico (Modo Livre) */}
+      <Card titulo="2. Entrar sem Histórico (Modo Livre)" classe="p-6 sm:p-8">
         <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-6">
-          Confirme seu câmpus, curso e matriz curricular. No Câmpus Curitiba, a plataforma atende
-          atualmente <strong className="text-zinc-800 dark:text-zinc-200">BSI 981 e Eng. Comp. 844</strong>.
-          A matriz 962 de Eng. Comp. já aparece como a próxima implementação, mas ainda não pode ser selecionada.
+          Acesse imediatamente a plataforma para explorar turmas abertas e simular grades. É necessário <strong>selecionar o curso desejado</strong>.
         </p>
 
         <div className="grid gap-6 md:grid-cols-3">
@@ -324,73 +352,15 @@ export function TelaCheckin(props: {
             )}
           </div>
         </div>
-      </Card>
 
-      {/* Seção 2: Opções de Acesso */}
-      <Card titulo="2. Como você deseja acessar a plataforma?" classe="p-6 sm:p-8">
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Opção A: Com PDF (Recomendada) */}
-          <div className="flex flex-col justify-between rounded-2xl border-2 border-utfpr-500/60 bg-utfpr-500/5 p-6 transition-all hover:border-utfpr-500 dark:bg-utfpr-500/5">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
-                  Com meu Histórico (Completo)
-                </span>
-                <Badge tom="acento">Recomendado</Badge>
-              </div>
-              <p className="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-                Importe seu PDF emitido pelo Portal do Aluno. A plataforma calcula suas horas cumpridas
-                por categoria curricular, valida pré-requisitos automaticamente em <strong>Matérias Abertas</strong> e
-                alerta sobre pendências na sua grade.
-              </p>
-              <div className="rounded-xl bg-white/80 p-3 text-[11px] text-zinc-500 border border-zinc-200/60 dark:bg-zinc-900/80 dark:border-zinc-800">
-                🛡️ Processamento <strong>100% no seu navegador</strong>. Seus dados nunca saem da sua máquina.
-              </div>
-            </div>
-
-            <label className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-utfpr-500 py-3 font-display text-sm font-bold text-zinc-950 shadow-xs transition-all hover:bg-utfpr-400 active:scale-[0.98]">
-              <IconUpload className="w-4 h-4 shrink-0" />
-              <span>{props.carregando ? "Processando..." : "Selecionar arquivo PDF"}</span>
-              <input
-                type="file"
-                accept="application/pdf"
-                className="hidden"
-                onChange={(e) =>
-                  e.target.files?.[0] &&
-                  props.onProcessarArquivo(e.target.files[0], { campus, curso, matriz })
-                }
-              />
-            </label>
-          </div>
-
-          {/* Opção B: Sem registros (Modo Livre / Grade na Hora) */}
-          <div className="flex flex-col justify-between rounded-2xl border border-zinc-200 bg-zinc-50/60 p-6 transition-all hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:border-zinc-700">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
-                  Continuar sem meus registros
-                </span>
-                <Badge tom="neutro">Modo Livre</Badge>
-              </div>
-              <p className="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-                Acesse imediatamente o portal sem importar um PDF. Ideal para testar combinações de grade
-                horária com todas as disciplinas liberadas (estilo <strong>Grade na Hora</strong>) ou consultar
-                turmas abertas no semestre.
-              </p>
-              <div className="rounded-xl bg-zinc-100/80 p-3 text-[11px] text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
-                ⚡ Você poderá importar seu histórico a qualquer momento depois através das Configurações.
-              </div>
-            </div>
-
-            <Botao
-              variante="sutil"
-              onClick={() => props.onContinuarSemRegistro({ campus, curso, matriz })}
-            >
-              <IconFileText className="w-4 h-4 text-zinc-500 shrink-0" />
-              <span>Entrar sem histórico (Grade na Hora)</span>
-            </Botao>
-          </div>
-        </div>
+        <Botao
+          variante="sutil"
+          classe="w-full justify-center"
+          onClick={() => props.onContinuarSemRegistro({ campus, curso, matriz })}
+        >
+          <IconFileText className="w-4 h-4 text-zinc-500 shrink-0" />
+          <span>Entrar sem histórico (Grade na Hora)</span>
+        </Botao>
 
         {props.erro && (
           <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm font-medium text-red-800 dark:border-red-900/60 dark:bg-red-950/60 dark:text-red-200">

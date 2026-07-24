@@ -233,21 +233,25 @@ export function TelaSituacao(props: {
 
           <div className="h-8 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
 
-          <div>
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              CR Absoluto
-            </span>
-            <div className="mt-0.5 font-display text-lg font-black text-utfpr-500">
-              {perfil.coefAbsoluto?.toFixed(4) ?? "—"}
+          <div className="col-span-2 flex flex-row items-center justify-around gap-4 sm:gap-6 rounded-xl border border-zinc-200/80 bg-zinc-50/50 px-4 py-2 dark:border-zinc-800/80 dark:bg-zinc-800/30 sm:col-span-1 sm:justify-start flex-nowrap whitespace-nowrap overflow-hidden">
+            <div>
+              <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                CR Absoluto
+              </span>
+              <div className="mt-0.5 font-display text-lg font-black text-utfpr-500">
+                {perfil.coefAbsoluto?.toFixed(4) ?? "—"}
+              </div>
             </div>
-          </div>
 
-          <div>
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              CR Normalizado
-            </span>
-            <div className="mt-0.5 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
-              {perfil.coefNormalizado?.toFixed(4) ?? "—"}
+            <div className="h-8 w-px bg-zinc-200 dark:bg-zinc-700" />
+
+            <div>
+              <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                CR Normalizado
+              </span>
+              <div className="mt-0.5 font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
+                {perfil.coefNormalizado?.toFixed(4) ?? "—"}
+              </div>
             </div>
           </div>
         </div>
@@ -472,6 +476,16 @@ export function TelaSituacao(props: {
                   </span>
                 </div>
                 <Barra valor={painel.trilhasValidadas} max={trilhasExigidas} destaque={painel.trilhasValidadas > 0} />
+                {painel.trilhas.filter(t => t.validado).length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {painel.trilhas.filter(t => t.validado).map(t => (
+                      <div key={t.conjunto} className="flex items-center justify-between text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/30 rounded px-1.5 py-0.5">
+                        <span className="truncate pr-2" title={t.nome}>✓ {t.nome}</span>
+                        <span className="shrink-0 font-mono">({t.cumprido}/{t.exigido}h)</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col justify-between rounded-xl bg-zinc-50 p-3 border border-zinc-200/60 dark:bg-zinc-800/50 dark:border-zinc-700/60">
