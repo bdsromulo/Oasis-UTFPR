@@ -152,7 +152,7 @@
    "modelo": "Formação Básica E Científica",
    "aulas_semanais": {
     "teoricas": 1,
-    "praticas": 962,
+    "praticas": 2,
     "total": 2,
     "aps": 4,
     "apcc": 3
@@ -161,7 +161,7 @@
     "ad": 0,
     "chext": 0,
     "chead": 0,
-    "total": 0
+    "total": 45
    },
    "prerequisitos": [],
    "equivalentes": [
@@ -6419,28 +6419,6 @@
      "grupo": null
     }
    ]
-  },
-  {
-   "codigo": "ENADE",
-   "nome": "C Enade Concluinte",
-   "periodo": null,
-   "conjunto": null,
-   "modelo": "Enade Concluinte",
-   "aulas_semanais": {
-    "teoricas": 0,
-    "praticas": 0,
-    "total": 0,
-    "aps": 0,
-    "apcc": 0
-   },
-   "horas": {
-    "ad": 0,
-    "chext": 0,
-    "chead": 0,
-    "total": 0
-   },
-   "prerequisitos": [],
-   "equivalentes": []
   },
   {
    "codigo": "ICSXG1",

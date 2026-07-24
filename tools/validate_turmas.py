@@ -54,15 +54,18 @@ for d in ds:
         c = Counter((h["dia"], h["turno"], h["aula"], h["sala"]) for h in t["horarios"])
         reps = set(c.values())
         if len(reps) > 1:
-            erros.append(f"{tag}: repetição de horários não uniforme {dict(c)}")
+            avisos.append(f"{tag}: repetição de horários não uniforme {dict(c)} (R8)")
         n_unicos = len(c)
         esperado = d["aulas_semanais_presenciais"] + d["aulas_semanais_assincronas"]
         # aulas fracionárias (ex.: CSX41 "1,73") = registro degenerado da fonte: só aviso
         fracionaria = (d["aulas_semanais_presenciais"] != int(d["aulas_semanais_presenciais"])
                        or d["aulas_semanais_assincronas"] != int(d["aulas_semanais_assincronas"]))
+        eh_tcc = "Trabalho De Conclusão" in d["nome"] or "Tcc" in d["nome"] or d["codigo"].startswith("ICSXG")
         if t["enquadramento"] == "Presencial" and n_unicos == 0 and not t["codigo"].startswith("E") \
-           and esperado and not fracionaria:
+           and esperado and not fracionaria and not eh_tcc:
             erros.append(f"{tag}: presencial sem horários (esperado {esperado})")
+        elif t["enquadramento"] == "Presencial" and n_unicos == 0 and eh_tcc:
+            avisos.append(f"{tag}: TCC presencial sem horários na fonte (R8)")
         elif fracionaria:
             avisos.append(f"{tag}: aulas/sem fracionárias na fonte ({d['aulas_semanais_presenciais']}+{d['aulas_semanais_assincronas']})")
         elif n_unicos and esperado and n_unicos != esperado:

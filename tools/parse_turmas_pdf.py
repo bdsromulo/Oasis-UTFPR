@@ -12,7 +12,7 @@ OUT = sys.argv[3] if len(sys.argv) > 3 else os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "data", "turmas", f"{SEM}.json")
 
 # fronteiras de coluna (x0) medidas na página
-COLS = [
+COLS_BSI = [
     ("turma",       35,  70),
     ("enquadr",     70, 175),
     ("vagas_total",175, 230),
@@ -23,6 +23,20 @@ COLS = [
     ("professor",  431, 488),
     ("optativa",   488, 600),
 ]
+
+COLS_ENG_COMP = [
+    ("turma",       35,  70),
+    ("enquadr",     70, 160),
+    ("vagas_total",160, 210),
+    ("vagas_cal",  210, 255),
+    ("reserva",    255, 300),
+    ("prioridade", 300, 360),
+    ("horario",    360, 600),
+    ("professor",  600, 680),
+    ("optativa",   680, 800),
+]
+
+COLS = COLS_BSI # default
 
 RE_TURMA = re.compile(r"^[A-Z]\d{2}$")
 RE_HORARIO = re.compile(r"^([2-7])([MTN])(\d)(?:\((\*{0,2})([A-Z]{1,2}-?[A-Z0-9]*)\))?$")
@@ -44,10 +58,19 @@ def group_rows(words, tol=3.5):
     return rows
 
 def parse():
+    global COLS
     disciplinas = []
     disc = None          # disciplina corrente
     turma = None         # turma corrente
     header_buf = []      # linhas do cabeçalho de disciplina (pode quebrar em 2+ linhas)
+
+    with pdfplumber.open(PDF) as pdf:
+        # Detect if it's Eng Comp PDF to use right column boundaries
+        first_page_text = " ".join(w["text"] for w in pdf.pages[0].extract_words())
+        if "ENG DE COMPUTA" in first_page_text:
+            COLS = COLS_ENG_COMP
+        else:
+            COLS = COLS_BSI
 
     def flush_header():
         nonlocal disc, header_buf
@@ -108,8 +131,9 @@ def parse():
                 ws.sort(key=lambda w: w["x0"])
                 line = " ".join(w["text"] for w in ws)
                 # lixo de cabeçalho de tabela / avisos / rodapé
-                if ("TurmaEnquadramento" in line or "TotalCalouros" in line
-                        or "alteração)Equivalências)" in line or "alterao)Equivalncias)" in line
+                line_no_space = line.replace(" ", "")
+                if ("TurmaEnquadramento" in line_no_space or "TotalCalouros" in line_no_space
+                        or "alteração)Equivalências)" in line_no_space or "alterao)Equivalncias)" in line_no_space
                         or line.startswith("Turmas Abertas") or "Semestre de" in line
                         or line.startswith("Disciplinas da Matriz") or line.startswith("Imprimir")
                         or line.startswith("Pesquisar") or "Arquivo gerado" in line
@@ -117,7 +141,8 @@ def parse():
                         or "coeficiente de" in line or "rendimento" in line
                         or "matriz curricular" in line or "prioridade e" in line
                         or "na ordem de" in line or "disciplina na" in line
-                        or "Horários marcados" in line or line == "SIST DE INFORMAÇÃO"):
+                        or "Horários marcados" in line or line == "SIST DE INFORMAÇÃO"
+                        or line == "ENG DE COMPUTAÇÃO"):
                     continue
                 first = ws[0]
                 # header de disciplina? começa na coluna 1 com CODIGO - ... ou continuação do header
@@ -167,6 +192,11 @@ def parse():
                 elif cur is not None:
                     cur["curso"] = (cur["curso"] + " " + tok).strip()
             t["prioridade_cursos"] = prio
+            
+            # limpar " Reserva" vazado do cabeçalho
+            if t["reserva"].endswith(" Reserva") and t["reserva"] != "Sem Reserva":
+                t["reserva"] = t["reserva"][:-8].strip()
+
             # horários
             hors = []
             for tok in t.pop("_hor_raw"):

@@ -426,15 +426,16 @@ export function TelaCatalogo(props: {
                       <h4 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
                         {trilha.nome}
                       </h4>
-                      {trilha.validado ? (
-                        <Badge tom="ok" icon={<IconCheck className="h-3 w-3" />} classe="shrink-0">
-                          validada
-                        </Badge>
-                      ) : (
-                        <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <span className={`font-mono text-xs font-bold shrink-0 ${trilha.validado ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-500 dark:text-zinc-400"}`}>
                           {trilha.cumprido}/{trilha.exigido}h
                         </span>
-                      )}
+                        {trilha.validado && (
+                          <Badge tom="ok" icon={<IconCheck className="h-3 w-3" />} classe="shrink-0">
+                            validada
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                     <Barra valor={trilha.cumprido} max={trilha.exigido} destaque={trilha.cumprido > 0} />
                   </div>
