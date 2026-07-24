@@ -7,6 +7,7 @@ import {
   proximoSemestre,
   simularFormatura,
 } from "../src/domain/motor/simuladorFormatura";
+import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import type { Matriz, OfertaSemestre, PerfilAluno, ResumoConjunto } from "../src/domain/tipos";
 
 const matriz = matrizJson as unknown as Matriz;
@@ -54,7 +55,8 @@ function conjunto(cod: string, nome: string, exigido: number, cursado: number): 
 }
 
 describe("sazonalidade empírica", () => {
-  const saz = inferirSazonalidade(ofertas);
+  const mapa = criarMapaIdentidade(matriz);
+  const saz = inferirSazonalidade(ofertas, mapa);
 
   it("classifica pelo que a oferta real mostra, não pela paridade do período", () => {
     // todas as obrigatórias de sala de aula da 981 abriram nos dois semestres
@@ -78,7 +80,8 @@ describe("sazonalidade empírica", () => {
   });
 
   it("não afirma exclusividade quando só um semestre foi observado", () => {
-    const soUm = inferirSazonalidade([turmas20252 as unknown as OfertaSemestre]);
+    const mapa = criarMapaIdentidade(matriz);
+    const soUm = inferirSazonalidade([turmas20252 as unknown as OfertaSemestre], mapa);
     expect(soUm.de("FCH7GA")).toBe("ambos");
   });
 });
@@ -164,7 +167,8 @@ describe("simulação de formatura", () => {
   });
 
   it("respeita a sazonalidade observada de cada disciplina", () => {
-    const saz = inferirSazonalidade(ofertas);
+    const mapa = criarMapaIdentidade(matriz);
+    const saz = inferirSazonalidade(ofertas, mapa);
     const r = simularFormatura(perfilFimDeCurso(), matriz, ofertas, {
       ritmo: 6,
       semestreInicial: "2026-2",

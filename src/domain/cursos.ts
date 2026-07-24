@@ -89,7 +89,21 @@ export const ENG_COMP_844: DescricaoCurso = {
   naoValidaveis: [973],
 };
 
-const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844];
+export const ENG_COMP_962: DescricaoCurso = {
+  matriz: 962,
+  agregadorTrilhas: 1081,
+  trilhasExigidas: 2,
+  categorias: [
+    { id: "humanidades", rotulo: "humanidades", rotuloLongo: "Ciclo de Humanidades", conjunto: 1080 },
+    { id: "expressaoGrafica", rotulo: "exp. gráfica", rotuloLongo: "Opção de Expressão Gráfica", conjunto: 1079 }
+  ],
+  estagios: [{ codigo: "ICSXG2", rotulo: "Estágio Supervisionado", ch: 360 }],
+  rotuloBlocoTrilhas: "Optativas Profissionalizantes",
+  sufixoTrilha: "",
+  naoValidaveis: [1096],
+};
+
+const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844, ENG_COMP_962];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
 export function descricaoDoCurso(matriz: Matriz | number): DescricaoCurso {
@@ -144,7 +158,7 @@ export function cargaAprovadaBlocoOptativo(
       )
     : undefined;
 
-  if (curso.matriz === 844) {
+  if (curso.matriz === 844 || curso.matriz === 962) {
     const totalAprovado = perfil.resumoGeral?.optativas.aprovadaTotal;
     if (totalAprovado !== undefined) return totalAprovado;
     if (agregado) return agregado.chCursadaAprovada;

@@ -5,6 +5,7 @@
 import { useMemo, useState, useRef } from "react";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import {
   horariosUnicos,
   haveriaConflito,
@@ -269,8 +270,10 @@ export function TelaLayoutGNH(props: {
 
   // estado de cada disciplina ofertada em relação ao MEU histórico
   const estadoPorCodigo = useMemo(() => {
+    const elegiveis = listarElegiveis(perfil, matriz, oferta);
+    const mapa = criarMapaIdentidade(matriz);
     const bloqueios = new Map(
-      listarElegiveis(perfil, matriz, oferta).map((e) => [
+      elegiveis.map((e) => [
         e.disciplina.codigo,
         e.motivoBloqueio,
       ]),
@@ -278,7 +281,7 @@ export function TelaLayoutGNH(props: {
     const m = new Map<string, { pendente: boolean; bloqueio: string | null; naMatriz: boolean }>();
     for (const d of oferta.disciplinas) {
       const naMatriz = matriz.disciplinas.some((x) => x.codigo === d.codigo);
-      const cumprida = naMatriz && cumpre(d.codigo, perfil, matriz);
+      const cumprida = naMatriz && cumpre(d.codigo, perfil, mapa);
       m.set(d.codigo, {
         naMatriz,
         pendente: naMatriz && !cumprida,

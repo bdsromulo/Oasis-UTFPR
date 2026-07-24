@@ -7,6 +7,7 @@ import { extrairLinhas } from "../src/domain/historico/extrair-linhas";
 import { parseHistorico } from "../src/domain/historico/parser";
 import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
+import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { nomeDeEletiva } from "../src/domain/eletivas";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
@@ -14,6 +15,7 @@ import turmasJson from "../data/turmas/2026-1.json";
 
 const matriz = matrizJson as unknown as Matriz;
 const oferta = turmasJson as unknown as OfertaSemestre;
+const mapa = criarMapaIdentidade(matriz);
 
 const PASTA = "I:\\Meu Drive\\Oásis UTFPR\\";
 const CASOS = [
@@ -53,7 +55,7 @@ for (const caso of CASOS) {
       const problemas: string[] = [];
       for (const d of matriz.disciplinas) {
         if (d.conjunto !== null || d.codigo.startsWith("ENADE")) continue;
-        const ok = cumpre(d.codigo, perfil, matriz);
+        const ok = cumpre(d.codigo, perfil, mapa);
         const listada = faltantes.has(d.codigo);
         if (ok === listada) {
           problemas.push(`${d.codigo}: cumprida=${ok} listadaComoFaltante=${listada}`);
@@ -72,7 +74,7 @@ for (const caso of CASOS) {
       expect(elegiveis.length).toBeGreaterThan(0);
       // nenhuma elegível pode já estar cumprida
       for (const e of elegiveis) {
-        expect(cumpre(e.disciplina.codigo, perfil, matriz)).toBe(false);
+        expect(cumpre(e.disciplina.codigo, perfil, mapa)).toBe(false);
       }
     });
   });
@@ -114,7 +116,7 @@ describe.skipIf(!existsSync(CASOS[1].arquivo))("fatos específicos: Namie", () =
   it("equivalência aplicada e dependência detectadas", async () => {
     const perfil = await carregar(CASOS[1].arquivo);
     // EST70C consignada via equivalente EST70A
-    expect(cumpre("EST70C", perfil, matriz)).toBe(true);
+    expect(cumpre("EST70C", perfil, mapa)).toBe(true);
     // ICSD20 aprovada (o ENADE vizinho dizia "Dispensado" e não pode contaminar)
     expect(perfil.cursadas.find((c) => c.codigo === "ICSD20")?.situacao).toBe("aprovado");
     // dependência: Estágio 1

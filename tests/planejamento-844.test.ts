@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { parseHistorico } from "../src/domain/historico/parser";
-import { listarElegiveis, normNome } from "../src/domain/motor/elegiveis";
+import { listarElegiveis } from "../src/domain/motor/elegiveis";
+import { normNome } from "../src/domain/motor/identidade";
 import { BSI, ENG_COMP, dadosDoCurso, semestresDoCurso } from "../src/domain/dadosCurso";
 
 describe("dados por curso", () => {
   it("entrega matriz e ofertas do curso escolhido", () => {
     expect(dadosDoCurso("eng-comp").matriz.matriz).toBe(844);
-    expect(dadosDoCurso("eng-comp").rotuloCurto).toBe("Eng. Comp.");
+    expect(dadosDoCurso("eng-comp").rotuloCurto).toBe("Eng. Comp. (844)");
     expect(dadosDoCurso("bsi-981").matriz.matriz).toBe(981);
     // curso desconhecido cai na BSI
     expect(dadosDoCurso("inexistente").matriz.matriz).toBe(981);

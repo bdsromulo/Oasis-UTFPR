@@ -3,6 +3,7 @@ import matriz981Json from "../../data/matriz-981.json";
 import turmasBsi20261 from "../../data/turmas/2026-1.json";
 import turmasBsi20252 from "../../data/turmas/2025-2.json";
 import matriz844Json from "../../data/eng-comp/matriz-844.json";
+import matriz962Json from "../../data/eng-comp/matriz-962.json";
 import turmasEng20261 from "../../data/eng-comp/turmas/2026-1.json";
 import turmasEng20252 from "../../data/eng-comp/turmas/2025-2.json";
 
@@ -62,8 +63,8 @@ export const BSI: DadosCurso = {
 
 export const ENG_COMP: DadosCurso = {
   id: "eng-comp",
-  rotulo: "Engenharia de Computação",
-  rotuloCurto: "Eng. Comp.",
+  rotulo: "Engenharia de Computação (844)",
+  rotuloCurto: "Eng. Comp. (844)",
   matriz: matriz844Json as unknown as Matriz,
   ofertas: {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
@@ -74,7 +75,20 @@ export const ENG_COMP: DadosCurso = {
   semestresPrevia: [],
 };
 
-const CURSOS = [BSI, ENG_COMP];
+export const ENG_COMP_962: DadosCurso = {
+  id: "eng-comp-962",
+  rotulo: "Engenharia de Computação (962)",
+  rotuloCurto: "Eng. Comp. (962)",
+  matriz: matriz962Json as unknown as Matriz,
+  ofertas: {
+    "2026-1": turmasEng20261 as unknown as OfertaSemestre,
+    "2025-2": turmasEng20252 as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-1",
+  semestresPrevia: [],
+};
+
+const CURSOS = [BSI, ENG_COMP, ENG_COMP_962];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {

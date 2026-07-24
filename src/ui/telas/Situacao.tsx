@@ -277,7 +277,7 @@ export function TelaSituacao(props: {
         </div>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className={`grid gap-4 ${[obr, painel.segundoEstrato, painel.humanidades, painel.eletivas, painel.extensao, true].filter(Boolean).length === 4 ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"}`}>
         {obr && (
           <CardProgresso
             titulo={descricaoDoCurso(matriz).matriz === 981 ? "Obrigatórias (1º estrato)" : "Obrigatórias"}

@@ -2,6 +2,7 @@
 // perfil do aluno e a oferta do semestre.
 import type { DisciplinaMatriz, DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
 import { rotuloDoConjunto } from "../cursos";
+import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
 
 export interface Elegivel {
   disciplina: DisciplinaMatriz;
@@ -11,44 +12,33 @@ export interface Elegivel {
   jaMatriculada: boolean;
 }
 
-export function normNome(nome: string): string {
-  return nome
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-}
-
 /** aluno cumpre `codigo`? (aprovação direta ou por equivalente declarada na matriz) */
-export function cumpre(codigo: string, perfil: PerfilAluno | null, matriz: Matriz): boolean {
+export function cumpre(codigo: string, perfil: PerfilAluno | null, mapa: MapaIdentidade): boolean {
   if (!perfil) return false;
-  if (perfil.aprovadas.has(codigo)) return true;
-  const d = matriz.disciplinas.find((x) => x.codigo === codigo);
-  if (!d) return false;
-  if (d.equivalentes.some((e) => perfil.aprovadas.has(e.codigo))) return true;
-
-  // Regra Automática: Equivalência por nome exatamente igual no histórico
-  const nomeNorm = normNome(d.nome);
-  for (const cursada of perfil.aprovadas) {
-    const discCursada = matriz.disciplinas.find((x) => x.codigo === cursada);
-    if (discCursada && normNome(discCursada.nome) === nomeNorm) return true;
+  
+  const canonico = mapa.resolver(codigo);
+  
+  for (const aprovada of perfil.aprovadas) {
+    if (mapa.mesmaExigencia(canonico, aprovada)) return true;
   }
+  
   for (const c of perfil.cursadas) {
     if ((c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") && c.nome) {
-      if (normNome(c.nome) === nomeNorm) return true;
+      const canonicoPeloNome = mapa.resolverPorNome(c.nome);
+      if (canonicoPeloNome && mapa.mesmaExigencia(canonico, canonicoPeloNome)) return true;
     }
   }
   return false;
 }
 
-function bloqueio(d: DisciplinaMatriz, perfil: PerfilAluno | null, matriz: Matriz): string | null {
+function bloqueio(d: DisciplinaMatriz, perfil: PerfilAluno | null, matriz: Matriz, mapa: MapaIdentidade): string | null {
   if (!perfil) return null; // Modo livre sem histórico: todas liberadas para simulação de grade
   const pendentes: string[] = [];
   for (const p of d.prerequisitos) {
     const mPer = p.match(/^Período:(\d)$/);
     if (mPer) {
       if ((perfil.periodo ?? 0) < parseInt(mPer[1])) pendentes.push(`estar no ${mPer[1]}º período`);
-    } else if (!cumpre(p, perfil, matriz)) {
+    } else if (!cumpre(p, perfil, mapa)) {
       const dep = matriz.disciplinas.find((x) => x.codigo === p);
       pendentes.push(dep ? `${p} (${dep.nome})` : p);
     }
@@ -68,6 +58,7 @@ export function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): string {
 export function buscarOfertaParaPlanejamento(
   d: DisciplinaMatriz,
   ofertadas: Map<string, DisciplinaOfertada>,
+  mapa: MapaIdentidade
 ): DisciplinaOfertada | null {
   // A oferta pode estar sob o código do equivalente, e não sob o da matriz.
   // Em Eng. Comp. isso é a regra, não a exceção: a matriz identifica a
@@ -79,13 +70,24 @@ export function buscarOfertaParaPlanejamento(
   // erra — EEQ31 tem [EL65D, ELB66, ELEQ30] e só ELEQ30 é "Análise de Sistemas
   // Lineares". Por isso o equivalente de mesmo NOME tem prioridade; o primeiro
   // com turma fica como último recurso.
-  const equivalentes = (d.equivalentes ?? []).map((e) => e.codigo);
+  
+  const equivalentes = mapa.equivalentesDe(d.codigo).filter(e => e !== d.codigo);
+  
   const comMesmoNome = equivalentes.filter(
-    (codigo) => ofertadas.get(codigo) && normNome(ofertadas.get(codigo)!.nome) === normNome(d.nome),
+    (codigo) => ofertadas.has(codigo) && mapa.resolverPorNome(ofertadas.get(codigo)!.nome) === d.codigo
   );
-  const candidatos = [d.codigo, ...comMesmoNome, ...equivalentes];
+  
+  const outrasOfertasComMesmoNome: string[] = [];
+  for (const [codOf, of] of ofertadas.entries()) {
+    if (mapa.resolverPorNome(of.nome) === d.codigo && codOf !== d.codigo && !equivalentes.includes(codOf)) {
+      outrasOfertasComMesmoNome.push(codOf);
+    }
+  }
 
-  for (const codigo of candidatos) {
+  const candidatos = [d.codigo, ...comMesmoNome, ...outrasOfertasComMesmoNome, ...equivalentes];
+  const candidatosUnicos = Array.from(new Set(candidatos));
+
+  for (const codigo of candidatosUnicos) {
     const encontrada = ofertadas.get(codigo);
     if (!encontrada) continue;
     const turmas = encontrada.turmas
@@ -103,6 +105,7 @@ export function listarElegiveis(
   matriz: Matriz,
   oferta: OfertaSemestre,
 ): Elegivel[] {
+  const mapa = criarMapaIdentidade(matriz);
   const ofertadas = new Map(oferta.disciplinas.map((d) => [d.codigo, d]));
   const matriculadas = new Set(perfil?.matriculadas.map((m) => m.codigo) ?? []);
   const out: Elegivel[] = [];
@@ -110,9 +113,9 @@ export function listarElegiveis(
 
   for (const d of matriz.disciplinas) {
     if (d.codigo.startsWith("ENADE")) continue;
-    if (cumpre(d.codigo, perfil, matriz)) continue;
+    if (cumpre(d.codigo, perfil, mapa)) continue;
     codigosAdicionados.add(d.codigo);
-    const ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, ofertadas);
+    const ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, ofertadas, mapa);
     // quando a turma veio pelo equivalente, esse código já foi consumido: sem
     // isto ele reapareceria adiante como uma segunda linha para a mesma matéria
     if (ofertaDaDisciplina) codigosAdicionados.add(ofertaDaDisciplina.codigo);
@@ -120,7 +123,7 @@ export function listarElegiveis(
       disciplina: d,
       oferta: ofertaDaDisciplina,
       categoria: categoriaDe(d, matriz),
-      motivoBloqueio: bloqueio(d, perfil, matriz),
+      motivoBloqueio: bloqueio(d, perfil, matriz, mapa),
       jaMatriculada: matriculadas.has(d.codigo),
     });
   }
@@ -128,7 +131,7 @@ export function listarElegiveis(
   // Adicionar disciplinas ofertadas no semestre que não estão diretamente na matriz (por equivalência ou optativas/eletivas)
   for (const [codOf, of] of ofertadas.entries()) {
     if (codigosAdicionados.has(codOf) || codOf.startsWith("ENADE")) continue;
-    if (cumpre(codOf, perfil, matriz)) continue;
+    if (cumpre(codOf, perfil, mapa)) continue;
 
     const turmasComHorario = of.turmas
       .filter((t) => t.horarios && t.horarios.length > 0)
@@ -137,15 +140,15 @@ export function listarElegiveis(
 
     // Verificar se esta disciplina ofertada é equivalente a alguma disciplina da matriz para herdar categoria, período e bloqueios
     let discRef: DisciplinaMatriz | undefined;
-    for (const d of matriz.disciplinas) {
-      const equivs = d.equivalentes || [];
-      if (equivs.some((eq) => eq.codigo === codOf) || normNome(d.nome) === normNome(of.nome)) {
-        discRef = d;
-        break;
-      }
+    const canonicoDaOferta = mapa.resolver(codOf);
+    const canonicoPorNome = mapa.resolverPorNome(of.nome);
+    const canonicoFinal = (canonicoDaOferta !== codOf) ? canonicoDaOferta : (canonicoPorNome || codOf);
+    
+    if (canonicoFinal) {
+      discRef = matriz.disciplinas.find((x) => x.codigo === canonicoFinal);
     }
 
-    if (discRef && cumpre(discRef.codigo, perfil, matriz)) continue;
+    if (discRef && cumpre(discRef.codigo, perfil, mapa)) continue;
 
     const aulasPresenciais = of.aulas_semanais_presenciais ?? 4;
     const aulasAssincronas = of.aulas_semanais_assincronas ?? 0;
@@ -182,7 +185,7 @@ export function listarElegiveis(
         turmas: turmasComHorario,
       },
       categoria: discRef ? categoriaDe(discRef, matriz) : "eletiva",
-      motivoBloqueio: discRef ? bloqueio(discRef, perfil, matriz) : null,
+      motivoBloqueio: discRef ? bloqueio(discRef, perfil, matriz, mapa) : null,
       jaMatriculada: matriculadas.has(codOf),
     });
   }

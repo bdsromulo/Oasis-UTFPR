@@ -6,6 +6,8 @@ import {
   ehTrilha,
   categoriaSimples,
 } from "../cursos";
+import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
+import { cumpre } from "./elegiveis";
 
 /**
  * Simulador de formatura.
@@ -34,18 +36,25 @@ export interface MapaSazonalidade {
 
 function ehSemestrePar(semestre: string): boolean {
   return /[-.]2$/.test(semestre);
+
+
 }
 
 /**
  * Infere, para cada disciplina, em quais semestres do ano ela costuma abrir,
  * cruzando as ofertas conhecidas. Disciplina nunca vista vira "sem_oferta".
  */
-export function inferirSazonalidade(ofertas: OfertaSemestre[]): MapaSazonalidade {
+export function inferirSazonalidade(ofertas: OfertaSemestre[], mapa: MapaIdentidade): MapaSazonalidade {
   const emPar = new Set<string>();
   const emImpar = new Set<string>();
   for (const o of ofertas) {
     const alvo = ehSemestrePar(o.semestre) ? emPar : emImpar;
-    for (const d of o.disciplinas) alvo.add(d.codigo);
+    for (const d of o.disciplinas) {
+      const canonicoDaOferta = mapa.resolver(d.codigo);
+      const canonicoPorNome = mapa.resolverPorNome(d.nome);
+      const canonico = (canonicoDaOferta !== d.codigo) ? canonicoDaOferta : (canonicoPorNome || d.codigo);
+      alvo.add(canonico);
+    }
   }
   const viuPar = ofertas.some((o) => ehSemestrePar(o.semestre));
   const viuImpar = ofertas.some((o) => !ehSemestrePar(o.semestre));
@@ -236,21 +245,21 @@ export function simularFormatura(
   ofertas: OfertaSemestre[],
   opcoes: OpcoesSimulacao,
 ): ResultadoSimulacao {
+  const mapa = criarMapaIdentidade(matriz);
   const { ritmo, semestreInicial } = opcoes;
   const horizonte = opcoes.horizonte ?? 20;
-  const saz = inferirSazonalidade(ofertas);
+  const saz = inferirSazonalidade(ofertas, mapa);
   const cursoDesc = descricaoDoCurso(matriz);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
   const avisos: string[] = [];
 
-  const aprovadas = new Set<string>(perfil ? perfil.aprovadas : []);
   const cumprido = cumpridoPorCategoria(perfil, matriz);
 
   // Obrigatórias: o cumprido sai do próprio roster (soma exatamente a carga da
   // matriz), e não do Quadro Resumo. Assim o "já concluído" e o "a planejar"
   // falam da mesma lista de disciplinas e nunca somam mais que o exigido.
   const obrigatoriasPendentes = matriz.disciplinas.filter(
-    (d) => d.conjunto === null && !d.codigo.startsWith("ENADE") && !aprovadas.has(d.codigo),
+    (d) => d.conjunto === null && !d.codigo.startsWith("ENADE") && !cumpre(d.codigo, perfil, mapa),
   );
   cumprido.obrigatorias =
     matriz.cargas.obrigatorias - obrigatoriasPendentes.reduce((a, d) => a + d.horas.total, 0);
@@ -280,7 +289,7 @@ export function simularFormatura(
   // menor conjunto que fecha a carga, então todas entram no pool de candidatas.
   const candidatas = matriz.disciplinas.filter((d) => {
     if (d.codigo.startsWith("ENADE")) return false;
-    if (aprovadas.has(d.codigo)) return false;
+    if (cumpre(d.codigo, perfil, mapa)) return false;
     const cat = categoriaDe(d, matriz);
     if (cat === null) return false;
     if (cat !== "obrigatorias" && saz.de(d.codigo) === "sem_oferta") return false;
@@ -291,7 +300,7 @@ export function simularFormatura(
     (d) =>
       d.conjunto === null &&
       !d.codigo.startsWith("ENADE") &&
-      !aprovadas.has(d.codigo) &&
+      !cumpre(d.codigo, perfil, mapa) &&
       ocupaVaga(d) &&
       saz.de(d.codigo) === "sem_oferta",
   );
@@ -322,7 +331,7 @@ export function simularFormatura(
     if (memo !== undefined) return memo;
     if (visitando.has(codigo)) return 0;
     visitando.add(codigo);
-    const filhos = (dependentesDe.get(codigo) ?? []).filter((f) => !aprovadas.has(f.codigo));
+    const filhos = (dependentesDe.get(codigo) ?? []).filter((f) => !cumpre(f.codigo, perfil, mapa));
     const h = filhos.length ? Math.max(...filhos.map((f) => altura(f.codigo, visitando))) + 1 : 0;
     visitando.delete(codigo);
     alturaMemo.set(codigo, h);
@@ -390,7 +399,7 @@ export function simularFormatura(
     const alcancavel = (d: DisciplinaMatriz) =>
       d.prerequisitos.every((p) => {
         if (periodoExigido(p) !== null) return true;
-        return aprovadas.has(p) || ehObrigatoria.has(p);
+        return cumpre(p, perfil, mapa) || ehObrigatoria.has(p);
       });
 
     const disponiveisPorTrilha = new Map<number, number>();
@@ -467,7 +476,7 @@ export function simularFormatura(
         return d.prerequisitos.every((p) => {
           const per = periodoExigido(p);
           if (per !== null) return periodoNoSemestre >= per;
-          return aprovadas.has(p);
+          return cumpre(p, perfil, mapa);
         });
       });
 
@@ -556,7 +565,13 @@ export function simularFormatura(
         conjunto: d.conjunto,
       });
       planejado[cat] += contribui;
-      aprovadas.add(d.codigo);
+      // Simulamos a aprovação para que dependentes sejam liberados nos próximos passos
+      if (perfil) {
+        perfil.aprovadas.add(d.codigo);
+      } else {
+        // Se não houver perfil, criamos um mock mínimo para manter o estado
+        perfil = { aprovadas: new Set([d.codigo]), cursadas: [] } as any;
+      }
       pendentes.delete(d.codigo);
       alturaMemo.clear();
       if (consome) vagas--;

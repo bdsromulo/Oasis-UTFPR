@@ -183,4 +183,6 @@ export interface PerfilAluno {
 export interface SelecaoTurma {
   codDisciplina: string;
   codTurma: string;
+  /** Se selecionou via turma que estava agrupada sob outro código (equivalência/mesmo nome) */
+  codDisciplinaOferta?: string;
 }

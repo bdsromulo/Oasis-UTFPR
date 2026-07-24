@@ -123,14 +123,31 @@ def parse():
             if eq_line:
                 eq_lines.append(eq_line)
 
-        cod_toks = [t for t in cells.get("codigo", []) if t != "Turmas"]
+        raw_cod_toks = [t for t in cells.get("codigo", []) if t != "Turmas"]
+        cod_toks = []
+        nome_extra = []
+        for t in raw_cod_toks:
+            if not cod_toks and (RE_COD.match(t) or t.startswith("ENADE")):
+                cod_toks.append(t)
+            else:
+                nome_extra.append(t)
         if not cod_toks:
             continue
         codigo = "".join(cod_toks)
+        
+        nome_parts = nome_extra + cells.get("nome", [])
+        nome_str = " ".join(nome_parts).title()
+        
+        # Heuristic for numeric columns to bypass non-uniform scaling issues
+        raw_nums = []
+        for ws in blk:
+            for w in ws:
+                if 310 <= w["x0"] <= 645 and re.match(r"^\d+$", w["text"]):
+                    raw_nums.append((w["x0"], int(w["text"])))
+        raw_nums.sort()
         nums = {}
-        for c in NUM_COLS:
-            vals = [t for t in cells.get(c, []) if re.match(r"^\d+$", t)]
-            nums[c] = int(vals[0]) if vals else 0
+        for i, c in enumerate(NUM_COLS):
+            nums[c] = raw_nums[i][1] if i < len(raw_nums) else 0
         prereqs = [t for t in cells.get("prereq", [])
                    if RE_COD.match(t) or re.match(r"^Período:\d$", t)]
         equivalentes = []
@@ -149,7 +166,7 @@ def parse():
         per_vals = [t for t in cells.get("periodo", []) if re.match(r"^\d$", t)]
         disciplinas.append({
             "codigo": codigo,
-            "nome": " ".join(cells.get("nome", [])).title(),
+            "nome": nome_str,
             "periodo": int(per_vals[0]) if per_vals else None,
             "conjunto": opt,   # null = obrigatória do 1º estrato
             "modelo": " ".join(cells.get("modelo", [])).title(),

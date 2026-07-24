@@ -1,5 +1,5 @@
 import type { DisciplinaMatriz, Matriz, PerfilAluno } from "../tipos";
-import { normNome } from "./elegiveis";
+import { normNome } from "./identidade";
 import type { ItemGrade } from "./grade";
 import {
   cargaAprovadaBlocoOptativo,

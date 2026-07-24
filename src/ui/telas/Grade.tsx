@@ -12,7 +12,8 @@ import {
 } from "../../domain/motor/grade";
 import type { Matriz, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { faixaDoSlot } from "../../domain/horarios";
-import { categoriaDe, normNome } from "../../domain/motor/elegiveis";
+import { categoriaDe } from "../../domain/motor/elegiveis";
+import { normNome } from "../../domain/motor/identidade";
 import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGrade } from "../../domain/motor/progressoGrade";
 import { Badge, Botao, Card, BarraProgressoComPreview, BalaoProgressoHover } from "../componentes";
 import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
