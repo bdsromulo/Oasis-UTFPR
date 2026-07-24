@@ -1,5 +1,6 @@
 import type { DisciplinaMatriz, Matriz } from "../tipos";
 import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
+import { criarMapaIdentidade } from "./identidade";
 
 /**
  * Monta os dois boards do fluxograma de progressão do curso, já com as posições
@@ -304,7 +305,7 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
  * Board das trilhas do curso, restrito às disciplinas efetivamente abertas.
  * @param codigosAbertos códigos que apareceram na oferta de algum semestre conhecido
  */
-export function montarBoardTrilhas(matriz: Matriz): Board {
+export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>): Board {
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
 
   const trilhas = Object.entries(matriz.conjuntos)
@@ -320,9 +321,9 @@ export function montarBoardTrilhas(matriz: Matriz): Board {
 
   for (const trilha of trilhas) {
     const daTrilha = matriz.disciplinas.filter(
-      (d) => d.conjunto === trilha.id
+      (d) => d.conjunto === trilha.id && codigosAbertos.has(d.codigo)
     );
-    if (daTrilha.length === 0) continue; // trilha vazia não vira raia
+    if (daTrilha.length === 0) continue; // trilha sem oferta conhecida não vira raia
 
     const internos = new Set(daTrilha.map((d) => d.codigo));
     const idNo = (codigo: string) => `${trilha.id}:${codigo}`;
@@ -393,7 +394,7 @@ export function montarBoardTrilhas(matriz: Matriz): Board {
     faixas.push({
       id: String(trilha.id),
       rotulo: trilha.nome,
-      subrotulo: `${daTrilha.length} ${daTrilha.length === 1 ? "disciplina" : "disciplinas"} · ${matriz.conjuntos[String(trilha.id)]?.ch ?? 90}h exigidas`,
+      subrotulo: `${daTrilha.length} ${daTrilha.length === 1 ? "disciplina aberta" : "disciplinas abertas"} · ${matriz.conjuntos[String(trilha.id)]?.ch ?? 90}h exigidas`,
       y: yAtual,
       altura: alturaFaixa,
     });
@@ -410,9 +411,16 @@ export function montarBoardTrilhas(matriz: Matriz): Board {
   };
 }
 
-/** Códigos que apareceram na oferta de qualquer um dos semestres informados. */
-export function codigosOfertados(ofertas: { disciplinas: { codigo: string }[] }[]): Set<string> {
+/** Códigos que apareceram na oferta de qualquer um dos semestres informados, normalizados para a matriz atual. */
+export function codigosOfertados(matriz: Matriz, ofertas: { disciplinas: { codigo: string; nome: string }[] }[]): Set<string> {
+  const map = criarMapaIdentidade(matriz);
   const s = new Set<string>();
-  for (const o of ofertas) for (const d of o.disciplinas) s.add(d.codigo);
+  for (const o of ofertas) {
+    for (const d of o.disciplinas) {
+      s.add(map.resolver(d.codigo));
+      const porNome = map.resolverPorNome(d.nome);
+      if (porNome) s.add(porNome);
+    }
+  }
   return s;
 }
