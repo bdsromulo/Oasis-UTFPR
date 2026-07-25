@@ -44,9 +44,9 @@ function csp(): Plugin {
   };
 }
 
-// base: repositório GitHub Pages (https://bdsromulo.github.io/Oasis-UTFPR/)
+// base: domínio próprio na raiz (https://oasisutfpr.com.br/), via CNAME no GitHub Pages
 export default defineConfig({
-  base: "/Oasis-UTFPR/",
+  base: "/",
   plugins: [react(), tailwindcss(), csp()],
   test: {
     environment: "node",
