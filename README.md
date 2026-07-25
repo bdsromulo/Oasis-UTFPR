@@ -21,7 +21,7 @@ Princípios:
 
 ```
 npm install
-npm run dev    # desenvolvimento (http://localhost:5173/Oasis-UTFPR/)
+npm run dev    # desenvolvimento (http://localhost:5173/)
 npm test       # testes (inclui parser de histórico com fixture sintética)
 npm run build  # produção
 ```

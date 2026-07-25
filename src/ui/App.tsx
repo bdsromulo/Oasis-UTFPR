@@ -22,6 +22,7 @@ import { TelaSimuladorFormatura } from "./telas/TelaSimuladorFormatura";
 import { TelaAmigosMatch } from "./telas/TelaAmigosMatch";
 import { TelaGestaoInformacao } from "./telas/TelaGestaoInformacao";
 import { TelaFluxograma } from "./telas/TelaFluxograma";
+import { TelaSobre } from "./telas/TelaSobre";
 import {
   LogoUTFPR,
   IconUser,
@@ -31,6 +32,7 @@ import {
   IconSettings,
   IconSun,
   IconMoon,
+  IconInfo,
 } from "./icons";
 
 export interface SelecaoTurma {
@@ -104,6 +106,7 @@ export function App() {
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
+  const [sobreAberta, setSobreAberta] = useState(false);
   // Com histórico carregado, a matriz detectada no próprio PDF é a fonte de
   // verdade do curso. Isso também corrige sessões antigas salvas como BSI por
   // padrão apesar de conterem um histórico da matriz 844.
@@ -427,9 +430,10 @@ export function App() {
           </div>
         </div>
 
-        {/* Controles do Cabeçalho visíveis quando já iniciou a plataforma */}
-        {(perfil || checkinConcluido) && (
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Controles do Cabeçalho visíveis quando já iniciou a plataforma */}
+          {(perfil || checkinConcluido) && (
+            <>
             {/* comutador de tema visível no topo da página (apenas ícones claro/escuro) */}
             <div className="flex rounded-xl border border-zinc-200/80 bg-zinc-100/70 p-0.5 text-xs font-bold dark:border-zinc-800/80 dark:bg-zinc-900/70">
               {[
@@ -481,12 +485,29 @@ export function App() {
                 <IconSettings className="h-4 w-4" />
               </Botao>
             </div>
-          </div>
-        )}
+            </>
+          )}
+
+          {/* "Sobre" acompanha a engrenagem, mas vale para qualquer ambiente:
+              é material do projeto, então aparece também antes do check-in. */}
+          <Botao
+            onClick={() => {
+              setGiAberta(false);
+              setSobreAberta(true);
+            }}
+            variante="sutil"
+            classe="!rounded-2xl !py-2 !px-3 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+            title="Sobre o projeto"
+          >
+            <IconInfo className="h-4 w-4" />
+            <span className="font-semibold">Sobre</span>
+          </Botao>
+        </div>
       </header>
 
-      {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória) */}
-      {ehPreMatricula && (
+      {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória).
+          Fica fora do "Sobre", que é material do projeto e não do semestre. */}
+      {ehPreMatricula && !sobreAberta && (
         <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-3.5">
@@ -507,9 +528,22 @@ export function App() {
         </div>
       )}
 
-      {/* Gestão da Informação é material sobre o projeto, não sobre o aluno:
-          abre a partir do check-in, sem exigir histórico nem entrar na sessão. */}
-      {giAberta ? (
+      {/* Sobre e Gestão da Informação são material do projeto, não do aluno:
+          abrem em qualquer ambiente, sem exigir histórico nem entrar na sessão. */}
+      {sobreAberta ? (
+        <div className="space-y-5">
+          <Botao variante="sutil" onClick={() => setSobreAberta(false)}>
+            <span>←</span>
+            <span>Voltar</span>
+          </Botao>
+          <TelaSobre
+            onAbrirGestaoInformacao={() => {
+              setSobreAberta(false);
+              setGiAberta(true);
+            }}
+          />
+        </div>
+      ) : giAberta ? (
         <div className="space-y-5">
           <Botao variante="sutil" onClick={() => setGiAberta(false)}>
             <span>←</span>
@@ -882,8 +916,10 @@ export function App() {
         carregandoPDF={carregando}
       />
 
-      {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta) */}
-      {aba === "planejamento" && abaPlanejamento === "cursar" && (
+      {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta).
+          Sobre e Gestão da Informação substituem o conteúdo principal: a barra
+          de grade não pode ficar flutuando por cima delas. */}
+      {aba === "planejamento" && abaPlanejamento === "cursar" && !sobreAberta && !giAberta && (
         <>
           <div className="fixed bottom-4 left-4 right-4 z-40 lg:hidden">
             <div className="flex items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-900/90 p-3.5 px-5 shadow-2xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-950/90 text-white">
