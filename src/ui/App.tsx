@@ -58,6 +58,10 @@ const CHAVE_CHECKIN = "oasis.checkin.v1";
 const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
 const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
 const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
+// ponteiro (semestre + letra da grade) para a grade do Planejamento que alimenta
+// o Simulador de Formatura; a seleção em si continua vindo da cesta, para o
+// simulador acompanhar as edições feitas na grade
+const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -180,9 +184,31 @@ export function App() {
     return { "2026-2": {} };
   });
 
+  // Grade do Planejamento escolhida como ponto de partida do Simulador de
+  // Formatura. Guardamos só o ponteiro: a seleção é lida da cesta a cada render,
+  // então mexer na grade replaneja a projeção sem precisar reimportar.
+  const [gradeParaSimulador, setGradeParaSimulador] = useState<{
+    semestre: string;
+    grade: string;
+  } | null>(() => {
+    try {
+      const salvo = JSON.parse(localStorage.getItem(CHAVE_GRADE_SIMULADOR) ?? "null");
+      return salvo && salvo.semestre && salvo.grade ? salvo : null;
+    } catch {
+      return null;
+    }
+  });
+
   const cestaGrades = useMemo(() => {
     return todasCestasPorSemestre[semestreAtivo] ?? { A: [] };
   }, [todasCestasPorSemestre, semestreAtivo]);
+
+  const gradeDoPlanejamentoParaSimulador = useMemo(() => {
+    if (!gradeParaSimulador) return null;
+    const sel = todasCestasPorSemestre[gradeParaSimulador.semestre]?.[gradeParaSimulador.grade];
+    if (!sel || sel.length === 0) return null;
+    return { ...gradeParaSimulador, selecao: sel };
+  }, [gradeParaSimulador, todasCestasPorSemestre]);
 
   const cestaExclusoes = useMemo(() => {
     return todasExclusoesPorSemestre[semestreAtivo] ?? {};
@@ -409,6 +435,24 @@ export function App() {
     setAba("planejamento");
     setAbaPlanejamento("grade");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /**
+   * Caminho de volta da importação: a grade montada no Planejamento vira o
+   * primeiro semestre do Simulador de Formatura, e os demais semestres passam a
+   * ser calculados a partir dela.
+   */
+  function handleEnviarGradeParaSimulador(semestreOrigem: string, gradeOrigem: string) {
+    const ponteiro = { semestre: semestreOrigem, grade: gradeOrigem };
+    setGradeParaSimulador(ponteiro);
+    localStorage.setItem(CHAVE_GRADE_SIMULADOR, JSON.stringify(ponteiro));
+    setAba("simulador");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handleDescartarGradeDoSimulador() {
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
   function handleContinuarSemRegistro(dados: DadosCheckin) {
@@ -878,6 +922,15 @@ export function App() {
                     todasCestasPorSemestre={todasCestasPorSemestre}
                     semestreAtivo={semestreAtivo}
                     todasOfertas={todasOfertas}
+                    onEnviarParaSimulador={
+                      SIMULADOR_LIBERADO && perfil
+                        ? () => handleEnviarGradeParaSimulador(semestreAtivo, gradeAtiva)
+                        : undefined
+                    }
+                    gradeNoSimulador={
+                      gradeParaSimulador?.semestre === semestreAtivo &&
+                      gradeParaSimulador?.grade === gradeAtiva
+                    }
                   />
                 )}
               </div>
@@ -891,6 +944,8 @@ export function App() {
                 semestreAtivo={semestreAtivo}
                 todasCestasPorSemestre={todasCestasPorSemestre}
                 onImportarGrade={handleImportarGradeDoSimulador}
+                gradeDoPlanejamento={gradeDoPlanejamentoParaSimulador}
+                onDescartarGradeDoPlanejamento={handleDescartarGradeDoSimulador}
               />
             )}
 

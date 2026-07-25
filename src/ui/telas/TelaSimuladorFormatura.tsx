@@ -3,6 +3,7 @@ import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from ".
 import {
   formatarSemestre,
   formatarSemestreExtenso,
+  gradeFixadaDaSelecao,
   rotuloSazonalidade,
   simularFormatura,
   type DisciplinaPlanejada,
@@ -37,6 +38,19 @@ function converterParaSelecao(
       continue;
     }
 
+    // O motor já reservou uma turma para esta disciplina na oferta do semestre,
+    // conferindo choque contra as demais que ele mesmo escolheu. Repetir a
+    // escolha dele é o que impede a grade importada de nascer em conflito.
+    if (d.codigoOferta && d.turma) {
+      const existe = oferta.disciplinas
+        .find((x) => x.codigo === d.codigoOferta)
+        ?.turmas.some((t) => t.codigo === d.turma);
+      if (existe) {
+        selecao.push({ codDisciplina: d.codigoOferta, codTurma: d.turma });
+        continue;
+      }
+    }
+
     const dMatriz = matriz.disciplinas.find((x) => x.codigo === d.codigo);
     const dOf = dMatriz ? buscarOfertaParaPlanejamento(dMatriz, ofertadas, mapa) : ofertadas.get(d.codigo);
     if (!dOf || !dOf.turmas.length) continue;
@@ -49,18 +63,20 @@ function converterParaSelecao(
       }))
       .sort((a, b) => b.peso - a.peso);
 
+    const jaNaSelecao = (t: Turma) =>
+      selecao.some((s) => s.codDisciplina === dOf.codigo && s.codTurma === t.codigo);
+
     let escolhida: Turma | null = null;
     for (const item of turmasOrdenadas) {
-      if (!haveriaConflito(itensAtuais, dOf, item.turma)) {
+      if (!jaNaSelecao(item.turma) && !haveriaConflito(itensAtuais, dOf, item.turma)) {
         escolhida = item.turma;
         break;
       }
     }
 
-    if (!escolhida && turmasOrdenadas.length > 0) {
-      escolhida = turmasOrdenadas[0].turma;
-    }
-
+    // Sem turma livre, a disciplina fica fora da importação. Antes o fallback
+    // pegava a primeira turma de qualquer jeito, e era daí que saía a grade
+    // importada já em choque.
     if (escolhida) {
       selecao.push({
         codDisciplina: dOf.codigo,
@@ -156,6 +172,9 @@ export function TelaSimuladorFormatura(props: {
   semestreAtivo: string;
   todasCestasPorSemestre?: Record<string, Record<string, SelecaoTurma[]>>;
   onImportarGrade?: (semestreDestino: string, gradeDestino: string, selecao: SelecaoTurma[]) => void;
+  /** grade montada no Planejamento que o motor deve tomar como fato */
+  gradeDoPlanejamento?: { semestre: string; grade: string; selecao: SelecaoTurma[] } | null;
+  onDescartarGradeDoPlanejamento?: () => void;
 }) {
   const { perfil, matriz, ofertas } = props;
   const [ritmo, setRitmo] = useState(5);
@@ -172,9 +191,26 @@ export function TelaSimuladorFormatura(props: {
     setSemestreInicial("2026-2");
   }, []);
 
+  // Caminho de volta da importação: a grade montada no Planejamento entra como
+  // o primeiro semestre da projeção, turma por turma, e os seguintes saem dela.
+  const gradeFixada = useMemo(() => {
+    const g = props.gradeDoPlanejamento;
+    if (!g || g.selecao.length === 0) return null;
+    const ofertaOrigem = ofertas.find((o) => o.semestre.replace(".", "-") === g.semestre);
+    if (!ofertaOrigem) return null;
+    return gradeFixadaDaSelecao(g.semestre, ofertaOrigem, g.selecao, matriz, `Grade ${g.grade}`);
+  }, [props.gradeDoPlanejamento, ofertas, matriz]);
+
+  const semestreDePartida = gradeFixada?.semestre ?? semestreInicial;
+
   const resultado = useMemo(
-    () => simularFormatura(perfil, matriz, ofertas, { ritmo, semestreInicial }),
-    [perfil, matriz, ofertas, ritmo, semestreInicial],
+    () =>
+      simularFormatura(perfil, matriz, ofertas, {
+        ritmo,
+        semestreInicial: semestreDePartida,
+        gradeFixada,
+      }),
+    [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada],
   );
 
   const totalMaterias = resultado.semestres.reduce((a, s) => a + s.materias, 0);
@@ -228,6 +264,36 @@ export function TelaSimuladorFormatura(props: {
         </div>
       )}
 
+      {gradeFixada && (
+        <div className="flex flex-wrap items-start justify-between gap-3 rounded-2xl border-2 border-utfpr-500/50 bg-gradient-to-r from-utfpr-500/10 via-amber-500/5 to-transparent p-4 dark:border-utfpr-500/40">
+          <div className="flex items-start gap-2.5">
+            <IconDownload className="mt-0.5 h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-400" />
+            <div className="text-sm text-zinc-700 dark:text-zinc-200">
+              <span className="font-display font-black text-zinc-900 dark:text-white">
+                Projeção partindo da sua {gradeFixada.origem} de{" "}
+                {formatarSemestre(gradeFixada.semestre)}
+              </span>
+              <p className="mt-1 max-w-2xl text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+                O semestre de {formatarSemestre(gradeFixada.semestre)} entra exatamente como você
+                montou no Planejamento de Matrícula ({gradeFixada.itens.length}{" "}
+                {gradeFixada.itens.length === 1 ? "matéria" : "matérias"}) — o motor não escolhe
+                nada nele. Os semestres seguintes são calculados a partir dessa grade.
+              </p>
+            </div>
+          </div>
+          {props.onDescartarGradeDoPlanejamento && (
+            <button
+              type="button"
+              onClick={props.onDescartarGradeDoPlanejamento}
+              className="shrink-0 rounded-xl border border-zinc-300 bg-white px-3 py-1.5 font-display text-xs font-bold text-zinc-700 transition-colors hover:border-red-400 hover:text-red-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-red-300 cursor-pointer"
+              title="Voltar a projetar o primeiro semestre livremente"
+            >
+              Descartar e projetar do zero
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Controles */}
       <div className="flex flex-wrap items-end gap-6 rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
         <div>
@@ -257,11 +323,12 @@ export function TelaSimuladorFormatura(props: {
             Começando em
           </label>
           <select
-            value={semestreInicial}
+            value={semestreDePartida}
+            disabled={!!gradeFixada}
             onChange={(e) => setSemestreInicial(e.target.value)}
-            className="mt-2 h-9 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 font-mono text-sm font-bold text-zinc-900 outline-none focus:border-utfpr-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+            className="mt-2 h-9 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 font-mono text-sm font-bold text-zinc-900 outline-none focus:border-utfpr-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
-            {semestresIniciais.map((s) => (
+            {Array.from(new Set([...semestresIniciais, semestreDePartida])).map((s) => (
               <option key={s} value={s}>
                 {formatarSemestre(s)}
               </option>
@@ -342,15 +409,31 @@ export function TelaSimuladorFormatura(props: {
                         {formatarSemestreExtenso(s.semestre)}
                       </span>
                     </div>
+                    {s.fixadoPeloPlanejamento && (
+                      <span className="rounded-full border border-utfpr-500/50 bg-utfpr-500/15 px-2.5 py-0.5 font-display text-[10px] font-black text-amber-900 dark:text-utfpr-300">
+                        DO PLANEJAMENTO
+                      </span>
+                    )}
                     {ultimo && resultado.semestreFormatura && (
                       <span className="rounded-full bg-utfpr-500 px-2.5 py-0.5 font-display text-[10px] font-black text-zinc-950">
                         FORMATURA
                       </span>
                     )}
                   </div>
-                  <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
-                    {s.materias} {s.materias === 1 ? "matéria" : "matérias"} · {s.horas}h
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                      {s.materias} {s.materias === 1 ? "matéria" : "matérias"} · {s.horas}h
+                    </span>
+                    {s.semestreReferencia &&
+                      s.semestreReferencia.replace(".", "-") !== s.semestre.replace(".", "-") && (
+                        <span
+                          className="text-[10px] font-semibold text-zinc-400"
+                          title="Os horários deste semestre futuro usam a oferta real mais recente de mesma paridade"
+                        >
+                          horários espelhados de {formatarSemestre(s.semestreReferencia)}
+                        </span>
+                      )}
+                  </div>
                 </div>
 
                 <ul className="space-y-1.5">
@@ -519,8 +602,11 @@ export function TelaSimuladorFormatura(props: {
 
       <p className="pb-4 text-center text-xs leading-relaxed text-zinc-400 dark:text-zinc-500">
         Projeção baseada na matriz {matriz.matriz} e na oferta observada em{" "}
-        {ofertas.map((o) => formatarSemestre(o.semestre)).join(" e ")}. Disciplinas de trilha sem
-        oferta registrada nesses semestres ficam fora do plano. Confirme sempre no Portal do Aluno.
+        {ofertas.map((o) => formatarSemestre(o.semestre)).join(" e ")}. Cada semestre futuro herda
+        os horários da oferta real mais recente de mesma paridade (2027.1 espelha 2026.1, 2027.2
+        espelha 2026.2), e o motor só agenda uma disciplina se houver turma sem choque com as que
+        já entraram no mesmo semestre. Disciplinas de trilha sem oferta registrada ficam fora do
+        plano. Confirme sempre no Portal do Aluno.
       </p>
     </div>
   );

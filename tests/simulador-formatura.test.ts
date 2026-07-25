@@ -2,16 +2,33 @@ import { describe, expect, it } from "vitest";
 import matrizJson from "../data/matriz-981.json";
 import turmas20252 from "../data/turmas/2025-2.json";
 import turmas20261 from "../data/turmas/2026-1.json";
+import turmas20262 from "../data/turmas/2026-2.json";
 import {
+  gradeFixadaDaSelecao,
   inferirSazonalidade,
+  ofertaReferenciaDoSemestre,
   proximoSemestre,
   simularFormatura,
 } from "../src/domain/motor/simuladorFormatura";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
-import type { Matriz, OfertaSemestre, PerfilAluno, ResumoConjunto } from "../src/domain/tipos";
+import { detectarConflitos, itensDaSelecao } from "../src/domain/motor/grade";
+import { BSI, ENG_COMP, ENG_COMP_962 } from "../src/domain/dadosCurso";
+import type {
+  Matriz,
+  OfertaSemestre,
+  PerfilAluno,
+  ResumoConjunto,
+  SelecaoTurma,
+} from "../src/domain/tipos";
 
 const matriz = matrizJson as unknown as Matriz;
 const ofertas = [turmas20252, turmas20261] as unknown as OfertaSemestre[];
+/** o que a aplicação de fato entrega ao motor hoje */
+const ofertasReais = [
+  turmas20262,
+  turmas20261,
+  turmas20252,
+] as unknown as OfertaSemestre[];
 
 /** Perfil sintético: nada de dado pessoal real entra no repositório. */
 function perfilFake(over: Partial<PerfilAluno> = {}): PerfilAluno {
@@ -335,6 +352,312 @@ describe("simulação de formatura", () => {
     expect(r.semestres.length).toBeGreaterThan(4);
     expect(r.requisitos.find((q) => q.id === "obrigatorias")!.faltante).toBe(2005);
   });
+});
+
+/**
+ * O simulador projeta uma grade, e uma grade que colide consigo mesma não é
+ * grade. Cada semestre futuro espelha a oferta real de mesma paridade e o motor
+ * só agenda uma disciplina se sobrar turma sem choque — do contrário ela fica
+ * para o semestre seguinte.
+ */
+describe("oferta-espelho e grade sem choque interno", () => {
+  /** Aluno de fim de curso, com pendências espalhadas por várias categorias. */
+  function perfilComPendencias(): PerfilAluno {
+    const aprovadas = new Set<string>(
+      matriz.disciplinas
+        .filter((d) => d.conjunto === null && !d.codigo.startsWith("ENADE"))
+        .filter((d) => !["ICSX30", "ICSX40", "ICSX41", "ICSS30"].includes(d.codigo))
+        .map((d) => d.codigo),
+    );
+    return perfilFake({
+      aprovadas,
+      resumoConjuntos: [
+        conjunto("1159", "Segundo Estrato", 360, 225),
+        conjunto("1161", "Optativas Do Ciclo De Humanidades", 135, 45),
+        conjunto("1164", "Desenvolvimento Baseado Em Plataformas", 90, 60),
+        conjunto("1165", "Banco De Dados", 90, 120),
+      ],
+      resumoGeral: {
+        obrigatorias: { total: 2005, aprovada: 1840, faltante: 165 },
+        optativas: { total: 840, aprovada: 90, faltante: 750 },
+        eletivas: { total: 105, aprovada: 105, faltante: 0 },
+      },
+    });
+  }
+
+  it("usa a própria oferta quando o semestre é conhecido", () => {
+    expect(ofertaReferenciaDoSemestre("2026-2", ofertasReais)?.semestre).toBe("2026-2");
+    expect(ofertaReferenciaDoSemestre("2026-1", ofertasReais)?.semestre).toBe("2026-1");
+  });
+
+  it("herda a oferta mais recente de mesma paridade nos semestres futuros", () => {
+    // 27.1 usa 26.1, 27.2 usa 26.2, 28.1 volta à 26.1 — esse é o padrão
+    expect(ofertaReferenciaDoSemestre("2027-1", ofertasReais)?.semestre).toBe("2026-1");
+    expect(ofertaReferenciaDoSemestre("2027-2", ofertasReais)?.semestre).toBe("2026-2");
+    expect(ofertaReferenciaDoSemestre("2028-1", ofertasReais)?.semestre).toBe("2026-1");
+    expect(ofertaReferenciaDoSemestre("2028-2", ofertasReais)?.semestre).toBe("2026-2");
+  });
+
+  it("registra em cada semestre projetado qual oferta o espelhou", () => {
+    const r = simularFormatura(perfilComPendencias(), matriz, ofertasReais, {
+      ritmo: 6,
+      semestreInicial: "2026-2",
+    });
+    for (const s of r.semestres) {
+      const esperado = s.semestre.endsWith("-2") ? "2026-2" : "2026-1";
+      expect(s.semestreReferencia, `${s.semestre} espelhou oferta errada`).toBe(esperado);
+    }
+  });
+
+  it("nunca monta um semestre que entra em conflito consigo mesmo", () => {
+    // Regressão: a grade projetada de 2026.2 chegava ao Planejamento de
+    // Matrícula acusando choque entre disciplinas que o próprio motor havia
+    // colocado no mesmo semestre.
+    const perfis: [string, PerfilAluno | null][] = [
+      ["fim de curso", perfilComPendencias()],
+      // curso inteiro do zero: é onde o guloso mais empilhava matéria no mesmo
+      // horário, porque há muita obrigatória elegível ao mesmo tempo
+      ["do zero", null],
+    ];
+    for (const [rotulo, p] of perfis)
+    for (const ritmo of [4, 5, 6, 7, 8]) {
+      const r = simularFormatura(p, matriz, ofertasReais, {
+        ritmo,
+        semestreInicial: "2026-2",
+      });
+      for (const s of r.semestres) {
+        const referencia = ofertaReferenciaDoSemestre(s.semestre, ofertasReais)!;
+        const selecao: SelecaoTurma[] = s.disciplinas
+          .filter((d) => d.codigoOferta && d.turma)
+          .map((d) => ({ codDisciplina: d.codigoOferta!, codTurma: d.turma! }));
+        const conflitos = detectarConflitos(itensDaSelecao(referencia, selecao));
+        expect(
+          conflitos.map((c) => `${c.a.disciplina.codigo}×${c.b.disciplina.codigo} (${c.detalhe})`),
+          `${rotulo}, ritmo ${ritmo}, semestre ${s.semestre}`,
+        ).toEqual([]);
+      }
+    }
+  });
+
+  it("reserva turma real para toda disciplina que ocupa vaga e tem oferta", () => {
+    const r = simularFormatura(perfilComPendencias(), matriz, ofertasReais, {
+      ritmo: 5,
+      semestreInicial: "2026-2",
+    });
+    const primeiro = r.semestres[0];
+    const comTurma = primeiro.disciplinas.filter((d) => d.ocupaVaga && d.turma);
+    expect(comTurma.length).toBeGreaterThan(0);
+    for (const d of comTurma) {
+      const oferta = turmas20262 as unknown as OfertaSemestre;
+      const disc = oferta.disciplinas.find((x) => x.codigo === d.codigoOferta);
+      expect(disc, `${d.codigo} apontou oferta inexistente`).toBeDefined();
+      expect(disc!.turmas.some((t) => t.codigo === d.turma)).toBe(true);
+    }
+  });
+});
+
+/**
+ * Caminho de volta da importação: a grade que o aluno montou no Planejamento de
+ * Matrícula entra na projeção como fato consumado, e os semestres seguintes são
+ * calculados a partir dela.
+ */
+describe("grade do Planejamento como semestre de partida", () => {
+  const oferta20262 = turmas20262 as unknown as OfertaSemestre;
+
+  function perfilBase(): PerfilAluno {
+    const aprovadas = new Set<string>(
+      matriz.disciplinas
+        .filter((d) => d.conjunto === null && !d.codigo.startsWith("ENADE"))
+        .filter((d) => !["ICSX30", "ICSX40", "ICSX41", "ICSS30"].includes(d.codigo))
+        .map((d) => d.codigo),
+    );
+    return perfilFake({
+      aprovadas,
+      resumoConjuntos: [
+        conjunto("1159", "Segundo Estrato", 360, 225),
+        conjunto("1161", "Optativas Do Ciclo De Humanidades", 135, 45),
+        conjunto("1164", "Desenvolvimento Baseado Em Plataformas", 90, 60),
+        conjunto("1165", "Banco De Dados", 90, 120),
+      ],
+      resumoGeral: {
+        obrigatorias: { total: 2005, aprovada: 1840, faltante: 165 },
+        optativas: { total: 840, aprovada: 90, faltante: 750 },
+        eletivas: { total: 105, aprovada: 105, faltante: 0 },
+      },
+    });
+  }
+
+  /** Grade de 2026.2 tal como o Planejamento a guarda: pares disciplina+turma. */
+  function selecaoDoPlanejamento(): SelecaoTurma[] {
+    const r = simularFormatura(perfilBase(), matriz, ofertasReais, {
+      ritmo: 3,
+      semestreInicial: "2026-2",
+    });
+    return r.semestres[0].disciplinas
+      .filter((d) => d.codigoOferta && d.turma)
+      .map((d) => ({ codDisciplina: d.codigoOferta!, codTurma: d.turma! }));
+  }
+
+  it("resolve cada turma da seleção para o código canônico da matriz", () => {
+    const fixada = gradeFixadaDaSelecao(
+      "2026-2",
+      oferta20262,
+      selecaoDoPlanejamento(),
+      matriz,
+      "Grade A",
+    );
+    expect(fixada.itens.length).toBeGreaterThan(0);
+    for (const item of fixada.itens) {
+      expect(item.codigoMatriz, `${item.codigoOferta} não casou com a matriz`).not.toBeNull();
+      expect(item.horas).toBeGreaterThan(0);
+    }
+  });
+
+  it("mantém o semestre importado exatamente como foi montado", () => {
+    const selecao = selecaoDoPlanejamento();
+    const fixada = gradeFixadaDaSelecao("2026-2", oferta20262, selecao, matriz, "Grade A");
+    const r = simularFormatura(perfilBase(), matriz, ofertasReais, {
+      // ritmo alto de propósito: o semestre importado não pode ganhar matérias
+      ritmo: 8,
+      semestreInicial: "2026-2",
+      gradeFixada: fixada,
+    });
+    const primeiro = r.semestres[0];
+    expect(primeiro.semestre).toBe("2026-2");
+    expect(primeiro.fixadoPeloPlanejamento).toBe(true);
+    expect(primeiro.disciplinas.filter((d) => d.ocupaVaga).map((d) => d.turma).sort()).toEqual(
+      selecao.map((s) => s.codTurma).sort(),
+    );
+  });
+
+  it("projeta os semestres seguintes a partir da grade importada", () => {
+    const selecao = selecaoDoPlanejamento();
+    const fixada = gradeFixadaDaSelecao("2026-2", oferta20262, selecao, matriz, "Grade A");
+    const r = simularFormatura(perfilBase(), matriz, ofertasReais, {
+      ritmo: 6,
+      semestreInicial: "2026-2",
+      gradeFixada: fixada,
+    });
+    expect(r.semestres.length).toBeGreaterThan(1);
+    // nada do que foi importado reaparece adiante
+    const importadas = new Set(fixada.itens.map((i) => i.codigoMatriz));
+    for (const s of r.semestres.slice(1)) {
+      for (const d of s.disciplinas) {
+        expect(importadas.has(d.codigo), `${d.codigo} foi planejada duas vezes`).toBe(false);
+      }
+    }
+    // e a projeção continua fechando todas as categorias
+    for (const q of r.requisitos) {
+      expect(q.atendido, `${q.nome} não fechou`).toBe(true);
+    }
+  });
+
+  it("continua sem choque interno nos semestres que ele mesmo projeta", () => {
+    const selecao = selecaoDoPlanejamento();
+    const fixada = gradeFixadaDaSelecao("2026-2", oferta20262, selecao, matriz, "Grade A");
+    const r = simularFormatura(perfilBase(), matriz, ofertasReais, {
+      ritmo: 6,
+      semestreInicial: "2026-2",
+      gradeFixada: fixada,
+    });
+    for (const s of r.semestres) {
+      const referencia = ofertaReferenciaDoSemestre(s.semestre, ofertasReais)!;
+      const sel: SelecaoTurma[] = s.disciplinas
+        .filter((d) => d.codigoOferta && d.turma)
+        .map((d) => ({ codDisciplina: d.codigoOferta!, codTurma: d.turma! }));
+      expect(detectarConflitos(itensDaSelecao(referencia, sel)), s.semestre).toEqual([]);
+    }
+  });
+});
+
+/**
+ * As correções do motor valem para todo curso coberto, não só para a BSI: o que
+ * muda por curso é a matriz e a oferta, não a regra. A Eng. Comp. é o caso
+ * difícil, porque a oferta abre a turma sob código de equivalente e a lista de
+ * equivalentes é histórica e larga.
+ */
+describe("motor em todos os cursos cobertos", () => {
+  const cursos = [BSI, ENG_COMP, ENG_COMP_962];
+  const ofertasDo = (curso: (typeof cursos)[number]) =>
+    Object.keys(curso.ofertas)
+      .sort()
+      .reverse()
+      .map((s) => curso.ofertas[s]);
+
+  for (const curso of cursos) {
+    describe(curso.rotuloCurto, () => {
+      const ofertasCurso = ofertasDo(curso);
+
+      it("espelha a oferta de mesma paridade em qualquer semestre futuro", () => {
+        expect(ofertaReferenciaDoSemestre("2027-1", ofertasCurso)?.semestre).toBe("2026-1");
+        expect(ofertaReferenciaDoSemestre("2027-2", ofertasCurso)?.semestre).toBe("2026-2");
+        expect(ofertaReferenciaDoSemestre("2028-1", ofertasCurso)?.semestre).toBe("2026-1");
+      });
+
+      it("não monta semestre em conflito nem repete a mesma turma", () => {
+        for (const ritmo of [3, 4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          for (const s of r.semestres) {
+            const referencia = ofertaReferenciaDoSemestre(s.semestre, ofertasCurso)!;
+            const sel: SelecaoTurma[] = s.disciplinas
+              .filter((d) => d.codigoOferta && d.turma)
+              .map((d) => ({ codDisciplina: d.codigoOferta!, codTurma: d.turma! }));
+
+            // Regressão da 844: MA70G e MA70H resolviam para MAT7ED/S01, e
+            // `haveriaConflito` lê o par idêntico como "já está na grade" —
+            // a grade saía com a mesma turma duas vezes, batendo consigo mesma.
+            const chaves = sel.map((x) => `${x.codDisciplina}|${x.codTurma}`);
+            expect(new Set(chaves).size, `${curso.rotuloCurto} ritmo ${ritmo} ${s.semestre}`).toBe(
+              chaves.length,
+            );
+
+            expect(
+              detectarConflitos(itensDaSelecao(referencia, sel)).map(
+                (c) => `${c.a.disciplina.codigo}×${c.b.disciplina.codigo}`,
+              ),
+              `${curso.rotuloCurto} ritmo ${ritmo} ${s.semestre}`,
+            ).toEqual([]);
+          }
+        }
+      });
+
+      it("valida o número de trilhas exigido sempre que a projeção fecha", () => {
+        for (const ritmo of [4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          if (!r.semestreFormatura) continue; // horizonte estourado: já avisa na tela
+          expect(
+            r.trilhasFechadas.length,
+            `${curso.rotuloCurto} ritmo ${ritmo}: ${r.trilhasFechadas.length} trilhas`,
+          ).toBeGreaterThanOrEqual(r.trilhasExigidas);
+        }
+      });
+
+      it("não planeja trilha muito além do piso do bloco optativo", () => {
+        // O excesso é inevitável por granularidade — validar uma trilha de 90h com
+        // optativas de 60h custa 120h —, mas era muito maior: o motor despejava o
+        // saldo do bloco numa trilha já validada (225h para um piso de 90h) e
+        // depois pagava de novo as validações pendentes.
+        for (const ritmo of [4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          if (!r.semestreFormatura) continue;
+          const bloco = r.requisitos.find((q) => q.id === "trilhas")!;
+          const excesso = bloco.cumprido + bloco.planejado - bloco.exigido;
+          expect(excesso, `${curso.rotuloCurto} ritmo ${ritmo}: +${excesso}h`).toBeLessThanOrEqual(
+            60,
+          );
+        }
+      });
+    });
+  }
 });
 
 /**

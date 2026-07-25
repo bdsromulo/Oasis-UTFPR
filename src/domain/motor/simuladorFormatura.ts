@@ -1,4 +1,12 @@
-import type { DisciplinaMatriz, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
+import type {
+  DisciplinaMatriz,
+  DisciplinaOfertada,
+  Matriz,
+  OfertaSemestre,
+  PerfilAluno,
+  SelecaoTurma,
+  Turma,
+} from "../tipos";
 import {
   cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
@@ -7,7 +15,9 @@ import {
   categoriaSimples,
 } from "../cursos";
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
-import { cumpre } from "./elegiveis";
+import { buscarOfertaParaPlanejamento, cumpre } from "./elegiveis";
+import { haveriaConflito, itensDaSelecao, type ItemGrade } from "./grade";
+import { calcularPesoPrioridadeTurma } from "./grade-magica";
 
 /**
  * Simulador de formatura.
@@ -106,6 +116,37 @@ export function formatarSemestreExtenso(semestre: string): string {
   return `${sem === "2" ? "2º" : "1º"} semestre de ${ano}`;
 }
 
+/** "2026.2" e "2026-2" são o mesmo semestre; a fonte usa as duas grafias. */
+function chaveSemestre(semestre: string): string {
+  return semestre.replace(".", "-");
+}
+
+/**
+ * Oferta que serve de espelho para um semestre projetado.
+ *
+ * A grade que a projeção monta precisa ser concreta o bastante para não colidir
+ * consigo mesma, e as únicas turmas que existem são as dos semestres conhecidos.
+ * Então cada semestre futuro herda a oferta conhecida mais recente de **mesma
+ * paridade**: 2026.2 usa a própria 2026.2, 2027.1 usa 2026.1, 2027.2 volta à
+ * 2026.2, 2028.1 à 2026.1, e assim em diante.
+ *
+ * Sem esse espelho o simulador escolhia disciplinas sem olhar horário e a
+ * importação para o Planejamento acusava choque na grade que o próprio
+ * simulador havia montado.
+ */
+export function ofertaReferenciaDoSemestre(
+  semestre: string,
+  ofertas: OfertaSemestre[],
+): OfertaSemestre | null {
+  const alvo = chaveSemestre(semestre);
+  const exata = ofertas.find((o) => chaveSemestre(o.semestre) === alvo);
+  if (exata) return exata;
+  const mesmaParidade = ofertas
+    .filter((o) => ehSemestrePar(o.semestre) === ehSemestrePar(semestre))
+    .sort((a, b) => chaveSemestre(b.semestre).localeCompare(chaveSemestre(a.semestre)));
+  return mesmaParidade[0] ?? null;
+}
+
 // ----------------------------------------------------------------- categorias
 
 export type IdCategoria =
@@ -140,6 +181,14 @@ export interface DisciplinaPlanejada {
   ocupaVaga: boolean;
   /** trilha à qual pertence, quando aplicável */
   conjunto: number | null;
+  /**
+   * Turma reservada na oferta-espelho do semestre. Vem preenchida quando a
+   * disciplina tem turma com horário: é ela que garante que a grade projetada
+   * fecha sem choque e que a importação para o Planejamento não inventa turma.
+   */
+  turma: string | null;
+  /** código sob o qual a turma aparece na oferta (pode ser um equivalente) */
+  codigoOferta: string | null;
 }
 
 export interface SemestreProjetado {
@@ -148,6 +197,75 @@ export interface SemestreProjetado {
   horas: number;
   /** disciplinas que de fato ocupam vaga na grade */
   materias: number;
+  /** semestre cuja oferta real serviu de espelho para montar este */
+  semestreReferencia: string | null;
+  /** true quando o semestre veio pronto do Planejamento de Matrícula */
+  fixadoPeloPlanejamento?: boolean;
+}
+
+/** Uma linha da grade que o Planejamento de Matrícula entrega ao simulador. */
+export interface ItemGradeFixada {
+  /** código canônico na matriz, quando a disciplina existe nela */
+  codigoMatriz: string | null;
+  /** código sob o qual a turma foi ofertada (pode ser um equivalente) */
+  codigoOferta: string;
+  turma: string;
+  nome: string;
+  horas: number;
+}
+
+/**
+ * Grade já montada que o simulador deve tomar como fato, em vez de projetar.
+ * É o caminho de volta da importação: o Planejamento manda o semestre real que o
+ * aluno montou e o motor calcula os demais semestres a partir dele.
+ */
+export interface GradeFixada {
+  semestre: string;
+  /** rótulo de origem para a tela ("Grade A do Planejamento", por exemplo) */
+  origem?: string;
+  itens: ItemGradeFixada[];
+}
+
+/**
+ * Traduz a seleção de turmas do Planejamento na grade fixada que o motor consome.
+ * Resolve cada código da oferta para o canônico da matriz — sem isso as turmas
+ * abertas sob código de equivalente (a regra em Eng. Comp.) entrariam como
+ * eletiva genérica e a projeção cobraria de novo a disciplina que o aluno já
+ * planejou cursar.
+ */
+export function gradeFixadaDaSelecao(
+  semestre: string,
+  oferta: OfertaSemestre,
+  selecao: SelecaoTurma[],
+  matriz: Matriz,
+  origem?: string,
+): GradeFixada {
+  const mapa = criarMapaIdentidade(matriz);
+  const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
+  const itens: ItemGradeFixada[] = [];
+
+  for (const item of itensDaSelecao(oferta, selecao)) {
+    const codOferta = item.disciplina.codigo;
+    const canonicoDireto = mapa.resolver(codOferta);
+    const canonicoPorNome = mapa.resolverPorNome(item.disciplina.nome);
+    const canonico =
+      canonicoDireto !== codOferta ? canonicoDireto : (canonicoPorNome ?? codOferta);
+    const dMatriz = porCodigo.get(canonico);
+    const aulas =
+      (item.disciplina.aulas_semanais_presenciais ?? 0) +
+      (item.disciplina.aulas_semanais_assincronas ?? 0);
+    itens.push({
+      codigoMatriz: dMatriz?.codigo ?? null,
+      // preserva exatamente o par que o Planejamento guarda, para o caminho de
+      // volta (simulador -> Planejamento) reencontrar a mesma turma
+      codigoOferta: item.selecaoOriginal?.codDisciplina ?? codOferta,
+      turma: item.selecaoOriginal?.codTurma ?? item.turma.codigo,
+      nome: dMatriz?.nome ?? item.disciplina.nome,
+      horas: dMatriz?.horas.total ?? aulas * 15,
+    });
+  }
+
+  return { semestre: chaveSemestre(semestre), origem, itens };
 }
 
 export interface ResultadoSimulacao {
@@ -242,6 +360,12 @@ export interface OpcoesSimulacao {
   semestreInicial: string;
   /** teto de semestres projetados, trava contra laço infinito */
   horizonte?: number;
+  /**
+   * Grade que o aluno já montou no Planejamento de Matrícula. O semestre
+   * correspondente entra na projeção exatamente como está — turma por turma — e
+   * os seguintes são calculados a partir dele.
+   */
+  gradeFixada?: GradeFixada | null;
 }
 
 /**
@@ -260,6 +384,8 @@ export function simularFormatura(
   const mapa = criarMapaIdentidade(matriz);
   const { ritmo, semestreInicial } = opcoes;
   const horizonte = opcoes.horizonte ?? 20;
+  const gradeFixada = opcoes.gradeFixada ?? null;
+  const usarPrioridadeBsi = matriz.matriz === 981;
   const saz = inferirSazonalidade(ofertas, mapa);
   const cursoDesc = descricaoDoCurso(matriz);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
@@ -397,6 +523,34 @@ export function simularFormatura(
   const faltaTerceiroEstrato = () =>
     falta("trilhas") > 0 || trilhasValidadas() < trilhasExigidas;
 
+  // ---- oferta-espelho de cada semestre projetado -------------------------
+  const cacheReferencia = new Map<
+    string,
+    { oferta: OfertaSemestre | null; ofertadas: Map<string, DisciplinaOfertada> }
+  >();
+  function referenciaDe(semestre: string) {
+    const chave = chaveSemestre(semestre);
+    let r = cacheReferencia.get(chave);
+    if (!r) {
+      const oferta = ofertaReferenciaDoSemestre(semestre, ofertas);
+      r = {
+        oferta,
+        ofertadas: new Map((oferta?.disciplinas ?? []).map((d) => [d.codigo, d])),
+      };
+      cacheReferencia.set(chave, r);
+    }
+    return r;
+  }
+
+  // Trilhas que a grade importada do Planejamento já começou: continuar nelas é
+  // mais barato do que abrir uma trilha nova que o aluno não escolheu.
+  const conjuntosFixados = new Set<number>();
+  for (const item of gradeFixada?.itens ?? []) {
+    if (!item.codigoMatriz) continue;
+    const d = matriz.disciplinas.find((x) => x.codigo === item.codigoMatriz);
+    if (d?.conjunto != null && ehTrilha(cursoDesc, d.conjunto)) conjuntosFixados.add(d.conjunto);
+  }
+
   /**
    * Escolhe, ANTES de montar os semestres, em quais trilhas o aluno vai investir.
    *
@@ -444,8 +598,14 @@ export function simularFormatura(
         return { conj, jaTem, restante, podeFechar: restante === 0 || disponivel >= restante };
       })
       .filter((t) => t.podeFechar)
-      // já validada primeiro, depois a que exige menos horas para fechar
-      .sort((a, b) => a.restante - b.restante || b.jaTem - a.jaTem);
+      // trilha já escolhida no Planejamento primeiro; depois a já validada e a
+      // que exige menos horas para fechar
+      .sort(
+        (a, b) =>
+          Number(conjuntosFixados.has(b.conj)) - Number(conjuntosFixados.has(a.conj)) ||
+          a.restante - b.restante ||
+          b.jaTem - a.jaTem,
+      );
 
     return new Set(viaveis.slice(0, trilhasExigidas).map((t) => t.conj));
   }
@@ -461,6 +621,28 @@ export function simularFormatura(
   const pendentes = new Set(candidatas.map((d) => d.codigo));
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
   const periodoAluno = perfil?.periodo ?? 1;
+
+  /**
+   * Horas que a trilha vai de fato consumir até validar o próprio piso.
+   *
+   * Não é o que falta e sim o que vai ser cursado: as optativas vêm em blocos de
+   * 45h ou 60h, então uma trilha a 30h das 90h ainda custa uma disciplina
+   * inteira. Na BSI, cujas optativas de trilha são todas de 60h, validar uma
+   * trilha custa sempre 120h — e é por isso que 3 trilhas somam 360h, acima das
+   * 345h do bloco. Contar o custo arredondado é o que impede o motor de gastar o
+   * saldo do bloco numa trilha já fechada e depois estourar o piso de novo.
+   */
+  const custoParaValidar = (conj: number) => {
+    const restante = faltaNaTrilha(conj);
+    if (restante === 0) return 0;
+    let menor = Infinity;
+    for (const cod of pendentes) {
+      const d = porCodigo.get(cod);
+      if (d?.conjunto === conj) menor = Math.min(menor, d.horas.total);
+    }
+    if (!Number.isFinite(menor) || menor <= 0) return restante;
+    return Math.ceil(restante / menor) * menor;
+  };
 
   const semestres: SemestreProjetado[] = [];
   let semestreAtual = semestreInicial;
@@ -485,8 +667,16 @@ export function simularFormatura(
     const semestrePar = ehSemestrePar(semestreAtual);
     // o período avança um a cada semestre projetado
     const periodoNoSemestre = periodoAluno + passo;
+    // oferta real que espelha este semestre (mesma paridade, mais recente)
+    const referencia = referenciaDe(semestreAtual);
+    // turmas já reservadas neste semestre: é contra elas que o motor confere o
+    // choque de horário antes de aceitar mais uma disciplina
+    const itensDoSemestre: ItemGrade[] = [];
+    // semestre que veio pronto do Planejamento: não se projeta, se obedece
+    const fixadoAqui =
+      !!gradeFixada && chaveSemestre(gradeFixada.semestre) === chaveSemestre(semestreAtual);
 
-    const elegiveis = [...pendentes]
+    const elegiveis = (fixadoAqui ? [] : [...pendentes])
       .map((c) => porCodigo.get(c)!)
       .filter((d) => {
         const cat = categoriaDe(d, matriz)!;
@@ -509,7 +699,7 @@ export function simularFormatura(
         });
       });
 
-    if (elegiveis.length === 0 && eletivasPendentes === 0) {
+    if (!fixadoAqui && elegiveis.length === 0 && eletivasPendentes === 0) {
       if (pendentes.size === 0) break;
       semestreAtual = proximoSemestre(semestreAtual);
       continue;
@@ -556,11 +746,92 @@ export function simularFormatura(
     const escolhidas: DisciplinaPlanejada[] = [];
     let vagas = ritmo;
 
+    // ---- semestre importado do Planejamento de Matrícula -----------------
+    // Aqui não há o que escolher: as matérias e as turmas são as que o aluno já
+    // montou. O motor só credita as horas e libera os dependentes, para que os
+    // semestres seguintes saiam a partir desta grade real. O ritmo escolhido na
+    // tela não vale para este semestre — vale o que o Planejamento tem.
+    if (fixadoAqui) {
+      for (const item of gradeFixada!.itens) {
+        const dMatriz = item.codigoMatriz ? porCodigo.get(item.codigoMatriz) : undefined;
+        // disciplina que o histórico já dá como aprovada não soma de novo
+        if (dMatriz && cumpre(dMatriz.codigo, perfil, mapa)) continue;
+        // fora da matriz (ou na pool de eletivas): conta como eletiva livre
+        const cat: IdCategoria = dMatriz ? (categoriaDe(dMatriz, matriz) ?? "eletivas") : "eletivas";
+        const horas = dMatriz?.horas.total ?? item.horas;
+
+        escolhidas.push({
+          codigo: dMatriz?.codigo ?? item.codigoOferta,
+          nome: item.nome,
+          horas,
+          categoria: cat,
+          sazonalidade: dMatriz ? saz.de(dMatriz.codigo) : "ambos",
+          ocupaVaga: dMatriz ? ocupaVaga(dMatriz) : true,
+          conjunto: dMatriz?.conjunto ?? null,
+          turma: item.turma,
+          codigoOferta: item.codigoOferta,
+        });
+
+        planejado[cat] += horas;
+        planejado.extensao += dMatriz?.horas.chext ?? 0;
+        if (cat === "eletivas") eletivasPendentes = Math.max(0, eletivasPendentes - horas);
+        if (cat === "trilhas" && dMatriz?.conjunto != null && ehTrilha(cursoDesc, dMatriz.conjunto)) {
+          horasPorTrilha.set(
+            dMatriz.conjunto,
+            (horasPorTrilha.get(dMatriz.conjunto) ?? 0) + horas,
+          );
+        }
+        if (dMatriz) {
+          if (perfil) perfil.aprovadas.add(dMatriz.codigo);
+          else perfil = { aprovadas: new Set([dMatriz.codigo]), cursadas: [] } as any;
+          pendentes.delete(dMatriz.codigo);
+          alturaMemo.clear();
+        }
+      }
+    }
+
     for (const d of elegiveis) {
       const cat = categoriaDe(d, matriz)!;
       const consome = ocupaVaga(d);
       if (consome && vagas <= 0) continue;
       if (cat !== "obrigatorias" && cat !== "trilhas" && falta(cat) === 0) continue;
+
+      // ---- reserva de turma: a grade do semestre tem de fechar sem choque --
+      // A checagem vem ANTES de mexer no estado das trilhas, porque uma
+      // disciplina rejeitada aqui continua pendente para o próximo semestre.
+      let turmaEscolhida: Turma | null = null;
+      let ofertaDaDisciplina: DisciplinaOfertada | null = null;
+      if (consome && referencia.oferta) {
+        ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
+        if (ofertaDaDisciplina && ofertaDaDisciplina.turmas.length > 0) {
+          const porPrioridade = [...ofertaDaDisciplina.turmas].sort(
+            (x, y) =>
+              calcularPesoPrioridadeTurma(y, usarPrioridadeBsi) -
+              calcularPesoPrioridadeTurma(x, usarPrioridadeBsi),
+          );
+          // Duas disciplinas da matriz podem cair na MESMA turma ofertada — em
+          // Eng. Comp. isso acontece porque a lista de equivalentes é histórica
+          // e larga (MA70G e MA70H chegam ambas a MAT7ED/S01). O aluno não se
+          // matricula duas vezes na mesma turma, e `haveriaConflito` devolve
+          // false para o par idêntico (ele o lê como "já está na grade"), então
+          // a checagem de reserva repetida tem de ser explícita.
+          const jaReservada = (t: Turma) =>
+            itensDoSemestre.some(
+              (i) =>
+                i.disciplina.codigo === ofertaDaDisciplina!.codigo && i.turma.codigo === t.codigo,
+            );
+          turmaEscolhida =
+            porPrioridade.find(
+              (t) => !jaReservada(t) && !haveriaConflito(itensDoSemestre, ofertaDaDisciplina!, t),
+            ) ?? null;
+          // Nenhuma turma livre cabe junto do que já foi reservado: a disciplina
+          // fica para o próximo semestre, quando a concorrente já terá saído da
+          // fila. Antes ela entrava mesmo em choque, e a importação para o
+          // Planejamento acusava conflito numa grade que o próprio simulador
+          // havia montado.
+          if (!turmaEscolhida) continue;
+        }
+      }
 
       // Toda optativa do bloco conta para a carga agregada. Nas trilhas, as horas
       // acima de 90h continuam contando; nas isoladas, contam apenas no total.
@@ -569,21 +840,38 @@ export function simularFormatura(
         if (!faltaTerceiroEstrato()) continue;
 
         const conj = d.conjunto!;
+        // Horas que as trilhas-alvo ainda não validadas vão obrigatoriamente
+        // consumir do bloco. Gastar o saldo do bloco numa trilha já fechada (ou
+        // numa optativa isolada) não adianta nada: as validações pendentes
+        // continuam custando as mesmas 90h e o total estoura o piso. Reservar
+        // essas horas é o que mantém a promessa de "cursar só o mínimo".
+        const reservadoParaValidar = [...trilhasAlvo]
+          .filter((c) => c !== conj)
+          .reduce((a, c) => a + custoParaValidar(c), 0);
+
         if (ehTrilha(cursoDesc, conj)) {
           // fora das trilhas-alvo o estudo não aproxima de validar o piso exigido
           if (!trilhasAlvo.has(conj)) continue;
 
           const horasNaTrilha = horasPorTrilha.get(conj) ?? 0;
-          // Trilha já validada só recebe mais disciplina se ainda faltarem horas
-          // no bloco agregado.
-          if (horasNaTrilha >= chDaTrilha(conj) && falta("trilhas") === 0) continue;
+          // Trilha já validada só recebe mais disciplina se sobrar horas no bloco
+          // depois de reservar o que as trilhas pendentes ainda vão exigir.
+          if (
+            horasNaTrilha >= chDaTrilha(conj) &&
+            falta("trilhas") <= reservadoParaValidar
+          ) {
+            continue;
+          }
           horasPorTrilha.set(conj, horasNaTrilha + d.horas.total);
-        } else if (falta("trilhas") === 0) {
+        } else if (falta("trilhas") <= reservadoParaValidar) {
           // Optativa isolada não substitui uma trilha completa.
           continue;
         }
       }
 
+      if (turmaEscolhida && ofertaDaDisciplina) {
+        itensDoSemestre.push({ disciplina: ofertaDaDisciplina, turma: turmaEscolhida });
+      }
       escolhidas.push({
         codigo: d.codigo,
         nome: d.nome,
@@ -592,6 +880,8 @@ export function simularFormatura(
         sazonalidade: saz.de(d.codigo),
         ocupaVaga: consome,
         conjunto: d.conjunto,
+        turma: turmaEscolhida?.codigo ?? null,
+        codigoOferta: ofertaDaDisciplina?.codigo ?? null,
       });
       planejado[cat] += contribui;
       // A extensão não é uma categoria à parte na matriz: ela vem embutida como
@@ -611,7 +901,7 @@ export function simularFormatura(
     }
 
     // eletivas entram como vaga genérica: a escolha é livre, fora da matriz
-    while (eletivasPendentes > 0 && vagas > 0) {
+    while (!fixadoAqui && eletivasPendentes > 0 && vagas > 0) {
       const horas = Math.min(eletivasPendentes, 60);
       escolhidas.push({
         codigo: "ELETIVA",
@@ -621,6 +911,8 @@ export function simularFormatura(
         sazonalidade: "ambos",
         ocupaVaga: true,
         conjunto: null,
+        turma: null,
+        codigoOferta: null,
       });
       planejado.eletivas += horas;
       eletivasPendentes -= horas;
@@ -647,6 +939,8 @@ export function simularFormatura(
         sazonalidade: "ambos",
         ocupaVaga: false,
         conjunto: null,
+        turma: null,
+        codigoOferta: null,
       });
       planejado.extensao += horas;
     }
@@ -669,6 +963,8 @@ export function simularFormatura(
               sazonalidade: "ambos",
               ocupaVaga: true,
               conjunto: null,
+              turma: null,
+              codigoOferta: null,
             });
             planejado[cat] += horas;
             vagas--;
@@ -697,6 +993,8 @@ export function simularFormatura(
       disciplinas: escolhidas,
       horas: escolhidas.reduce((a, d) => a + d.horas, 0),
       materias: escolhidas.filter((d) => d.ocupaVaga).length,
+      semestreReferencia: referencia.oferta?.semestre ?? null,
+      fixadoPeloPlanejamento: fixadoAqui,
     });
     semestreAtual = proximoSemestre(semestreAtual);
   }

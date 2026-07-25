@@ -22,6 +22,17 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
   - Auditoria local contra um histórico real da 844 confirmou os totais oficiais e corrigiu dois desvios: faltantes do 10º período agora são lidas; horas optativas aprovadas são preservadas separadamente das horas já validadas pela regra das duas trilhas.
   - Regressões cobertas por `tests/regressao-engcomp.test.ts`, sem uso de histórico pessoal.
 
+- `[x]` **TASK-17 — Simulador de Formatura com oferta-espelho e via de duas mãos com o Planejamento:**
+  - Cada semestre projetado passa a herdar a oferta real conhecida de **mesma paridade** (2026.2 usa a própria 2026.2; 2027.1 usa 2026.1; 2027.2 volta à 2026.2; 2028.1 à 2026.1) via `ofertaReferenciaDoSemestre`.
+  - O motor reserva turma de verdade para cada disciplina que ocupa vaga e só a agenda se houver turma sem choque com as que já entraram no mesmo semestre; sem turma livre, a disciplina fica para o semestre seguinte. Antes a grade projetada chegava ao Planejamento acusando conflito entre matérias que o próprio simulador havia juntado.
+  - A importação simulador → Planejamento repete a turma que o motor reservou, em vez de reescolher.
+  - Caminho de volta (Planejamento → simulador): `gradeFixadaDaSelecao` + `OpcoesSimulacao.gradeFixada` fazem o semestre montado no Planejamento entrar na projeção como fato consumado, turma por turma, com os demais semestres calculados a partir dele. A tela mostra o crachá `DO PLANEJAMENTO` e permite descartar.
+  - Uma turma ofertada não pode ser reservada duas vezes no mesmo semestre: em Eng. Comp. a lista larga de equivalentes levava `MA70G` e `MA70H` à mesma `MAT7ED/S01`, e `haveriaConflito` lê o par idêntico como "já está na grade" — a grade nascia batendo consigo mesma. A importação também deixou de forçar uma turma em choque quando não sobra turma livre (antes pegava a primeira de qualquer jeito).
+  - Trilhas: o motor deixou de despejar o saldo do bloco optativo numa trilha já validada (chegava a 225h numa trilha de piso 90h) e depois pagar de novo as validações pendentes. A reserva considera o **custo real** de validar cada trilha-alvo restante, arredondado pelo tamanho das optativas disponíveis (validar 90h com optativas de 60h custa 120h). Excesso sobre o piso do bloco caiu de +120h/+105h/+165h para +15h (BSI) e +30h a +45h (844 e 962), sem perder nenhuma trilha validada.
+  - Verificado nos três cursos servidos (981, 844, 962), ritmos 3 a 8: zero conflito interno, zero turma repetida, piso de trilhas sempre atendido quando a projeção fecha.
+  - Regressões em `tests/simulador-formatura.test.ts` (grade sem choque interno em vários ritmos, com e sem histórico; espelho por paridade; round-trip da grade fixada; suíte parametrizada pelos três cursos).
+  - **Pendência de dados separada:** a matriz 844 declara equivalências que apontam para disciplinas de outra área (`CSF30` → `QBI7QE` "Química Geral Experimental"; `MA70H` → `MAT7ED` "Equações Diferenciais"). Afeta também Posso Cursar / Planejamento. Exige auditoria do PDF cru antes de qualquer correção.
+
 ### Interface Visual e Experiência do Usuário (UI/UX)
 - `[x]` **Repaginada Visual Completa (Remoção da "Cara de IA"):** Subscrição integral de todos os emojis decorativos e fontes padrão de sistema por uma identidade de produto digital de alta fidelidade.
 - `[x]` **Tipografia Personalizada:** Integração com Google Fonts utilizando **`Outfit`** (`--font-display`) para cabeçalhos e **`Plus Jakarta Sans`** (`--font-sans`) para o corpo e números.
