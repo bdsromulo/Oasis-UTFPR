@@ -336,3 +336,86 @@ describe("simulação de formatura", () => {
     expect(r.requisitos.find((q) => q.id === "obrigatorias")!.faltante).toBe(2005);
   });
 });
+
+/**
+ * A extensão curricular não era modelada pelo simulador: a projeção fechava
+ * ignorando 330h na BSI e 420h na 962, com o aluno reprovando na integralização
+ * por um requisito que a tela dizia estar em dia.
+ *
+ * Ela não vem de um conjunto da matriz. Chega como CHEXT embutido em disciplinas
+ * que já contam noutro bloco, e o saldo é cumprido em atividades que o aluno
+ * escolhe — daí o placeholder, no mesmo espírito da eletiva livre.
+ */
+describe("extensão curricular na projeção", () => {
+  it("cobra as horas de extensão que o curso exige", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 60, chFaltante: 270 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    const ext = r.requisitos.find((x) => x.id === "extensao");
+    expect(ext).toBeDefined();
+    expect(ext).toMatchObject({ exigido: 330, cumprido: 60 });
+  });
+
+  it("planeja atividades extensionistas até cobrir o que falta", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    const ext = r.requisitos.find((x) => x.id === "extensao")!;
+    expect(ext.cumprido + ext.planejado).toBeGreaterThanOrEqual(ext.exigido);
+
+    const atividades = r.semestres
+      .flatMap((s) => s.disciplinas)
+      .filter((d) => d.categoria === "extensao");
+    expect(atividades.length).toBeGreaterThan(0);
+    for (const a of atividades) {
+      expect(a.codigo).toBe("EXTENSAO");
+      expect(a.horas).toBeLessThanOrEqual(90);
+      // atividade extensionista não é turma: não disputa vaga com as disciplinas
+      expect(a.ocupaVaga).toBe(false);
+    }
+    // no máximo uma atividade por semestre, para a carga acumular aos poucos
+    for (const s of r.semestres) {
+      expect(s.disciplinas.filter((d) => d.categoria === "extensao").length).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it("não cobra extensão de quem já cumpriu tudo", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 330, chFaltante: 0 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    expect(r.requisitos.find((x) => x.id === "extensao")).toMatchObject({
+      faltante: 0,
+      atendido: true,
+    });
+    const atividades = r.semestres
+      .flatMap((s) => s.disciplinas)
+      .filter((d) => d.categoria === "extensao");
+    expect(atividades).toHaveLength(0);
+  });
+
+  it("some da lista no curso que não exige extensão", () => {
+    // a 844 declara cargas.extensao = 0
+    const semExtensao = { ...matriz, cargas: { ...matriz.cargas, extensao: 0 } } as Matriz;
+    const r = simularFormatura(perfilFake(), semExtensao, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    expect(r.requisitos.find((x) => x.id === "extensao")).toBeUndefined();
+  });
+});

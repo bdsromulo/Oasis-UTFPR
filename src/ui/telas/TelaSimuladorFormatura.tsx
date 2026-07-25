@@ -41,6 +41,10 @@ const CORES_CATEGORIA: Record<IdCategoria, { chip: string; ponto: string }> = {
     chip: "bg-sky-500/10 text-sky-800 border-sky-500/30 dark:text-sky-300",
     ponto: "bg-sky-500",
   },
+  extensao: {
+    chip: "bg-teal-500/10 text-teal-800 border-teal-500/30 dark:text-teal-300",
+    ponto: "bg-teal-500",
+  },
 };
 
 const ROTULO_CURTO: Record<IdCategoria, string> = {
@@ -50,6 +54,7 @@ const ROTULO_CURTO: Record<IdCategoria, string> = {
   expressaoGrafica: "Exp. gráfica",
   trilhas: "Trilha",
   eletivas: "Eletiva",
+  extensao: "Extensão",
 };
 
 function CardRequisito(props: { req: Requisito }) {

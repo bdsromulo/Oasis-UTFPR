@@ -115,7 +115,9 @@ export type IdCategoria =
   // bloco próprio da matriz 962; cursos sem ele ficam com exigido 0 e somem da lista
   | "expressaoGrafica"
   | "trilhas"
-  | "eletivas";
+  | "eletivas"
+  // horas de extensão: vêm embutidas no CHEXT das disciplinas, não de um conjunto
+  | "extensao";
 
 export interface Requisito {
   id: IdCategoria;
@@ -195,6 +197,7 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     expressaoGrafica: 0,
     trilhas: 0,
     eletivas: 0,
+    extensao: 0,
   };
   if (!perfil) return zero;
 
@@ -229,6 +232,7 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     expressaoGrafica: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "expressaoGrafica")?.conjunto)),
     trilhas,
     eletivas: perfil.eletivas ? perfil.eletivas.chTotal - perfil.eletivas.chFaltante : 0,
+    extensao: perfil.extensao?.chCursada ?? 0,
   };
 }
 
@@ -297,6 +301,8 @@ export function simularFormatura(
         : matriz.conjuntos[String(conjuntoExpressaoGrafica)]?.ch ?? 0,
     trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
     eletivas: matriz.cargas.eletiva,
+    // 844 declara 0 e some da lista; BSI pede 330h e a 962, 420h
+    extensao: matriz.cargas.extensao ?? 0,
   };
 
   // ---- candidatas -------------------------------------------------------
@@ -361,6 +367,7 @@ export function simularFormatura(
     expressaoGrafica: 0,
     trilhas: 0,
     eletivas: 0,
+    extensao: 0,
   };
   const horasPorTrilha = new Map<number, number>();
   if (perfil) {
@@ -466,6 +473,7 @@ export function simularFormatura(
       falta("segundoEstrato") === 0 &&
       falta("humanidades") === 0 &&
       falta("expressaoGrafica") === 0 &&
+      falta("extensao") === 0 &&
       !faltaTerceiroEstrato() &&
       eletivasPendentes === 0 &&
       ![...pendentes].some((c) => categoriaDe(porCodigo.get(c)!, matriz) === "obrigatorias");
@@ -583,6 +591,10 @@ export function simularFormatura(
         conjunto: d.conjunto,
       });
       planejado[cat] += contribui;
+      // A extensão não é uma categoria à parte na matriz: ela vem embutida como
+      // CHEXT de disciplinas que já contam noutro bloco. Creditamos aqui para não
+      // exigir do aluno horas que a própria grade planejada já entrega.
+      planejado.extensao += d.horas.chext ?? 0;
       // Simulamos a aprovação para que dependentes sejam liberados nos próximos passos
       if (perfil) {
         perfil.aprovadas.add(d.codigo);
@@ -610,6 +622,29 @@ export function simularFormatura(
       planejado.eletivas += horas;
       eletivasPendentes -= horas;
       vagas--;
+    }
+
+    // Sobrando extensão depois de contar o CHEXT das disciplinas planejadas, o
+    // saldo vira atividade extensionista genérica: não existe disciplina formal
+    // da matriz para apontar, porque o aluno escolhe a atividade.
+    //
+    // Ela não disputa vaga de turma, pela mesma razão do estágio e das
+    // atividades complementares: acontece junto das aulas do semestre. Se
+    // disputasse, as obrigatórias tomariam todas as vagas e a extensão nunca
+    // seria planejada — a projeção fechava ignorando 330h na BSI.
+    // Uma atividade por semestre, para a carga acumular em ritmo plausível.
+    if (falta("extensao") > 0) {
+      const horas = Math.min(falta("extensao"), 90);
+      escolhidas.push({
+        codigo: "EXTENSAO",
+        nome: `Atividade extensionista (${horas}h)`,
+        horas,
+        categoria: "extensao",
+        sazonalidade: "ambos",
+        ocupaVaga: false,
+        conjunto: null,
+      });
+      planejado.extensao += horas;
     }
 
     if (escolhidas.length === 0) {
@@ -670,6 +705,7 @@ export function simularFormatura(
     falta("segundoEstrato") === 0 &&
     falta("humanidades") === 0 &&
     falta("expressaoGrafica") === 0 &&
+    falta("extensao") === 0 &&
     !faltaTerceiroEstrato() &&
     eletivasPendentes === 0;
 
@@ -687,6 +723,7 @@ export function simularFormatura(
       ["expressaoGrafica", "Opção de Expressão Gráfica"],
       ["trilhas", cursoDesc.matriz === 981 ? "Trilhas (3º estrato)" : "Optativas em trilhas e isoladas"],
       ["eletivas", "Eletivas"],
+      ["extensao", "Extensão Universitária"],
     ] as [IdCategoria, string][]
   )
     .map(([id, nome]) => ({
