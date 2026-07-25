@@ -39,6 +39,15 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 ## 2. Tarefas Pendentes (`[/]` ou `[ ]`)
 
 ### Prioridade Alta (Próximo Ciclo de Desenvolvimento)
+- `[/]` **TASK-19 — Implementar Engenharia Eletrônica (matriz 968):**
+  - `[x]` **Turmas 2026-2 importadas e validadas** (`data/eng-eletronica/turmas/2026-2.json`): 145 disciplinas, 330 turmas, 966 horários, **0 erros** em `validate_turmas.py`. O `parse_turmas_pdf.py` passou a rotular o curso pelo cabeçalho da fonte também para `ENG ELETRÔNICA`.
+  - `[x]` **Estrutura da 968 conferida contra histórico real**: obrigatórias 1710h, optativas 2385h, extensão 465h, eletivas 0h — a matriz extraída bate exatamente com o Quadro Resumo do histórico. A 968 concentra o curso em "Opções" (escolha dentro de cada grupo), por isso o bloco optativo é maior que o obrigatório; não é erro de leitura.
+  - `[ ]` **Parser da matriz: capturar o 3º nível de aninhamento.** `parse_matriz.py` lê até o conjunto 1226, mas não cria `1227 Fundamentos`, `1228 Unidades Curriculares Formadoras`, `1229 Aplicações`, `1230 Programação`, `1231 Armazenamento`, `1232 Hardware` e `1233 Conexão` — 11 disciplinas ficam apontando para conjuntos inexistentes. A hierarquia real é `1180 Trilhas de Aprofundamento → {1181..1184, 1226} → 1226 Sistemas IoT → {1227, 1228, 1229} → 1228 → {1230..1233}`.
+  - `[ ]` **Corrigir carga horária zerada**: `ELB11` (a fonte diz 45h), `ELTD12` e `ELTD13` (têm CHEAD 60 e total 0) saem com `horas.total: 0`.
+  - `[ ]` `validate_matriz_968.py` nos moldes do `_962`, incluindo a checagem de que todo conjunto citado existe e de que as cargas batem com o Quadro Resumo.
+  - `[ ]` Descritor do curso em `cursos.ts` (agregador de trilhas 1180, Ciclo de Humanidades 1174, os grupos "Opções de…" como categorias próprias) e motores de situação/progresso/simulador.
+  - `[ ]` `Eng. Eletrônica` + `968 (Nova)` no `Checkin.tsx` só depois de dados, motores e regressões prontos.
+  - Decisão do dono: **motor específico por curso por enquanto** — não generalizar as regras agora.
 - `[/]` **TASK-18 — Página "Como Usar o Site" (manual da plataforma):**
   - **Gatilho:** botão com o ícone `?` no cabeçalho, vizinho ao "Sobre" e à engrenagem, acessível em qualquer ambiente (antes e depois do check-in). Ao passar o mouse, exibe o tooltip *"Como Usar o Site"*; ao clicar, abre a página.
   - **Conteúdo por tela:** para cada página da plataforma (Minha Situação, Catálogo, Trilhas, Posso Cursar, Grade, Layout Grade na Hora, Fluxograma, Simulador de Formatura, Amigos/Match, Configurações), descrever *o que ela mostra*, *quais interações são possíveis* e *o que a alimenta*.

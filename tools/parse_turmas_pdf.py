@@ -72,9 +72,18 @@ def parse():
     global CURSO_NOME
     with pdfplumber.open(PDF) as pdf:
         # O nome do curso vem do texto do cabeçalho da fonte, para o JSON não
-        # herdar o rótulo de BSI quando a origem é Eng. Comp. (e vice-versa).
+        # herdar o rótulo de um curso quando a origem é outro. O acento cai na
+        # extração, então casamos por prefixo sem acento.
         first_page_text = " ".join(w["text"] for w in pdf.pages[0].extract_words())
-        CURSO_NOME = "ENG DE COMPUTAÇÃO" if "ENG DE COMPUTA" in first_page_text else "SIST DE INFORMAÇÃO"
+        CURSO_NOME = "SIST DE INFORMAÇÃO"
+        for marca, nome in (
+            ("ENG DE COMPUTA", "ENG DE COMPUTAÇÃO"),
+            ("ENG ELETR", "ENG ELETRÔNICA"),
+            ("SIST DE INFORMA", "SIST DE INFORMAÇÃO"),
+        ):
+            if marca in first_page_text:
+                CURSO_NOME = nome
+                break
 
         # As fronteiras de coluna dependem do LAYOUT da fonte, não do curso: a
         # exportação de 2026/2 (BSI e Eng. Comp.) passou a usar um gabarito mais
