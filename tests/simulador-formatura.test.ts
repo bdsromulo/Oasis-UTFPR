@@ -13,6 +13,7 @@ import {
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { detectarConflitos, itensDaSelecao } from "../src/domain/motor/grade";
 import { BSI, ENG_COMP, ENG_COMP_962 } from "../src/domain/dadosCurso";
+import { descricaoDoCurso, ehTrilha } from "../src/domain/cursos";
 import type {
   Matriz,
   OfertaSemestre,
@@ -654,6 +655,146 @@ describe("motor em todos os cursos cobertos", () => {
           expect(excesso, `${curso.rotuloCurto} ritmo ${ritmo}: +${excesso}h`).toBeLessThanOrEqual(
             60,
           );
+        }
+      });
+    });
+  }
+});
+
+/**
+ * Filtros de exclusão: o aluno diz o que não quer cursar, e o motor obedece —
+ * até o ponto em que obedecer impediria a formatura. Aí ele desobedece, mantém
+ * o item no plano e explica, em vez de devolver uma projeção que não fecha.
+ */
+describe("exclusões de matéria, professor e trilha", () => {
+  const cursos = [BSI, ENG_COMP, ENG_COMP_962];
+  const ofertasDo = (curso: (typeof cursos)[number]) =>
+    Object.keys(curso.ofertas)
+      .sort()
+      .reverse()
+      .map((s) => curso.ofertas[s]);
+
+  for (const curso of cursos) {
+    describe(curso.rotuloCurto, () => {
+      const ofertasCurso = ofertasDo(curso);
+      const desc = descricaoDoCurso(curso.matriz);
+      const base = () =>
+        simularFormatura(null, curso.matriz, ofertasCurso, { ritmo: 6, semestreInicial: "2026-2" });
+
+      const obrigatoria = curso.matriz.disciplinas.find(
+        (d) => d.conjunto === null && d.aulas_semanais.total > 0 && !d.codigo.startsWith("ENADE"),
+      )!;
+      const trilhas = Object.keys(curso.matriz.conjuntos).filter((c) => ehTrilha(desc, c));
+
+      it("sem exclusão nenhuma, não inventa impossibilidade", () => {
+        expect(base().exclusoesImpossiveis).toEqual([]);
+      });
+
+      it("acusa impossibilidade e mantém a obrigatória excluída no plano", () => {
+        const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+          ritmo: 6,
+          semestreInicial: "2026-2",
+          exclusoes: { disciplinas: [{ codigo: obrigatoria.codigo, nome: obrigatoria.nome }] },
+        });
+
+        const impossivel = r.exclusoesImpossiveis.find(
+          (x) => x.tipo === "disciplina" && x.alvo === obrigatoria.codigo,
+        );
+        expect(impossivel, "obrigatória excluída não foi acusada").toBeDefined();
+        expect(impossivel!.disciplinas).toContain(obrigatoria.codigo);
+
+        // e o principal: ela continua no plano, marcada
+        const planejada = r.semestres
+          .flatMap((s) => s.disciplinas)
+          .find((d) => d.codigo === obrigatoria.codigo);
+        expect(planejada, "obrigatória sumiu do plano").toBeDefined();
+        expect(planejada!.exclusaoIgnorada?.tipo).toBe("disciplina");
+        // a projeção continua fechando
+        expect(r.semestreFormatura).toBe(base().semestreFormatura);
+      });
+
+      it("excluir todas as trilhas acusa e usa as trilhas mesmo assim", () => {
+        const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+          ritmo: 6,
+          semestreInicial: "2026-2",
+          exclusoes: { trilhas },
+        });
+
+        // uma impossibilidade por trilha que precisou voltar, nem mais nem menos
+        const porTrilha = r.exclusoesImpossiveis.filter((x) => x.tipo === "trilha");
+        expect(porTrilha.length).toBe(r.trilhasExigidas);
+        expect(r.trilhasFechadas.length).toBeGreaterThanOrEqual(r.trilhasExigidas);
+
+        const marcadas = r.semestres
+          .flatMap((s) => s.disciplinas)
+          .filter((d) => d.exclusaoIgnorada?.tipo === "trilha");
+        expect(marcadas.length, "nenhuma disciplina de trilha foi marcada").toBeGreaterThan(0);
+      });
+
+      it("excluir uma única trilha é respeitado em silêncio", () => {
+        const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+          ritmo: 6,
+          semestreInicial: "2026-2",
+          exclusoes: { trilhas: [trilhas[0]] },
+        });
+        expect(r.exclusoesImpossiveis).toEqual([]);
+        for (const s of r.semestres) {
+          for (const d of s.disciplinas) {
+            if (d.categoria !== "trilhas" || d.conjunto === null) continue;
+            expect(String(d.conjunto), "usou a trilha excluída").not.toBe(trilhas[0]);
+          }
+        }
+      });
+
+      it("professor sem turma na oferta não muda nada", () => {
+        const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+          ritmo: 6,
+          semestreInicial: "2026-2",
+          exclusoes: { professores: ["DOCENTE QUE NAO EXISTE"] },
+        });
+        expect(r.exclusoesImpossiveis).toEqual([]);
+        expect(r.semestres.length).toBe(base().semestres.length);
+      });
+
+      it("evita o docente excluído quando há turma alternativa", () => {
+        // docente de uma disciplina que tem mais de uma turma: dá para desviar
+        const oferta = curso.ofertas["2026-2"];
+        const docentesDe = (t: { professores?: string[]; professores_raw?: string }) => {
+          const out = new Set<string>(t.professores ?? []);
+          for (const p of (t.professores_raw ?? "").split(/[,;/]+/)) {
+            if (p.trim()) out.add(p.trim());
+          }
+          return out;
+        };
+        const comVariasTurmas = oferta.disciplinas.find(
+          (d) => d.turmas.filter((t) => t.horarios?.length).length > 2,
+        );
+        if (!comVariasTurmas) return;
+        const alvo = [...docentesDe(comVariasTurmas.turmas[0])][0];
+        if (!alvo) return;
+
+        const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+          ritmo: 6,
+          semestreInicial: "2026-2",
+          exclusoes: { professores: [alvo] },
+        });
+
+        // toda turma reservada ou não é do docente, ou está acusada como inevitável
+        for (const s of r.semestres) {
+          for (const d of s.disciplinas) {
+            if (!d.turma || !d.codigoOferta) continue;
+            const ref = ofertaReferenciaDoSemestre(s.semestre, ofertasCurso)!;
+            const turma = ref.disciplinas
+              .find((x) => x.codigo === d.codigoOferta)
+              ?.turmas.find((t) => t.codigo === d.turma);
+            if (!turma) continue;
+            if (docentesDe(turma).has(alvo)) {
+              expect(
+                d.exclusaoIgnorada?.tipo,
+                `${d.codigo} ficou com o docente excluído sem acusar`,
+              ).toBe("professor");
+            }
+          }
         }
       });
     });

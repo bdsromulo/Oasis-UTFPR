@@ -17,7 +17,11 @@ import {
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
 import { buscarOfertaParaPlanejamento, cumpre } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao, type ItemGrade } from "./grade";
-import { calcularPesoPrioridadeTurma } from "./grade-magica";
+import {
+  calcularPesoPrioridadeTurma,
+  disciplinaEstaExcluida,
+  turmaViolaProfessores,
+} from "./grade-magica";
 
 /**
  * Simulador de formatura.
@@ -182,6 +186,12 @@ export interface DisciplinaPlanejada {
   /** trilha à qual pertence, quando aplicável */
   conjunto: number | null;
   /**
+   * Preenchido quando a disciplina entrou no plano apesar de uma exclusão pedida
+   * pelo aluno: sem ela não há como integralizar, então o motor a mantém e diz
+   * por quê, em vez de devolver uma projeção que não fecha.
+   */
+  exclusaoIgnorada?: { tipo: TipoExclusao; alvo: string; motivo: string };
+  /**
    * Turma reservada na oferta-espelho do semestre. Vem preenchida quando a
    * disciplina tem turma com horário: é ela que garante que a grade projetada
    * fecha sem choque e que a importação para o Planejamento não inventa turma.
@@ -268,6 +278,40 @@ export function gradeFixadaDaSelecao(
   return { semestre: chaveSemestre(semestre), origem, itens };
 }
 
+export type TipoExclusao = "disciplina" | "professor" | "trilha";
+
+/**
+ * Filtros de exclusão, os mesmos da Sugestão de Grade: o aluno diz o que NÃO
+ * quer cursar. Aqui eles são pedidos, não ordens — a integralização manda.
+ */
+export interface ExclusoesSimulacao {
+  /** disciplinas que o aluno não quer cursar (código ou {codigo, nome}) */
+  disciplinas?: ({ codigo: string; nome: string } | string)[];
+  /** docentes cujas turmas devem ser evitadas */
+  professores?: string[];
+  /** conjuntos de trilha que não devem ser usados para fechar o bloco optativo */
+  trilhas?: string[];
+}
+
+/**
+ * Exclusão que o motor teve de desrespeitar para a projeção fechar.
+ *
+ * A tela precisa dizer as duas coisas ao mesmo tempo: que o pedido é impossível
+ * e o que exatamente entrou no plano contra a vontade do aluno. Devolver só um
+ * "não deu" deixaria a linha do tempo mentindo.
+ */
+export interface ExclusaoImpossivel {
+  tipo: TipoExclusao;
+  /** código da disciplina, nome do docente ou conjunto da trilha */
+  alvo: string;
+  /** rótulo legível para a tela */
+  rotulo: string;
+  /** por que não havia como respeitar o pedido */
+  motivo: string;
+  /** disciplinas do plano que carregam a violação */
+  disciplinas: string[];
+}
+
 export interface ResultadoSimulacao {
   semestres: SemestreProjetado[];
   /** null quando a projeção não fecha dentro do horizonte */
@@ -279,6 +323,8 @@ export interface ResultadoSimulacao {
   trilhasFechadas: { conjunto: number; nome: string; horas: number }[];
   /** quantas trilhas o curso exige validar (piso à parte do total de horas) */
   trilhasExigidas: number;
+  /** exclusões pedidas que a integralização não permitiu respeitar */
+  exclusoesImpossiveis: ExclusaoImpossivel[];
 }
 
 function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): IdCategoria | null {
@@ -366,6 +412,8 @@ export interface OpcoesSimulacao {
    * os seguintes são calculados a partir dele.
    */
   gradeFixada?: GradeFixada | null;
+  /** o que o aluno pediu para não cursar */
+  exclusoes?: ExclusoesSimulacao | null;
 }
 
 /**
@@ -390,6 +438,58 @@ export function simularFormatura(
   const cursoDesc = descricaoDoCurso(matriz);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
   const avisos: string[] = [];
+
+  // ---- exclusões pedidas pelo aluno ------------------------------------
+  // São pedidos, não ordens: quando respeitar a exclusão impede a formatura, o
+  // motor a desrespeita, marca a disciplina e explica na lista de impossíveis.
+  const exclusoes = opcoes.exclusoes ?? {};
+  const disciplinasExcluidas = exclusoes.disciplinas ?? [];
+  const professoresExcluidos = (exclusoes.professores ?? []).filter((p) => p.trim());
+  const trilhasExcluidas = new Set((exclusoes.trilhas ?? []).map(String));
+  const exclusoesImpossiveis: ExclusaoImpossivel[] = [];
+
+  const excluidaPeloAluno = (d: DisciplinaMatriz) =>
+    disciplinaEstaExcluida({ codigo: d.codigo, nome: d.nome }, disciplinasExcluidas);
+
+  /** Registra (ou complementa) uma exclusão que a integralização não permitiu honrar. */
+  function registrarImpossivel(
+    tipo: TipoExclusao,
+    alvo: string,
+    rotulo: string,
+    motivo: string,
+    disciplina?: string,
+  ) {
+    let reg = exclusoesImpossiveis.find((x) => x.tipo === tipo && x.alvo === alvo);
+    if (!reg) {
+      reg = { tipo, alvo, rotulo, motivo, disciplinas: [] };
+      exclusoesImpossiveis.push(reg);
+    }
+    if (disciplina && !reg.disciplinas.includes(disciplina)) reg.disciplinas.push(disciplina);
+  }
+
+  /**
+   * Marca, na disciplina planejada, que ela entrou apesar de um pedido de
+   * exclusão — e anexa a disciplina ao registro de impossibilidade, para a tela
+   * poder listar o estrago concreto de cada pedido negado.
+   */
+  const violacaoDe = (d: DisciplinaMatriz): DisciplinaPlanejada["exclusaoIgnorada"] => {
+    const registro = (tipo: TipoExclusao, alvo: string) => {
+      const reg = exclusoesImpossiveis.find((x) => x.tipo === tipo && x.alvo === alvo);
+      if (!reg) return undefined;
+      if (!reg.disciplinas.includes(d.codigo)) reg.disciplinas.push(d.codigo);
+      return { tipo, alvo, motivo: reg.motivo };
+    };
+    if (excluidaPeloAluno(d)) {
+      const r = registro("disciplina", d.codigo);
+      if (r) return r;
+    }
+    // trilha excluída que precisou virar trilha-alvo mesmo assim
+    if (d.conjunto !== null && trilhasExcluidas.has(String(d.conjunto))) {
+      const r = registro("trilha", String(d.conjunto));
+      if (r) return r;
+    }
+    return undefined;
+  };
 
   const cumprido = cumpridoPorCategoria(perfil, matriz);
 
@@ -434,13 +534,67 @@ export function simularFormatura(
   // ---- candidatas -------------------------------------------------------
   // Obrigatórias: o mínimo é o roster inteiro. Demais categorias: escolhe-se o
   // menor conjunto que fecha a carga, então todas entram no pool de candidatas.
-  const candidatas = matriz.disciplinas.filter((d) => {
+  const elegiveisAoPlano = matriz.disciplinas.filter((d) => {
     if (d.codigo.startsWith("ENADE")) return false;
     if (cumpre(d.codigo, perfil, mapa)) return false;
     const cat = categoriaDe(d, matriz);
     if (cat === null) return false;
     if (cat !== "obrigatorias" && saz.de(d.codigo) === "sem_oferta") return false;
     return true;
+  });
+
+  // ---- exclusão de disciplinas ------------------------------------------
+  // Obrigatória excluída é impossível por definição: o mínimo dessa categoria é
+  // o roster inteiro, não existe substituta. Ela volta para o plano marcada.
+  for (const d of elegiveisAoPlano) {
+    if (categoriaDe(d, matriz) !== "obrigatorias" || !excluidaPeloAluno(d)) continue;
+    registrarImpossivel(
+      "disciplina",
+      d.codigo,
+      `${d.codigo} — ${d.nome}`,
+      "é obrigatória da matriz: não há disciplina que a substitua, então ela entra no plano mesmo assim.",
+      d.codigo,
+    );
+  }
+
+  // Nas demais categorias há substitutas — desde que sobrem horas suficientes.
+  // Se a exclusão deixa a categoria sem como fechar, ela é desfeita por inteiro
+  // naquela categoria, porque escolher quais devolver seria arbitrário.
+  const categoriasComPool: IdCategoria[] = [
+    "segundoEstrato",
+    "humanidades",
+    "expressaoGrafica",
+    "trilhas",
+  ];
+  const excluidasRestauradas = new Set<string>();
+  for (const cat of categoriasComPool) {
+    const naCategoria = elegiveisAoPlano.filter((d) => categoriaDe(d, matriz) === cat);
+    const excluidasDaCategoria = naCategoria.filter((d) => excluidaPeloAluno(d));
+    if (excluidasDaCategoria.length === 0) continue;
+
+    const faltante = Math.max(0, exigido[cat] - cumprido[cat]);
+    const disponivelSemExcluidas = naCategoria
+      .filter((d) => !excluidaPeloAluno(d))
+      .reduce((a, d) => a + d.horas.total, 0);
+    if (disponivelSemExcluidas >= faltante) continue;
+
+    for (const d of excluidasDaCategoria) {
+      excluidasRestauradas.add(d.codigo);
+      registrarImpossivel(
+        "disciplina",
+        d.codigo,
+        `${d.codigo} — ${d.nome}`,
+        `sem ela a categoria não fecha: restam ${disponivelSemExcluidas}h ofertadas para ${faltante}h exigidas.`,
+        d.codigo,
+      );
+    }
+  }
+
+  const candidatas = elegiveisAoPlano.filter((d) => {
+    const cat = categoriaDe(d, matriz)!;
+    // obrigatória e restaurada seguem no pool; as demais exclusões valem
+    if (cat === "obrigatorias" || excluidasRestauradas.has(d.codigo)) return true;
+    return !excluidaPeloAluno(d);
   });
 
   const semOfertaObrigatorias = matriz.disciplinas.filter(
@@ -607,7 +761,28 @@ export function simularFormatura(
           b.jaTem - a.jaTem,
       );
 
-    return new Set(viaveis.slice(0, trilhasExigidas).map((t) => t.conj));
+    // A trilha excluída sai da fila, mas o curso continua exigindo o mesmo
+    // número de trilhas validadas. Se não sobram trilhas suficientes, as
+    // excluídas voltam — as mais baratas primeiro — e cada volta é registrada.
+    const permitidas = viaveis.filter((t) => !trilhasExcluidas.has(String(t.conj)));
+    const escolhidasAlvo = permitidas.slice(0, trilhasExigidas);
+
+    if (escolhidasAlvo.length < trilhasExigidas) {
+      const reservas = viaveis.filter((t) => trilhasExcluidas.has(String(t.conj)));
+      for (const t of reservas) {
+        if (escolhidasAlvo.length >= trilhasExigidas) break;
+        escolhidasAlvo.push(t);
+        registrarImpossivel(
+          "trilha",
+          String(t.conj),
+          matriz.conjuntos[String(t.conj)]?.nome ?? `Trilha ${t.conj}`,
+          `o curso exige ${trilhasExigidas} trilha(s) validada(s) e só ${permitidas.length} ` +
+            `trilha(s) fora da sua exclusão conseguem fechar as horas com a oferta conhecida.`,
+        );
+      }
+    }
+
+    return new Set(escolhidasAlvo.map((t) => t.conj));
   }
 
   const trilhasAlvo = escolherTrilhasAlvo();
@@ -801,6 +976,7 @@ export function simularFormatura(
       // disciplina rejeitada aqui continua pendente para o próximo semestre.
       let turmaEscolhida: Turma | null = null;
       let ofertaDaDisciplina: DisciplinaOfertada | null = null;
+      let violacaoDeDocente: DisciplinaPlanejada["exclusaoIgnorada"];
       if (consome && referencia.oferta) {
         ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
         if (ofertaDaDisciplina && ofertaDaDisciplina.turmas.length > 0) {
@@ -820,8 +996,20 @@ export function simularFormatura(
               (i) =>
                 i.disciplina.codigo === ofertaDaDisciplina!.codigo && i.turma.codigo === t.codigo,
             );
+
+          // ---- exclusão de professor ------------------------------------
+          // Vale por turma, não por disciplina: só as turmas dos docentes
+          // excluídos saem da mesa. Quando TODAS as turmas da disciplina são
+          // deles, evitar o docente significaria não cursar a disciplina — e
+          // isso a matriz não permite. Aí o pedido cai e a turma é marcada.
+          const aceitas = professoresExcluidos.length
+            ? porPrioridade.filter((t) => !turmaViolaProfessores(t, { professoresExcluidos }))
+            : porPrioridade;
+          const semAlternativaDeDocente = aceitas.length === 0;
+          const candidatasTurma = semAlternativaDeDocente ? porPrioridade : aceitas;
+
           turmaEscolhida =
-            porPrioridade.find(
+            candidatasTurma.find(
               (t) => !jaReservada(t) && !haveriaConflito(itensDoSemestre, ofertaDaDisciplina!, t),
             ) ?? null;
           // Nenhuma turma livre cabe junto do que já foi reservado: a disciplina
@@ -830,6 +1018,20 @@ export function simularFormatura(
           // Planejamento acusava conflito numa grade que o próprio simulador
           // havia montado.
           if (!turmaEscolhida) continue;
+
+          if (semAlternativaDeDocente) {
+            for (const prof of professoresExcluidos) {
+              if (!turmaViolaProfessores(turmaEscolhida, { professoresExcluidos: [prof] })) continue;
+              registrarImpossivel(
+                "professor",
+                prof,
+                prof,
+                "todas as turmas ofertadas desta disciplina são deste docente, e a disciplina é necessária para integralizar.",
+                d.codigo,
+              );
+              violacaoDeDocente = { tipo: "professor", alvo: prof, motivo: "única turma ofertada" };
+            }
+          }
         }
       }
 
@@ -880,6 +1082,7 @@ export function simularFormatura(
         sazonalidade: saz.de(d.codigo),
         ocupaVaga: consome,
         conjunto: d.conjunto,
+        exclusaoIgnorada: violacaoDe(d) ?? violacaoDeDocente,
         turma: turmaEscolhida?.codigo ?? null,
         codigoOferta: ofertaDaDisciplina?.codigo ?? null,
       });
@@ -1064,5 +1267,6 @@ export function simularFormatura(
     avisos,
     trilhasFechadas,
     trilhasExigidas,
+    exclusoesImpossiveis,
   };
 }

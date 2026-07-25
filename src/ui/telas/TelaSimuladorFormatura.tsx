@@ -17,11 +17,18 @@ import { calcularPesoPrioridadeTurma } from "../../domain/motor/grade-magica";
 import { haveriaConflito, itensDaSelecao } from "../../domain/motor/grade";
 import { Barra, Card } from "../componentes";
 import {
+  IconBan,
   IconCheck,
   IconDownload,
   IconGraduationCap,
   IconWarning,
 } from "../icons";
+import {
+  EXCLUSOES_VAZIAS,
+  SeletorExclusoes,
+  totalExclusoes,
+  type ValorExclusoes,
+} from "./SeletorExclusoes";
 
 function converterParaSelecao(
   disciplinasPlanejadas: DisciplinaPlanejada[],
@@ -203,14 +210,22 @@ export function TelaSimuladorFormatura(props: {
 
   const semestreDePartida = gradeFixada?.semestre ?? semestreInicial;
 
+  const [exclusoes, setExclusoes] = useState<ValorExclusoes>(EXCLUSOES_VAZIAS);
+  const [painelExclusoesAberto, setPainelExclusoesAberto] = useState(false);
+
   const resultado = useMemo(
     () =>
       simularFormatura(perfil, matriz, ofertas, {
         ritmo,
         semestreInicial: semestreDePartida,
         gradeFixada,
+        exclusoes: {
+          disciplinas: exclusoes.disciplinas,
+          professores: exclusoes.professores,
+          trilhas: exclusoes.trilhas.map((t) => t.conjunto),
+        },
       }),
-    [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada],
+    [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada, exclusoes],
   );
 
   const totalMaterias = resultado.semestres.reduce((a, s) => a + s.materias, 0);
@@ -353,6 +368,101 @@ export function TelaSimuladorFormatura(props: {
         </div>
       </div>
 
+      {/* Filtros de exclusão */}
+      <div className="rounded-2xl border border-zinc-200/90 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <button
+          type="button"
+          onClick={() => setPainelExclusoesAberto((v) => !v)}
+          className="flex w-full cursor-pointer items-center justify-between gap-3 p-4 text-left"
+        >
+          <span className="flex items-center gap-2.5">
+            <IconBan className="h-4 w-4 shrink-0 text-zinc-500" />
+            <span>
+              <span className="block font-display text-sm font-black text-zinc-900 dark:text-zinc-100">
+                Filtros de exclusão
+              </span>
+              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                Matérias, professores e trilhas que você prefere não cursar
+              </span>
+            </span>
+          </span>
+          <span className="flex items-center gap-2">
+            {totalExclusoes(exclusoes) > 0 && (
+              <span className="rounded-lg bg-red-500/15 px-2 py-0.5 font-mono text-xs font-black text-red-700 dark:text-red-300">
+                {totalExclusoes(exclusoes)}
+              </span>
+            )}
+            <span className="font-mono text-xs font-bold text-zinc-400">
+              {painelExclusoesAberto ? "▲" : "▼"}
+            </span>
+          </span>
+        </button>
+        {painelExclusoesAberto && (
+          <div className="animate-in fade-in border-t border-zinc-200/70 p-4 dark:border-zinc-800">
+            <SeletorExclusoes
+              ofertas={ofertas}
+              matriz={matriz}
+              valor={exclusoes}
+              onChange={setExclusoes}
+            />
+            {totalExclusoes(exclusoes) > 0 && (
+              <button
+                type="button"
+                onClick={() => setExclusoes(EXCLUSOES_VAZIAS)}
+                className="mt-4 cursor-pointer rounded-xl border border-zinc-300 px-3 py-1.5 font-display text-xs font-bold text-zinc-600 transition-colors hover:border-red-400 hover:text-red-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:text-red-300"
+              >
+                Limpar todas as exclusões
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Exclusões que a integralização não permitiu respeitar */}
+      {resultado.exclusoesImpossiveis.length > 0 && (
+        <section className="rounded-2xl border-2 border-red-400/60 bg-red-50/70 p-4 dark:border-red-800/70 dark:bg-red-950/40">
+          <div className="flex items-start gap-2.5">
+            <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+            <div>
+              <h3 className="font-display text-sm font-black text-red-900 dark:text-red-200">
+                Não é possível se formar respeitando{" "}
+                {resultado.exclusoesImpossiveis.length === 1
+                  ? "esta exclusão"
+                  : `estas ${resultado.exclusoesImpossiveis.length} exclusões`}
+              </h3>
+              <p className="mt-1 text-xs leading-relaxed text-red-900/80 dark:text-red-200/80">
+                A projeção abaixo <strong>mantém</strong> o que você pediu para excluir — sem isso
+                não haveria como integralizar o curso. As disciplinas afetadas aparecem marcadas na
+                linha do tempo.
+              </p>
+            </div>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {resultado.exclusoesImpossiveis.map((x) => (
+              <li
+                key={`${x.tipo}-${x.alvo}`}
+                className="rounded-xl border border-red-300/70 bg-white/80 p-3 text-xs dark:border-red-900/60 dark:bg-zinc-900/70"
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-md bg-red-500/15 px-1.5 py-0.5 font-display text-[10px] font-black uppercase tracking-wide text-red-700 dark:text-red-300">
+                    {x.tipo}
+                  </span>
+                  <span className="font-display font-black text-zinc-900 dark:text-zinc-100">
+                    {x.rotulo}
+                  </span>
+                </div>
+                <p className="mt-1 leading-snug text-zinc-600 dark:text-zinc-300">{x.motivo}</p>
+                {x.disciplinas.length > 0 && (
+                  <p className="mt-1.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+                    Entra no plano: {x.disciplinas.join(", ")}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {resultado.avisos.map((a) => (
         <div
           key={a}
@@ -468,6 +578,15 @@ export function TelaSimuladorFormatura(props: {
                       {!d.ocupaVaga && (
                         <span className="rounded bg-teal-500/15 px-1.5 font-mono text-[10px] font-bold text-teal-700 dark:text-teal-300">
                           fora da grade
+                        </span>
+                      )}
+                      {d.exclusaoIgnorada && (
+                        <span
+                          className="inline-flex items-center gap-1 rounded border border-red-400/60 bg-red-500/15 px-1.5 font-display text-[10px] font-black text-red-700 dark:text-red-300"
+                          title={`Você pediu para excluir, mas ${d.exclusaoIgnorada.motivo}`}
+                        >
+                          <IconBan className="h-3 w-3 shrink-0" />
+                          excluída, mas necessária
                         </span>
                       )}
                     </li>
