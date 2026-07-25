@@ -7,6 +7,11 @@ import {
   IconShieldLock,
   IconUser,
 } from "../icons";
+import {
+  IlustracaoFluxoHistorico,
+  IlustracaoFontes,
+  IlustracaoSemestres,
+} from "./ilustracoes";
 
 /**
  * Página "Como Usar o Site" — manual da plataforma (TASK-18).
@@ -276,6 +281,12 @@ export function TelaComoUsar() {
         descricao="O PDF não é enviado: ele é interpretado dentro do seu navegador, por um parser."
       >
         <Card>
+          <figure className="mb-5">
+            <IlustracaoFluxoHistorico />
+            <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
+              O arquivo entra pela página e não volta a sair dela.
+            </figcaption>
+          </figure>
           <ol className="space-y-4">
             <Passo n={1} titulo="Você escolhe o PDF">
               O arquivo é aberto localmente pela página. Nenhum upload acontece — não
@@ -365,6 +376,15 @@ export function TelaComoUsar() {
         descricao="Cinco fontes alimentam a plataforma — e só a primeira é sua e privada."
       >
         <div className="space-y-3">
+          <Card>
+            <figure>
+              <IlustracaoFontes />
+              <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
+                As quatro fontes públicas vivem no repositório; o seu histórico entra por
+                fora e fica na sua máquina.
+              </figcaption>
+            </figure>
+          </Card>
           {FONTES.map((f, i) => (
             <Card key={f.titulo}>
               <div className="flex items-start gap-3.5">
@@ -396,6 +416,14 @@ export function TelaComoUsar() {
         titulo="Semestres: atual, futuro e passado"
         descricao="Nem todo semestre tem a mesma origem — e a plataforma sinaliza isso."
       >
+        <Card classe="mb-3.5">
+          <figure>
+            <IlustracaoSemestres />
+            <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
+              Só o semestre em pré-matrícula ainda está sujeito a mudança.
+            </figcaption>
+          </figure>
+        </Card>
         <div className="grid gap-3.5 sm:grid-cols-3">
           <Card>
             <Badge tom="ok">Pré-Matrícula</Badge>

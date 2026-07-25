@@ -518,19 +518,17 @@ export function App() {
             <IconHelp className="h-4 w-4" />
           </BotaoIconeComDica>
 
-          <Botao
+          <BotaoIconeComDica
+            dica="Sobre o Projeto"
+            classe="text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
             onClick={() => {
               setGiAberta(false);
               setComoUsarAberta(false);
               setSobreAberta(true);
             }}
-            variante="sutil"
-            classe="!rounded-2xl !py-2 !px-3 text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
-            title="Sobre o projeto"
           >
             <IconInfo className="h-4 w-4" />
-            <span className="font-semibold">Sobre</span>
-          </Botao>
+          </BotaoIconeComDica>
         </div>
       </header>
 
