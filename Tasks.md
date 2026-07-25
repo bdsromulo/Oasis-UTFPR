@@ -39,6 +39,19 @@ Este arquivo é o **rastreador operacional vivo** do projeto. Ele é atualizado 
 ## 2. Tarefas Pendentes (`[/]` ou `[ ]`)
 
 ### Prioridade Alta (Próximo Ciclo de Desenvolvimento)
+- `[/]` **TASK-18 — Página "Como Usar o Site" (manual da plataforma):**
+  - **Gatilho:** botão com o ícone `?` no cabeçalho, vizinho ao "Sobre" e à engrenagem, acessível em qualquer ambiente (antes e depois do check-in). Ao passar o mouse, exibe o tooltip *"Como Usar o Site"*; ao clicar, abre a página.
+  - **Conteúdo por tela:** para cada página da plataforma (Minha Situação, Catálogo, Trilhas, Posso Cursar, Grade, Layout Grade na Hora, Fluxograma, Simulador de Formatura, Amigos/Match, Configurações), descrever *o que ela mostra*, *quais interações são possíveis* e *o que a alimenta*.
+  - **Princípios:** explicitar os princípios que regem a plataforma — local-first, leitura fiel da fonte (erro alto > erro silencioso), dado oficial versus dado provisório (Pré-Matrícula) e ausência de backend.
+  - **Como o histórico é lido:** explicar que o PDF passa por um **parser** que roda no navegador, extraindo disciplinas, notas, situação e os quadros-resumo — e que é isso que personaliza todas as telas.
+  - **De onde vêm os dados (as cinco fontes):**
+    1. o **próprio histórico** do aluno (client-side, nunca enviado);
+    2. **coleta coletiva de vivências** dos estudantes, que corrige o que a burocracia não reflete (ex.: pré-requisito que na prática não trava);
+    3. **Projetos Pedagógicos de Curso (PPCs)**;
+    4. **Matrizes curriculares** oficiais;
+    5. **relação de Turmas Abertas** de cada semestre, do Portal do Aluno.
+  - **Semestres anteriores:** documentar que as ofertas passadas são alimentadas a partir dos dados do **Grade na Hora**, e não do Portal.
+  - Reaproveitar a estrutura visual de `TelaSobre.tsx` (seções numeradas, `Card`, `Badge`) para manter coerência entre as páginas institucionais.
 - `[ ]` **TASK-17 — Implementar Engenharia de Computação — Matriz 962:**
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

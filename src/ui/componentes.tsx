@@ -135,6 +135,52 @@ export function Rosca(props: {
   );
 }
 
+/**
+ * Botão só com ícone que revela o rótulo ao passar o mouse ou ao receber foco
+ * pelo teclado.
+ *
+ * A dica é controlada por estado, e não pelo variante `group-hover`, para que
+ * o teclado receba a mesma affordance do mouse: quem navega por Tab também
+ * precisa ler o rótulo do botão que só tem ícone.
+ */
+export function BotaoIconeComDica(props: {
+  children: ReactNode;
+  dica: string;
+  onClick: () => void;
+  classe?: string;
+}) {
+  const [visivel, setVisivel] = useState(false);
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setVisivel(true)}
+      onMouseLeave={() => setVisivel(false)}
+    >
+      <Botao
+        onClick={props.onClick}
+        variante="sutil"
+        classe={`!rounded-2xl !p-2 ${props.classe ?? ""}`}
+        title={props.dica}
+      >
+        <span onFocus={() => setVisivel(true)} onBlur={() => setVisivel(false)}>
+          {props.children}
+        </span>
+      </Botao>
+      {/* A opacidade vai no style, e não em `opacity-*`: é o único par de
+          estados do componente e, inline, não depende de o utilitário ter sido
+          gerado no build — falha aqui seria silenciosa (dica invisível). */}
+      <span
+        role="tooltip"
+        aria-hidden={!visivel}
+        style={{ opacity: visivel ? 1 : 0 }}
+        className="pointer-events-none absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-xl bg-zinc-900 px-2.5 py-1.5 font-display text-xs font-bold text-white shadow-lg transition-opacity duration-150 dark:bg-zinc-100 dark:text-zinc-900"
+      >
+        {props.dica}
+      </span>
+    </div>
+  );
+}
+
 export function Botao(props: {
   children: ReactNode;
   onClick?: (e?: any) => void;
