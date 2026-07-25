@@ -382,9 +382,21 @@ export function App() {
   function handleContinuarSemRegistro(dados: DadosCheckin) {
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
-    setPreferencias((p) => ({ ...p, campus: dados.campus, curso: dados.curso, matriz: dados.matriz }));
+    // O check-in escolhe curso e matriz separadamente ("eng-comp" + "962"), mas
+    // cada matriz é um curso próprio aqui dentro: sem resolver pela matriz, a
+    // 962 cairia nos dados da 844.
+    const cursoDaMatriz = dadosDoCursoPorMatriz(Number(dados.matriz))?.id ?? dados.curso;
+    setPreferencias((p) => ({
+      ...p,
+      campus: dados.campus,
+      curso: cursoDaMatriz,
+      matriz: dados.matriz,
+    }));
     setAba("planejamento");
     setAbaPlanejamento("cursar");
+    // Modo Livre entra direto no Planejamento: a página precisa começar no topo,
+    // e não na posição de rolagem herdada do check-in.
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
 
   function handleLimparDados() {

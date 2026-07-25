@@ -6,6 +6,7 @@ import { useMemo, useState, useRef } from "react";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { EXIGE_HISTORICO } from "../SidebarNavegacao";
 import {
   horariosUnicos,
   haveriaConflito,
@@ -387,12 +388,18 @@ export function TelaLayoutGNH(props: {
         </label>
         <MenuOrdenacao valor={ordenacao} onMudar={setOrdenacao} />
         {onAbrirGradeMagica && (
+          /* Mesma regra do Layout Oásis: sem histórico não há o que sugerir. */
           <button
-            onClick={onAbrirGradeMagica}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
-            title="Preenchimento com Sugestão de Grade"
+            onClick={() => perfil && onAbrirGradeMagica()}
+            disabled={!perfil}
+            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 font-display text-sm font-bold transition-all ${
+              perfil
+                ? "bg-gradient-to-r from-amber-500 to-utfpr-500 text-zinc-950 shadow-md hover:brightness-105 cursor-pointer"
+                : "border border-zinc-200 bg-zinc-100 text-zinc-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-500"
+            }`}
+            title={perfil ? "Preenchimento com Sugestão de Grade" : EXIGE_HISTORICO}
           >
-            <span>✨</span>
+            <span>{perfil ? "✨" : "🔒"}</span>
             <span className="hidden sm:inline">Sugestão de Grade</span>
             <span className="sm:hidden">Sugestão</span>
           </button>

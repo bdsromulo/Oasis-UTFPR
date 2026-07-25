@@ -10,6 +10,7 @@ import {
 import { faixaDoSlot } from "../../domain/horarios";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
+import { EXIGE_HISTORICO } from "../SidebarNavegacao";
 import { Badge, Botao, Card, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
 import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
 import { IconPlus, IconTrash, IconCheck, IconWarning, IconFilter } from "../icons";
@@ -473,12 +474,20 @@ export function TelaPossoCursar(props: {
           </button>
           <MenuOrdenacao valor={ordenacao} onMudar={setOrdenacao} />
           {onAbrirGradeMagica && (
+            /* A sugestão parte do que o aluno já cumpriu: em Modo Livre não há
+               histórico para basear a recomendação, então fica travada. Volta a
+               abrir assim que um histórico for importado nas Configurações. */
             <button
-              onClick={onAbrirGradeMagica}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-utfpr-500 px-3.5 py-2 font-display text-sm font-bold text-zinc-950 shadow-md transition-all hover:brightness-105 cursor-pointer"
-              title="Preenchimento com Sugestão de Grade"
+              onClick={() => perfil && onAbrirGradeMagica()}
+              disabled={!perfil}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 font-display text-sm font-bold transition-all ${
+                perfil
+                  ? "bg-gradient-to-r from-amber-500 to-utfpr-500 text-zinc-950 shadow-md hover:brightness-105 cursor-pointer"
+                  : "border border-zinc-200 bg-zinc-100 text-zinc-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-500"
+              }`}
+              title={perfil ? "Preenchimento com Sugestão de Grade" : EXIGE_HISTORICO}
             >
-              <span>✨</span>
+              <span>{perfil ? "✨" : "🔒"}</span>
               <span className="hidden sm:inline">Sugestão de Grade</span>
               <span className="sm:hidden">Sugestão</span>
             </button>

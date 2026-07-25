@@ -11,7 +11,7 @@ interface SidebarNavegacaoProps {
 }
 
 /** Mensagem única para tudo que depende do Histórico Escolar. */
-const EXIGE_HISTORICO =
+export const EXIGE_HISTORICO =
   "Requer o seu Histórico Escolar. Importe o PDF nas Configurações para liberar.";
 
 export function SidebarNavegacao({

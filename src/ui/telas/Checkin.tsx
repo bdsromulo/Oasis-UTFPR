@@ -44,8 +44,8 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
     {
       numero: "962",
       rotulo: "962 (Nova)",
-      nota: "Próxima matriz de Engenharia de Computação a ser implementada.",
-      disponivel: false,
+      nota: "Implementada: matriz vigente de Engenharia de Computação, com trilhas e optativas próprias.",
+      disponivel: true,
     },
   ],
 };
