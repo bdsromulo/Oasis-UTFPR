@@ -389,6 +389,34 @@ describe("extensão curricular na projeção", () => {
     }
   });
 
+  it("avisa que o aluno precisa buscar as atividades por conta própria", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    const aviso = r.avisos.find((a) => /extensionistas/.test(a));
+    expect(aviso, "sem aviso, a tela sugere que basta cursar o que está listado").toBeDefined();
+    expect(aviso).toContain("buscar matérias ou projetos extensionistas");
+    // o aviso informa quantas horas ainda não têm disciplina para apontar
+    expect(aviso).toMatch(/\d+h de extensão/);
+  });
+
+  it("não avisa quando nenhuma hora genérica foi necessária", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 330, chFaltante: 0 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    expect(r.avisos.find((a) => /extensionistas/.test(a))).toBeUndefined();
+  });
+
   it("não cobra extensão de quem já cumpriu tudo", () => {
     const perfil = perfilFake({
       extensao: { chTotal: 330, chCursada: 330, chFaltante: 0 },

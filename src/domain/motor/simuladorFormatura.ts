@@ -465,6 +465,9 @@ export function simularFormatura(
   const semestres: SemestreProjetado[] = [];
   let semestreAtual = semestreInicial;
   let eletivasPendentes = falta("eletivas");
+  // horas de extensão que a projeção não conseguiu casar com disciplina da
+  // matriz e virou atividade a escolher: é o que o aluno precisa correr atrás
+  let horasExtensaoGenerica = 0;
   let semestresSemProgresso = 0;
 
   for (let passo = 0; passo < horizonte; passo++) {
@@ -635,9 +638,10 @@ export function simularFormatura(
     // Uma atividade por semestre, para a carga acumular em ritmo plausível.
     if (falta("extensao") > 0) {
       const horas = Math.min(falta("extensao"), 90);
+      horasExtensaoGenerica += horas;
       escolhidas.push({
         codigo: "EXTENSAO",
-        nome: `Atividade extensionista (${horas}h)`,
+        nome: `Extensão a definir (${horas}h)`,
         horas,
         categoria: "extensao",
         sazonalidade: "ambos",
@@ -712,6 +716,15 @@ export function simularFormatura(
   if (!fechou) {
     avisos.push(
       "A projeção não fecha dentro do horizonte simulado — reveja o ritmo ou verifique pré-requisitos travados.",
+    );
+  }
+
+  // O plano cobre as horas, mas não diz em quê: essas horas não saíram de uma
+  // disciplina da matriz, e sim de atividade que o aluno ainda vai escolher.
+  // Sem este aviso, a tela daria a entender que basta cursar o que está listado.
+  if (horasExtensaoGenerica > 0) {
+    avisos.push(
+      `Você ainda deve buscar matérias ou projetos extensionistas para concluir o curso nesses próximos períodos: faltam ${horasExtensaoGenerica}h de extensão que não estão vinculadas a uma disciplina da sua matriz.`,
     );
   }
 
