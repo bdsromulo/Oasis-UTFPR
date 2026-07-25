@@ -370,11 +370,25 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               Inspiração e embasamento
             </h4>
             <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              O <strong className="text-zinc-800 dark:text-zinc-200">repositório de apoio
-              de Eletrônica</strong> serviu de inspiração e de embasamento didático para o
-              desenvolvimento do Oásis de Eletrônica, tanto na forma de organizar o
-              material de apoio quanto na leitura das exigências próprias do curso.
+              O{" "}
+              <strong className="text-zinc-800 dark:text-zinc-200">
+                MatrizEngEletronicaUTFPR
+              </strong>
+              , repositório de apoio de Engenharia Eletrônica mantido por{" "}
+              <strong className="text-zinc-800 dark:text-zinc-200">Kcaiooooo</strong>,
+              serviu de inspiração e de embasamento didático para o desenvolvimento do
+              Oásis de Eletrônica — tanto na forma de organizar o material de apoio quanto
+              na leitura das exigências próprias do curso.
             </p>
+            <div className="mt-3">
+              <LinkSocial
+                href="https://github.com/Kcaiooooo/MatrizEngEletronicaUTFPR"
+                rotulo="Repositório MatrizEngEletronicaUTFPR no GitHub"
+              >
+                <IconGithub className="h-4.5 w-4.5" />
+                <span>Kcaiooooo/MatrizEngEletronicaUTFPR</span>
+              </LinkSocial>
+            </div>
             <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               O <strong className="text-zinc-800 dark:text-zinc-200">Grade na Hora</strong>{" "}
               é a referência declarada de origem do projeto: o Oásis nasce da vontade de
