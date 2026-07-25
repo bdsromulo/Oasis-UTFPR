@@ -8,6 +8,11 @@ import {
   type ItemGrade,
 } from "../../domain/motor/grade";
 import { faixaDoSlot } from "../../domain/horarios";
+import {
+  ModalConflitoTurma,
+  verificarChoqueAoAdicionar,
+  type ConflitoBloqueado,
+} from "./ModalConflitoTurma";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { EXIGE_HISTORICO } from "../SidebarNavegacao";
@@ -338,6 +343,7 @@ export function TelaPossoCursar(props: {
   const [soLiberadas, setSoLiberadas] = useState(true);
   const [grupo, setGrupo] = useState<Grupo>("todas");
   const [trilha, setTrilha] = useState<string>("todas");
+  const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
   const curso = descricaoDoCurso(matriz);
   const grupos = useMemo<[Grupo, string][]>(() => [
     ["todas", "Todas"],
@@ -453,12 +459,24 @@ export function TelaPossoCursar(props: {
     );
     if (existe) {
       setSelecao(selecao.filter((s) => s !== existe));
-    } else {
-      setSelecao([
-        ...selecao.filter((s) => s.codDisciplina !== codDisciplina),
-        { codDisciplina, codTurma },
-      ]);
+      return;
     }
+
+    // Trocar de turma dentro da mesma matéria substitui a anterior: ela sai da
+    // conta antes de checar o choque, senão a matéria conflitaria consigo mesma.
+    const semEssaDisciplina = selecao.filter((s) => s.codDisciplina !== codDisciplina);
+    const bloqueio = verificarChoqueAoAdicionar(
+      oferta,
+      semEssaDisciplina,
+      codDisciplina,
+      codTurma,
+    );
+    if (bloqueio) {
+      setConflitoBloqueado(bloqueio);
+      return;
+    }
+
+    setSelecao([...semEssaDisciplina, { codDisciplina, codTurma }]);
   }
 
   return (
@@ -609,6 +627,11 @@ export function TelaPossoCursar(props: {
           />
         ))}
       </div>
+
+      <ModalConflitoTurma
+        bloqueio={conflitoBloqueado}
+        onFechar={() => setConflitoBloqueado(null)}
+      />
     </div>
   );
 }

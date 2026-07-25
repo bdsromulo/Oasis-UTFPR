@@ -20,6 +20,11 @@ import {
   type ItemGrade,
 } from "../../domain/motor/grade";
 import { faixaDoSlot } from "../../domain/horarios";
+import {
+  ModalConflitoTurma,
+  verificarChoqueAoAdicionar,
+  type ConflitoBloqueado,
+} from "./ModalConflitoTurma";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
@@ -273,6 +278,7 @@ export function TelaLayoutGNH(props: {
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [soPendentes, setSoPendentes] = useState(false);
   const [soLiberadas, setSoLiberadas] = useState(false);
+  const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
 
   const itensSelecao = useMemo(() => itensDaSelecao(oferta, selecao), [oferta, selecao]);
 
@@ -357,12 +363,24 @@ export function TelaLayoutGNH(props: {
       setSelecao(
         selecao.filter((s) => !(s.codDisciplina === codDisciplina && s.codTurma === codTurma)),
       );
-    } else {
-      setSelecao([
-        ...selecao.filter((s) => s.codDisciplina !== codDisciplina),
-        { codDisciplina, codTurma },
-      ]);
+      return;
     }
+
+    // Trocar de turma dentro da mesma matéria substitui a anterior: ela sai da
+    // conta antes de checar o choque, senão a matéria conflitaria consigo mesma.
+    const semEssaDisciplina = selecao.filter((s) => s.codDisciplina !== codDisciplina);
+    const bloqueio = verificarChoqueAoAdicionar(
+      oferta,
+      semEssaDisciplina,
+      codDisciplina,
+      codTurma,
+    );
+    if (bloqueio) {
+      setConflitoBloqueado(bloqueio);
+      return;
+    }
+
+    setSelecao([...semEssaDisciplina, { codDisciplina, codTurma }]);
   }
 
   return (
@@ -436,6 +454,11 @@ export function TelaLayoutGNH(props: {
           );
         })}
       </div>
+
+      <ModalConflitoTurma
+        bloqueio={conflitoBloqueado}
+        onFechar={() => setConflitoBloqueado(null)}
+      />
     </div>
   );
 }
