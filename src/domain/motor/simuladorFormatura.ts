@@ -112,6 +112,8 @@ export type IdCategoria =
   | "obrigatorias"
   | "segundoEstrato"
   | "humanidades"
+  // bloco próprio da matriz 962; cursos sem ele ficam com exigido 0 e somem da lista
+  | "expressaoGrafica"
   | "trilhas"
   | "eletivas";
 
@@ -190,6 +192,7 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     obrigatorias: 0,
     segundoEstrato: 0,
     humanidades: 0,
+    expressaoGrafica: 0,
     trilhas: 0,
     eletivas: 0,
   };
@@ -223,6 +226,7 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     obrigatorias: perfil.resumoGeral?.obrigatorias.aprovada ?? 0,
     segundoEstrato: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "segundoEstrato")?.conjunto)),
     humanidades: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "humanidades")?.conjunto)),
+    expressaoGrafica: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "expressaoGrafica")?.conjunto)),
     trilhas,
     eletivas: perfil.eletivas ? perfil.eletivas.chTotal - perfil.eletivas.chFaltante : 0,
   };
@@ -274,6 +278,9 @@ export function simularFormatura(
   const conjuntoHumanidades = cursoDesc.categorias.find(
     (c) => c.id === "humanidades",
   )?.conjunto;
+  const conjuntoExpressaoGrafica = cursoDesc.categorias.find(
+    (c) => c.id === "expressaoGrafica",
+  )?.conjunto;
   const exigido: Record<IdCategoria, number> = {
     obrigatorias: matriz.cargas.obrigatorias,
     segundoEstrato:
@@ -284,6 +291,10 @@ export function simularFormatura(
       conjuntoHumanidades === undefined
         ? 0
         : matriz.conjuntos[String(conjuntoHumanidades)]?.ch ?? 0,
+    expressaoGrafica:
+      conjuntoExpressaoGrafica === undefined
+        ? 0
+        : matriz.conjuntos[String(conjuntoExpressaoGrafica)]?.ch ?? 0,
     trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
     eletivas: matriz.cargas.eletiva,
   };
@@ -347,6 +358,7 @@ export function simularFormatura(
     obrigatorias: 0,
     segundoEstrato: 0,
     humanidades: 0,
+    expressaoGrafica: 0,
     trilhas: 0,
     eletivas: 0,
   };
@@ -453,6 +465,7 @@ export function simularFormatura(
       falta("obrigatorias") === 0 &&
       falta("segundoEstrato") === 0 &&
       falta("humanidades") === 0 &&
+      falta("expressaoGrafica") === 0 &&
       !faltaTerceiroEstrato() &&
       eletivasPendentes === 0 &&
       ![...pendentes].some((c) => categoriaDe(porCodigo.get(c)!, matriz) === "obrigatorias");
@@ -625,6 +638,7 @@ export function simularFormatura(
         };
 
         if (falta("humanidades") > 0) addPlaceholdersFor("humanidades", "Humanidades");
+        if (falta("expressaoGrafica") > 0) addPlaceholdersFor("expressaoGrafica", "Expressão Gráfica");
         if (falta("segundoEstrato") > 0) addPlaceholdersFor("segundoEstrato", "2º Estrato");
         if (falta("trilhas") > 0) addPlaceholdersFor("trilhas", "Trilha");
         if (falta("obrigatorias") > 0) addPlaceholdersFor("obrigatorias", "Obrigatória");
@@ -655,6 +669,7 @@ export function simularFormatura(
     obrigatoriasRestantes.length === 0 &&
     falta("segundoEstrato") === 0 &&
     falta("humanidades") === 0 &&
+    falta("expressaoGrafica") === 0 &&
     !faltaTerceiroEstrato() &&
     eletivasPendentes === 0;
 
@@ -669,6 +684,7 @@ export function simularFormatura(
       ["obrigatorias", cursoDesc.matriz === 981 ? "Obrigatórias (1º estrato)" : "Obrigatórias"],
       ["segundoEstrato", "2º Estrato"],
       ["humanidades", "Ciclo de Humanidades"],
+      ["expressaoGrafica", "Opção de Expressão Gráfica"],
       ["trilhas", cursoDesc.matriz === 981 ? "Trilhas (3º estrato)" : "Optativas em trilhas e isoladas"],
       ["eletivas", "Eletivas"],
     ] as [IdCategoria, string][]

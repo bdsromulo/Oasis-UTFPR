@@ -25,6 +25,10 @@ const CORES_CATEGORIA: Record<IdCategoria, { chip: string; ponto: string }> = {
     chip: "bg-violet-500/10 text-violet-800 border-violet-500/30 dark:text-violet-300",
     ponto: "bg-violet-500",
   },
+  expressaoGrafica: {
+    chip: "bg-rose-500/10 text-rose-800 border-rose-500/30 dark:text-rose-300",
+    ponto: "bg-rose-500",
+  },
   trilhas: {
     chip: "bg-indigo-500/10 text-indigo-800 border-indigo-500/30 dark:text-indigo-300",
     ponto: "bg-indigo-500",
@@ -39,6 +43,7 @@ const ROTULO_CURTO: Record<IdCategoria, string> = {
   obrigatorias: "Obrigatória",
   segundoEstrato: "2º estrato",
   humanidades: "Humanidades",
+  expressaoGrafica: "Exp. gráfica",
   trilhas: "Trilha",
   eletivas: "Eletiva",
 };

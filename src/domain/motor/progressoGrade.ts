@@ -144,7 +144,7 @@ export function calcularProgressoMateria(
   } else if (conjunto === cjEletivas || !d) {
     categoriaId = "eletivas";
     categoriaNome = "Eletivas";
-    exigido = perfil?.eletivas?.chTotal ?? 120;
+    exigido = perfil?.eletivas?.chTotal ?? matriz?.cargas?.eletiva ?? 120;
     cumpridoBase = perfil?.eletivas ? Math.max(0, perfil.eletivas.chTotal - perfil.eletivas.chFaltante) : 0;
   }
 
@@ -237,14 +237,23 @@ export function calcularResumoProgressoGrade(
       impulsoGrade: 0,
       disciplinas: [],
     },
-    eletivas: {
+  };
+
+  // Nem todo curso exige eletivas: a 962 declara `cargas.eletiva: 0`, e um
+  // padrão fixo faria a tela cobrar horas que o PPC não pede. A matriz é a
+  // fonte; o histórico só prevalece quando declara as eletivas do aluno.
+  const chEletivasExigida = perfil?.eletivas?.chTotal ?? matriz?.cargas?.eletiva ?? 120;
+  if (chEletivasExigida > 0) {
+    categoriasMapa.eletivas = {
       nome: "Eletivas",
-      exigido: perfil?.eletivas?.chTotal ?? 120,
-      cumpridoBase: perfil?.eletivas ? Math.max(0, perfil.eletivas.chTotal - perfil.eletivas.chFaltante) : 0,
+      exigido: chEletivasExigida,
+      cumpridoBase: perfil?.eletivas
+        ? Math.max(0, perfil.eletivas.chTotal - perfil.eletivas.chFaltante)
+        : 0,
       impulsoGrade: 0,
       disciplinas: [],
-    },
-  };
+    };
+  }
 
   if (exigeExtensao(matriz)) {
     categoriasMapa.extensao = {
@@ -342,7 +351,8 @@ export function calcularResumoProgressoGrade(
       }
       categoriasMapa.estagio.impulsoGrade += acrescimo;
       categoriasMapa.estagio.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
-    } else {
+    } else if (categoriasMapa.eletivas) {
+      // sem exigência de eletivas no curso, não há bucket para creditar
       categoriasMapa.eletivas.impulsoGrade += acrescimo;
       categoriasMapa.eletivas.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
     }

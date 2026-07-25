@@ -145,6 +145,14 @@ export function contaNoBlocoOptativo(
  * de completar duas trilhas. Para planejar o saldo real, usamos a coluna E
  * (aprovada total) ou o conjunto 959, mantendo a validação de duas trilhas como
  * requisito separado. Na BSI, o próprio agregador 1160 continua sendo a fonte.
+ *
+ * A linha "Optativas" do Quadro Resumo é uma só para o curso inteiro, então ela
+ * só equivale ao bloco de trilhas quando o curso NÃO tem outras categorias
+ * optativas. Na 844 equivale (não há humanidades nem expressão gráfica); na 962
+ * as 420h declaradas somam Humanidades + Expressão Gráfica + Profissionalizantes,
+ * e usá-la aqui creditaria ao bloco de 270h horas que são de outro requisito —
+ * era o que fazia dois históricos reais aparecerem com 120h já cumpridas nas
+ * profissionalizantes, sendo que a própria fonte declara 0 no conjunto 1081.
  */
 export function cargaAprovadaBlocoOptativo(
   perfil: PerfilAluno | null | undefined,
@@ -158,7 +166,8 @@ export function cargaAprovadaBlocoOptativo(
       )
     : undefined;
 
-  if (curso.matriz === 844 || curso.matriz === 962) {
+  const resumoCobreApenasOBloco = curso.categorias.length === 0;
+  if (resumoCobreApenasOBloco) {
     const totalAprovado = perfil.resumoGeral?.optativas.aprovadaTotal;
     if (totalAprovado !== undefined) return totalAprovado;
     if (agregado) return agregado.chCursadaAprovada;
