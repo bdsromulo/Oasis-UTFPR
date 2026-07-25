@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Card, Botao, Badge } from "../componentes";
 import {
-  LogoUTFPR,
-  IconUpload,
-  IconFileText,
+  IconBookOpen,
   IconBuilding,
+  IconFileText,
+  IconFolders,
   IconGraduationCap,
   IconSearch,
+  IconShieldLock,
+  IconUpload,
   IconWarning,
-  IconBookOpen,
+  LogoUTFPR,
 } from "../icons";
 
 export interface DadosCheckin {
@@ -104,7 +106,7 @@ export function TelaCheckin(props: Props) {
           aqui, antes de escolher entre importar o histórico ou entrar sem ele. */}
       <div className="flex justify-end">
         <Botao variante="sutil" onClick={props.onAbrirGestaoInformacao} classe="!text-xs">
-          <span>🗂️</span>
+          <IconFolders className="h-4 w-4 shrink-0" />
           <span>Gestão da Informação</span>
         </Botao>
       </div>
@@ -130,7 +132,7 @@ export function TelaCheckin(props: Props) {
               Importe seu PDF emitido pelo Portal do Aluno. A plataforma identifica <strong>automaticamente seu curso e matriz</strong>, calcula as horas cumpridas, valida pré-requisitos e alerta sobre pendências.
             </p>
             <div className="rounded-xl bg-white/80 p-3 text-[11px] text-zinc-500 border border-zinc-200/60 dark:bg-zinc-900/80 dark:border-zinc-800">
-              🛡️ Processamento <strong>100% no seu navegador</strong>. Seus dados nunca saem da sua máquina.
+              {<IconShieldLock className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Processamento <strong>100% no seu navegador</strong>. Seus dados nunca saem da sua máquina.
             </div>
           </div>
 

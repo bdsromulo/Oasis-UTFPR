@@ -2,14 +2,16 @@ import { useState } from "react";
 import type { PerfilAluno } from "../../domain/tipos";
 import { Botao, Badge } from "../componentes";
 import {
-  IconX,
-  IconSun,
-  IconMoon,
+  IconFileText,
+  IconHourglass,
   IconMonitor,
+  IconMoon,
+  IconSun,
+  IconTrash,
   IconUpload,
   IconUser,
-  IconTrash,
   IconWarning,
+  IconX,
 } from "../icons";
 
 export interface Preferencias {
@@ -269,13 +271,13 @@ export function TelaConfiguracoes(props: {
 
             {processandoPreview && (
               <div className="mt-3 rounded-xl bg-zinc-100 p-3 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-                ⏳ Lendo e extraindo dados do seu novo Histórico Escolar...
+                {<IconHourglass className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Lendo e extraindo dados do seu novo Histórico Escolar...
               </div>
             )}
 
             {erroPreview && (
               <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-600 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400">
-                ⚠️ Erro ao ler PDF: {erroPreview}
+                {<IconWarning className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Erro ao ler PDF: {erroPreview}
               </div>
             )}
 
@@ -283,7 +285,7 @@ export function TelaConfiguracoes(props: {
               <div className="mt-4 rounded-2xl border-2 border-utfpr-500 bg-utfpr-500/10 p-4 space-y-3 dark:bg-utfpr-500/5 animate-in fade-in duration-200">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <Badge tom="acento">📄 Pré-visualização — Confirmação Dupla</Badge>
+                    <Badge tom="acento">{<IconFileText className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Pré-visualização — Confirmação Dupla</Badge>
                     <h4 className="font-display font-bold text-base text-zinc-900 dark:text-zinc-100 mt-2">
                       {perfilPreview.nome} — {perfilPreview.curso}
                     </h4>

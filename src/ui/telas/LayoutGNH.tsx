@@ -3,6 +3,13 @@
 // minigrade lateral — com as melhorias que o nosso motor permite (filtro de
 // pendentes do MEU curso, liberadas por pré-requisito, busca).
 import { useMemo, useState, useRef } from "react";
+import {
+  IconBarChart,
+  IconEye,
+  IconLock,
+  IconPin,
+  IconSparkles,
+} from "../icons";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -118,10 +125,10 @@ function DisciplinaGNHItem({
 
           {est.bloqueio ? (
             <span title={est.bloqueio} className="cursor-help">
-              <Badge tom="alerta">🔒 Trancada</Badge>
+              <Badge tom="alerta">{<IconLock className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Trancada</Badge>
             </span>
           ) : est.pendente && est.naMatriz ? (
-            <Badge tom="ok">✨ Liberada</Badge>
+            <Badge tom="ok">{<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Liberada</Badge>
           ) : null}
         </div>
       </div>
@@ -170,7 +177,7 @@ function DisciplinaGNHItem({
                       className="inline-flex items-center gap-1 rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-0.5 text-[11px] font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
                       title="Espiar nesta turma na grade (ideal no celular ou para teste rápido)"
                     >
-                      <span>👁️</span>
+                      <IconEye className="h-4 w-4 shrink-0" />
                       <span>Espiar</span>
                     </button>
                   )}
@@ -195,7 +202,7 @@ function DisciplinaGNHItem({
                         className="inline-flex items-center gap-1 rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-0.5 text-[11px] font-bold text-zinc-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950 transition-all cursor-pointer shadow-2xs"
                         title="Status de progresso desta matéria no currículo"
                       >
-                        <span>📊</span>
+                        <IconBarChart className="h-4 w-4 shrink-0" />
                         <span>Status</span>
                       </button>
                       {statusHoverTurma === t.codigo && (
@@ -222,7 +229,7 @@ function DisciplinaGNHItem({
                             : "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300"
                         }`}
                       >
-                        📍 {s}
+                        {<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} {s}
                       </span>
                     ))}
                   <span
@@ -399,7 +406,7 @@ export function TelaLayoutGNH(props: {
             }`}
             title={perfil ? "Preenchimento com Sugestão de Grade" : EXIGE_HISTORICO}
           >
-            <span>{perfil ? "✨" : "🔒"}</span>
+            {perfil ? <IconSparkles className="h-4 w-4 shrink-0" /> : <IconLock className="h-4 w-4 shrink-0" />}
             <span className="hidden sm:inline">Sugestão de Grade</span>
             <span className="sm:hidden">Sugestão</span>
           </button>

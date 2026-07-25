@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { IconBookOpen, IconUser } from "./icons";
+import {
+  IconBookOpen,
+  IconGraduationCap,
+  IconHandshake,
+  IconLock,
+  IconUser,
+} from "./icons";
 
 export type AbaPrincipal = "situacao" | "planejamento" | "simulador" | "match";
 
@@ -39,7 +45,7 @@ export function SidebarNavegacao({
       subrotulo: "Resumo, Catálogo e Trilhas",
       bloqueado: !temPerfil,
       motivoBloqueio: EXIGE_HISTORICO,
-      icone: !temPerfil ? <span>🔒</span> : <IconUser className="h-5 w-5 shrink-0" />,
+      icone: !temPerfil ? <IconLock className="h-4 w-4 shrink-0" /> : <IconUser className="h-5 w-5 shrink-0" />,
     },
     {
       id: "planejamento",
@@ -57,14 +63,14 @@ export function SidebarNavegacao({
       subrotulo: "Previsão & Linha do Tempo",
       bloqueado: !temPerfil,
       motivoBloqueio: EXIGE_HISTORICO,
-      icone: !temPerfil ? <span>🔒</span> : <span>🎓</span>,
+      icone: !temPerfil ? <IconLock className="h-4 w-4 shrink-0" /> : <IconGraduationCap className="h-4 w-4 shrink-0" />,
     },
     {
       id: "match",
       rotulo: "Oásis Match",
       subrotulo: "Grade com Amigos",
       bloqueado: false,
-      icone: <span>🤝</span>,
+      icone: <IconHandshake className="h-4 w-4 shrink-0" />,
       badge: "P2P",
     },
   ];

@@ -509,3 +509,200 @@ export function IconHelp(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+/* Substitutos vetoriais dos emojis que a interface usava. Mesmo traço dos
+   demais: 24x24, contorno em currentColor, sem preenchimento. */
+
+function base(props: SVGProps<SVGSVGElement>, tamanho = "w-4 h-4") {
+  return {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.85",
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    ...props,
+    className: props.className ?? tamanho,
+  };
+}
+
+export function IconStar(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3.6l2.6 5.27 5.82.85-4.21 4.1.99 5.79L12 16.88l-5.2 2.73.99-5.79-4.21-4.1 5.82-.85z" />
+    </svg>
+  );
+}
+
+export function IconTrophy(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M8 4h8v5a4 4 0 0 1-8 0z" />
+      <path d="M8 5.5H5.5a2.5 2.5 0 0 0 2.5 4" />
+      <path d="M16 5.5h2.5a2.5 2.5 0 0 1-2.5 4" />
+      <path d="M12 13v3.5M9 20h6M10.5 16.5h3l.6 3.5h-4.2z" />
+    </svg>
+  );
+}
+
+export function IconRocket(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M13.5 4.5c3.2-1.6 6 .2 6 .2s1.8 2.8.2 6c-1.3 2.6-4.4 5-6.7 6.3l-4-4C10.3 10.7 12.2 7.1 13.5 4.5z" />
+      <path d="M9 14.5L6.2 17.3M7.5 9.5l-2.8.7-1 2.6M14.5 16.5l-.7 2.8-2.6 1" />
+      <circle cx="15" cy="9" r="1.4" />
+    </svg>
+  );
+}
+
+export function IconTrendUp(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <polyline points="3.5 16.5 9 11 13 15 20.5 7.5" />
+      <polyline points="15.5 7.5 20.5 7.5 20.5 12.5" />
+    </svg>
+  );
+}
+
+export function IconClipboard(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9 4.5h6v2.5H9z" />
+      <path d="M9 5.8H6.8A1.8 1.8 0 0 0 5 7.6v10.6a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V7.6a1.8 1.8 0 0 0-1.8-1.8H15" />
+    </svg>
+  );
+}
+
+export function IconEye(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z" />
+      <circle cx="12" cy="12" r="3.1" />
+    </svg>
+  );
+}
+
+export function IconPin(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 21s7-5.4 7-10.4A7 7 0 0 0 5 10.6C5 15.6 12 21 12 21z" />
+      <circle cx="12" cy="10.5" r="2.6" />
+    </svg>
+  );
+}
+
+export function IconLock(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <rect x="4.8" y="10.5" width="14.4" height="9.2" rx="2.2" />
+      <path d="M8.2 10.5V7.8a3.8 3.8 0 0 1 7.6 0v2.7" />
+    </svg>
+  );
+}
+
+export function IconHandshake(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2.8 12.4l3.4-3.4h3.3l2.5 2.4 2.5-2.4h3.3l3.4 3.4" />
+      <path d="M12 11.4l2.6 2.6-1.4 1.4-1.2-1.2-1.2 1.2L9.4 14z" />
+      <path d="M6.2 9v6.2l3 3M17.8 9v6.2l-3 3" />
+    </svg>
+  );
+}
+
+export function IconSparkles(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3.5l1.6 4.3 4.3 1.6-4.3 1.6L12 15.3l-1.6-4.3-4.3-1.6 4.3-1.6z" />
+      <path d="M18.5 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
+    </svg>
+  );
+}
+
+export function IconFolders(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M3.5 8.2V17a1.8 1.8 0 0 0 1.8 1.8h11" />
+      <path d="M6.8 5.2h3.4l1.6 2h6.4a1.8 1.8 0 0 1 1.8 1.8v6.2a1.8 1.8 0 0 1-1.8 1.8H6.8A1.8 1.8 0 0 1 5 15.2V7a1.8 1.8 0 0 1 1.8-1.8z" />
+    </svg>
+  );
+}
+
+export function IconTarget(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="8.2" />
+      <circle cx="12" cy="12" r="4.6" />
+      <circle cx="12" cy="12" r="1.2" />
+    </svg>
+  );
+}
+
+export function IconDownload(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M3.5 15.5v3a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-3" />
+      <polyline points="7.5 11 12 15.5 16.5 11" />
+      <line x1="12" y1="3.5" x2="12" y2="15.5" />
+    </svg>
+  );
+}
+
+export function IconImage(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3.5" y="4.8" width="17" height="14.4" rx="2.2" />
+      <circle cx="8.6" cy="9.8" r="1.5" />
+      <path d="M3.9 16.6l4.4-4.2 3.3 3.1 3.2-3.1 5.1 4.9" />
+    </svg>
+  );
+}
+
+export function IconHourglass(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M7 3.8h10M7 20.2h10" />
+      <path d="M8 3.8v3.4c0 1.6 4 3.1 4 4.8 0-1.7 4-3.2 4-4.8V3.8" />
+      <path d="M8 20.2v-3.4c0-1.6 4-3.1 4-4.8 0 1.7 4 3.2 4 4.8v3.4" />
+    </svg>
+  );
+}
+
+export function IconBarChart(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <line x1="4" y1="20" x2="20" y2="20" />
+      <rect x="6" y="12" width="3.4" height="6" rx="1" />
+      <rect x="11.3" y="8" width="3.4" height="10" rx="1" />
+      <rect x="16.6" y="4.6" width="3.4" height="13.4" rx="1" />
+    </svg>
+  );
+}
+
+export function IconBan(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="12" cy="12" r="8.4" />
+      <line x1="6.1" y1="17.9" x2="17.9" y2="6.1" />
+    </svg>
+  );
+}
+
+export function IconSprout(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 20.5v-7.2" />
+      <path d="M12 13.3C12 9.9 9.3 7.2 5.9 7.2c0 3.4 2.7 6.1 6.1 6.1z" />
+      <path d="M12 13.3c0-2.9 2.3-5.2 5.2-5.2 0 2.9-2.3 5.2-5.2 5.2z" />
+    </svg>
+  );
+}
+
+export function IconLightbulb(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M9.2 17.2a6 6 0 1 1 5.6 0" />
+      <path d="M9.6 17.4h4.8M10.2 20.2h3.6" />
+    </svg>
+  );
+}

@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  IconGraduationCap,
+  IconSearch,
+} from "../icons";
 import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import {
   ALTURA_NO,
@@ -234,7 +238,7 @@ export function TelaFluxograma(props: {
       <div className="grid grid-cols-2 gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
         {(
           [
-            { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: "🎓", qtd: boardObr.nos.length },
+            { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: <IconGraduationCap className="h-4 w-4 shrink-0" />, qtd: boardObr.nos.length },
             { id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
           ]
         ).map((op) => {
@@ -284,9 +288,7 @@ export function TelaFluxograma(props: {
             placeholder="Buscar matéria por nome ou código…"
             className="w-full rounded-xl border border-zinc-200 bg-zinc-50 py-2 pl-9 pr-3 text-sm text-zinc-900 outline-none transition-colors placeholder:text-zinc-400 focus:border-utfpr-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">
-            🔍
-          </span>
+          <IconSearch className="h-4 w-4 shrink-0" />
         </div>
 
         {busca && (

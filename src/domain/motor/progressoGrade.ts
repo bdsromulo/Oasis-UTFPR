@@ -10,6 +10,9 @@ import {
   exigeExtensao,
 } from "../cursos";
 
+/** Qual símbolo a interface deve mostrar ao lado do status. */
+export type StatusIcone = null | "concluida" | "emcurso" | "excedente" | "completa" | "impulso";
+
 export interface DadosProgressoCategoria {
   categoriaId: string;
   categoriaNome: string;
@@ -18,6 +21,7 @@ export interface DadosProgressoCategoria {
   previewCarga: number;
   cumpridoSimulado: number;
   statusTexto: string;
+  statusIcone: StatusIcone;
   jaConcluidaNoHistorico: boolean;
   emCursoNoHistorico: boolean;
 }
@@ -31,6 +35,7 @@ export interface ResumoCategoriaGrade {
   cumpridoSimulado: number;
   disciplinasEnvolvidas: { codigo: string; nome: string; carga: number }[];
   statusTexto: string;
+  statusIcone: StatusIcone;
 }
 
 export function obterCargaHoraria(
@@ -152,17 +157,23 @@ export function calcularProgressoMateria(
   const cumpridoSimulado = cumpridoBase + previewCarga;
 
   let statusTexto = "";
+  let statusIcone: StatusIcone = null;
   if (jaConcluidaNoHistorico) {
-    statusTexto = "✅ Disciplina já concluída no seu histórico";
+    statusIcone = "concluida";
+    statusTexto = "Disciplina já concluída no seu histórico";
   } else if (emCursoNoHistorico) {
-    statusTexto = `⏳ Disciplina em curso no histórico (+${previewCarga}h nesta simulação)`;
+    statusIcone = "emcurso";
+    statusTexto = `Disciplina em curso no histórico (+${previewCarga}h nesta simulação)`;
   } else if (cumpridoBase >= exigido && exigido > 0) {
-    statusTexto = `⭐️ Carga da categoria já concluída (+${previewCarga}h excedentes/opcionais)`;
+    statusIcone = "excedente";
+    statusTexto = `Carga da categoria já concluída (+${previewCarga}h excedentes/opcionais)`;
   } else if (cumpridoSimulado >= exigido && exigido > 0) {
-    statusTexto = `🎉 Esta matéria completa a carga exigida para ${categoriaNome}!`;
+    statusIcone = "completa";
+    statusTexto = `Esta matéria completa a carga exigida para ${categoriaNome}!`;
   } else {
     const faltantes = Math.max(0, exigido - cumpridoSimulado);
-    statusTexto = `Impulsiona +${previewCarga}h de progresso (faltarão ${faltantes}h para concluir)`;
+    statusIcone = "impulso";
+    statusTexto = `Avança +${previewCarga}h de progresso (faltarão ${faltantes}h para concluir)`;
   }
 
   return {
@@ -173,6 +184,7 @@ export function calcularProgressoMateria(
     previewCarga,
     cumpridoSimulado,
     statusTexto,
+    statusIcone,
     jaConcluidaNoHistorico,
     emCursoNoHistorico,
   };
@@ -384,19 +396,25 @@ export function calcularResumoProgressoGrade(
 
     const cumpridoSimulado = c.cumpridoBase + c.impulsoGrade;
     let statusTexto = "";
+    let statusIcone: StatusIcone = null;
     if (ehSubTrilha && c.cumpridoBase >= c.exigido && c.impulsoGrade > 0) {
-      statusTexto = `⭐️ Trilha já concluída (${c.cumpridoBase}/${c.exigido}h) · +${c.impulsoGrade}h somam como excedente`;
+      statusIcone = "excedente";
+      statusTexto = `Trilha já concluída (${c.cumpridoBase}/${c.exigido}h) · +${c.impulsoGrade}h somam como excedente`;
     } else if (c.cumpridoBase >= c.exigido && c.exigido > 0) {
-      statusTexto = `⭐️ Estrato já cumprido no histórico (${c.cumpridoBase}/${c.exigido}h)`;
+      statusIcone = "excedente";
+      statusTexto = `Estrato já cumprido no histórico (${c.cumpridoBase}/${c.exigido}h)`;
     } else if (cumpridoSimulado >= c.exigido && c.exigido > 0) {
       if (chave === "trilhas_geral" && cumpridoSimulado > c.exigido) {
-        statusTexto = `🎉 Completa as ${c.exigido}h exigidas (+${cumpridoSimulado - c.exigido}h excedentes em trilha)!`;
+        statusIcone = "completa";
+      statusTexto = `Completa as ${c.exigido}h exigidas (+${cumpridoSimulado - c.exigido}h excedentes em trilha)!`;
       } else {
-        statusTexto = `🎉 Esta grade completa todas as horas exigidas para este estrato!`;
+        statusIcone = "completa";
+      statusTexto = `Esta grade completa todas as horas exigidas para este estrato!`;
       }
     } else if (c.impulsoGrade > 0) {
       const falta = Math.max(0, c.exigido - cumpridoSimulado);
-      statusTexto = `🚀 Grade impulsiona +${c.impulsoGrade}h (faltarão ${falta}h para concluir)`;
+      statusIcone = "impulso";
+      statusTexto = `Grade avança +${c.impulsoGrade}h (faltarão ${falta}h para concluir)`;
     } else {
       statusTexto = `Faltam ${Math.max(0, c.exigido - c.cumpridoBase)}h para a conclusão do estrato`;
     }
@@ -410,6 +428,7 @@ export function calcularResumoProgressoGrade(
       cumpridoSimulado,
       disciplinasEnvolvidas: c.disciplinas,
       statusTexto,
+      statusIcone,
     });
   }
 

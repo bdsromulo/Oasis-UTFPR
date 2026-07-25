@@ -15,8 +15,25 @@ import { faixaDoSlot } from "../../domain/horarios";
 import { categoriaDe } from "../../domain/motor/elegiveis";
 import { normNome } from "../../domain/motor/identidade";
 import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGrade } from "../../domain/motor/progressoGrade";
-import { Badge, Botao, Card, BarraProgressoComPreview, BalaoProgressoHover } from "../componentes";
-import { IconCopy, IconCheck, IconTrash, IconWarning, IconCalendar } from "../icons";
+import { Badge, BalaoProgressoHover, BarraProgressoComPreview, Botao, Card, IconeStatusProgresso } from "../componentes";
+import {
+  IconCalendar,
+  IconCheck,
+  IconCopy,
+  IconDownload,
+  IconHourglass,
+  IconImage,
+  IconInfo,
+  IconLock,
+  IconPin,
+  IconSparkles,
+  IconStar,
+  IconTarget,
+  IconTrash,
+  IconTrendUp,
+  IconUser,
+  IconWarning,
+} from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
@@ -102,7 +119,7 @@ function CardResumoCategoria({ r, isSubTrilha }: { r: ResumoCategoriaGrade; isSu
 
         {ehExcedenteConcluido && (
           <div className="mt-3 flex items-start gap-2 rounded-xl bg-amber-500/15 border border-amber-500/30 p-2.5 text-[11px] font-bold text-amber-900 dark:text-amber-200">
-            <span className="text-sm shrink-0 mt-0.5">⭐️</span>
+            <IconStar className="h-4 w-4 shrink-0" />
             <span>
               Trilha já completa ({r.cumpridoBase}/{r.exigido}h)! As <strong className="font-mono text-amber-700 dark:text-amber-300">+{r.impulsoGrade}h</strong> contam como <strong className="underline decoration-amber-500">horas excedentes</strong> no bloco optativo do curso.
             </span>
@@ -132,8 +149,9 @@ function CardResumoCategoria({ r, isSubTrilha }: { r: ResumoCategoriaGrade; isSu
         )}
       </div>
 
-      <div className="mt-3 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
-        {r.statusTexto}
+      <div className="mt-3 flex items-center gap-1.5 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
+        <IconeStatusProgresso status={r.statusIcone} />
+        <span>{r.statusTexto}</span>
       </div>
     </div>
   );
@@ -157,15 +175,13 @@ function SecaoResumoImpactoGrade(props: {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800">
           <div>
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
-                📈
-              </span>
+              <IconTrendUp className="h-4 w-4 shrink-0" />
               <h3 className="font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
                 Resumo do Impacto Curricular da Grade
               </h3>
             </div>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-              Confira quanto as matérias selecionadas impulsionam cada categoria do seu curso em relação ao progresso atual.
+              Veja quanto as matérias selecionadas somam em cada categoria do seu curso.
             </p>
           </div>
         </div>
@@ -173,9 +189,7 @@ function SecaoResumoImpactoGrade(props: {
         <div className="relative overflow-hidden rounded-2xl">
           {/* Overlay bloqueio com mensagem */}
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-white/75 p-6 text-center backdrop-blur-md dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800 shadow-lg">
-            <span className="mb-2.5 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/20 text-2xl text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 shadow-inner">
-              🔒
-            </span>
+            <IconLock className="h-4 w-4 shrink-0" />
             <h4 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100">
               Histórico do Aluno não carregado
             </h4>
@@ -238,15 +252,13 @@ function SecaoResumoImpactoGrade(props: {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
-              📈
-            </span>
+            <IconTrendUp className="h-4 w-4 shrink-0" />
             <h3 className="font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
               Resumo do Impacto Curricular da Grade
             </h3>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-            Confira quanto as matérias selecionadas impulsionam cada categoria do seu curso em relação ao progresso atual.
+            Veja quanto as matérias selecionadas somam em cada categoria do seu curso.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold">
@@ -274,9 +286,7 @@ function SecaoResumoImpactoGrade(props: {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-utfpr-500/20 text-utfpr-700 dark:bg-utfpr-500/15 dark:text-utfpr-400 font-bold text-sm">
-                        🎯
-                      </span>
+                      <IconTarget className="h-4 w-4 shrink-0" />
                       <span className="font-display text-base font-black text-zinc-900 dark:text-zinc-100 leading-snug">
                         {resumoTrilhasGeral.categoriaNome}
                       </span>
@@ -331,8 +341,9 @@ function SecaoResumoImpactoGrade(props: {
                   )}
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
-                  {resumoTrilhasGeral.statusTexto}
+                <div className="mt-3 flex items-center gap-1.5 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/60 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
+                  <IconeStatusProgresso status={resumoTrilhasGeral.statusIcone} />
+                  <span>{resumoTrilhasGeral.statusTexto}</span>
                 </div>
               </div>
             )}
@@ -342,7 +353,7 @@ function SecaoResumoImpactoGrade(props: {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs font-bold uppercase tracking-wider text-utfpr-700 dark:text-utfpr-400">
-                      📌 Progresso Individual por Trilha ({resumosSubTrilhas.length})
+                      {<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Progresso Individual por Trilha ({resumosSubTrilhas.length})
                     </span>
                   </div>
                   <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium">
@@ -620,7 +631,7 @@ export function TelaGrade(props: {
             className="flex h-8 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 font-mono text-xs font-bold shadow-2xs transition-colors hover:border-utfpr-500 hover:bg-utfpr-50 hover:text-utfpr-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
             title="Importar matérias cadastradas em outros semestres"
           >
-            <span>📥 Importar Matérias</span>
+            <span>{<IconDownload className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Importar Matérias</span>
           </button>
           <span
             className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-200 text-[11px] font-bold text-zinc-600 cursor-help dark:bg-zinc-700 dark:text-zinc-300"
@@ -654,9 +665,7 @@ export function TelaGrade(props: {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-zinc-200/80 px-6 py-5 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50">
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-utfpr-500/10 text-xl text-utfpr-600 dark:bg-utfpr-500/20 dark:text-utfpr-400">
-                  📥
-                </span>
+                <IconDownload className="h-4 w-4 shrink-0" />
                 <div>
                   <h2 className="font-display text-lg font-black tracking-tight text-zinc-900 dark:text-white">
                     Importar Matérias de Outro Semestre
@@ -682,7 +691,7 @@ export function TelaGrade(props: {
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {/* Aviso de regra de compatibilidade */}
               <div className="flex items-start gap-3 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-4 text-xs text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/40 dark:text-amber-200">
-                <span className="text-base shrink-0 mt-0.5">ℹ️</span>
+                <IconInfo className="h-4 w-4 shrink-0" />
                 <p className="leading-relaxed">
                   <strong>Regra de compatibilidade:</strong> Só serão importadas as matérias que permaneceram exatamente iguais em horário e professor na oferta de {props.semestreAtivo || "2026-2"}. Turmas que sofreram alteração na carga horária, dias/horários ou docente serão sinalizadas como incompatíveis e não serão trazidas.
                 </p>
@@ -785,7 +794,7 @@ export function TelaGrade(props: {
                               <span>Horário: <strong className="font-mono text-zinc-700 dark:text-zinc-300">{item.horariosStr}</strong></span>
                               <span>·</span>
                               <span className="truncate max-w-[180px]" title={item.professoresStr}>
-                                👤 {item.professoresStr}
+                                {<IconUser className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} {item.professoresStr}
                               </span>
                             </div>
                           </div>
@@ -796,7 +805,7 @@ export function TelaGrade(props: {
                               </span>
                             ) : item.existeNoAlvo ? (
                               <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-[11px] font-bold text-amber-700 dark:bg-amber-500/20 dark:text-amber-300" title={`Esta turma ou matéria mudou de horário/professor no semestre ${props.semestreAtivo || "2026-2"}`}>
-                                <span>⚠️ Mudou no atual</span>
+                                <span>{<IconWarning className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Mudou no atual</span>
                               </span>
                             ) : (
                               <span className="inline-flex items-center gap-1 rounded-full bg-red-500/15 px-2.5 py-1 text-[11px] font-bold text-red-700 dark:bg-red-500/20 dark:text-red-300" title="Matéria não está sendo ofertada no semestre atual">
@@ -817,7 +826,7 @@ export function TelaGrade(props: {
               {props.selecao.length > 0 && !confirmacaoSobreescreverImportacao ? (
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 p-3.5">
                   <div className="flex items-start gap-2.5">
-                    <span className="text-amber-600 dark:text-amber-400 text-lg">⚠️</span>
+                    <IconWarning className="h-4 w-4 shrink-0" />
                     <p className="text-xs font-semibold text-amber-900 dark:text-amber-200 leading-snug">
                       O seu período atual possui matérias preenchidas. Você tem certeza de que quer sobreescrevê-las com a importação?
                     </p>
@@ -870,9 +879,7 @@ export function TelaGrade(props: {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="flex max-w-md w-full flex-col rounded-3xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 text-left">
             <div className="flex items-center gap-3 text-red-600 dark:text-red-400 mb-2">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-red-500/10 text-xl">
-                🗑️
-              </span>
+              <IconTrash className="h-4 w-4 shrink-0" />
               <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white">
                 Tem certeza que deseja limpar a prévia de Matrícula?
               </h3>
@@ -919,7 +926,7 @@ export function TelaGrade(props: {
             onClick={props.onAbrirGradeMagica || (() => setModalGradeMagica(true))}
             classe="!bg-gradient-to-r !from-amber-500 !to-utfpr-500 !text-zinc-950 !border-amber-600/30 hover:!brightness-105 transition-all shadow-md font-bold cursor-pointer"
           >
-            ✨ Sugestão de Grade
+            {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Sugestão de Grade
           </Botao>
         </div>
         <Card classe="p-12 text-center">
@@ -997,14 +1004,14 @@ export function TelaGrade(props: {
             classe="hover:!border-utfpr-500/80 transition-all font-semibold cursor-pointer text-xs"
             title="Baixar imagem PNG da sua grade horária montada"
           >
-            <span>{baixandoImagem ? "⏳ Gerando PNG..." : "🖼️ Baixar Imagem (PNG)"}</span>
+            <span className="inline-flex items-center gap-1.5">{baixandoImagem ? <IconHourglass className="h-4 w-4 shrink-0" /> : <IconImage className="h-4 w-4 shrink-0" />}<span>{baixandoImagem ? "Gerando PNG..." : "Baixar Imagem (PNG)"}</span></span>
           </Botao>
           <Botao
             variante="primario"
             onClick={props.onAbrirGradeMagica || (() => setModalGradeMagica(true))}
             classe="!bg-gradient-to-r !from-amber-500 !to-utfpr-500 !text-zinc-950 !border-amber-600/30 hover:!brightness-105 transition-all shadow-md font-bold cursor-pointer"
           >
-            ✨ Sugestão de Grade
+            {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Sugestão de Grade
           </Botao>
           <Botao
             variante="primario"
@@ -1175,7 +1182,7 @@ export function TelaGrade(props: {
           <div className="rounded-2xl border border-amber-400/60 bg-amber-50/90 p-4 text-xs text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/70 dark:text-amber-200 shadow-sm space-y-1.5 animate-in fade-in">
             <div className="font-display text-sm font-bold flex items-center justify-between">
               <span className="flex items-center gap-2">
-                <span>ℹ️</span> Observação: Itens excluídos ou filtros na geração via Sugestão de Grade
+                <IconInfo className="h-4 w-4 shrink-0" /> Observação: Itens excluídos ou filtros na geração via Sugestão de Grade
               </span>
               {props.onLimparExclusoes && (
                 <button
@@ -1290,7 +1297,7 @@ export function TelaGrade(props: {
                         </span>
                       </div>
                       <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
-                        <span className="text-zinc-400">👤</span>
+                        <IconUser className="h-4 w-4 shrink-0" />
                         <span className="truncate" title={nomesProfessores}>
                           {nomesProfessores}
                         </span>

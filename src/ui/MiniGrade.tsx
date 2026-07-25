@@ -2,6 +2,12 @@
 // grade semanal compacta sempre visível com as turmas escolhidas, preview da
 // turma sob o mouse, contador de aulas e alerta de conflitos.
 import { useState, useMemo } from "react";
+import {
+  IconClipboard,
+  IconInfo,
+  IconPin,
+  IconTrash,
+} from "./icons";
 import type { DisciplinaOfertada, OfertaSemestre, Turma, Matriz, PerfilAluno } from "../domain/tipos";
 import {
   aulasSemanais,
@@ -385,7 +391,7 @@ export function MiniGrade(props: {
               (props.exclusoesSugestao.outrosFiltros && props.exclusoesSugestao.outrosFiltros.length > 0)) && (
               <div className="rounded-xl border border-amber-400/50 bg-amber-50/80 p-2 text-[11px] text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/60 dark:text-amber-200 space-y-1">
                 <div className="font-bold flex items-center justify-between">
-                  <span className="flex items-center gap-1">ℹ️ Excluídos/Filtros via Sugestão de Grade:</span>
+                  <span className="flex items-center gap-1">{<IconInfo className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Excluídos/Filtros via Sugestão de Grade:</span>
                   {props.onLimparExclusoes && (
                     <button
                       type="button"
@@ -552,7 +558,7 @@ export function MiniGrade(props: {
                                       </div>
                                       {ocup.sede && (
                                         <div className="mt-1 text-[10px] font-semibold opacity-90 flex items-center gap-0.5">
-                                          <span>📍 {ocup.sede}</span>
+                                          <span>{<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} {ocup.sede}</span>
                                         </div>
                                       )}
                                       {onRemoverTurma && (
@@ -592,7 +598,7 @@ export function MiniGrade(props: {
                 onClick={() => navigator.clipboard.writeText(relatorioTexto(itens))}
                 className="rounded-xl bg-utfpr-500 px-4 py-1.5 font-display text-xs font-bold text-zinc-950 hover:bg-utfpr-400 transition-colors"
               >
-                📋 Copiar resumo p/ matrícula
+                {<IconClipboard className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Copiar resumo p/ matrícula
               </button>
             </div>
           </div>
@@ -603,9 +609,7 @@ export function MiniGrade(props: {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="flex max-w-md w-full flex-col rounded-3xl bg-white p-6 shadow-2xl dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 text-left">
             <div className="flex items-center gap-3 text-red-600 dark:text-red-400 mb-2">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-red-500/10 text-xl">
-                🗑️
-              </span>
+              <IconTrash className="h-4 w-4 shrink-0" />
               <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white">
                 Tem certeza que deseja limpar a prévia de Matrícula?
               </h3>

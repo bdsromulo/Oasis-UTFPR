@@ -25,16 +25,18 @@ import { TelaFluxograma } from "./telas/TelaFluxograma";
 import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
 import {
-  LogoUTFPR,
-  IconUser,
-  IconCalendar,
   IconBookOpen,
-  IconWarning,
+  IconCalendar,
+  IconClipboard,
+  IconEye,
+  IconHelp,
+  IconInfo,
+  IconMoon,
   IconSettings,
   IconSun,
-  IconMoon,
-  IconInfo,
-  IconHelp,
+  IconUser,
+  IconWarning,
+  LogoUTFPR,
 } from "./icons";
 
 export interface SelecaoTurma {
@@ -538,9 +540,7 @@ export function App() {
         <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-3.5">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/25 text-2xl font-bold text-emerald-600 dark:text-emerald-300 shadow-xs">
-                📋
-              </span>
+              <IconClipboard className="h-4 w-4 shrink-0" />
               <div>
                 <div className="font-display text-sm font-black text-emerald-900 dark:text-emerald-100 uppercase tracking-wide flex items-center gap-2">
                   <span>Período de Pré-Matrícula: {semestreAtivo.replace("-", ".")}</span>
@@ -967,7 +967,7 @@ export function App() {
                 </div>
                 {preview ? (
                   <span className="truncate text-xs font-semibold text-amber-400">
-                    👁️ Espiando {preview.turma.codigo} ({preview.disciplina.codigo})
+                    {<IconEye className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Espiando {preview.turma.codigo} ({preview.disciplina.codigo})
                   </span>
                 ) : (
                   <span className="truncate text-xs text-zinc-400">

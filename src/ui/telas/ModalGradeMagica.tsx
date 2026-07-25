@@ -2,7 +2,15 @@ import { useMemo, useState } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { gerarSugestaoGrade, type OpcoesSugestaoGrade } from "../../domain/motor/grade-magica";
 import { Botao } from "../componentes";
-import { IconWarning } from "../icons";
+import {
+  IconBan,
+  IconInfo,
+  IconPin,
+  IconSettings,
+  IconSparkles,
+  IconStar,
+  IconWarning,
+} from "../icons";
 import { descricaoDoCurso, ehTrilha, exigeExtensao } from "../../domain/cursos";
 
 export interface ModalSugestaoGradeProps {
@@ -244,7 +252,7 @@ export function ModalSugestaoGrade({
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span>✨</span> Sugestão de Grade
+              <IconSparkles className="h-4 w-4 shrink-0" /> Sugestão de Grade
             </h3>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
               O motor Oásis analisa seu progresso e sugere uma grade compatível, respeitando pré-requisitos, exclusões, turnos, sedes e conflitos de horário.
@@ -263,7 +271,7 @@ export function ModalSugestaoGrade({
           <div className="space-y-4 py-3 animate-in fade-in">
             <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-zinc-800 dark:text-zinc-200">
               <p className="font-bold text-base mb-1.5 text-amber-700 dark:text-amber-300 flex items-center gap-2">
-                <span>⚠️</span> Grade com matérias preenchidas
+                <IconWarning className="h-4 w-4 shrink-0" /> Grade com matérias preenchidas
               </p>
               <p className="leading-relaxed">
                 Já existem matérias preenchidas na sua grade, você gostaria de sobreescrevê-las ou você quer mantê-las e fazer a sugestão em cima delas?
@@ -431,7 +439,7 @@ export function ModalSugestaoGrade({
                   onChange={(e) => setSedeCentro(e.target.checked)}
                   className="accent-utfpr-500 rounded"
                 />
-                <span>📍 Centro</span>
+                <span>{<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Centro</span>
               </label>
               <label
                 className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold cursor-pointer transition-colors ${
@@ -446,7 +454,7 @@ export function ModalSugestaoGrade({
                   onChange={(e) => setSedeEcoville(e.target.checked)}
                   className="accent-utfpr-500 rounded"
                 />
-                <span>📍 Ecoville</span>
+                <span>{<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Ecoville</span>
               </label>
               <label
                 className={`flex items-center justify-center gap-2 rounded-xl border p-2.5 text-xs font-bold cursor-pointer transition-colors ${
@@ -461,7 +469,7 @@ export function ModalSugestaoGrade({
                   onChange={(e) => setSedeNeoville(e.target.checked)}
                   className="accent-utfpr-500 rounded"
                 />
-                <span>📍 Neoville</span>
+                <span>{<IconPin className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Neoville</span>
               </label>
             </div>
             <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
@@ -477,13 +485,13 @@ export function ModalSugestaoGrade({
               className="flex w-full items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-50/80 p-3.5 text-left font-display text-xs font-bold uppercase tracking-wider text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/50 dark:text-zinc-300 dark:hover:bg-zinc-800 cursor-pointer"
             >
               <div className="flex items-center gap-2">
-                <span>⚙️ Definições Avançadas</span>
+                <span>{<IconSettings className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Definições Avançadas</span>
                 <span
                   title="Exclusões, Filtros e Prioridades"
                   onClick={(e) => e.stopPropagation()}
                   className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-zinc-200/80 text-[11px] font-normal text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 cursor-help"
                 >
-                  ⓘ
+                  {<IconInfo className="inline h-4 w-4 shrink-0 align-[-0.2em]" />}
                 </span>
               </div>
               <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-zinc-200/80 text-sm font-black text-zinc-700 transition-all dark:bg-zinc-700 dark:text-zinc-200">
@@ -500,7 +508,7 @@ export function ModalSugestaoGrade({
                       title="Evita que as disciplinas selecionadas sejam sugeridas na montagem automática da grade"
                       className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 cursor-help"
                     >
-                      Excluir Disciplinas {disciplinasExcluidas.length > 0 ? `(${disciplinasExcluidas.length})` : ""} <span className="text-[10px] font-normal text-zinc-400">ⓘ</span>
+                      Excluir Disciplinas {disciplinasExcluidas.length > 0 ? `(${disciplinasExcluidas.length})` : ""} <IconInfo className="h-4 w-4 shrink-0" />
                     </label>}
                     {!modoBuscaDisc && (
                       <button
@@ -595,7 +603,7 @@ export function ModalSugestaoGrade({
                       title="Evita que turmas ministradas ou co-ministradas por estes docentes sejam sugeridas na grade"
                       className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 cursor-help"
                     >
-                      Excluir Professores {professoresExcluidos.length > 0 ? `(${professoresExcluidos.length})` : ""} <span className="text-[10px] font-normal text-zinc-400">ⓘ</span>
+                      Excluir Professores {professoresExcluidos.length > 0 ? `(${professoresExcluidos.length})` : ""} <IconInfo className="h-4 w-4 shrink-0" />
                     </label>}
                     {!modoBuscaProf && (
                       <button
@@ -618,7 +626,7 @@ export function ModalSugestaoGrade({
                           key={p}
                           className="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50/80 px-2.5 py-1 text-xs font-semibold text-red-800 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200"
                         >
-                          <span>🚫 {p}</span>
+                          <span>{<IconBan className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} {p}</span>
                           <button
                             type="button"
                             onClick={() => setProfessoresExcluidos((prev) => prev.filter((prof) => prof !== p))}
@@ -686,7 +694,7 @@ export function ModalSugestaoGrade({
                       title="Evita que matérias optativas pertencentes a essa trilha específica sejam sugeridas no cálculo da grade"
                       className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-300 cursor-help"
                     >
-                      Excluir Trilhas {trilhasExcluidas.length > 0 ? `(${trilhasExcluidas.length})` : ""} <span className="text-[10px] font-normal text-zinc-400">ⓘ</span>
+                      Excluir Trilhas {trilhasExcluidas.length > 0 ? `(${trilhasExcluidas.length})` : ""} <IconInfo className="h-4 w-4 shrink-0" />
                     </label>
                     {!modoBuscaTrilha && (
                       <button
@@ -796,7 +804,7 @@ export function ModalSugestaoGrade({
                         className="accent-red-500 rounded"
                       />
                       <span className="flex items-center gap-1">
-                        Não quero Humanidades <span className="text-[10px] text-zinc-400">ⓘ</span>
+                        Não quero Humanidades <IconInfo className="h-4 w-4 shrink-0" />
                       </span>
                     </label>
 
@@ -815,7 +823,7 @@ export function ModalSugestaoGrade({
                         className="accent-red-500 rounded"
                       />
                       <span className="flex items-center gap-1">
-                        Não quero Trilhas <span className="text-[10px] text-zinc-400">ⓘ</span>
+                        Não quero Trilhas <IconInfo className="h-4 w-4 shrink-0" />
                       </span>
                     </label>
 
@@ -834,7 +842,7 @@ export function ModalSugestaoGrade({
                         className="accent-red-500 rounded"
                       />
                       <span className="flex items-center gap-1">
-                        Não quero Eletivas <span className="text-[10px] text-zinc-400">ⓘ</span>
+                        Não quero Eletivas <IconInfo className="h-4 w-4 shrink-0" />
                       </span>
                     </label>
 
@@ -853,7 +861,7 @@ export function ModalSugestaoGrade({
                         className="accent-utfpr-500 rounded"
                       />
                       <span className="flex items-center gap-1">
-                        ⭐ Priorizar Extensionistas <span className="text-[10px] text-zinc-400">ⓘ</span>
+                        {<IconStar className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Priorizar Extensionistas <IconInfo className="h-4 w-4 shrink-0" />
                       </span>
                     </label>
                   </div>

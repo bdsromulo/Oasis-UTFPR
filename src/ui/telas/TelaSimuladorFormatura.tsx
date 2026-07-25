@@ -10,7 +10,11 @@ import {
 } from "../../domain/motor/simuladorFormatura";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 import { Barra, Card } from "../componentes";
-import { IconCheck, IconWarning } from "../icons";
+import {
+  IconCheck,
+  IconGraduationCap,
+  IconWarning,
+} from "../icons";
 
 const CORES_CATEGORIA: Record<IdCategoria, { chip: string; ponto: string }> = {
   obrigatorias: {
@@ -119,9 +123,7 @@ export function TelaSimuladorFormatura(props: {
       <header className="rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-6 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-utfpr-500/20 text-2xl">
-              🎓
-            </span>
+            <IconGraduationCap className="h-4 w-4 shrink-0" />
             <div>
               <h2 className="font-display text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
                 Simulador de Formatura

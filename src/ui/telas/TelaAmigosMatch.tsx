@@ -1,4 +1,15 @@
 import { useMemo, useState } from "react";
+import {
+  IconCheckCircle,
+  IconClipboard,
+  IconDownload,
+  IconHandshake,
+  IconLightbulb,
+  IconSparkles,
+  IconSprout,
+  IconUpload,
+  IconWarning,
+} from "../icons";
 import type { Matriz, OfertaSemestre, PerfilAluno, Horario } from "../../domain/tipos";
 import type { SelecaoTurma } from "../App";
 import {
@@ -114,7 +125,7 @@ export function TelaAmigosMatch({
       {/* Cabeçalho */}
       <div>
         <h2 className="font-display text-2xl font-black text-zinc-900 dark:text-white flex items-center gap-3">
-          <span>🤝 Oásis Match — Estudar Junto com Amigos</span>
+          <span>{<IconHandshake className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Oásis Match — Estudar Junto com Amigos</span>
           <Badge tom="ok">P2P Instantâneo</Badge>
         </h2>
         <p className="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">
@@ -129,7 +140,7 @@ export function TelaAmigosMatch({
           <div>
             <div className="flex items-center justify-between gap-2">
               <h3 className="font-display text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-                <span>📤 Compartilhar Minha Grade</span>
+                <span>{<IconUpload className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Compartilhar Minha Grade</span>
               </h3>
               <Badge tom="neutro">{selecao.length} turmas selecionadas</Badge>
             </div>
@@ -162,10 +173,11 @@ export function TelaAmigosMatch({
 
           <div className="mt-5 flex items-center justify-between gap-3 pt-3 border-t border-zinc-200/80 dark:border-zinc-800/80">
             <span className="text-xs font-semibold text-zinc-500">
-              {copiado ? "✅ Copiado para a área de transferência!" : "Clique no botão ou no texto para copiar"}
+              {copiado ? "Copiado para a área de transferência!" : "Clique no botão ou no texto para copiar"}
             </span>
             <Botao onClick={handleCopiar} variante="primario" classe="!px-4 !py-2.5 !text-xs font-black shadow-md cursor-pointer">
-              {copiado ? "✅ Copiado!" : "📋 Copiar Código"}
+              {copiado ? <IconCheckCircle className="h-4 w-4 shrink-0" /> : <IconClipboard className="h-4 w-4 shrink-0" />}
+              <span>{copiado ? "Copiado!" : "Copiar Código"}</span>
             </Botao>
           </div>
         </div>
@@ -174,7 +186,7 @@ export function TelaAmigosMatch({
         <div className="flex flex-col justify-between rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-6 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
           <div>
             <h3 className="font-display text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-              <span>📥 Comparar com Código de Amigo</span>
+              <span>{<IconDownload className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Comparar com Código de Amigo</span>
             </h3>
             <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
               Cole abaixo o código compartilhado pelo seu amigo(a) para descobrir matérias em comum e compatibilidade de horários.
@@ -192,7 +204,7 @@ export function TelaAmigosMatch({
 
             {erro && (
               <p className="mt-2 rounded-xl bg-red-50 p-2.5 text-xs font-bold text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-800">
-                ⚠️ {erro}
+                {<IconWarning className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} {erro}
               </p>
             )}
           </div>
@@ -211,7 +223,7 @@ export function TelaAmigosMatch({
               </Botao>
             )}
             <Botao onClick={handleComparar} variante="primario" classe="!px-5 !py-2.5 !text-xs font-black shadow-md cursor-pointer">
-              ✨ Calcular Match
+              {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Calcular Match
             </Botao>
           </div>
         </div>
@@ -296,7 +308,7 @@ export function TelaAmigosMatch({
             )}
           </div>
 
-          {/* SEÇÃO 2: Comparativo de Jornada e Mentoria */}
+          {/* SEÇÃO 2: Comparativo de progresso e mentoria */}
           <div>
             <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white flex items-center gap-2 mb-3">
               <span>Mentoria</span>
@@ -305,7 +317,7 @@ export function TelaAmigosMatch({
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <Card classe="p-5">
                 <h4 className="font-display text-sm font-black text-zinc-900 dark:text-white flex items-center gap-2">
-                  <span>🌱 Matérias em que você pode mentorar {resultado.amigoNome}</span>
+                  <span>{<IconSprout className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Matérias em que você pode mentorar {resultado.amigoNome}</span>
                   <Badge tom="neutro">{resultado.comparativo.aPodeMentorarB.length}</Badge>
                 </h4>
                 <p className="mt-1 text-xs text-zinc-500">
@@ -328,7 +340,7 @@ export function TelaAmigosMatch({
 
               <Card classe="p-5">
                 <h4 className="font-display text-sm font-black text-zinc-900 dark:text-white flex items-center gap-2">
-                  <span>🤝 Matérias em que {resultado.amigoNome} pode te ajudar</span>
+                  <span>{<IconHandshake className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Matérias em que {resultado.amigoNome} pode te ajudar</span>
                   <Badge tom="neutro">{resultado.comparativo.bPodeMentorarA.length}</Badge>
                 </h4>
                 <p className="mt-1 text-xs text-zinc-500">
@@ -354,7 +366,7 @@ export function TelaAmigosMatch({
           {/* SEÇÃO 3: Oportunidade de Ouro (Matéria em comum na prévia com horários livres) */}
           <div>
             <h3 className="font-display text-lg font-black text-amber-600 dark:text-amber-400 flex items-center gap-2 mb-3">
-              <span>💡 Oportunidades de Ouro (Matérias em comum na Prévia)</span>
+              <span>{<IconLightbulb className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Oportunidades de Ouro (Matérias em comum na Prévia)</span>
               <Badge tom="ok">{resultado.oportunidadesDeOuro.length}</Badge>
             </h3>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-4">
@@ -393,7 +405,7 @@ export function TelaAmigosMatch({
 
                     <div className="mt-4">
                       <span className="text-xs font-black uppercase text-amber-900 dark:text-amber-300 tracking-wider">
-                        ✨ Turmas compatíveis sem conflito com a grade dos dois:
+                        {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Turmas compatíveis sem conflito com a grade dos dois:
                       </span>
 
                       {op.turmasSugeridasLivreParaAmbos.length === 0 ? (
@@ -429,7 +441,7 @@ export function TelaAmigosMatch({
                                 classe="!px-3 !py-2 !text-xs font-black shrink-0 cursor-pointer"
                                 title="Mudar sua grade para esta turma e cursar junto!"
                               >
-                                ✨ Unificar
+                                {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Unificar
                               </Botao>
                             </div>
                           ))}

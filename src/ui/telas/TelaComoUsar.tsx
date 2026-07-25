@@ -37,44 +37,44 @@ const TELAS: Tela[] = [
     nome: "Minha Situação · Painel Geral",
     exige: "historico",
     mostra:
-      "Onde você está no curso: progresso geral em rosca, carga horária cumprida e faltante por categoria (obrigatórias, estratos, trilhas, eletivas, extensão e estágio), coeficientes de rendimento e pendências do seu período.",
+      "Onde você está no curso. Traz o progresso geral em rosca, a carga cumprida e a faltante por categoria, os coeficientes de rendimento e as pendências do seu período.",
     interacoes: [
       "Abrir cada categoria para ver o que já conta e o que ainda falta",
       "Saltar direto para o Catálogo a partir de uma pendência",
     ],
     alimenta:
-      "Os quadros-resumo do seu Histórico Escolar cruzados com as exigências da sua matriz curricular.",
+      "Os quadros-resumo do seu histórico, cruzados com as exigências da sua matriz.",
   },
   {
     nome: "Minha Situação · Catálogo",
     exige: "historico",
     mostra:
-      "A lista completa das disciplinas da sua matriz, período a período, marcando o que você já cumpriu, o que está cursando e o que continua pendente.",
+      "A lista completa das disciplinas da sua matriz, período a período. Marca o que você cumpriu, o que está cursando e o que continua pendente.",
     interacoes: [
       "Filtrar por categoria curricular e por período",
       "Buscar disciplina por nome ou código",
       "Expandir uma disciplina para ver carga, pré-requisitos e equivalências",
     ],
     alimenta:
-      "A matriz curricular oficial do curso, sobreposta ao que o seu histórico registra como aprovado, matriculado ou pendente.",
+      "A matriz oficial do curso somada ao que o seu histórico registra como aprovado, matriculado ou pendente.",
   },
   {
     nome: "Minha Situação · Árvore & Trilhas",
     exige: "historico",
     mostra:
-      "O fluxograma de progressão do curso: cada disciplina como um nó, ligada às que ela destrava, e o mapa das trilhas optativas com o quanto de cada uma você já validou.",
+      "O fluxograma do curso. Cada disciplina vira um nó ligado às que ela destrava. Mostra também quanto de cada trilha optativa você já validou.",
     interacoes: [
       "Navegar e dar zoom no board de progressão",
       "Clicar num nó para ver pré-requisitos e o que ele libera à frente",
       "Comparar trilhas para decidir qual fechar primeiro",
     ],
     alimenta:
-      "A cadeia de pré-requisitos da matriz, o agrupamento por conjunto/trilha e o seu histórico para colorir o que já foi cumprido.",
+      "A cadeia de pré-requisitos da matriz, o agrupamento por trilha e o seu histórico, que colore o que já foi cumprido.",
   },
   {
     nome: "Planejamento · Matérias Abertas",
     mostra:
-      "Tudo o que está efetivamente aberto no semestre escolhido, com turmas, horários, salas, sedes, vagas, reserva, prioridade de curso e professor. Sem histórico, funciona em Modo Livre e mostra a oferta inteira.",
+      "Tudo o que está aberto no semestre escolhido, com turmas, horários, salas, sedes, vagas, reserva, prioridade de curso e professor. Sem histórico, o Modo Livre mostra a oferta inteira.",
     interacoes: [
       "Adicionar e remover turmas da grade em construção",
       "Espiar uma turma no preview antes de decidir",
@@ -84,12 +84,12 @@ const TELAS: Tela[] = [
       "Abrir a Grade Mágica para montar combinações automaticamente",
     ],
     alimenta:
-      "A relação de Turmas Abertas do semestre. Com histórico, o motor de elegibilidade ainda cruza cada disciplina com os seus pré-requisitos já cumpridos.",
+      "A relação de Turmas Abertas do semestre. Com histórico, o motor também confere os seus pré-requisitos cumpridos.",
   },
   {
     nome: "Planejamento · Minha Grade",
     mostra:
-      "A grade da semana montada com as turmas escolhidas, os choques de horário e os conflitos de deslocamento entre sedes no mesmo turno.",
+      "A grade da semana com as turmas que você escolheu. Aponta choques de horário e deslocamentos impossíveis entre sedes no mesmo turno.",
     interacoes: [
       "Manter grades alternativas em paralelo (A, B e C) e alternar entre elas",
       "Copiar a lista de códigos no formato de digitação do Portal",
@@ -97,35 +97,35 @@ const TELAS: Tela[] = [
       "Ver, a cada turma adicionada, o impulso que ela dá em cada categoria",
     ],
     alimenta:
-      "As turmas que você selecionou, os horários da oferta e — quando há histórico — as regras de integralização da sua matriz.",
+      "As turmas que você marcou, os horários da oferta e, com histórico, as regras de integralização da sua matriz.",
   },
   {
     nome: "Simulador de Formatura",
     exige: "historico",
     mostra:
-      "Uma projeção de quando você se forma: quantos semestres faltam segundo o ritmo escolhido e o que precisa ser cumprido em cada categoria até lá.",
+      "A projeção de quando você se forma. Diz quantos semestres faltam no ritmo escolhido e o que falta cumprir em cada categoria.",
     interacoes: [
       "Ajustar o ritmo (disciplinas por semestre) e o semestre de partida",
       "Ver a linha do tempo até a formatura e os requisitos ainda em aberto",
     ],
     alimenta:
-      "O que o seu histórico já cumpriu, as exigências da matriz e a sazonalidade real das ofertas — quais disciplinas costumam abrir em cada semestre.",
+      "O que o seu histórico já cumpriu, as exigências da matriz e quais disciplinas costumam abrir em cada semestre.",
   },
   {
     nome: "Oásis Match",
     mostra:
-      "A comparação da sua grade com a de colegas: aulas em comum, horários livres coincidentes e as disciplinas que vocês poderiam cursar juntos.",
+      "A comparação da sua grade com a de colegas. Mostra aulas em comum, horários livres iguais e disciplinas que vocês podem cursar juntos.",
     interacoes: [
       "Gerar o seu código de compartilhamento (Oásis Code)",
       "Colar o código de um amigo para comparar as grades",
     ],
     alimenta:
-      "Um código gerado no seu navegador e trocado diretamente entre vocês. Não há servidor no meio: nada é publicado, nada fica hospedado.",
+      "Um código gerado no seu navegador e trocado direto entre vocês. Não existe servidor no meio. Nada é publicado, nada fica hospedado.",
   },
   {
     nome: "Configurações",
     mostra:
-      "O controle da sessão local: tema, layout, importação e troca de histórico, filtros de conflito e limpeza dos dados.",
+      "O controle da sessão local. Reúne tema, layout, importação e troca de histórico, filtros de conflito e limpeza dos dados.",
     interacoes: [
       "Importar ou atualizar o PDF do Histórico Escolar",
       "Alternar tema (claro, escuro ou seguir o sistema) e layout",
@@ -133,7 +133,7 @@ const TELAS: Tela[] = [
       "Trocar de usuário ou apagar todos os dados salvos",
     ],
     alimenta:
-      "Preferências guardadas no armazenamento local do próprio navegador.",
+      "As preferências guardadas no armazenamento local do navegador.",
   },
 ];
 
@@ -148,31 +148,31 @@ const FONTES: Fonte[] = [
     titulo: "O seu Histórico Escolar",
     etiqueta: "Local",
     texto:
-      "É o que personaliza a plataforma inteira. Lido no seu navegador, nunca enviado a lugar nenhum — nem para o Oásis, que não tem servidor para recebê-lo.",
+      "Personaliza a plataforma inteira. O seu navegador lê o arquivo e não envia para lugar nenhum. Nem para o Oásis, que não tem servidor para receber.",
   },
   {
     titulo: "Coleta coletiva de vivências",
     etiqueta: "Comunidade",
     texto:
-      "O que os estudantes relatam da prática, e que o documento oficial não reflete: pré-requisito que na realidade não trava a matrícula, equivalência aceita no balcão, eletiva que vale para o curso. Cada caso observado vira uma correção registrada sobre o dado oficial.",
+      "O que os estudantes relatam da prática e o documento oficial não mostra. Pré-requisito que não trava a matrícula, equivalência aceita no balcão, eletiva que vale para o curso. Cada caso observado vira uma correção sobre o dado oficial.",
   },
   {
     titulo: "Projetos Pedagógicos de Curso (PPCs)",
     etiqueta: "Oficial",
     texto:
-      "Definem as regras de integralização de cada curso: quantas trilhas fechar, quanto de optativa, de eletiva, de extensão e de estágio é exigido para formar.",
+      "Definem as regras de integralização de cada curso. Quantas trilhas fechar e quanto de optativa, eletiva, extensão e estágio o curso exige para formar.",
   },
   {
     titulo: "Matrizes curriculares",
     etiqueta: "Oficial",
     texto:
-      "A lista canônica de disciplinas, com carga horária, período, conjunto, pré-requisitos e equivalências. É a régua contra a qual o seu histórico é comparado.",
+      "A lista oficial de disciplinas, com carga, período, conjunto, pré-requisitos e equivalências. É a régua que compara o seu histórico.",
   },
   {
     titulo: "Relação de Turmas Abertas",
     etiqueta: "Oficial",
     texto:
-      "O PDF de Turmas Abertas do Portal do Aluno, importado a cada semestre. É de onde saem turmas, horários, salas, sedes, vagas, reservas e prioridade de curso.",
+      "O PDF de Turmas Abertas do Portal, importado a cada semestre. Dele saem turmas, horários, salas, sedes, vagas, reservas e prioridade de curso.",
   },
 ];
 
@@ -233,7 +233,7 @@ export function TelaComoUsar() {
           Como usar o site
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-          O que cada página mostra, o que dá para fazer nelas e de onde vem cada
+          O que cada página mostra, o que dá para fazer nela e de onde vem cada
           informação que você lê aqui dentro.
         </p>
       </header>
@@ -242,7 +242,7 @@ export function TelaComoUsar() {
       <Secao
         numero="01"
         titulo="Por onde começar"
-        descricao="Há dois jeitos de entrar, e eles mudam o que a plataforma consegue responder."
+        descricao="Existem dois jeitos de entrar, e eles mudam o que a plataforma responde."
       >
         <div className="grid gap-3.5 sm:grid-cols-2">
           <Card>
@@ -253,9 +253,9 @@ export function TelaComoUsar() {
               </h4>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              Você envia o PDF do Histórico Escolar do Portal do Aluno. A plataforma passa
-              a saber o que você já cumpriu e libera tudo: situação, catálogo, trilhas,
-              elegibilidade real e simulador de formatura.
+              Você envia o PDF do histórico do Portal. A plataforma passa a saber o que
+              você cumpriu e libera tudo: situação, catálogo, trilhas, elegibilidade real
+              e simulador de formatura.
             </p>
           </Card>
           <Card>
@@ -266,9 +266,9 @@ export function TelaComoUsar() {
               </h4>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              Entra direto, sem enviar nada. Você vê a oferta completa do semestre e monta
-              grade normalmente — só não há como dizer o que <em>você</em> já cumpriu ou
-              pode cursar, porque a plataforma não conhece o seu percurso.
+              Você entra direto, sem enviar nada, vê a oferta completa do semestre e monta
+              grade normalmente. A plataforma só não sabe o que <em>você</em> cumpriu ou
+              pode cursar, porque não conhece o seu percurso.
             </p>
           </Card>
         </div>
@@ -278,42 +278,39 @@ export function TelaComoUsar() {
       <Secao
         numero="02"
         titulo="Como o seu histórico é lido"
-        descricao="O PDF não é enviado: ele é interpretado dentro do seu navegador, por um parser."
+        descricao="O seu navegador interpreta o PDF por um parser. O arquivo não é enviado."
       >
         <Card>
           <figure className="mb-5">
             <IlustracaoFluxoHistorico />
             <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
-              O arquivo entra pela página e não volta a sair dela.
+              O arquivo entra pela página e não sai dela.
             </figcaption>
           </figure>
           <ol className="space-y-4">
             <Passo n={1} titulo="Você escolhe o PDF">
-              O arquivo é aberto localmente pela página. Nenhum upload acontece — não
-              existe servidor nem banco de dados para onde ele pudesse ir.
+              A página abre o arquivo na sua máquina. Nenhum upload acontece, porque não
+              existe servidor nem banco de dados para receber.
             </Passo>
             <Passo n={2} titulo="O parser extrai as linhas">
-              Um leitor de PDF roda no próprio navegador e reconstrói o texto do documento
-              linha a linha, incluindo as tabelas, que no PDF são só palavras posicionadas
-              na página.
+              Um leitor de PDF roda no navegador e reconstrói o texto linha a linha,
+              inclusive as tabelas. No PDF elas são apenas palavras posicionadas na página.
             </Passo>
             <Passo n={3} titulo="Cada linha vira dado estruturado">
-              Disciplinas cursadas (com código, nome, carga, nota, frequência e situação —
-              aprovado, equivalência, aproveitamento, matriculado ou dependência), as
-              pendências por período e os quadros-resumo de obrigatórias, optativas,
-              eletivas, extensão e estágio.
+              Saem daí as disciplinas cursadas, com código, nome, carga, nota, frequência
+              e situação. Saem também as pendências por período e os quadros-resumo de
+              obrigatórias, optativas, eletivas, extensão e estágio.
             </Passo>
             <Passo n={4} titulo="O motor cruza com a sua matriz">
-              O que foi extraído é comparado com a matriz curricular e as regras do PPC do
-              seu curso. É desse cruzamento que sai tudo o que as telas mostram.
+              O motor compara o que foi extraído com a matriz curricular e as regras do
+              PPC do seu curso. Desse cruzamento sai tudo o que as telas mostram.
             </Passo>
           </ol>
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5">
             <IconShieldLock className="mt-0.5 h-4.5 w-4.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
             <p className="text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-              Se a leitura encontrar algo que não sabe explicar, a plataforma avisa em vez
-              de adivinhar: aparece um aviso no topo dizendo o que ficou em aberto na
-              interpretação do documento.
+              Quando a leitura encontra algo que não sabe explicar, a plataforma avisa em
+              vez de adivinhar. Um aviso no topo diz o que ficou em aberto.
             </p>
           </div>
         </Card>
@@ -323,7 +320,7 @@ export function TelaComoUsar() {
       <Secao
         numero="03"
         titulo="O que há em cada página"
-        descricao="Para cada tela: o que ela mostra, o que dá para fazer e o que a alimenta."
+        descricao="O que cada tela mostra, o que dá para fazer nela e o que a alimenta."
       >
         <div className="space-y-3.5">
           {TELAS.map((t) => (
@@ -373,15 +370,15 @@ export function TelaComoUsar() {
       <Secao
         numero="04"
         titulo="De onde vêm os dados"
-        descricao="Cinco fontes alimentam a plataforma — e só a primeira é sua e privada."
+        descricao="Cinco fontes alimentam a plataforma. Só a primeira é sua e privada."
       >
         <div className="space-y-3">
           <Card>
             <figure>
               <IlustracaoFontes />
               <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
-                As quatro fontes públicas vivem no repositório; o seu histórico entra por
-                fora e fica na sua máquina.
+                As quatro fontes públicas ficam no repositório. O seu histórico entra por
+                fora e permanece na sua máquina.
               </figcaption>
             </figure>
           </Card>
@@ -414,13 +411,13 @@ export function TelaComoUsar() {
       <Secao
         numero="05"
         titulo="Semestres: atual, futuro e passado"
-        descricao="Nem todo semestre tem a mesma origem — e a plataforma sinaliza isso."
+        descricao="Os semestres têm origens diferentes, e a plataforma sinaliza isso."
       >
         <Card classe="mb-3.5">
           <figure>
             <IlustracaoSemestres />
             <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
-              Só o semestre em pré-matrícula ainda está sujeito a mudança.
+              Só o semestre em pré-matrícula ainda muda.
             </figcaption>
           </figure>
         </Card>
@@ -428,25 +425,25 @@ export function TelaComoUsar() {
           <Card>
             <Badge tom="ok">Pré-Matrícula</Badge>
             <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              O semestre que ainda vai começar. A oferta é oficial, vinda do PDF de Turmas
-              Abertas, mas provisória: vagas, horários e turmas ainda podem mudar até a
-              matrícula. Aparece um aviso no topo quando esse é o semestre ativo.
+              O semestre que ainda vai começar. A oferta é oficial e vem do PDF de Turmas
+              Abertas, mas segue provisória. Vagas, horários e turmas podem mudar até a
+              matrícula. Um aviso no topo marca esse estado.
             </p>
           </Card>
           <Card>
             <Badge tom="neutro">Semestre corrente</Badge>
             <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              Oferta oficial já consolidada, também importada do Portal do Aluno e
-              validada linha a linha contra o PDF de origem.
+              Oferta oficial já consolidada. Também vem do Portal e passa por validação
+              linha a linha contra o PDF de origem.
             </p>
           </Card>
           <Card>
             <Badge tom="neutro">Semestres anteriores</Badge>
             <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              Os semestres passados são alimentados a partir dos dados do{" "}
+              Os semestres passados vêm do{" "}
               <strong className="text-zinc-800 dark:text-zinc-200">Grade na Hora</strong>,
-              não do Portal — que não mantém a oferta antiga disponível. Servem de
-              referência histórica e de base para estimar o que costuma abrir.
+              e não do Portal, que não guarda a oferta antiga. Eles servem de referência
+              e ajudam a estimar o que costuma abrir.
             </p>
           </Card>
         </div>
@@ -456,7 +453,7 @@ export function TelaComoUsar() {
       <Secao
         numero="06"
         titulo="Princípios da plataforma"
-        descricao="As regras que o projeto se impôs, e que explicam várias decisões de tela."
+        descricao="As regras que o projeto segue e que explicam várias decisões de tela."
       >
         <div className="grid gap-3.5 sm:grid-cols-2">
           {[
@@ -464,25 +461,25 @@ export function TelaComoUsar() {
               icone: <IconShieldLock className="h-4.5 w-4.5" />,
               titulo: "Local-first",
               texto:
-                "O seu histórico é processado no navegador e fica na sua máquina. Não há servidor, banco de dados nem conta de usuário.",
+                "O navegador processa o seu histórico e ele fica na sua máquina. Não existe servidor, banco de dados nem conta de usuário.",
             },
             {
               icone: <IconFileText className="h-4.5 w-4.5" />,
               titulo: "Erro alto, nunca silencioso",
               texto:
-                "Toda importação de dados passa por uma validação que recusa o arquivo se alguma linha não puder ser explicada. É preferível falhar visivelmente a exibir um dado errado com ar de certo.",
+                "Toda importação passa por uma validação que recusa o arquivo se alguma linha não for explicada. Falhar à vista é melhor do que mostrar dado errado com ar de certo.",
             },
             {
               icone: <IconCalendar className="h-4.5 w-4.5" />,
               titulo: "Leitura fiel à fonte",
               texto:
-                "Quando o documento oficial contradiz a expectativa, a plataforma preserva o que o documento diz e sinaliza a anomalia, em vez de 'corrigir' o dado por conta própria.",
+                "Quando o documento oficial contraria a expectativa, a plataforma mantém o que ele diz e sinaliza a anomalia. Ela não corrige o dado por conta própria.",
             },
             {
               icone: <IconUser className="h-4.5 w-4.5" />,
               titulo: "A prática também é dado",
               texto:
-                "O que a burocracia registra nem sempre é o que acontece na matrícula. As vivências relatadas pelos estudantes entram como uma camada de correção sobre o dado oficial.",
+                "O que a burocracia registra nem sempre acontece na matrícula. As vivências dos estudantes entram como camada de correção sobre o dado oficial.",
             },
           ].map((p) => (
             <Card key={p.titulo}>
@@ -503,9 +500,9 @@ export function TelaComoUsar() {
       <div className="flex items-start gap-3 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-4 dark:border-amber-800/80 dark:bg-amber-950/50">
         <IconBookOpen className="mt-0.5 h-4.5 w-4.5 shrink-0 text-amber-600 dark:text-amber-400" />
         <p className="text-xs leading-relaxed text-amber-900 dark:text-amber-200">
-          O Oásis é uma ferramenta de apoio ao planejamento, não um sistema oficial da
-          UTFPR. Antes de efetivar a matrícula, confirme sempre a oferta e a sua situação
-          no Portal do Aluno.
+          O Oásis apoia o seu planejamento, mas não é um sistema oficial da UTFPR.
+          Confirme sempre a oferta e a sua situação no Portal antes de efetivar a
+          matrícula.
         </p>
       </div>
     </div>

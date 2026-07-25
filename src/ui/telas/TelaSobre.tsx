@@ -53,21 +53,21 @@ const ROADMAP: Marco[] = [
     data: "16 jul 2026",
     titulo: "Criação e primeiro protótipo",
     descricao:
-      "Primeiro commit do projeto: camada de dados da matriz 981 (BSI), pipeline de importação com validação e o protótipo em camadas — parser de histórico no navegador, motor de regras e app React.",
+      "Primeiro commit do projeto. Entram a camada de dados da matriz 981 (BSI), o pipeline de importação com validação e o protótipo em camadas: parser de histórico no navegador, motor de regras e app React.",
     estado: "concluido",
   },
   {
     data: "22 jul 2026",
-    titulo: "Protótipo de Eng. Computação — matriz antiga (844)",
+    titulo: "Protótipo de Eng. Computação na matriz antiga (844)",
     descricao:
-      "Conclusão do protótipo da matriz 844: leitura do histórico de Eng. Comp., trilhas optativas, categorias parametrizadas por curso e integração da oferta com a progressão.",
+      "O protótipo da matriz 844 fica pronto. Leitura do histórico de Eng. Comp., trilhas optativas, categorias por curso e integração da oferta com a progressão.",
     estado: "concluido",
   },
   {
     data: "24 jul 2026",
     titulo: "Oásis da grade nova de Eng. Comp. (962) e turmas de 2026/2",
     descricao:
-      "Finalização do Oásis da matriz 962 e importação das Turmas Abertas de 2026/2 direto do Portal do Aluno para todos os cursos da plataforma, no estado de Pré-Matrícula.",
+      "O Oásis da matriz 962 fica pronto. As Turmas Abertas de 2026/2 entram direto do Portal para todos os cursos, no estado de Pré-Matrícula.",
     estado: "concluido",
   },
   {
@@ -81,7 +81,7 @@ const ROADMAP: Marco[] = [
     data: "Em aberto",
     titulo: "Oásis de mais cursos da UTFPR e Sistema de Comunidade",
     descricao:
-      "Levar a plataforma aos demais cursos do câmpus e abrir um sistema de comunidade, para que o planejamento deixe de ser um exercício solitário.",
+      "Levar a plataforma aos demais cursos do câmpus e abrir um sistema de comunidade, para que planejar o curso deixe de ser tarefa solitária.",
     estado: "aberto",
   },
 ];
@@ -139,9 +139,8 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
           <span className="text-utfpr-600 dark:text-utfpr-500">Oásis</span> UTFPR
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Uma plataforma para o estudante da UTFPR entender onde está no curso, o que
-          pode cursar e como montar o próximo semestre — sem depender de planilha,
-          print de grade ou conversa de corredor.
+          O Oásis mostra onde você está no curso, o que pode cursar e como montar o
+          próximo semestre. Sem planilha, sem print de grade, sem conversa de corredor.
         </p>
       </header>
 
@@ -149,25 +148,23 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="01"
         titulo="A proposta do site"
-        descricao="Por que o Oásis existe e o problema que ele resolve."
+        descricao="O problema que o Oásis resolve."
       >
         <Card>
           <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-            A ideia do site é, de forma bem resumida, ser um{" "}
+            O Oásis é um{" "}
             <strong className="font-bold text-zinc-900 dark:text-white">
               Grade na Hora 2
             </strong>
-            : integrar o <strong>histórico escolar do aluno</strong> com a{" "}
-            <strong>vivência prática do dia a dia dele</strong>, para que consiga se
-            planejar e se organizar para fazer o curso na UTFPR — que, como sabemos, não é
-            amigável na hora de apresentar as informações sobre os próprios alunos.
+            . Ele junta o <strong>seu histórico escolar</strong> com a{" "}
+            <strong>vivência do dia a dia</strong> para você planejar o seu curso na
+            UTFPR. A universidade não facilita o acesso a essas informações.
           </p>
           <p className="mt-3.5 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-            Na prática, isso significa ler o seu histórico do Portal do Aluno e cruzá-lo
-            com a matriz curricular e as turmas realmente abertas no semestre, respondendo
-            as perguntas que o sistema oficial deixa em aberto: o que já cumpri, o que
-            posso cursar agora, o que ainda falta e como isso cabe numa grade sem
-            conflito de horário.
+            A plataforma lê o seu histórico do Portal e cruza com a matriz curricular e
+            as turmas abertas no semestre. Daí saem as respostas que o sistema oficial não
+            dá: o que você já cumpriu, o que pode cursar agora, o que ainda falta e como
+            tudo isso cabe numa grade sem choque de horário.
           </p>
         </Card>
       </Secao>
@@ -176,7 +173,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="02"
         titulo="Política de dados locais"
-        descricao="O seu histórico escolar não sai do seu computador."
+        descricao="O seu histórico não sai do seu computador."
       >
         <Card>
           <div className="flex items-start gap-4">
@@ -186,32 +183,32 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
             <div className="space-y-3 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
               <p>
                 O Oásis é um site <strong>estático, sem servidor e sem banco de dados</strong>.
-                O PDF do seu histórico é lido e interpretado{" "}
+                O seu navegador lê e interpreta o PDF{" "}
                 <strong className="text-emerald-700 dark:text-emerald-400">
-                  inteiramente dentro do seu navegador
+                  por conta própria
                 </strong>
-                : o arquivo nunca é enviado para lugar nenhum, porque não existe para onde
+                . O arquivo nunca é enviado para lugar nenhum, porque não existe para onde
                 enviar.
               </p>
               <ul className="space-y-2">
                 {[
-                  ["Nada é transmitido", "nenhum upload, nenhuma API, nenhum rastreamento do seu histórico."],
-                  ["Fica só na sua máquina", "o que você monta é guardado no armazenamento local do próprio navegador (localStorage)."],
-                  ["Você apaga quando quiser", "em Configurações há a opção de limpar todos os dados salvos e voltar a plataforma ao estado original."],
-                  ["Nada pessoal no repositório", "o código é público, e nenhum histórico de aluno entra nele — só dados públicos de matriz e de turmas."],
+                  ["Nada é transmitido", "nenhum upload, nenhuma API, nenhum rastreamento."],
+                  ["Fica na sua máquina", "o navegador guarda a sua grade no armazenamento local."],
+                  ["Você apaga quando quiser", "as Configurações limpam todos os dados salvos de uma vez."],
+                  ["Nada pessoal no repositório", "o código é público e guarda apenas matrizes e turmas."],
                 ].map(([titulo, texto]) => (
                   <li key={titulo} className="flex gap-2.5">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                     <span>
                       <strong className="font-bold text-zinc-900 dark:text-white">{titulo}</strong>{" "}
-                      — {texto}
+                      . {texto}
                     </span>
                   </li>
                 ))}
               </ul>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Consequência prática: como nada é sincronizado, limpar os dados do navegador
-                ou trocar de dispositivo também apaga a sua grade montada.
+                Nada é sincronizado. Limpar os dados do navegador ou trocar de aparelho
+                também apaga a grade que você montou.
               </p>
             </div>
           </div>
@@ -222,20 +219,20 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="03"
         titulo="Projeto de código aberto"
-        descricao="Tudo o que a plataforma faz pode ser auditado linha a linha."
+        descricao="Você pode conferir o código linha a linha."
       >
         <Card>
           <div className="space-y-3.5 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
             <p>
-              O Oásis é <strong>open source</strong>: o código-fonte, os dados públicos de
-              matriz e de turmas e as ferramentas de importação estão todos no repositório
-              público. Qualquer pessoa pode verificar como o histórico é interpretado, de
-              onde vem cada informação e conferir que ela realmente não sai do navegador.
+              O Oásis é <strong>open source</strong>. O código, os dados de matriz e de
+              turmas e as ferramentas de importação estão num repositório público. Qualquer
+              pessoa pode ver como o histórico é lido, de onde vem cada informação e
+              confirmar que ela não sai do navegador.
             </p>
             <p>
-              Isso é uma escolha de projeto, não um detalhe: uma plataforma que pede o seu
-              histórico escolar precisa poder ser conferida por quem a usa. Contribuições,
-              correções de dados e relatos de erro são bem-vindos pelo repositório.
+              Essa foi uma escolha de projeto. Quem pede o seu histórico escolar precisa
+              aceitar ser conferido. Contribuições, correções e relatos de erro são
+              bem-vindos pelo repositório.
             </p>
             <div className="pt-1">
               <LinkSocial href={REPO_URL} rotulo="Repositório do Oásis UTFPR no GitHub">
@@ -251,7 +248,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="04"
         titulo="Gestão da Informação do projeto"
-        descricao="A documentação de como a informação é tratada, do dado bruto à tela."
+        descricao="Como a informação é tratada, do dado bruto até a tela."
       >
         <Card>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -260,10 +257,10 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
                 <IconBookOpen className="h-5.5 w-5.5" />
               </span>
               <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-                O Oásis também é um exercício de <strong>Gestão da Informação</strong>: há
-                uma página dedicada ao planejamento estratégico do projeto, ao ciclo de vida
-                da informação e às dimensões de qualidade que os dados precisam atender
-                antes de virar uma recomendação na tela.
+                O Oásis também é um exercício de <strong>Gestão da Informação</strong>. Uma
+                página à parte reúne o planejamento do projeto, o ciclo de vida da
+                informação e os critérios de qualidade que os dados cumprem antes de virar
+                recomendação na tela.
               </p>
             </div>
             <div className="shrink-0">
@@ -280,7 +277,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="05"
         titulo="Créditos"
-        descricao="Quem construiu e quem tornou possível calibrar a plataforma."
+        descricao="Quem construiu e quem ajudou a calibrar a plataforma."
       >
         <div className="space-y-4">
           {/* Criador */}
@@ -336,10 +333,10 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
             </div>
             <p className="mb-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               Cada histórico cedido revelou um caso que a plataforma ainda não sabia
-              tratar — equivalências, trilhas, matrizes diferentes. Sem essas pessoas o
-              Oásis funcionaria para um aluno só. Quem está marcado como{" "}
-              <strong className="text-zinc-800 dark:text-zinc-200">revisão</strong>{" "}
-              também acompanhou o resultado e apontou o que estava errado.
+              tratar. Equivalências, trilhas, matrizes diferentes. Sem essas pessoas o
+              Oásis serviria a um aluno só. Quem aparece como{" "}
+              <strong className="text-zinc-800 dark:text-zinc-200">revisor</strong>{" "}
+              também conferiu o resultado e apontou os erros.
             </p>
             <ul className="grid gap-2.5 sm:grid-cols-2">
               {APOIADORES.map((p) => (
@@ -376,9 +373,8 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               </strong>
               , repositório de apoio de Engenharia Eletrônica mantido por{" "}
               <strong className="text-zinc-800 dark:text-zinc-200">Kcaiooooo</strong>,
-              serviu de inspiração e de embasamento didático para o desenvolvimento do
-              Oásis de Eletrônica — tanto na forma de organizar o material de apoio quanto
-              na leitura das exigências próprias do curso.
+              inspirou o Oásis de Eletrônica. Ele serviu de base tanto para organizar o
+              material de apoio quanto para entender as exigências do curso.
             </p>
             <div className="mt-3">
               <LinkSocial
@@ -391,8 +387,8 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
             </div>
             <p className="mt-3 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               O <strong className="text-zinc-800 dark:text-zinc-200">Grade na Hora</strong>{" "}
-              é a referência declarada de origem do projeto: o Oásis nasce da vontade de
-              continuar a ideia dele, agora ancorada no histórico de cada aluno.
+              é a origem declarada do projeto. O Oásis continua a ideia dele, agora
+              ancorada no histórico de cada aluno.
             </p>
           </Card>
         </div>
@@ -402,7 +398,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       <Secao
         numero="06"
         titulo="Roadmap"
-        descricao="De onde o projeto veio e para onde ele está indo."
+        descricao="De onde o projeto veio e para onde vai."
       >
         <Card>
           <ol className="relative space-y-6 pl-7">
@@ -454,7 +450,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
       </Secao>
 
       <p className="pb-2 text-center text-xs text-zinc-400 dark:text-zinc-500">
-        Oásis UTFPR — projeto independente, sem vínculo institucional com a UTFPR.
+        Oásis UTFPR. Projeto independente, sem vínculo institucional com a UTFPR.
       </p>
     </div>
   );
