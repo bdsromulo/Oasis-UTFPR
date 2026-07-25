@@ -205,8 +205,20 @@ export interface SemestreProjetado {
   semestre: string;
   disciplinas: DisciplinaPlanejada[];
   horas: number;
-  /** disciplinas que de fato ocupam vaga na grade */
+  /**
+   * Matérias que o semestre pede — é o número que a tela mostra, e ele tem de
+   * bater com a lista logo abaixo dele.
+   *
+   * Conta estágio, TCC e atividades complementares, que são disciplinas da
+   * matriz ainda que não ocupem vaga de aula. Só a atividade extensionista fica
+   * de fora: ela não é matéria, é carga a cumprir em projeto que o aluno escolhe.
+   */
   materias: number;
+  /**
+   * Quantas dessas matérias disputam vaga de aula — este é o número limitado
+   * pelo ritmo escolhido na tela, e por isso pode ser menor que `materias`.
+   */
+  vagasOcupadas: number;
   /** semestre cuja oferta real serviu de espelho para montar este */
   semestreReferencia: string | null;
   /** true quando o semestre veio pronto do Planejamento de Matrícula */
@@ -340,6 +352,18 @@ function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): IdCategoria | null {
 /** Estágio e atividades complementares não são turma: não disputam vaga na grade. */
 function ocupaVaga(d: DisciplinaMatriz): boolean {
   return d.aulas_semanais.total > 0 && !d.codigo.startsWith("ENADE");
+}
+
+/**
+ * É matéria para efeito de contagem na tela?
+ *
+ * Tudo que o aluno vai cursar conta — inclusive estágio, TCC e atividades
+ * complementares, que não ocupam vaga de aula mas são disciplinas da matriz e
+ * aparecem na lista do semestre. A atividade extensionista é a única exceção:
+ * ela não é disciplina, é carga a cumprir em projeto que o aluno ainda escolhe.
+ */
+export function ehMateria(d: DisciplinaPlanejada): boolean {
+  return d.codigo !== "EXTENSAO";
 }
 
 /** "Período:4" -> 4 */
@@ -1195,7 +1219,10 @@ export function simularFormatura(
       semestre: semestreAtual,
       disciplinas: escolhidas,
       horas: escolhidas.reduce((a, d) => a + d.horas, 0),
-      materias: escolhidas.filter((d) => d.ocupaVaga).length,
+      // o cabeçalho do semestre conta o que está listado nele, e não só o que
+      // disputa vaga de aula: estágio e TCC aparecem na lista e são matéria
+      materias: escolhidas.filter((d) => ehMateria(d)).length,
+      vagasOcupadas: escolhidas.filter((d) => d.ocupaVaga).length,
       semestreReferencia: referencia.oferta?.semestre ?? null,
       fixadoPeloPlanejamento: fixadoAqui,
     });

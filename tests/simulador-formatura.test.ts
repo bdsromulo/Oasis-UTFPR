@@ -302,8 +302,11 @@ describe("simulação de formatura", () => {
     );
     // com ritmo 1, estágio e atividades ainda assim cabem no mesmo semestre
     const primeiro = r.semestres[0];
-    expect(primeiro.materias).toBeLessThanOrEqual(1);
+    // o ritmo limita a disputa por vaga de aula, não a lista do semestre
+    expect(primeiro.vagasOcupadas).toBeLessThanOrEqual(1);
     expect(primeiro.disciplinas.length).toBeGreaterThan(1);
+    // e o que a tela mostra segue a lista, podendo passar do ritmo
+    expect(primeiro.materias).toBeGreaterThan(primeiro.vagasOcupadas);
   });
 
   it("nunca contabiliza mais horas do que a categoria exige", () => {
@@ -636,6 +639,28 @@ describe("motor em todos os cursos cobertos", () => {
             r.trilhasFechadas.length,
             `${curso.rotuloCurto} ritmo ${ritmo}: ${r.trilhasFechadas.length} trilhas`,
           ).toBeGreaterThanOrEqual(r.trilhasExigidas);
+        }
+      });
+
+      it("o total de matérias do cabeçalho bate com a lista do semestre", () => {
+        // Regressão: o cabeçalho contava só quem disputa vaga de aula, então um
+        // semestre com TCC e duas trilhas anunciava "2 matérias" e listava 3.
+        for (const ritmo of [3, 4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          for (const s of r.semestres) {
+            const listadas = s.disciplinas.filter((d) => d.codigo !== "EXTENSAO");
+            expect(
+              s.materias,
+              `${curso.rotuloCurto} ritmo ${ritmo} ${s.semestre}: diz ${s.materias}, lista ${listadas.length}`,
+            ).toBe(listadas.length);
+            // a atividade extensionista não é matéria e fica fora da conta
+            expect(s.materias).toBeLessThanOrEqual(s.disciplinas.length);
+            // e o que disputa vaga de aula continua respeitando o ritmo
+            expect(s.vagasOcupadas).toBeLessThanOrEqual(ritmo);
+          }
         }
       });
 
