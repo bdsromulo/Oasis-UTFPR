@@ -381,6 +381,36 @@ export function App() {
     setSelecao(novaCesta[abaDestino] || []);
   }
 
+  function handleImportarGradeDoSimulador(semestreDestino: string, gradeDestino: string, novaSelecao: SelecaoTurma[]) {
+    setPreferencias((p) => ({ ...p, semestreAtivo: semestreDestino }));
+    setTodasCestasPorSemestre((prev) => {
+      const cestaAtual = prev[semestreDestino] || { A: [] };
+      const novaCesta = { ...cestaAtual, [gradeDestino]: novaSelecao };
+      const novoTodas = { ...prev, [semestreDestino]: novaCesta };
+      localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(novoTodas));
+      if (semestreDestino === "2026-1") {
+        localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
+      }
+      return novoTodas;
+    });
+    setTodasExclusoesPorSemestre((prevTodas) => {
+      const atual = prevTodas[semestreDestino] || {};
+      const novo = { ...atual, [gradeDestino]: { disciplinas: [], professores: [] } };
+      const novoTodas = { ...prevTodas, [semestreDestino]: novo };
+      localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(novoTodas));
+      if (semestreDestino === "2026-1") {
+        localStorage.setItem(CHAVE_CESTA_EXCLUSOES, JSON.stringify(novo));
+      }
+      return novoTodas;
+    });
+    setGradeAtiva(gradeDestino);
+    localStorage.setItem(CHAVE_GRADE_ATIVA, gradeDestino);
+    setSelecao(novaSelecao);
+    setAba("planejamento");
+    setAbaPlanejamento("grade");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   function handleContinuarSemRegistro(dados: DadosCheckin) {
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
@@ -859,6 +889,8 @@ export function App() {
                 matriz={matriz}
                 ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                 semestreAtivo={semestreAtivo}
+                todasCestasPorSemestre={todasCestasPorSemestre}
+                onImportarGrade={handleImportarGradeDoSimulador}
               />
             )}
 
