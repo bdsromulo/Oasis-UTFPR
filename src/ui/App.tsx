@@ -24,6 +24,7 @@ import { TelaGestaoInformacao } from "./telas/TelaGestaoInformacao";
 import { TelaFluxograma } from "./telas/TelaFluxograma";
 import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
+import { PilulaFaleConosco } from "./telas/Contato";
 import {
   IconBookOpen,
   IconCalendar,
@@ -1144,6 +1145,9 @@ export function App() {
       <footer className="mt-20 border-t border-zinc-200/80 pt-6 pb-24 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
         Projeto acadêmico independente desenvolvido por e para estudantes da UTFPR — não oficial. Sempre verifique e confirme seus dados no Portal do Aluno da UTFPR.
       </footer>
+
+      {/* contato sempre à mão, em qualquer tela da plataforma */}
+      <PilulaFaleConosco />
     </div>
   );
 }

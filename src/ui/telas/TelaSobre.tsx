@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Badge, Botao, Card } from "../componentes";
 import { MenuSecoes, type ItemSecao } from "./NavegacaoSecoes";
+import { BotaoFaleConosco, EMAIL_CONTATO } from "./Contato";
 import {
   IconBookOpen,
   IconGithub,
@@ -157,7 +158,11 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
         </p>
       </header>
 
-      <MenuSecoes secoes={SECOES} rotulo="Seções desta página" />
+      <MenuSecoes
+        secoes={SECOES}
+        rotulo="Seções desta página"
+        acao={<BotaoFaleConosco compacto />}
+      />
 
       {/* 01 — Proposta */}
       <Secao
@@ -480,6 +485,20 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
           </ol>
         </Card>
       </Secao>
+
+      <Card classe="!border-utfpr-500/40 !border-2 text-center">
+        <h3 className="font-display text-lg font-black tracking-tight text-zinc-900 dark:text-white">
+          Achou um erro? Fale com a gente
+        </h3>
+        <p className="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+          Dado divergente do Portal, pré-requisito que não bate com a prática, bug na grade ou
+          sugestão: o retorno de quem usa é o que corrige a plataforma. Escreva para{" "}
+          <strong className="font-mono text-zinc-800 dark:text-zinc-200">{EMAIL_CONTATO}</strong>.
+        </p>
+        <div className="mt-4 flex justify-center">
+          <BotaoFaleConosco />
+        </div>
+      </Card>
 
       <p className="pb-2 text-center text-xs text-zinc-400 dark:text-zinc-500">
         Oásis UTFPR. Projeto independente, sem vínculo institucional com a UTFPR.

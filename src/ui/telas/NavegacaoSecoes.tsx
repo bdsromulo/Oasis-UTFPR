@@ -23,7 +23,12 @@ export function irParaSecao(id: string) {
   window.scrollTo({ top: y, behavior: menosMovimento ? "auto" : "smooth" });
 }
 
-export function MenuSecoes(props: { secoes: ItemSecao[]; rotulo?: string }) {
+export function MenuSecoes(props: {
+  secoes: ItemSecao[];
+  rotulo?: string;
+  /** ação fixa à direita da barra (contato, por exemplo) */
+  acao?: React.ReactNode;
+}) {
   const { secoes } = props;
   const [ativa, setAtiva] = useState<string | null>(secoes[0]?.id ?? null);
 
@@ -58,6 +63,7 @@ export function MenuSecoes(props: { secoes: ItemSecao[]; rotulo?: string }) {
         <li className="hidden px-2 font-display text-[11px] font-black uppercase tracking-wider text-zinc-400 sm:block">
           Ir para
         </li>
+        {props.acao && <li className="order-last ml-auto">{props.acao}</li>}
         {secoes.map((s) => {
           const atual = ativa === s.id;
           return (

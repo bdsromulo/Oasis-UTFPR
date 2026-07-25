@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Badge, Card } from "../componentes";
 import { MenuSecoes, type ItemSecao } from "./NavegacaoSecoes";
+import { BotaoFaleConosco } from "./Contato";
 import {
   IconBookOpen,
   IconCalendar,
@@ -251,7 +252,11 @@ export function TelaComoUsar() {
         </p>
       </header>
 
-      <MenuSecoes secoes={SECOES} rotulo="Seções do manual" />
+      <MenuSecoes
+        secoes={SECOES}
+        rotulo="Seções do manual"
+        acao={<BotaoFaleConosco compacto />}
+      />
 
       {/* 01 — Começando */}
       <Secao
