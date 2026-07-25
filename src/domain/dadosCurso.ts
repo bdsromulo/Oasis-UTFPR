@@ -1,9 +1,11 @@
 import type { Matriz, OfertaSemestre } from "./tipos";
 import matriz981Json from "../../data/matriz-981.json";
+import turmasBsi20262 from "../../data/turmas/2026-2.json";
 import turmasBsi20261 from "../../data/turmas/2026-1.json";
 import turmasBsi20252 from "../../data/turmas/2025-2.json";
 import matriz844Json from "../../data/eng-comp/matriz-844.json";
 import matriz962Json from "../../data/eng-comp/matriz-962.json";
+import turmasEng20262 from "../../data/eng-comp/turmas/2026-2.json";
 import turmasEng20261 from "../../data/eng-comp/turmas/2026-1.json";
 import turmasEng20252 from "../../data/eng-comp/turmas/2025-2.json";
 
@@ -23,29 +25,17 @@ export interface DadosCurso {
   ofertas: Record<string, OfertaSemestre>;
   /** semestre aberto por padrão ao entrar no curso */
   semestrePadrao: string;
-  /** semestres cujos dados são simulados, não oficiais */
-  semestresPrevia: string[];
+  /**
+   * Semestres em fase de Pré-Matrícula: a oferta já é oficial (PDF de Turmas
+   * Abertas do Portal), mas o período ainda não começou — vagas, horários e a
+   * própria lista de turmas ainda podem mudar até a matrícula. NÃO são dados
+   * simulados; a etiqueta serve para o aluno saber que o quadro é provisório.
+   */
+  semestresPreMatricula: string[];
 }
 
-/**
- * 2026.2 ainda não tem PDF oficial de turmas. A prévia herda a oferta de 2025.2
- * removendo o que sabidamente não abre, e fica marcada como simulada para o
- * aluno não confundir com dado do Portal.
- */
-function previaBsi20262(base: OfertaSemestre): OfertaSemestre {
-  return {
-    ...base,
-    semestre: "2026-2",
-    fonte: "Simulação prévia (baseada nas ofertas de 2025.2)",
-    disciplinas: base.disciplinas.filter(
-      (d) =>
-        d.codigo !== "ICSH41" &&
-        !d.nome.toLowerCase().includes("avaliação em interação humano-computador"),
-    ),
-  };
-}
-
-const bsi20252 = turmasBsi20252 as unknown as OfertaSemestre;
+const bsi20262 = turmasBsi20262 as unknown as OfertaSemestre;
+const eng20262 = turmasEng20262 as unknown as OfertaSemestre;
 
 export const BSI: DadosCurso = {
   id: "bsi-981",
@@ -53,26 +43,30 @@ export const BSI: DadosCurso = {
   rotuloCurto: "BSI",
   matriz: matriz981Json as unknown as Matriz,
   ofertas: {
-    "2026-2": previaBsi20262(bsi20252),
+    "2026-2": bsi20262,
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
-    "2025-2": bsi20252,
+    "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
   },
   semestrePadrao: "2026-2",
-  semestresPrevia: ["2026-2"],
+  semestresPreMatricula: ["2026-2"],
 };
 
+// Eng. Comp. tem uma única oferta de Turmas Abertas por semestre (curso "ENG DE
+// COMPUTAÇÃO"); as matrizes 844 e 962 apenas a leem por códigos distintos. Por
+// isso ambas apontam para o mesmo arquivo de turmas — que é o de Eng. Comp., e
+// não o de BSI.
 export const ENG_COMP: DadosCurso = {
   id: "eng-comp",
   rotulo: "Engenharia de Computação (844)",
   rotuloCurto: "Eng. Comp. (844)",
   matriz: matriz844Json as unknown as Matriz,
   ofertas: {
+    "2026-2": eng20262,
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  // sem prévia: só há oferta oficial de 2026.1 e o backup do GNH de 2025.2
-  semestrePadrao: "2026-1",
-  semestresPrevia: [],
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
 };
 
 export const ENG_COMP_962: DadosCurso = {
@@ -81,11 +75,12 @@ export const ENG_COMP_962: DadosCurso = {
   rotuloCurto: "Eng. Comp. (962)",
   matriz: matriz962Json as unknown as Matriz,
   ofertas: {
+    "2026-2": eng20262,
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-1",
-  semestresPrevia: [],
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
 };
 
 const CURSOS = [BSI, ENG_COMP, ENG_COMP_962];

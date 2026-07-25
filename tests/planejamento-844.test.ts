@@ -14,11 +14,11 @@ describe("dados por curso", () => {
   });
 
   it("expõe só os semestres que cada curso tem", () => {
-    expect(semestresDoCurso(ENG_COMP)).toEqual(["2026-1", "2025-2"]);
+    expect(semestresDoCurso(ENG_COMP)).toEqual(["2026-2", "2026-1", "2025-2"]);
     expect(semestresDoCurso(BSI)).toContain("2026-2");
-    // Eng. Comp. não tem prévia simulada
-    expect(ENG_COMP.semestresPrevia).toHaveLength(0);
-    expect(BSI.semestresPrevia).toContain("2026-2");
+    // 2026-2 é oferta oficial em fase de pré-matrícula (não simulada) nos dois cursos
+    expect(ENG_COMP.semestresPreMatricula).toContain("2026-2");
+    expect(BSI.semestresPreMatricula).toContain("2026-2");
   });
 });
 

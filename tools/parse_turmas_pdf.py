@@ -24,12 +24,16 @@ COLS_BSI = [
     ("optativa",   488, 600),
 ]
 
+# Gabarito "largo" das exportações de 2026/2 (BSI e Eng. Comp. usam o mesmo).
+# A fronteira vagas_cal|reserva fica em 263: o "0" de vagas_calouros cai em
+# x≈254 (Eng. Comp.) / x≈256 (BSI) e a reserva ("Fechada"/"Aberta") em x≈268+ —
+# a antiga fronteira em 255 deixava o "0" do BSI vazar para a coluna reserva.
 COLS_ENG_COMP = [
     ("turma",       35,  70),
     ("enquadr",     70, 160),
     ("vagas_total",160, 210),
-    ("vagas_cal",  210, 255),
-    ("reserva",    255, 300),
+    ("vagas_cal",  210, 263),
+    ("reserva",    263, 300),
     ("prioridade", 300, 360),
     ("horario",    360, 600),
     ("professor",  600, 680),
@@ -37,6 +41,7 @@ COLS_ENG_COMP = [
 ]
 
 COLS = COLS_BSI # default
+CURSO_NOME = "SIST DE INFORMAÇÃO"  # sobrescrito ao detectar o curso no cabeçalho
 
 RE_TURMA = re.compile(r"^[A-Z]\d{2}$")
 RE_HORARIO = re.compile(r"^([2-7])([MTN])(\d)(?:\((\*{0,2})([A-Z]{1,2}-?[A-Z0-9]*)\))?$")
@@ -64,13 +69,25 @@ def parse():
     turma = None         # turma corrente
     header_buf = []      # linhas do cabeçalho de disciplina (pode quebrar em 2+ linhas)
 
+    global CURSO_NOME
     with pdfplumber.open(PDF) as pdf:
-        # Detect if it's Eng Comp PDF to use right column boundaries
+        # O nome do curso vem do texto do cabeçalho da fonte, para o JSON não
+        # herdar o rótulo de BSI quando a origem é Eng. Comp. (e vice-versa).
         first_page_text = " ".join(w["text"] for w in pdf.pages[0].extract_words())
-        if "ENG DE COMPUTA" in first_page_text:
-            COLS = COLS_ENG_COMP
-        else:
-            COLS = COLS_BSI
+        CURSO_NOME = "ENG DE COMPUTAÇÃO" if "ENG DE COMPUTA" in first_page_text else "SIST DE INFORMAÇÃO"
+
+        # As fronteiras de coluna dependem do LAYOUT da fonte, não do curso: a
+        # exportação de 2026/2 (BSI e Eng. Comp.) passou a usar um gabarito mais
+        # largo (coluna Optativa/Matriz por volta de x≈690) do que a de 2026/1
+        # (x≈490). Detectamos pela posição real dos tokens "Matriz:", que só
+        # aparecem na última coluna — assim BSI e Eng. Comp. novos caem no
+        # gabarito certo sem depender do nome do curso.
+        matriz_xs = [w["x0"] for p in pdf.pages[:8] for w in p.extract_words()
+                     if w["text"].startswith("Matriz:")]
+        layout_largo = bool(matriz_xs) and (sum(matriz_xs) / len(matriz_xs)) > 600
+        COLS = COLS_ENG_COMP if layout_largo else COLS_BSI
+        print(f"curso={CURSO_NOME!r} layout={'largo(962)' if layout_largo else 'estreito(2026-1)'} "
+              f"matriz_x≈{round(sum(matriz_xs)/len(matriz_xs)) if matriz_xs else 'n/a'}", file=sys.stderr)
 
     def flush_header():
         nonlocal disc, header_buf
@@ -240,7 +257,7 @@ if __name__ == "__main__":
     ds = parse()
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
-        json.dump({"curso": "SIST DE INFORMAÇÃO", "semestre": SEM,
+        json.dump({"curso": CURSO_NOME, "semestre": SEM,
                    "fonte": "Turmas Abertas - Portal do Aluno", "disciplinas": ds},
                   f, ensure_ascii=False, indent=1)
     nt = sum(len(d["turmas"]) for d in ds)

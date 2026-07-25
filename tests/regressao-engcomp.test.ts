@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import matrizJson from "../data/eng-comp/matriz-844.json";
 import ofertaJson from "../data/eng-comp/turmas/2026-1.json";
+import ofertaEng20262 from "../data/eng-comp/turmas/2026-2.json";
+import ofertaBsi20262 from "../data/turmas/2026-2.json";
 import { ENG_COMP_844, contaNoBlocoOptativo, ehTrilha } from "../src/domain/cursos";
 import { dadosDoCursoPorMatriz } from "../src/domain/dadosCurso";
 import { listarElegiveis } from "../src/domain/motor/elegiveis";
@@ -167,5 +169,35 @@ describe("regressão Eng. Comp. — oferta e progressão optativa", () => {
   it("seleciona o curso automaticamente pela matriz do histórico", () => {
     expect(dadosDoCursoPorMatriz(844)?.id).toBe("eng-comp");
     expect(dadosDoCursoPorMatriz(981)?.id).toBe("bsi-981");
+  });
+
+  it("a oferta 2026-2 de Eng. Comp. é de Eng. Comp. — não se apoia no material de BSI", () => {
+    const eng = ofertaEng20262 as unknown as OfertaSemestre;
+    const bsi = ofertaBsi20262 as unknown as OfertaSemestre;
+
+    // rótulo e semestre corretos, sem herdar o de BSI
+    expect(eng.curso).toBe("ENG DE COMPUTAÇÃO");
+    expect(eng.semestre).toBe("2026-2");
+    expect(bsi.curso).toBe("SIST DE INFORMAÇÃO");
+
+    // é um documento distinto do de BSI: traz disciplinas próprias de
+    // Engenharia (elétrica/eletrônica/física) que não existem na oferta de BSI
+    const codsBsi = new Set(bsi.disciplinas.map((d) => d.codigo));
+    const exclusivasEng = eng.disciplinas.filter((d) => !codsBsi.has(d.codigo));
+    expect(exclusivasEng.length).toBeGreaterThan(50);
+    for (const cod of ["ELEB30", "ELEW30", "ELEQ30", "FIS7F1"]) {
+      expect(eng.disciplinas.some((d) => d.codigo === cod), `${cod} ausente na oferta Eng. Comp.`).toBe(true);
+      expect(codsBsi.has(cod), `${cod} não deveria estar na oferta BSI`).toBe(false);
+    }
+
+    // e casa a matriz 844 pelos equivalentes característicos de Eng. Comp.
+    const elegiveis = listarElegiveis(null, matriz, eng);
+    for (const [codigoMatriz, codigoOferta] of [
+      ["CSW30", "ELEW30"],
+      ["EEB31", "ELEB30"],
+    ] as const) {
+      const e = elegiveis.find((x) => x.disciplina.codigo === codigoMatriz);
+      expect(e?.oferta?.codigo, `${codigoMatriz} deveria puxar ${codigoOferta} em 2026-2`).toBe(codigoOferta);
+    }
   });
 });

@@ -125,7 +125,7 @@ export function App() {
     [semestreAtivo, todasOfertas, dadosCurso],
   );
 
-  const ehPrevia = dadosCurso.semestresPrevia.includes(semestreAtivo);
+  const ehPreMatricula = dadosCurso.semestresPreMatricula.includes(semestreAtivo);
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
@@ -485,21 +485,21 @@ export function App() {
         )}
       </header>
 
-      {/* Banner de Aviso: 2026.2 Dados Simulados */}
-      {ehPrevia && (
+      {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória) */}
+      {ehPreMatricula && (
         <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-3.5">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/25 text-2xl font-bold text-emerald-600 dark:text-emerald-300 shadow-xs">
-                ⚠️
+                📋
               </span>
               <div>
                 <div className="font-display text-sm font-black text-emerald-900 dark:text-emerald-100 uppercase tracking-wide flex items-center gap-2">
-                  <span>Módulo de Prévia: 2026.2 (Simulação Futura)</span>
-                  <span className="inline-flex items-center rounded-lg bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white shadow-2xs">DADOS SIMULADOS DE 2025.2</span>
+                  <span>Período de Pré-Matrícula: {semestreAtivo.replace("-", ".")}</span>
+                  <span className="inline-flex items-center rounded-lg bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white shadow-2xs">OFERTA OFICIAL PROVISÓRIA</span>
                 </div>
                 <p className="mt-1 leading-relaxed text-zinc-800 dark:text-zinc-200 text-xs font-semibold">
-                  Este módulo de <strong className="text-emerald-700 dark:text-emerald-300 underline">2026.2</strong> está operando com dados simulados herdados de 2025.2 (com remoção de matérias como <em>Avaliação em IHC</em> para simular disciplinas não ofertadas) e <strong className="text-red-600 dark:text-red-400 font-black uppercase">não representa dados genuínos</strong> oficiais de 2026.2.
+                  As turmas de <strong className="text-emerald-700 dark:text-emerald-300 underline">{semestreAtivo.replace("-", ".")}</strong> vêm do PDF oficial de <em>Turmas Abertas</em> do Portal do Aluno — são <strong className="text-emerald-700 dark:text-emerald-300 font-black">dados genuínos</strong>, não uma simulação. Como o período ainda não começou, vagas, horários e a lista de turmas <strong className="uppercase">ainda podem mudar</strong> até a matrícula.
                 </p>
               </div>
             </div>
@@ -626,7 +626,7 @@ export function App() {
                       </div>
                       <label
                         className={`relative mt-0.5 inline-flex items-center gap-1.5 rounded-lg border pl-2.5 pr-5 py-0.5 font-mono text-sm font-bold transition-colors cursor-pointer shadow-2xs select-none ${
-                          ehPrevia
+                          ehPreMatricula
                             ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
                             : "border-orange-500/40 bg-orange-500/15 text-orange-700 dark:text-orange-300 hover:bg-orange-500/25"
                         }`}
@@ -634,7 +634,7 @@ export function App() {
                       >
                         <span
                           className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${
-                            ehPrevia ? "bg-emerald-500" : "bg-orange-500"
+                            ehPreMatricula ? "bg-emerald-500" : "bg-orange-500"
                           }`}
                         />
                         <select
@@ -643,18 +643,18 @@ export function App() {
                           className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
                         >
                           {semestresDisponiveis.map((sem) => {
-                            const previa = dadosCurso.semestresPrevia.includes(sem);
+                            const preMatricula = dadosCurso.semestresPreMatricula.includes(sem);
                             return (
                               <option
                                 key={sem}
                                 value={sem}
                                 className={`bg-white font-bold dark:bg-zinc-900 ${
-                                  previa
+                                  preMatricula
                                     ? "text-emerald-700 dark:text-emerald-400"
                                     : "text-orange-600 dark:text-orange-400"
                                 }`}
                               >
-                                {sem.replace("-", ".")} ({previa ? "Prévia" : "Passado"})
+                                {sem.replace("-", ".")} ({preMatricula ? "Pré-Matrícula" : "Passado"})
                               </option>
                             );
                           })}
