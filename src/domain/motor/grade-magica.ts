@@ -244,28 +244,21 @@ export function gerarSugestaoGrade(
       ? Math.max(0, resumoSegundoEstrato.chObrigatoria - resumoSegundoEstrato.chCursadaAprovada)
       : (matriz.conjuntos[String(cjSegundoEstrato)]?.ch ?? 0);
 
-  const trilhasNoPerfil = perfil
-    ? Object.entries(matriz.conjuntos)
-        .filter(([cod]) => ehTrilha(curso, cod))
-        .map(([cod, conj]) => {
-          const r = perfil.resumoConjuntos.find((x) => x.conjunto === cod);
-          const cump = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
-          return { cod, chExigida: conj.ch, cump, validado: cump >= conj.ch };
-        })
-    : [];
+  const trilhasNoPerfil = Object.entries(matriz.conjuntos)
+    .filter(([cod]) => ehTrilha(curso, cod))
+    .map(([cod, conj]) => {
+      const r = perfil?.resumoConjuntos.find((x) => x.conjunto === cod);
+      const cump = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
+      return { cod, chExigida: conj.ch, cump, validado: cump >= conj.ch };
+    });
   const trilhasValidadasCount = trilhasNoPerfil.filter((t) => t.validado).length;
   const trilhasAlvo = Math.max(0, curso.trilhasExigidas - trilhasValidadasCount);
   const trilhasPendentes = trilhasNoPerfil
     .filter((t) => !t.validado)
     .sort((a, b) => b.cump - a.cump);
-  const chFaltanteTrilhas = perfil
-    ? trilhasPendentes
-        .slice(0, trilhasAlvo)
-        .reduce((acc, t) => acc + Math.max(0, t.chExigida - t.cump), 0)
-    : Object.entries(matriz.conjuntos)
-        .filter(([cod]) => ehTrilha(curso, cod))
-        .slice(0, curso.trilhasExigidas)
-        .reduce((acc, [, conj]) => acc + conj.ch, 0);
+  const chFaltanteTrilhas = trilhasPendentes
+    .slice(0, trilhasAlvo)
+    .reduce((acc, t) => acc + Math.max(0, t.chExigida - t.cump), 0);
   const chExigidaBlocoOptativo = cjAgregador
     ? matriz.conjuntos[String(cjAgregador)]?.ch ?? matriz.cargas.optativas
     : matriz.cargas.optativas;
@@ -319,6 +312,35 @@ export function gerarSugestaoGrade(
     return true;
   });
 
+  // Mapear carga horária de turmas elegíveis e disponíveis no semestre por trilha
+  const chDisponivelPorTrilha = new Map<string, number>();
+  for (const e of elegiveis) {
+    if (e.disciplina.conjunto !== null && contaNoBlocoOptativo(curso, e.disciplina.conjunto)) {
+      const cod = String(e.disciplina.conjunto);
+      if (ehTrilha(curso, e.disciplina.conjunto)) {
+        chDisponivelPorTrilha.set(cod, (chDisponivelPorTrilha.get(cod) ?? 0) + e.disciplina.horas.total);
+      }
+    }
+  }
+
+  // Identificar Trilhas Alvo prioritárias: concentrar o foco nas trilhas em que o aluno já iniciou progresso
+  // e que possuem disciplinas abertas no semestre, para fechar a exigência (ex: 3 trilhas de 90h) antes de espalhar carga
+  const trilhasValidadasSet = new Set<string>(
+    trilhasNoPerfil.filter((t) => t.validado).map((t) => t.cod)
+  );
+  const conjuntosTrilhaAlvo = new Set<string>(
+    trilhasNoPerfil
+      .filter((t) => !t.validado)
+      .sort((a, b) => {
+        const dispA = (chDisponivelPorTrilha.get(a.cod) ?? 0) > 0 ? 1 : 0;
+        const dispB = (chDisponivelPorTrilha.get(b.cod) ?? 0) > 0 ? 1 : 0;
+        if (dispA !== dispB) return dispB - dispA; // Prioridade imediata para trilhas com turmas abertas nesta oferta
+        return b.cump - a.cump || (chDisponivelPorTrilha.get(b.cod) ?? 0) - (chDisponivelPorTrilha.get(a.cod) ?? 0);
+      })
+      .slice(0, trilhasAlvo)
+      .map((t) => t.cod)
+  );
+
   // 3. Pontuar cada disciplina para saber quais priorizar na grade
   const disciplinasPontuadas = elegiveis.map((e) => {
     let pts = 0;
@@ -333,6 +355,24 @@ export function gerarSugestaoGrade(
 
     // Reduzir ligeiramente a prioridade inicial de humanidades frente a disciplinas técnicas/obrigatórias
     if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades) pts -= 15;
+
+    // Inteligência de Trilhas: priorizar disciplinas que ajudam a fechar as N trilhas exigidas pelo curso
+    if (e.disciplina.conjunto !== null && contaNoBlocoOptativo(curso, e.disciplina.conjunto)) {
+      const codConjunto = String(e.disciplina.conjunto);
+      if (ehTrilha(curso, e.disciplina.conjunto)) {
+        if (conjuntosTrilhaAlvo.has(codConjunto)) {
+          // Trilha alvo: alta prioridade para bater as 90h exigidas naquelas em que o aluno já investiu tempo!
+          const cumpAtual = trilhasNoPerfil.find((t) => t.cod === codConjunto)?.cump ?? 0;
+          pts += 65 + (cumpAtual / 5);
+        } else if (trilhasValidadasSet.has(codConjunto)) {
+          // Trilha já completa (90/90h): forte penalidade para evitar pegar matérias excedentes aqui se houver outras trilhas precisando de horas
+          pts -= 40;
+        } else {
+          // Trilhas não-iniciadas ou fora das metas (evita pulverizar horas em 4 ou 5 trilhas diferentes)
+          pts -= 15;
+        }
+      }
+    }
 
     // Filtrar e pontuar as turmas válidas dessa disciplina
     const turmasValidas = e.oferta!.turmas
@@ -355,6 +395,26 @@ export function gerarSugestaoGrade(
     .filter((d) => d.turmasValidas.length > 0)
     .sort((a, b) => b.pontosDisc - a.pontosDisc);
 
+  // Rastrear progressão dinâmica por trilha durante o loop guloso para detectar quando uma trilha completa 90h na própria simulação
+  const cumpSimuladoPorTrilha = new Map<string, number>();
+  for (const t of trilhasNoPerfil) {
+    cumpSimuladoPorTrilha.set(t.cod, t.cump);
+  }
+  for (const s of selecaoFinal) {
+    const dm = matriz?.disciplinas.find((x) => x.codigo === s.codDisciplina);
+    if (dm && dm.conjunto !== null && ehTrilha(curso, dm.conjunto)) {
+      const cod = String(dm.conjunto);
+      cumpSimuladoPorTrilha.set(cod, (cumpSimuladoPorTrilha.get(cod) ?? 0) + dm.horas.total);
+    }
+  }
+  const todasTrilhasValidadas = () => {
+    let count = 0;
+    for (const t of trilhasNoPerfil) {
+      if ((cumpSimuladoPorTrilha.get(t.cod) ?? 0) >= t.chExigida) count++;
+    }
+    return count >= curso.trilhasExigidas;
+  };
+
   // 4. Algoritmo Guloso / Backtracking leve para selecionar turmas sem choque e sem exceder horas necessárias (limite máximo de 405h)
   for (const item of candidatas) {
     if (opcoes.estrategia === "balanceado" && selecaoFinal.length >= maxDisc) break;
@@ -366,7 +426,7 @@ export function gerarSugestaoGrade(
     if (
       contaNoBlocoOptativo(curso, c) &&
       chAlocadaTrilhas >= chFaltanteBlocoOptativo &&
-      chFaltanteTrilhas <= 0
+      todasTrilhasValidadas()
     ) {
       continue;
     }
@@ -426,6 +486,10 @@ export function gerarSugestaoGrade(
         chAlocadaEletivas += item.elegivel.disciplina.horas.total;
       } else if (contaNoBlocoOptativo(curso, c)) {
         chAlocadaTrilhas += item.elegivel.disciplina.horas.total;
+        if (c !== null && ehTrilha(curso, c)) {
+          const cod = String(c);
+          cumpSimuladoPorTrilha.set(cod, (cumpSimuladoPorTrilha.get(cod) ?? 0) + item.elegivel.disciplina.horas.total);
+        }
       }
     }
   }
