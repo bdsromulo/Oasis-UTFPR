@@ -48,8 +48,15 @@ RE_BLOCO_HORARIOS = re.compile(r"\[\s*(.*?)\s*\]")
 RE_HORARIO = re.compile(r"^([2-7])([MTN])(\d)\s*(?:\(\s*(\*{0,2})\s*([^)]*)\))?$")
 
 
-# Sequências de mojibake que aparecem quando uma página UTF-8 é lida como
-# cp1252 — o caso das cópias antigas do GNH salvas por alguns navegadores.
+# O encoding da página varia conforme COMO ela foi salva, e o arquivo não pode ser
+# lido às cegas em cp1252: o backup de 2025-2 de Eng. Comp. é UTF-8 puro (declara
+# charset=UTF-8, tem 458 bytes-líder 0xC3 e nenhum acento de byte único), e lê-lo
+# como cp1252 gravou "Introdução À Estatística" em 113 dos 157 nomes de disciplina
+# — nomes corrompidos degradam o casamento por nome do motor de identidade.
+# Por isso decodificar() tenta UTF-8 primeiro e só cai em cp1252 quando os bytes
+# não são UTF-8 válido. Nesse segundo caso o encoding é MISTO — acentos em cp1252
+# de byte único (ã = 0xE3) e travessão em UTF-8 (0xE2 0x80 0x94) —, e as sequências
+# conhecidas que sobram são consertadas abaixo.
 MOJIBAKE = {
     "â€”": "—",  # em dash
     "â€“": "–",  # en dash
@@ -66,20 +73,13 @@ def corrigir_mojibake(texto: str) -> str:
     return texto
 
 
-def ler_pagina(caminho: str) -> str:
-    """Lê a página salva do GNH detectando o encoding em vez de presumi-lo.
-
-    As cópias que temos hoje — BSI, Eng. Comp. e Eng. Eletrônica — são todas
-    UTF-8 válido. Ler tudo como cp1252, como se fazia aqui, produzia
-    "ENG DE COMPUTAÃ‡ÃƒO" no campo `curso` da oferta de 2025.2 já versionada.
-    O caminho cp1252 continua existindo para cópias antigas que de fato usem
-    esse encoding: nelas o UTF-8 estrito falha e a decodificação cai no fallback.
-    """
+def decodificar(caminho: str) -> str:
+    """Texto da página, respeitando o encoding com que ela foi salva."""
     bruto = io.open(caminho, "rb").read()
     try:
         return bruto.decode("utf-8")
     except UnicodeDecodeError:
-        # Um byte inválido isolado não pode derrubar a importação inteira.
+        # cp1252 com travessão em UTF-8: um byte inválido isolado impede o strict
         return corrigir_mojibake(bruto.decode("cp1252", errors="replace"))
 
 
@@ -110,7 +110,7 @@ def parse_horario(token: str) -> dict | None:
 
 
 def parse(caminho: str, semestre: str) -> dict:
-    pagina = ler_pagina(caminho)
+    pagina = decodificar(caminho)
 
     curso = "DESCONHECIDO"
     m = re.search(r"Curso:\s*<strong>(.*?)</strong>", pagina)

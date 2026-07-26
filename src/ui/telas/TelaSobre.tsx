@@ -152,7 +152,17 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
         <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
           <span className="text-utfpr-600 dark:text-utfpr-500">Oásis</span> UTFPR
         </h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        {/* Epígrafe de abertura: preâmbulo da descrição do projeto. */}
+        <blockquote className="mt-4 max-w-3xl border-l-2 border-utfpr-500/70 pl-4">
+          <p className="text-sm italic leading-relaxed text-zinc-600 dark:text-zinc-300">
+            “Os planos do diligente conduzem à abundância, mas a pressa desmedida conduz
+            à pobreza.”
+          </p>
+          <cite className="mt-1.5 block text-xs font-semibold not-italic tracking-wide text-utfpr-700 dark:text-utfpr-400">
+            Provérbios 21:5
+          </cite>
+        </blockquote>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
           O Oásis mostra onde você está no curso, o que pode cursar e como montar o
           próximo semestre. Sem planilha, sem print de grade, sem conversa de corredor.
         </p>
@@ -500,8 +510,15 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
         </div>
       </Card>
 
-      <p className="pb-2 text-center text-xs text-zinc-400 dark:text-zinc-500">
+      {/* o respiro final fica na epígrafe, que é o último elemento da página */}
+      <p className="text-center text-xs text-zinc-400 dark:text-zinc-500">
         Oásis UTFPR. Projeto independente, sem vínculo institucional com a UTFPR.
+      </p>
+
+      {/* Fecho discreto: a origem do nome da plataforma. */}
+      <p className="pb-2 text-center text-[11px] italic leading-relaxed text-zinc-400 dark:text-zinc-500">
+        “[...] transformarei o deserto numa lagoa e a terra árida em oásis.”{" "}
+        <span className="whitespace-nowrap not-italic">Isaías 41:18</span>
       </p>
     </div>
   );

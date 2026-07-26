@@ -3072,6 +3072,11 @@
      "codigo": "ELEC20",
      "cht": 60,
      "grupo": null
+    },
+    {
+     "codigo": "ET76H",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -3097,13 +3102,7 @@
    "prerequisitos": [
     "ELB66"
    ],
-   "equivalentes": [
-    {
-     "codigo": "ET76H",
-     "cht": 60,
-     "grupo": null
-    }
-   ]
+   "equivalentes": []
   },
   {
    "codigo": "ELF61",
@@ -5297,6 +5296,11 @@
      "codigo": "GEE7E1",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "ME78I",
+     "cht": 30,
+     "grupo": null
     }
    ]
   },
@@ -5320,13 +5324,7 @@
     "total": 45
    },
    "prerequisitos": [],
-   "equivalentes": [
-    {
-     "codigo": "ME78I",
-     "cht": 30,
-     "grupo": null
-    }
-   ]
+   "equivalentes": []
   },
   {
    "codigo": "GEE7E3",

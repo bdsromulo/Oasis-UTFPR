@@ -9,6 +9,7 @@ import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { nomeDeEletiva } from "../src/domain/eletivas";
+import { ENG_COMP, semestresDoCurso } from "../src/domain/dadosCurso";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
 import turmasJson from "../data/turmas/2026-1.json";
@@ -147,5 +148,94 @@ describe.skipIf(!existsSync(CASOS[2].arquivo))("fatos específicos: Yago", () =>
     expect(perfil.dependencias.map((d) => d.codigo)).toContain("ICSX51");
     expect(perfil.cursadas.filter((c) => c.situacao === "consignado").length).toBe(1);
     expect(perfil.cursadas.filter((c) => c.situacao === "cancelado").length).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Eng. Comp. (matriz 844) — os históricos ficam na pasta de referência local do
+// mantenedor, fora do repositório. O layout da tabela de cursadas difere do de
+// BSI: tem uma coluna de créditos a mais, e as linhas de Exame de Suficiência
+// trazem a nota com ponto ("10.0") em vez de vírgula.
+const PASTA_844 = PASTA + "Material Referência Eng. Comp Antiga 844\\";
+const CASOS_844 = [
+  PASTA_844 + "Histórico do Aluno - Victor Eng Comp.PDF",
+  PASTA_844 + "Histórico do Aluno - Garrett Eng Comp.pdf",
+  PASTA_844 + "Histórico Malu Eng Comp.pdf",
+];
+
+const matriz844 = ENG_COMP.matriz;
+const mapa844 = criarMapaIdentidade(matriz844);
+
+for (const arquivo of CASOS_844) {
+  describe.skipIf(!existsSync(arquivo))(`histórico real 844: ${arquivo.split("\\").pop()}`, () => {
+    it("mapeia todas as cursadas e fecha com o próprio histórico", async () => {
+      const perfil = await carregar(arquivo);
+
+      expect(perfil.matriz).toBe(844);
+      expect(perfil.avisos, perfil.avisos.join("; ")).toEqual([]);
+      expect(perfil.resumoConjuntos.length).toBeGreaterThanOrEqual(15);
+      expect(perfil.resumoGeral?.obrigatorias.total).toBe(3460);
+
+      // toda cursada tem CHT: a coluna de créditos da 844 fazia o parser ler o
+      // CHEXT (0 em quase toda a matriz) no lugar da carga horária
+      const semCarga = perfil.cursadas.filter((c) => !c.cht).map((c) => c.codigo);
+      expect(semCarga, `sem CHT: ${semCarga.join(",")}`).toEqual([]);
+      for (const c of perfil.cursadas) {
+        if (c.media !== null) expect(c.media, `${c.codigo} média`).toBeLessThanOrEqual(10);
+        if (c.frequencia !== null) expect(c.frequencia, `${c.codigo} freq`).toBeLessThanOrEqual(100);
+        expect(c.ano, `${c.codigo} ano`).toBeGreaterThan(2000);
+      }
+
+      // toda cursada precisa achar lugar na matriz — ou pelo código, ou pelo
+      // equivalente. Só eletivas de outros cursos podem ficar de fora.
+      const naMatriz = new Set(matriz844.disciplinas.map((d) => d.codigo));
+      const orfas = perfil.cursadas.filter(
+        (c) => c.origem !== "eletiva" && !naMatriz.has(c.codigo) && !naMatriz.has(mapa844.resolver(c.codigo)),
+      );
+      expect(orfas.map((c) => c.codigo)).toEqual([]);
+
+      // INVARIANTE FORTE: obrigatória cumprida XOR listada como faltante
+      const faltantes = new Set(perfil.obrigatoriasFaltantes.map((f) => f.codigo));
+      const problemas: string[] = [];
+      for (const d of matriz844.disciplinas) {
+        if (d.conjunto !== null || d.codigo.startsWith("ENADE")) continue;
+        const ok = cumpre(d.codigo, perfil, mapa844);
+        if (ok === faltantes.has(d.codigo)) {
+          problemas.push(`${d.codigo}: cumprida=${ok} listadaComoFaltante=${faltantes.has(d.codigo)}`);
+        }
+      }
+      expect(problemas, problemas.join("; ")).toEqual([]);
+
+      expect(montarPainel(perfil, matriz844).inconsistencias).toEqual([]);
+
+      // nas três ofertas: nada já cumprido é oferecido, e a turma casada é da
+      // própria matéria
+      for (const semestre of semestresDoCurso(ENG_COMP)) {
+        const elegiveis = listarElegiveis(perfil, matriz844, ENG_COMP.ofertas[semestre]) as any[];
+        expect(elegiveis.length).toBeGreaterThan(0);
+        for (const e of elegiveis) {
+          expect(cumpre(e.disciplina.codigo, perfil, mapa844), `${semestre}: ${e.disciplina.codigo}`).toBe(false);
+        }
+      }
+    });
+  });
+}
+
+describe.skipIf(!existsSync(CASOS_844[1]))("fatos específicos 844: aprovação por Exame de Suficiência", () => {
+  it("conta como aprovada e some da lista de pendências", async () => {
+    // "1 CSF13 Fundamentos De Programação 1 S71 6 90 0 6 10.0 * 1 2020 Aprovado
+    // Em Exame De Suficiência" — sem a coluna de créditos opcional e o ponto
+    // decimal, a linha não casava e a disciplina sumia do sistema sem aviso:
+    // aparecia como pendente mesmo o histórico não a listando como faltante.
+    const perfil = await carregar(CASOS_844[1]);
+    for (const codigo of ["CSF13", "MA71A"]) {
+      expect(perfil.aprovadas.has(codigo), `${codigo} aprovada`).toBe(true);
+      expect(cumpre(codigo, perfil, mapa844), `${codigo} cumpre`).toBe(true);
+      const cursada = perfil.cursadas.find((c) => c.codigo === codigo);
+      expect(cursada, `${codigo} em cursadas`).toBeDefined();
+      expect(cursada).toMatchObject({ situacao: "aprovado", cht: 90, media: 10, ano: 2020 });
+    }
+    const elegiveis = listarElegiveis(perfil, matriz844, ENG_COMP.ofertas["2026-2"]) as any[];
+    expect(elegiveis.some((e) => ["CSF13", "MA71A"].includes(e.disciplina.codigo))).toBe(false);
   });
 });

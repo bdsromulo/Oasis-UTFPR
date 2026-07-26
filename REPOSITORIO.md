@@ -58,7 +58,9 @@ oasis-utfpr/
 │   └── eng-eletronica/       # Matriz 968, oferta e o complemento de conjuntos
 ├── tools/                    # Pipeline de extração e validação de dados em Python 3
 │   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-<n>.json
+│   ├── aplicar_anotacoes.py  # Soma a curadoria (anotacoes-981.json) ao parse do PDF
 │   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
+│   ├── validate_matriz_equivalencias.py # Invariantes E1 a E3 das equivalências (qualquer matriz)
 │   ├── validate_matriz_968.py # Invariantes da 968, inclusive a árvore de conjuntos
 │   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
@@ -91,7 +93,8 @@ Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não im
 
 1. **Camada 1 — Dados e Pipeline (`data/` + `tools/`):**
    - Extração posicional por colunas (`COLS`) no `parse_turmas_pdf.py` a partir do PDF oficial.
-   - Auditoria rigorosa: `validate_turmas.py` cruza a oferta com PDF; `validate_turmas_estrutura.py` protege qualquer fonte de oferta. O validador de matriz atual ainda é específico da 981.
+   - Auditoria rigorosa: `validate_turmas.py` cruza a oferta com PDF; `validate_turmas_estrutura.py` protege qualquer fonte de oferta. O validador de matriz atual ainda é específico da 981; `validate_matriz_equivalencias.py` vale para qualquer matriz e cruza as equivalências com o texto cru do PDF.
+   - **Camada de anotação (`data/anotacoes-981.json`).** A Consulta oficial da 981 não imprime como linha as 11 eletivas do conjunto 1199 (declara só a CH total do conjunto no rodapé) nem ED70U/FCH7XC, e omite 7 equivalências que aparecem nos históricos. Isso vivia editado à mão dentro do JSON, e um `parse_matriz.py` apagava tudo em silêncio. Agora a curadoria fica em arquivo próprio e `aplicar_anotacoes.py` a soma ao parse — a matriz servida à aplicação continua sendo `data/matriz-981.json`, mas voltou a ser reprodutível a partir do PDF. A anotação **só acrescenta**: se a fonte passar a trazer o que ela adiciona, a aplicação falha em vez de duplicar. As matrizes 844 e 962 saem inteiras do PDF, sem anotação.
 
 2. **Camada 2 — Domínio (`src/domain/`):**
    - `historico/parser.ts`: Transforma texto extraído em `PerfilAluno` (identificando matérias aprovadas por equivalência, aproveitamento ou notas).
@@ -137,6 +140,12 @@ npm run build
 python tools/validate_turmas.py "Turmas Abertas - Portal do Aluno UTFPR.pdf" data/turmas/2026-1.json
 python tools/validate_turmas_estrutura.py data/eng-comp/turmas/2025-2.json
 python tools/validate_matriz.py
+python tools/validate_matriz_equivalencias.py data/eng-comp/matriz-844.json "matrizengcomp.pdf"
+
+# Reimportar a matriz 981: o parse do PDF passa pela camada de anotação antes de
+# virar o arquivo servido à aplicação (844 e 962 não têm anotação: é só o parse)
+python tools/parse_matriz.py "Lista de Matérias Matriz Curricular.pdf" /tmp/base-981.json
+python tools/aplicar_anotacoes.py /tmp/base-981.json data/anotacoes-981.json data/matriz-981.json
 
 # Reimportar a matriz de Engenharia Eletrônica (o 3º argumento traz os conjuntos
 # que a legenda da matriz não declara — ver o cabeçalho do complemento)
