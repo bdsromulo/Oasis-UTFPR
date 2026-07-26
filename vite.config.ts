@@ -55,5 +55,10 @@ export default defineConfig({
     include: ["tests/**/*.test.ts"],
     // em Node, o pdf.js precisa do build legacy (fake worker)
     alias: { "pdfjs-dist": "pdfjs-dist/legacy/build/pdf.mjs" },
+    // As suítes de histórico real abrem PDFs de centenas de páginas pelo pdf.js.
+    // Isoladas levam ~2s, mas com a suíte inteira rodando em paralelo passavam
+    // dos 5s padrão e falhavam por tempo — vermelho intermitente que não é
+    // defeito nenhum do código.
+    testTimeout: 30000,
   },
 } as never);

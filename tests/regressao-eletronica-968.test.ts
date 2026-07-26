@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import matriz968Json from "../data/eng-eletronica/matriz-968.json";
 import oferta20262 from "../data/eng-eletronica/turmas/2026-2.json";
+import matriz981 from "../data/matriz-981.json";
+import matriz844 from "../data/eng-comp/matriz-844.json";
 import {
   ENG_ELETRONICA_968,
   categoriaSimples,
@@ -17,6 +19,12 @@ import { parseHistorico } from "../src/domain/historico/parser";
 import { montarPainel } from "../src/domain/motor/situacao";
 import { calcularResumoProgressoGrade } from "../src/domain/motor/progressoGrade";
 import { gerarSugestaoGrade } from "../src/domain/motor/grade-magica";
+import {
+  codigosOfertados,
+  montarBoardObrigatorias,
+  montarBoardOpcoes,
+  montarBoardTrilhas,
+} from "../src/domain/motor/fluxograma";
 import { haveriaConflito, itensDaSelecao } from "../src/domain/motor/grade";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { simularFormatura } from "../src/domain/motor/simuladorFormatura";
@@ -393,6 +401,71 @@ describe("Grade Inteligente com a 968", () => {
         false,
       );
     }
+  });
+});
+
+describe("fluxograma da 968", () => {
+  const abertos = codigosOfertados(matriz, [oferta]);
+
+  it("põe os grupos de escolha no desenho, uma raia por grupo", () => {
+    const board = montarBoardOpcoes(matriz, abertos);
+    // 25 grupos declarados; só entram os que têm disciplina aberta na oferta
+    expect(board.faixas.length).toBeGreaterThan(15);
+    expect(board.nos.filter((n) => !n.externo).length).toBeGreaterThan(30);
+    // as raias são os grupos "Opções de …" mais o Ciclo de Humanidades, que é a
+    // mesma decisão do aluno: escolher N horas dentro de um conjunto
+    const esperados = [
+      ...ENG_ELETRONICA_968.gruposOpcao!.map(String),
+      ...ENG_ELETRONICA_968.categorias.map((c) => String(c.conjunto)),
+    ];
+    for (const f of board.faixas) {
+      expect(esperados, `raia inesperada: ${f.id}`).toContain(f.id);
+      expect(f.subrotulo).toMatch(/escolher \d+h de \d+h abertas/);
+    }
+    expect(board.faixas.map((f) => f.id)).toContain("1174");
+  });
+
+  it("não mistura grupo de escolha com o bloco de trilhas", () => {
+    const opcoes = montarBoardOpcoes(matriz, abertos);
+    const trilhas = montarBoardTrilhas(matriz, abertos);
+    const idsOpcoes = new Set(opcoes.faixas.map((f) => f.id));
+    for (const f of trilhas.faixas) {
+      expect(idsOpcoes.has(f.id), `raia ${f.id} nos dois boards`).toBe(false);
+      // toda raia do board de trilhas soma para o bloco optativo — inclusive
+      // "1186 Optativas", que conta para as 300h sem validar trilha
+      expect(contaNoBlocoOptativo(ENG_ELETRONICA_968, f.id), `raia ${f.id}`).toBe(true);
+    }
+    expect(trilhas.faixas.some((f) => ehTrilha(ENG_ELETRONICA_968, f.id))).toBe(true);
+  });
+
+  it("nenhuma disciplina do currículo fica invisível nos três boards", () => {
+    const nosDe = (b: { nos: { codigo: string; externo: boolean }[] }) =>
+      b.nos.filter((n) => !n.externo).map((n) => n.codigo);
+    const desenhadas = new Set([
+      ...nosDe(montarBoardObrigatorias(matriz)),
+      ...nosDe(montarBoardOpcoes(matriz, abertos)),
+      ...nosDe(montarBoardTrilhas(matriz, abertos)),
+    ]);
+    // toda disciplina com turma aberta tem de aparecer em algum board
+    const abertasNaMatriz = matriz.disciplinas.filter(
+      (d) => abertos.has(d.codigo) && !d.codigo.startsWith("ENADE"),
+    );
+    const invisiveis = abertasNaMatriz.filter((d) => !desenhadas.has(d.codigo));
+    expect(invisiveis.map((d) => d.codigo)).toEqual([]);
+  });
+
+  it("o board de opções serve os outros cursos sem inventar grupo de escolha", () => {
+    // A 968 é o único curso com "Opções de …", mas o board também é onde mora o
+    // Ciclo de Humanidades — que era invisível no fluxograma de TODOS os cursos.
+    // Sem oferta conhecida nenhuma raia é desenhada, e é isso que se verifica
+    // aqui; o conteúdo por curso é assunto das suítes de cada matriz.
+    for (const outra of [matriz981, matriz844]) {
+      const board = montarBoardOpcoes(outra as unknown as Matriz, new Set<string>());
+      expect(board.faixas).toEqual([]);
+      expect(board.nos).toEqual([]);
+    }
+    // e nenhum deles declara grupo de escolha
+    expect(ENG_ELETRONICA_968.gruposOpcao).toHaveLength(25);
   });
 });
 

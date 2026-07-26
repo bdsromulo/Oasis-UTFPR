@@ -9,6 +9,7 @@ import {
   LARGURA_NO,
   codigosOfertados,
   montarBoardObrigatorias,
+  montarBoardOpcoes,
   montarBoardTrilhas,
   type Board,
   type GrupoCor,
@@ -16,7 +17,7 @@ import {
 } from "../../domain/motor/fluxograma";
 import { descricaoDoCurso } from "../../domain/cursos";
 
-type AbaBoard = "obrigatorias" | "trilhas";
+type AbaBoard = "obrigatorias" | "opcoes" | "trilhas";
 
 const ZOOM_MIN = 0.35;
 const ZOOM_MAX = 1.8;
@@ -63,10 +64,15 @@ const CORES: Record<GrupoCor, { no: string; barra: string; rotulo: string }> = {
     barra: "bg-indigo-500",
     rotulo: "Trilha do 3º estrato",
   },
+  opcao: {
+    no: "border-cyan-400/70 bg-cyan-50 dark:border-cyan-500/50 dark:bg-cyan-950/50",
+    barra: "bg-cyan-500",
+    rotulo: "Grupo de escolha",
+  },
   externo: {
     no: "border-dashed border-zinc-300 bg-zinc-50/70 dark:border-zinc-700 dark:bg-zinc-900/60",
     barra: "bg-zinc-300 dark:bg-zinc-700",
-    rotulo: "Pré-requisito de fora da trilha",
+    rotulo: "Pré-requisito de fora da raia",
   },
 };
 
@@ -106,7 +112,9 @@ export function TelaFluxograma(props: {
 
   const boardObr = useMemo(() => montarBoardObrigatorias(matriz), [matriz]);
   const boardTri = useMemo(() => montarBoardTrilhas(matriz, abertos), [matriz, abertos]);
-  const board: Board = abaBoard === "obrigatorias" ? boardObr : boardTri;
+  const boardOpc = useMemo(() => montarBoardOpcoes(matriz, abertos), [matriz, abertos]);
+  const board: Board =
+    abaBoard === "obrigatorias" ? boardObr : abaBoard === "opcoes" ? boardOpc : boardTri;
 
   const nosPorId = useMemo(() => new Map(board.nos.map((n) => [n.id, n])), [board]);
 
@@ -235,10 +243,13 @@ export function TelaFluxograma(props: {
   return (
     <div className="space-y-4">
       {/* Abas dos dois boards */}
-      <div className="grid grid-cols-2 gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
+      <div className={`grid ${curso.gruposOpcao?.length ? "grid-cols-3" : "grid-cols-2"} gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95`}>
         {(
           [
             { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: <IconGraduationCap className="h-4 w-4 shrink-0" />, qtd: boardObr.nos.length },
+            ...(curso.gruposOpcao?.length
+              ? [{ id: "opcoes" as const, rotulo: curso.rotuloOpcoes ?? "Opções do Curso", icone: "◈", qtd: boardOpc.nos.filter((n) => !n.externo).length }]
+              : []),
             { id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
           ]
         ).map((op) => {

@@ -1,5 +1,11 @@
 import type { DisciplinaMatriz, Matriz } from "../tipos";
-import { descricaoDoCurso, ehTrilha, categoriaSimples } from "../cursos";
+import {
+  categoriaSimples,
+  contaNoBlocoOptativo,
+  descricaoDoCurso,
+  ehTrilha,
+  grupoOpcaoDe,
+} from "../cursos";
 import { criarMapaIdentidade } from "./identidade";
 
 /**
@@ -10,10 +16,15 @@ import { criarMapaIdentidade } from "./identidade";
  * coluna por período. Quando a matriz declara um segundo estrato, ele vai para
  * uma faixa própria abaixo para não distorcer a leitura do fluxo.
  *
- * Board "trilhas": uma raia por trilha do curso, contendo apenas disciplinas
- * que efetivamente abriram em algum semestre conhecido. Pré-requisitos que moram
- * fora da raia (obrigatórias, 2º estrato) entram como nós fantasma na coluna 0,
- * para que a árvore não comece no ar.
+ * Board "opcoes": uma raia por conjunto de escolha — os grupos "Opções de …" da
+ * 968 e o Ciclo de Humanidades. É a metade do currículo que não cabe em
+ * "obrigatorias" e não é trilha; sem este board a 968 mostrava 27 das 201
+ * disciplinas, e o Ciclo de Humanidades era invisível em todos os cursos.
+ *
+ * Board "trilhas": uma raia por conjunto do bloco de aprofundamento, contendo
+ * apenas disciplinas que efetivamente abriram em algum semestre conhecido.
+ * Pré-requisitos que moram fora da raia (obrigatórias, 2º estrato) entram como
+ * nós fantasma na coluna 0, para que a árvore não comece no ar.
  */
 
 export const LARGURA_NO = 190;
@@ -32,6 +43,8 @@ export type GrupoCor =
   | "atividades"
   | "segundoEstrato"
   | "trilha"
+  // grupo de escolha da 968 ("Opções de …"): não é trilha nem obrigatória
+  | "opcao"
   | "externo";
 
 export interface NoFluxo {
@@ -301,17 +314,30 @@ export function montarBoardObrigatorias(matriz: Matriz): Board {
   };
 }
 
-/**
- * Board das trilhas do curso, restrito às disciplinas efetivamente abertas.
- * @param codigosAbertos códigos que apareceram na oferta de algum semestre conhecido
- */
-export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>): Board {
-  const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
+/** Uma raia do board: o conjunto que a nomeia e as disciplinas que caem nela. */
+interface Raia {
+  id: number;
+  nome: string;
+  /** carga que o conjunto exige, para o subrótulo */
+  ch: number;
+  /** disciplinas da raia, já filtradas por oferta conhecida */
+  disciplinas: DisciplinaMatriz[];
+}
 
-  const trilhas = Object.entries(matriz.conjuntos)
-    .filter(([id]) => ehTrilha(descricaoDoCurso(matriz), id))
-    .map(([id, c]) => ({ id: Number(id), nome: c.nome }))
-    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+/**
+ * Board de raias: uma faixa por conjunto, com a árvore de pré-requisitos dentro.
+ *
+ * Serve tanto às trilhas quanto aos grupos de escolha da 968 — a diferença
+ * entre eles é curricular, não visual: nos dois casos o aluno escolhe dentro de
+ * um conjunto que tem carga própria a cumprir.
+ */
+function montarBoardRaias(
+  matriz: Matriz,
+  raias: Raia[],
+  grupoCor: GrupoCor,
+  rotuloCarga: (r: Raia) => string,
+): Board {
+  const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
 
   const nos: NoFluxo[] = [];
   const arestas: ArestaFluxo[] = [];
@@ -319,11 +345,9 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
   let yAtual = PADDING;
   let maxColunas = 1;
 
-  for (const trilha of trilhas) {
-    const daTrilha = matriz.disciplinas.filter(
-      (d) => d.conjunto === trilha.id && codigosAbertos.has(d.codigo)
-    );
-    if (daTrilha.length === 0) continue; // trilha sem oferta conhecida não vira raia
+  for (const trilha of raias) {
+    const daTrilha = trilha.disciplinas;
+    if (daTrilha.length === 0) continue; // conjunto sem oferta conhecida não vira raia
 
     const internos = new Set(daTrilha.map((d) => d.codigo));
     const idNo = (codigo: string) => `${trilha.id}:${codigo}`;
@@ -347,7 +371,7 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
       nos.push(noDe(d, matriz, { id: idNo(codigo), externo: true, grupo: "externo" }));
       prereqsPorNo.set(idNo(codigo), []);
     }
-    for (const d of daTrilha) nos.push(noDe(d, matriz, { id: idNo(d.codigo), grupo: "trilha" }));
+    for (const d of daTrilha) nos.push(noDe(d, matriz, { id: idNo(d.codigo), grupo: grupoCor }));
 
     for (const [para, pais] of prereqsPorNo) {
       for (const de of pais) arestas.push({ id: `${de}->${para}`, de, para });
@@ -394,7 +418,7 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
     faixas.push({
       id: String(trilha.id),
       rotulo: trilha.nome,
-      subrotulo: `${daTrilha.length} ${daTrilha.length === 1 ? "disciplina aberta" : "disciplinas abertas"} · ${matriz.conjuntos[String(trilha.id)]?.ch ?? 90}h exigidas`,
+      subrotulo: rotuloCarga(trilha),
       y: yAtual,
       altura: alturaFaixa,
     });
@@ -409,6 +433,106 @@ export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>):
     largura: xDaColuna(maxColunas - 1) + LARGURA_NO + PADDING,
     altura: yAtual + PADDING,
   };
+}
+
+/**
+ * Board das trilhas do curso, restrito às disciplinas efetivamente abertas.
+ * @param codigosAbertos códigos que apareceram na oferta de algum semestre conhecido
+ */
+export function montarBoardTrilhas(matriz: Matriz, codigosAbertos: Set<string>): Board {
+  const curso = descricaoDoCurso(matriz);
+  // Entra tudo que soma para o bloco optativo, e não só o que valida trilha:
+  // "973 Optativas Isoladas" na 844 e "1186 Optativas" na 968 contam para a
+  // carga do bloco e ficavam fora do desenho.
+  const raias: Raia[] = Object.entries(matriz.conjuntos)
+    .filter(([id]) => contaNoBlocoOptativo(curso, id) && !conjuntoTemFilho(matriz, id))
+    .map(([id, c]) => ({
+      id: Number(id),
+      nome: c.nome,
+      ch: c.ch,
+      // a disciplina pode estar numa subárea da trilha: em Sistemas IoT (1226)
+      // ela mora em 1227..1233, três níveis abaixo do agregador
+      disciplinas: matriz.disciplinas.filter(
+        (d) =>
+          codigosAbertos.has(d.codigo) &&
+          (d.conjunto === Number(id) || conjuntoAncestral(curso, d.conjunto, Number(id))),
+      ),
+    }))
+    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+  return montarBoardRaias(
+    matriz,
+    raias,
+    "trilha",
+    (r) =>
+      `${r.disciplinas.length} ${r.disciplinas.length === 1 ? "disciplina aberta" : "disciplinas abertas"} · ${r.ch}h exigidas`,
+  );
+}
+
+/**
+ * Board dos grupos de escolha ("Opções de …"), uma raia por grupo.
+ *
+ * É o board que faltava para a matriz 968: são 25 grupos somando 1875h, quase
+ * metade do curso. Sem ele o fluxograma mostrava 27 das 201 disciplinas e dava
+ * a impressão de que o currículo cabia nas obrigatórias.
+ *
+ * O subrótulo diz o que o aluno de fato decide ali: quantas horas escolher de
+ * quantas ofertadas.
+ */
+export function montarBoardOpcoes(matriz: Matriz, codigosAbertos: Set<string>): Board {
+  const curso = descricaoDoCurso(matriz);
+  // Grupos "Opções de …" mais as categorias de escolha do curso — Ciclo de
+  // Humanidades, Opção de Expressão Gráfica. São a mesma decisão do ponto de
+  // vista do aluno: escolher N horas dentro de um conjunto. A pool de eletivas
+  // fica fora porque é disciplina de fora da matriz, sem lista a desenhar.
+  const conjuntos = [
+    ...(curso.gruposOpcao ?? []),
+    ...curso.categorias.filter((c) => c.id !== "eletivas" && c.id !== "segundoEstrato").map((c) => c.conjunto),
+  ];
+  const raias: Raia[] = conjuntos
+    .map((g) => {
+      const conj = matriz.conjuntos[String(g)];
+      return {
+        id: g,
+        nome: conj?.nome ?? String(g),
+        ch: conj?.ch ?? 0,
+        disciplinas: matriz.disciplinas.filter(
+          (d) =>
+            codigosAbertos.has(d.codigo) &&
+            (grupoOpcaoDe(curso, d.conjunto) === g ||
+              d.conjunto === g ||
+              conjuntoAncestral(curso, d.conjunto, g)),
+        ),
+      };
+    })
+    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+  return montarBoardRaias(matriz, raias, "opcao", (r) => {
+    const ofertadas = r.disciplinas.reduce((a, d) => a + (d.horas.total || d.horas.chead), 0);
+    return `escolher ${r.ch}h de ${ofertadas}h abertas · ${r.disciplinas.length} ${
+      r.disciplinas.length === 1 ? "disciplina" : "disciplinas"
+    }`;
+  });
+}
+
+/** true quando o conjunto tem subárea: quem vira raia é a folha, não o agregador. */
+function conjuntoTemFilho(matriz: Matriz, id: string): boolean {
+  return Object.values(matriz.conjuntos).some((c) => String((c as { pai?: unknown }).pai) === id);
+}
+
+/** true quando `alvo` é ancestral do conjunto na árvore da matriz. */
+function conjuntoAncestral(
+  curso: ReturnType<typeof descricaoDoCurso>,
+  conjunto: number | null,
+  alvo: number,
+): boolean {
+  if (conjunto === null) return false;
+  let atual: number | undefined = conjunto;
+  for (let i = 0; i < 8 && atual !== undefined; i++) {
+    if (atual === alvo) return true;
+    atual = curso.hierarquia?.[atual];
+  }
+  return false;
 }
 
 /** Códigos que apareceram na oferta de qualquer um dos semestres informados, normalizados para a matriz atual. */
