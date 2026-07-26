@@ -23,7 +23,7 @@ Este documento é o **contrato de trabalho e manual canônico de arquitetura** p
 
 ## 1. O que é o projeto e Metodologia de Desenvolvimento
 
-O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matriz 981)** e à **Engenharia de Computação (matriz 844)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de BSI se aplica a outro curso.
+O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matriz 981)**, à **Engenharia de Computação (matrizes 844 e 962)** e à **Engenharia Eletrônica (matriz 968)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de BSI se aplica a outro curso — na 968, por exemplo, o bloco optativo (2385h) é maior que o obrigatório (1710h), e quase todo o currículo são grupos de escolha, e não trilhas.
 
 ### Metodologia e Escalação de Trabalho
 Atualmente, o projeto adota uma metodologia de **Desenvolvimento Ágil Individual com Vibe Coding / IA Assistida (Antigravity & Claude Code)**. Para garantir escalabilidade e transição suave para **trabalho grupal de mantenedores no futuro**, a documentação é dividida em **três documentos canônicos especializados**:
@@ -54,14 +54,17 @@ oasis-utfpr/
 │   ├── turmas/               # Ofertas semestrais de BSI
 │       ├── 2026-1.json       # Oferta primária gerada via PDF do Portal do Aluno
 │       └── 2025-2.json       # Oferta secundária (Grade na Hora)
-│   └── eng-comp/             # Matriz 844 e ofertas de Engenharia de Computação
+│   ├── eng-comp/             # Matrizes 844 e 962 e ofertas de Engenharia de Computação
+│   └── eng-eletronica/       # Matriz 968, oferta e o complemento de conjuntos
 ├── tools/                    # Pipeline de extração e validação de dados em Python 3
-│   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-981.json
+│   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-<n>.json
 │   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
+│   ├── validate_matriz_968.py # Invariantes da 968, inclusive a árvore de conjuntos
 │   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
 │   ├── validate_turmas_estrutura.py # Invariantes independentes da fonte
-│   └── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
+│   ├── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
+│   └── parse_gnh_html.py     # Leitor terciário: página salva do GNH (ofertas passadas)
 ├── src/                      # Código fonte da aplicação web (Vite + React 19 + TypeScript)
 │   ├── index.css             # Tokens Tailwind v4 e estilos base (--color-utfpr-*)
 │   ├── main.tsx              # Montagem do React no DOM
@@ -101,6 +104,13 @@ Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não im
      choque, para a grade projetada nunca conflitar consigo mesma. Aceita `gradeFixada`,
      a grade montada no Planejamento de Matrícula, como semestre de partida.
    - `motor/grade-magica.ts`: Sistema de Recomendação de Grade (Grade Mágica) maximizando carga horária e avanço em matérias obrigatórias, aplicando pesos diferenciados para turmas S73 (Prioridade 1, +100pts) e S71 (Prioridade 2, +30pts) de BSI, e validando restrições de turnos.
+     Todo teto de categoria é resolvido pela hierarquia de conjuntos e pelo que a
+     matriz declara — nunca por número solto nem por piso fixo. Comparar
+     `conjunto === 1174` fazia o teto de humanidades nunca disparar em Eng.
+     Eletrônica, e um piso fixo de 120h de eletivas era sugerido a cursos que
+     declaram `cargas.eletiva: 0`. A sugestão também consolida pelo código
+     canônico (`criarMapaIdentidade`): a mesma exigência abre turma sob códigos
+     diferentes, e sem isso a grade saía com a matéria repetida.
 
 3. **Camada 3 — Interface Visual (`src/ui/`):**
    - **Design Aesthetics:** Visual limpo, sem emojis, tipografia de alta fidelidade com `Outfit` (cabeçalhos) e `Plus Jakarta Sans` (corpo), paleta neutra `zinc` contrastando com amarelo dourado `utfpr` (`--color-utfpr-500`).
@@ -127,7 +137,23 @@ npm run build
 python tools/validate_turmas.py "Turmas Abertas - Portal do Aluno UTFPR.pdf" data/turmas/2026-1.json
 python tools/validate_turmas_estrutura.py data/eng-comp/turmas/2025-2.json
 python tools/validate_matriz.py
+
+# Reimportar a matriz de Engenharia Eletrônica (o 3º argumento traz os conjuntos
+# que a legenda da matriz não declara — ver o cabeçalho do complemento)
+python tools/parse_matriz.py "materiais-referencia/Eng-Eletronica-968/Matriz Curricular Eng. Eletrônica 968.pdf" data/eng-eletronica/matriz-968.json data/eng-eletronica/conjuntos-968-complemento.json
+python tools/validate_matriz_968.py
 ```
+
+### Hierarquia de conjuntos na matriz
+
+A legenda das optativas declara `Período inicial/final` **apenas** nos conjuntos
+de topo; um conjunto sem período é subárea do topo declarado logo acima dele. É
+a única marca de aninhamento na fonte, e o `parse_matriz.py` a converte no campo
+`pai` de cada conjunto — que é o que separa um grupo de escolha de uma subárea
+dele. Em Eng. Eletrônica a árvore chega a quatro níveis
+(`1180 → 1226 → 1228 → 1230`). Ao ler um conjunto no domínio, suba a hierarquia
+(`categoriaSimples`, `grupoOpcaoDe`) em vez de comparar o número direto: a
+disciplina aponta para a folha, e quem tem carga a cumprir é o topo.
 
 ---
 
