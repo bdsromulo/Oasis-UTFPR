@@ -81,7 +81,7 @@ export function ModalComoGerarHistorico(props: { aberto: boolean; onFechar: () =
             type="button"
             onClick={onFechar}
             aria-label="Fechar"
-            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
           >
             <IconX className="h-4 w-4" />
           </button>
@@ -118,7 +118,7 @@ export function ModalComoGerarHistorico(props: { aberto: boolean; onFechar: () =
           <button
             type="button"
             onClick={onFechar}
-            className="w-full cursor-pointer rounded-xl bg-utfpr-500 py-2.5 font-display text-sm font-black text-zinc-950 shadow-sm transition-all hover:bg-utfpr-400 active:scale-[0.98]"
+            className="min-h-11 w-full cursor-pointer rounded-xl bg-utfpr-500 py-2.5 font-display text-sm font-black text-zinc-950 shadow-sm transition-all hover:bg-utfpr-400 active:scale-[0.98]"
           >
             Entendi, voltar para o envio
           </button>
