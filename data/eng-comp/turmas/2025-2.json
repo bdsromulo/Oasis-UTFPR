@@ -1,11 +1,11 @@
 {
- "curso": "ENG DE COMPUTAÃ‡ÃƒO",
+ "curso": "ENG DE COMPUTAÇÃO",
  "semestre": "2025-2",
  "fonte": "Backup HTML do Grade na Hora (2025-2), atualizado em 04/08/2025 11:33:03",
  "disciplinas": [
   {
    "codigo": "ICSHX0",
-   "nome": "Acessibilidade E InclusÃ£o Digital",
+   "nome": "Acessibilidade E Inclusão Digital",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -51,7 +51,7 @@
   },
   {
    "codigo": "ELEQ30",
-   "nome": "AnÃ¡lise De Sistemas Lineares",
+   "nome": "Análise De Sistemas Lineares",
    "aulas_semanais_presenciais": 5,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -162,7 +162,7 @@
   },
   {
    "codigo": "ICSG20",
-   "nome": "AnÃ¡lise E Projeto De Sistemas",
+   "nome": "Análise E Projeto De Sistemas",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -245,7 +245,7 @@
   },
   {
    "codigo": "ELEW30",
-   "nome": "Arquitetura E OrganizaÃ§Ã£o De Computadores",
+   "nome": "Arquitetura E Organização De Computadores",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -342,7 +342,7 @@
   },
   {
    "codigo": "ELF61",
-   "nome": "Arquitetura E OrganizaÃ§Ã£o De Computadores",
+   "nome": "Arquitetura E Organização De Computadores",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -439,7 +439,7 @@
   },
   {
    "codigo": "ICSH41",
-   "nome": "AvaliaÃ§Ã£o Em InteraÃ§Ã£o Humano-Computador",
+   "nome": "Avaliação Em Interação Humano-Computador",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -591,7 +591,7 @@
   },
   {
    "codigo": "FCH7HC",
-   "nome": "Capitalismo ContemporÃ¢neo E Economia PolÃ­tica",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1049,7 +1049,7 @@
   },
   {
    "codigo": "ELEB21",
-   "nome": "Circuitos ElÃ©tricos",
+   "nome": "Circuitos Elétricos",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1132,7 +1132,7 @@
   },
   {
    "codigo": "ELN73A",
-   "nome": "Circuitos ElÃ©tricos A",
+   "nome": "Circuitos Elétricos A",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1229,7 +1229,7 @@
   },
   {
    "codigo": "ELN75A",
-   "nome": "Circuitos ElÃ©tricos B",
+   "nome": "Circuitos Elétricos B",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1326,7 +1326,7 @@
   },
   {
    "codigo": "ICSI31",
-   "nome": "CiÃªncia Das Redes",
+   "nome": "Ciência Das Redes",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1379,7 +1379,7 @@
   },
   {
    "codigo": "ICSB56",
-   "nome": "CiÃªncia De Dados",
+   "nome": "Ciência De Dados",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1432,7 +1432,7 @@
   },
   {
    "codigo": "QB70J",
-   "nome": "CiÃªncias Do Ambiente",
+   "nome": "Ciências Do Ambiente",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1471,7 +1471,7 @@
   },
   {
    "codigo": "QBI7CA",
-   "nome": "CiÃªncias Do Ambiente",
+   "nome": "Ciências Do Ambiente",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1510,7 +1510,7 @@
   },
   {
    "codigo": "ICSHX1",
-   "nome": "ComputaÃ§Ã£o E Sociedade",
+   "nome": "Computação E Sociedade",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1556,7 +1556,7 @@
   },
   {
    "codigo": "ICSA47",
-   "nome": "ComputaÃ§Ã£o QuÃ¢ntica",
+   "nome": "Computação Quântica",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1609,7 +1609,7 @@
   },
   {
    "codigo": "ELET30",
-   "nome": "ComunicaÃ§Ã£o De Dados",
+   "nome": "Comunicação De Dados",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1678,7 +1678,7 @@
   },
   {
    "codigo": "COE70A",
-   "nome": "ComunicaÃ§Ã£o Oral E Escrita",
+   "nome": "Comunicação Oral E Escrita",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1897,7 +1897,7 @@
   },
   {
    "codigo": "ELTB3",
-   "nome": "ComunicaÃ§Ãµes Sem Fio",
+   "nome": "Comunicações Sem Fio",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -1950,7 +1950,7 @@
   },
   {
    "codigo": "ELTB4",
-   "nome": "ComunicaÃ§Ãµes Ã“pticas",
+   "nome": "Comunicações Ópticas",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -2109,7 +2109,7 @@
   },
   {
    "codigo": "MAT7C1",
-   "nome": "CÃ¡lculo Diferencial E Integral 1",
+   "nome": "Cálculo Diferencial E Integral 1",
    "aulas_semanais_presenciais": 6,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -2640,7 +2640,7 @@
   },
   {
    "codigo": "MA72H",
-   "nome": "CÃ¡lculo Diferencial E Integral 2",
+   "nome": "Cálculo Diferencial E Integral 2",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -2707,7 +2707,7 @@
   },
   {
    "codigo": "MAT7C2",
-   "nome": "CÃ¡lculo Diferencial E Integral 2",
+   "nome": "Cálculo Diferencial E Integral 2",
    "aulas_semanais_presenciais": 6,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3294,7 +3294,7 @@
   },
   {
    "codigo": "FCH7AA",
-   "nome": "DanÃ§a E Tecnologia",
+   "nome": "Dança E Tecnologia",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3377,7 +3377,7 @@
   },
   {
    "codigo": "ELN7AA",
-   "nome": "Desenho EletrÃ´nico",
+   "nome": "Desenho Eletrônico",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3430,7 +3430,7 @@
   },
   {
    "codigo": "ELB13",
-   "nome": "Desenho TÃ©cnico",
+   "nome": "Desenho Técnico",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3499,7 +3499,7 @@
   },
   {
    "codigo": "ELEF10",
-   "nome": "Desenho TÃ©cnico",
+   "nome": "Desenho Técnico",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3568,7 +3568,7 @@
   },
   {
    "codigo": "ELB23",
-   "nome": "Desenho TÃ©cnico Aplicado",
+   "nome": "Desenho Técnico Aplicado",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3637,7 +3637,7 @@
   },
   {
    "codigo": "ELEF20",
-   "nome": "Desenho TÃ©cnico Aplicado",
+   "nome": "Desenho Técnico Aplicado",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3824,7 +3824,7 @@
   },
   {
    "codigo": "FCH7XF",
-   "nome": "DimensÃ£o Ambiental Na GestÃ£o Urbana",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3870,7 +3870,7 @@
   },
   {
    "codigo": "FCH7XD",
-   "nome": "Direitos Humanos, SeguranÃ§a E Diversidade",
+   "nome": "Direitos Humanos, Segurança E Diversidade",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -3953,7 +3953,7 @@
   },
   {
    "codigo": "QB7AH",
-   "nome": "EducaÃ§Ã£o Ambiental",
+   "nome": "Educação Ambiental",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4075,7 +4075,7 @@
   },
   {
    "codigo": "ELE11",
-   "nome": "Eletricidade E EletrÃ´nica Na PrÃ¡tica",
+   "nome": "Eletricidade E Eletrônica Na Prática",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4128,7 +4128,7 @@
   },
   {
    "codigo": "ELN74A",
-   "nome": "EletrÃ´nica A",
+   "nome": "Eletrônica A",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4225,7 +4225,7 @@
   },
   {
    "codigo": "ELP61",
-   "nome": "EletrÃ´nica AnalÃ³gica 3: Amplificadores",
+   "nome": "Eletrônica Analógica 3: Amplificadores",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4322,7 +4322,7 @@
   },
   {
    "codigo": "ELN76A",
-   "nome": "EletrÃ´nica B",
+   "nome": "Eletrônica B",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4375,7 +4375,7 @@
   },
   {
    "codigo": "ELEE30",
-   "nome": "EletrÃ´nica Geral 1",
+   "nome": "Eletrônica Geral 1",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4472,7 +4472,7 @@
   },
   {
    "codigo": "ELEE31",
-   "nome": "EletrÃ´nica Geral 2",
+   "nome": "Eletrônica Geral 2",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4578,7 +4578,7 @@
   },
   {
    "codigo": "ELTA4",
-   "nome": "Engenharia ClÃ­nica",
+   "nome": "Engenharia Clínica",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -4857,7 +4857,7 @@
   },
   {
    "codigo": "MAT7ED",
-   "nome": "EquaÃ§Ãµes Diferenciais OrdinÃ¡rias",
+   "nome": "Equações Diferenciais Ordinárias",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -5681,7 +5681,7 @@
   },
   {
    "codigo": "FCH7FA",
-   "nome": "Filosofia Da CiÃªncia E Da Tecnologia",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -5928,7 +5928,7 @@
   },
   {
    "codigo": "ES70H",
-   "nome": "Fundamentos Da Ã‰tica",
+   "nome": "Fundamentos Da Ética",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6057,7 +6057,7 @@
   },
   {
    "codigo": "FCH7FB",
-   "nome": "Fundamentos Da Ã‰tica",
+   "nome": "Fundamentos Da Ética",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6140,7 +6140,7 @@
   },
   {
    "codigo": "GEE7A1",
-   "nome": "Fundamentos De AdministraÃ§Ã£o",
+   "nome": "Fundamentos De Administração",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6391,7 +6391,7 @@
   },
   {
    "codigo": "GEE7F1",
-   "nome": "Fundamentos De FinanÃ§as",
+   "nome": "Fundamentos De Finanças",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6442,7 +6442,7 @@
   },
   {
    "codigo": "GEE7G3",
-   "nome": "Fundamentos De GestÃ£o Da ProduÃ§Ã£o",
+   "nome": "Fundamentos De Gestão Da Produção",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6534,7 +6534,7 @@
   },
   {
    "codigo": "ICSF13",
-   "nome": "Fundamentos De ProgramaÃ§Ã£o 1",
+   "nome": "Fundamentos De Programação 1",
    "aulas_semanais_presenciais": 6,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -6833,7 +6833,7 @@
   },
   {
    "codigo": "FIS7E1",
-   "nome": "FÃ­sica Experimental 1",
+   "nome": "Física Experimental 1",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -7412,7 +7412,7 @@
   },
   {
    "codigo": "FIS7E2",
-   "nome": "FÃ­sica Experimental 2",
+   "nome": "Física Experimental 2",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -7479,7 +7479,7 @@
   },
   {
    "codigo": "FIS7F1",
-   "nome": "FÃ­sica TeÃ³rica 1",
+   "nome": "Física Teórica 1",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -7840,7 +7840,7 @@
   },
   {
    "codigo": "FIS7F2",
-   "nome": "FÃ­sica TeÃ³rica 2",
+   "nome": "Física Teórica 2",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8333,7 +8333,7 @@
   },
   {
    "codigo": "FIS7F3",
-   "nome": "FÃ­sica TeÃ³rica 3",
+   "nome": "Física Teórica 3",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8474,7 +8474,7 @@
   },
   {
    "codigo": "FIS7F4",
-   "nome": "FÃ­sica TeÃ³rica 4",
+   "nome": "Física Teórica 4",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8571,7 +8571,7 @@
   },
   {
    "codigo": "MAT7GA",
-   "nome": "Geometria AnalÃ­tica",
+   "nome": "Geometria Analítica",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8721,7 +8721,7 @@
   },
   {
    "codigo": "GE70L",
-   "nome": "GestÃ£o Da ProduÃ§Ã£o",
+   "nome": "Gestão Da Produção",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8760,7 +8760,7 @@
   },
   {
    "codigo": "GE79A",
-   "nome": "GestÃ£o De Pessoas",
+   "nome": "Gestão De Pessoas",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8799,7 +8799,7 @@
   },
   {
    "codigo": "GE70H",
-   "nome": "GestÃ£o Financeira",
+   "nome": "Gestão Financeira",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8868,7 +8868,7 @@
   },
   {
    "codigo": "FCH7HA",
-   "nome": "HistÃ³ria Da TÃ©cnica E Da Tecnologia",
+   "nome": "História Da Técnica E Da Tecnologia",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -8988,7 +8988,7 @@
   },
   {
    "codigo": "ES81A",
-   "nome": "HistÃ³ria Da TÃ©cnica E Da Tecnologia",
+   "nome": "História Da Técnica E Da Tecnologia",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9057,7 +9057,7 @@
   },
   {
    "codigo": "FCH7HB",
-   "nome": "HistÃ³ria Geral Da Economia",
+   "nome": "História Geral Da Economia",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9140,7 +9140,7 @@
   },
   {
    "codigo": "ICSU42",
-   "nome": "InformÃ¡tica Na EducaÃ§Ã£o",
+   "nome": "Informática Na Educação",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9193,7 +9193,7 @@
   },
   {
    "codigo": "ICSR42",
-   "nome": "Infraestrutura De Lans HierÃ¡rquicas",
+   "nome": "Infraestrutura De Lans Hierárquicas",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9299,7 +9299,7 @@
   },
   {
    "codigo": "ICSIX0",
-   "nome": "InteligÃªncia Artificial E Sociedade",
+   "nome": "Inteligência Artificial E Sociedade",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9380,7 +9380,7 @@
   },
   {
    "codigo": "ICSB30",
-   "nome": "IntroduÃ§Ã£o A Banco De Dados",
+   "nome": "Introdução A Banco De Dados",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9477,7 +9477,7 @@
   },
   {
    "codigo": "ELEX10",
-   "nome": "IntroduÃ§Ã£o A PrÃ¡ticas De LaboratÃ³rio Em Eletricidade E EletrÃ´nica",
+   "nome": "Introdução A Práticas De Laboratório Em Eletricidade E Eletrônica",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9597,7 +9597,7 @@
   },
   {
    "codigo": "EST70A",
-   "nome": "IntroduÃ§Ã£o Ã€ EstatÃ­stica",
+   "nome": "Introdução À Estatística",
    "aulas_semanais_presenciais": 0,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -9726,7 +9726,7 @@
   },
   {
    "codigo": "EST70C",
-   "nome": "IntroduÃ§Ã£o Ã€ EstatÃ­stica",
+   "nome": "Introdução À Estatística",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10087,7 +10087,7 @@
   },
   {
    "codigo": "ICSH31",
-   "nome": "IntroduÃ§Ã£o Ã€ InteraÃ§Ã£o Humano-Computador",
+   "nome": "Introdução À Interação Humano-Computador",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10133,7 +10133,7 @@
   },
   {
    "codigo": "ICSD20",
-   "nome": "IntroduÃ§Ã£o Ã€ LÃ³gica Para ComputaÃ§Ã£o",
+   "nome": "Introdução À Lógica Para Computação",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10216,7 +10216,7 @@
   },
   {
    "codigo": "ELEC30",
-   "nome": "LaboratÃ³rio De Controle Discreto",
+   "nome": "Laboratório De Controle Discreto",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10359,7 +10359,7 @@
   },
   {
    "codigo": "ELEW33",
-   "nome": "LÃ³gica ReconfigurÃ¡vel",
+   "nome": "Lógica Reconfigurável",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10412,7 +10412,7 @@
   },
   {
    "codigo": "ELTE3",
-   "nome": "LÃ³gica ReconfigurÃ¡vel",
+   "nome": "Lógica Reconfigurável",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10465,7 +10465,7 @@
   },
   {
    "codigo": "ICSD21",
-   "nome": "MatemÃ¡tica Discreta",
+   "nome": "Matemática Discreta",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10581,7 +10581,7 @@
   },
   {
    "codigo": "FCH7GA",
-   "nome": "MetropolizaÃ§Ã£o ContemporÃ¢nea: Tecnologia E TerritÃ³rio",
+   "nome": "Metropolização Contemporânea: Tecnologia E Território",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10627,7 +10627,7 @@
   },
   {
    "codigo": "ICSG48",
-   "nome": "Modelagem De Processos De NegÃ³cios",
+   "nome": "Modelagem De Processos De Negócios",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10680,7 +10680,7 @@
   },
   {
    "codigo": "ICSB60",
-   "nome": "Nosql - Banco De Dados NÃ£o Relacionais",
+   "nome": "Nosql - Banco De Dados Não Relacionais",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10733,7 +10733,7 @@
   },
   {
    "codigo": "EST70B",
-   "nome": "NoÃ§Ãµes De EstatÃ­stica",
+   "nome": "Noções De Estatística",
    "aulas_semanais_presenciais": 0,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10772,7 +10772,7 @@
   },
   {
    "codigo": "ELH05",
-   "nome": "NoÃ§Ãµes JurÃ­dicas Para Empreendedores",
+   "nome": "Noções Jurídicas Para Empreendedores",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10825,7 +10825,7 @@
   },
   {
    "codigo": "ELE64",
-   "nome": "Oficina De IntegraÃ§Ã£o",
+   "nome": "Oficina De Integração",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10871,7 +10871,7 @@
   },
   {
    "codigo": "ELEX20",
-   "nome": "Oficina De IntegraÃ§Ã£o 1",
+   "nome": "Oficina De Integração 1",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -10991,7 +10991,7 @@
   },
   {
    "codigo": "ELEX21",
-   "nome": "Oficina De IntegraÃ§Ã£o 2",
+   "nome": "Oficina De Integração 2",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11074,7 +11074,7 @@
   },
   {
    "codigo": "ELEX22",
-   "nome": "Oficina De IntegraÃ§Ã£o 3",
+   "nome": "Oficina De Integração 3",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11199,7 +11199,7 @@
   },
   {
    "codigo": "ELE41",
-   "nome": "Oficina De IntegraÃ§Ã£o: Eletricidade, EletrÃ´nica E ComputaÃ§Ã£o Na PrÃ¡tica",
+   "nome": "Oficina De Integração: Eletricidade, Eletrônica E Computação Na Prática",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11372,7 +11372,7 @@
   },
   {
    "codigo": "ICSM49",
-   "nome": "PadrÃµes Web",
+   "nome": "Padrões Web",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11425,7 +11425,7 @@
   },
   {
    "codigo": "FCH7SF",
-   "nome": "PolÃ­tica, InstituiÃ§Ãµes E Cidadania No ParanÃ¡",
+   "nome": "Política, Instituições E Cidadania No Paraná",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11478,7 +11478,7 @@
   },
   {
    "codigo": "FCH7XE",
-   "nome": "PolÃ­ticas PÃºblicas",
+   "nome": "Políticas Públicas",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11524,7 +11524,7 @@
   },
   {
    "codigo": "FCH7XC",
-   "nome": "PresenÃ§a Africana No Brasil",
+   "nome": "Presença Africana No Brasil",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11598,7 +11598,7 @@
   },
   {
    "codigo": "ELTA1",
-   "nome": "PrincÃ­pios De Engenharia BiomÃ©dica",
+   "nome": "Princípios De Engenharia Biomédica",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11651,7 +11651,7 @@
   },
   {
    "codigo": "ELB31",
-   "nome": "Probabilidade E EstatÃ­stica Aplicadas",
+   "nome": "Probabilidade E Estatística Aplicadas",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11923,7 +11923,7 @@
   },
   {
    "codigo": "ELTE2",
-   "nome": "ProgramaÃ§Ã£o MatemÃ¡tica",
+   "nome": "Programação Matemática",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -11976,7 +11976,7 @@
   },
   {
    "codigo": "CSM43",
-   "nome": "ProgramaÃ§Ã£o Para Dispositivos MÃ³veis E Sem Fio",
+   "nome": "Programação Para Dispositivos Móveis E Sem Fio",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12029,7 +12029,7 @@
   },
   {
    "codigo": "ICSM46",
-   "nome": "ProgramaÃ§Ã£o Para Dispositivos MÃ³veis E Sem Fio",
+   "nome": "Programação Para Dispositivos Móveis E Sem Fio",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12082,7 +12082,7 @@
   },
   {
    "codigo": "DIN83A",
-   "nome": "Projeto De Interfaces E ExperiÃªncias Digitais",
+   "nome": "Projeto De Interfaces E Experiências Digitais",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12179,7 +12179,7 @@
   },
   {
    "codigo": "ICSA30",
-   "nome": "Projeto E AnÃ¡lise De Algoritmos",
+   "nome": "Projeto E Análise De Algoritmos",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12299,7 +12299,7 @@
   },
   {
    "codigo": "CAART05",
-   "nome": "PrÃ¡tica ArtÃ­stica Musial: Grupos Instrumentais 2",
+   "nome": "Prática Artística Musial: Grupos Instrumentais 2",
    "aulas_semanais_presenciais": 6,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12366,7 +12366,7 @@
   },
   {
    "codigo": "CAART04",
-   "nome": "PrÃ¡tica ArtÃ­stica Musical: Grupos Instrumentais 1",
+   "nome": "Prática Artística Musical: Grupos Instrumentais 1",
    "aulas_semanais_presenciais": 6,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12433,7 +12433,7 @@
   },
   {
    "codigo": "CAART02",
-   "nome": "PrÃ¡tica Musical E InteraÃ§Ãµes Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo AcÃºstico 1",
+   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo Acústico 1",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12795,7 +12795,7 @@
   },
   {
    "codigo": "QBI7QE",
-   "nome": "QuÃ­mica Geral Experimental",
+   "nome": "Química Geral Experimental",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -12954,7 +12954,7 @@
   },
   {
    "codigo": "QBI7QT",
-   "nome": "QuÃ­mica Geral TeÃ³rica",
+   "nome": "Química Geral Teórica",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -13220,7 +13220,7 @@
   },
   {
    "codigo": "ELER50",
-   "nome": "SimulaÃ§Ãµes De Sistemas De ComunicaÃ§Ãµes",
+   "nome": "Simulações De Sistemas De Comunicações",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -13340,7 +13340,7 @@
   },
   {
    "codigo": "ELTB1",
-   "nome": "Sistemas De ComunicaÃ§Ã£o",
+   "nome": "Sistemas De Comunicação",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -13543,7 +13543,7 @@
   },
   {
    "codigo": "ICSS30",
-   "nome": "Sistemas DistribuÃ­dos",
+   "nome": "Sistemas Distribuídos",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -14263,7 +14263,7 @@
   },
   {
    "codigo": "FCH7SD",
-   "nome": "Sociedade E PolÃ­tica No Brasil",
+   "nome": "Sociedade E Política No Brasil",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -14695,7 +14695,7 @@
   },
   {
    "codigo": "FCH7XA",
-   "nome": "Tecnologia Social E Economia SolidÃ¡ria",
+   "nome": "Tecnologia Social E Economia Solidária",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -14848,7 +14848,7 @@
   },
   {
    "codigo": "FCH7SC",
-   "nome": "Tecnologia, Trabalho E SaÃºde",
+   "nome": "Tecnologia, Trabalho E Saúde",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -14968,7 +14968,7 @@
   },
   {
    "codigo": "ICSA31",
-   "nome": "Teoria Da ComputaÃ§Ã£o",
+   "nome": "Teoria Da Computação",
    "aulas_semanais_presenciais": 3,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15067,7 +15067,7 @@
   },
   {
    "codigo": "ICSXG0",
-   "nome": "Trabalho De ConclusÃ£o De Curso 1",
+   "nome": "Trabalho De Conclusão De Curso 1",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15106,7 +15106,7 @@
   },
   {
    "codigo": "CSX43",
-   "nome": "Trabalho De ConclusÃ£o De Curso 2",
+   "nome": "Trabalho De Conclusão De Curso 2",
    "aulas_semanais_presenciais": 0,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15130,7 +15130,7 @@
   },
   {
    "codigo": "ICSXG1",
-   "nome": "Trabalho De ConclusÃ£o De Curso 2",
+   "nome": "Trabalho De Conclusão De Curso 2",
    "aulas_semanais_presenciais": 2,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15154,7 +15154,7 @@
   },
   {
    "codigo": "ICSE20",
-   "nome": "TÃ©cnicas De ProgramaÃ§Ã£o",
+   "nome": "Técnicas De Programação",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15339,7 +15339,7 @@
   },
   {
    "codigo": "ELTB6",
-   "nome": "TÃ³picos AvanÃ§ados Em ComunicaÃ§Ãµes",
+   "nome": "Tópicos Avançados Em Comunicações",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15391,47 +15391,8 @@
    ]
   },
   {
-   "codigo": "ELEF30",
-   "nome": "Ã‰tica, ProfissÃ£o E Cidadania",
-   "aulas_semanais_presenciais": 2,
-   "aulas_semanais_assincronas": null,
-   "horas_semestrais_extensionistas": null,
-   "turmas": [
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": null,
-     "vagas_calouros": null,
-     "reserva": "",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CB-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-105",
-       "sede": "Centro"
-      }
-     ],
-     "professores": [
-      "Ricardo Luders"
-     ],
-     "professores_raw": "Ricardo Luders",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
    "codigo": "MAT7AL",
-   "nome": "Ã�lgebra Linear",
+   "nome": "Álgebra Linear",
    "aulas_semanais_presenciais": 4,
    "aulas_semanais_assincronas": null,
    "horas_semestrais_extensionistas": null,
@@ -15961,6 +15922,45 @@
       "Diane Rizzotto Rossetto"
      ],
      "professores_raw": "Diane Rizzotto Rossetto",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELEF30",
+   "nome": "Ética, Profissão E Cidadania",
+   "aulas_semanais_presenciais": 2,
+   "aulas_semanais_assincronas": null,
+   "horas_semestrais_extensionistas": null,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": null,
+     "vagas_calouros": null,
+     "reserva": "",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CB-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-105",
+       "sede": "Centro"
+      }
+     ],
+     "professores": [
+      "Ricardo Luders"
+     ],
+     "professores_raw": "Ricardo Luders",
      "optativa_matrizes": [],
      "optativa": false
     }
