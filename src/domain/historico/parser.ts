@@ -12,8 +12,14 @@ import type { DisciplinaCursada, PerfilAluno, ResumoConjunto, Situacao } from ".
 // O primeiro campo aceita 3 dígitos porque a carga horária pode passar de 99:
 // o Estágio Supervisionado de Eng. Comp. tem 400h, e com o limite de 2 dígitos a
 // linha inteira deixava de casar — a disciplina sumia do histórico em silêncio.
+// O bloco numérico é CHS CHT CHEXT [Créd.] Média Freq Semestre Ano. A coluna de
+// créditos só existe no histórico de Eng. Comp.; sem torná-la opcional o CHT lido
+// era o CHEXT (0 em quase toda a matriz 844). A nota aceita vírgula ou ponto: as
+// linhas "Aprovado Em Exame De Suficiência" saem com "10.0" enquanto as demais
+// saem com "9,3" — e sem o ponto a linha inteira não casava, fazendo a disciplina
+// aprovada por suficiência desaparecer do sistema sem aviso.
 const RE_NUCLEO =
-  /(?:^|\s)(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})\s+([\d,]+|\*)\s+([\d,]+|\*)\s+([12])\s*(20\d{2})/;
+  /(?:^|\s)(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})(?:\s+(\d{1,3}))?\s+([\d,.]+|\*)\s+([\d,.]+|\*)\s+([12])\s*(20\d{2})/;
 const RE_CODIGO = /^[A-Z]{2,4}[0-9][A-Z0-9]{1,3}$|^[A-Z]{3,5}[0-9]{2}[A-Z0-9]?$/;
 const RE_TURMA = /^[A-Z]\d{2}$/;
 
@@ -67,7 +73,12 @@ function acharSituacao(linhas: string[]): Situacao | null {
 
 function num(s: string): number | null {
   if (s === "*" || s === undefined) return null;
-  return parseFloat(s.replace(/\./g, "").replace(",", "."));
+  // com vírgula, o ponto é separador de milhar ("1.234,5"); sem ela, só é milhar
+  // se agrupar de três em três ("2.005" = 2005), senão é decimal mesmo ("10.0",
+  // como sai a nota nas linhas de Exame de Suficiência)
+  if (s.includes(",")) return parseFloat(s.replace(/\./g, "").replace(",", "."));
+  if (/^\d{1,3}(?:\.\d{3})+$/.test(s)) return parseFloat(s.replace(/\./g, ""));
+  return parseFloat(s);
 }
 
 export function parseHistorico(linhasIn: string[]): PerfilAluno {
@@ -152,7 +163,9 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     if (/Disciplinas Obrigatórias Faltantes/.test(l)) { secao = "faltantes"; continue; }
     if (/^Dependências/.test(l)) { secao = "dependencias"; continue; }
     if (/Disciplinas Matriculadas/.test(l)) { secao = "matriculadas"; continue; }
-    if (/Exame De Curso|Exame de Suficiência/.test(l)) { secao = "nenhuma"; continue; }
+    // só o cabeçalho da seção, ancorado: a linha da própria disciplina termina em
+    // "Aprovado Em Exame De Suficiência" e não pode encerrar a tabela de cursadas
+    if (/^Exame De Curso|^Exame de Suficiência/i.test(l)) { secao = "nenhuma"; continue; }
     if (/Quadro Resumo disciplinas/.test(l)) { secao = "resumoGeral"; continue; }
     if (/Detalhes Para o Cálculo|Quadro De Carga Horária|Histórico de Disciplinas Faltantes/.test(l)) {
       secao = "nenhuma";
@@ -320,11 +333,11 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
       nome: "",
       situacao,
       origem: cursadasLinhas[idx].origem,
-      media: num(m[4]),
-      frequencia: num(m[5]),
+      media: num(m[5]),
+      frequencia: num(m[6]),
       cht: parseInt(m[2]),
-      semestre: parseInt(m[6]),
-      ano: parseInt(m[7]),
+      semestre: parseInt(m[7]),
+      ano: parseInt(m[8]),
     } satisfies DisciplinaCursada);
   });
 
