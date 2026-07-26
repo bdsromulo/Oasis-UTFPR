@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, Botao, Badge } from "../componentes";
+import { ModalComoGerarHistorico } from "./ModalComoGerarHistorico";
 import {
   IconBookOpen,
   IconBuilding,
@@ -75,6 +76,7 @@ export function TelaCheckin(props: Props) {
   const [openCampus, setOpenCampus] = useState(false);
   const [openCurso, setOpenCurso] = useState(false);
   const [openMatriz, setOpenMatriz] = useState(false);
+  const [comoGerarAberto, setComoGerarAberto] = useState(false);
 
   const listaCampus = [
     { id: "curitiba", nome: "Câmpus Curitiba", disponivel: true },
@@ -149,8 +151,18 @@ export function TelaCheckin(props: Props) {
               }
             />
           </label>
+
+          <button
+            type="button"
+            onClick={() => setComoGerarAberto(true)}
+            className="mt-3 min-h-11 w-full cursor-pointer text-center text-xs font-semibold text-zinc-500 underline decoration-dotted underline-offset-2 transition-colors hover:text-utfpr-600 dark:text-zinc-400 dark:hover:text-utfpr-400"
+          >
+            Não sei gerar meu histórico
+          </button>
         </div>
       </Card>
+
+      <ModalComoGerarHistorico aberto={comoGerarAberto} onFechar={() => setComoGerarAberto(false)} />
 
       {/* Seção 2: Entrar sem Histórico (Modo Livre) */}
       <Card titulo="2. Entrar sem Histórico (Modo Livre)" classe="p-6 sm:p-8">
