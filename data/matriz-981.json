@@ -142,9 +142,9 @@
    "conjunto": null,
    "modelo": "Enade Ingressante",
    "aulas_semanais": {
-    "teoricas": 981,
+    "teoricas": 0,
     "praticas": 0,
-    "total": 3,
+    "total": 0,
     "aps": 0,
     "apcc": 0
    },

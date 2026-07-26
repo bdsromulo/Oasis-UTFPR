@@ -1,0 +1,363 @@
+{
+ "matriz": 981,
+ "fonte": "Curadoria manual — o que a Consulta Curso e Matriz Curricular não imprime como linha.",
+ "notas": {
+  "cabecalho": "O PDF abrevia o nome do curso; a plataforma usa o nome por extenso.",
+  "conjuntos": "O conjunto 1199 (Disciplinas Eletivas) só aparece no rodapé, com a CH total: a Consulta não lista as disciplinas dele.",
+  "disciplinas": "As 11 eletivas do 1199 e as humanidades ED70U/FCH7XC, observadas nas Turmas Abertas e nos históricos reais. 'apos' fixa a posição na lista; sem ele a disciplina vai para o fim.",
+  "equivalentes": "Equivalências levantadas do catálogo e dos históricos, ausentes da coluna Equivalentes do PDF."
+ },
+ "cabecalho": {
+  "curso": "BACHARELADO EM SISTEMAS DE INFORMAÇÃO (236)"
+ },
+ "conjuntos": {
+  "1199": {
+   "nome": "Disciplinas Eletivas",
+   "periodo_inicial": 4,
+   "periodo_final": 8,
+   "ch": 105,
+   "ch_semanal": null
+  }
+ },
+ "disciplinas": [
+  {
+   "codigo": "ED70U",
+   "nome": "Libras B",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [],
+   "apos": "EDU70J"
+  },
+  {
+   "codigo": "FCH7XC",
+   "nome": "Presença Africana No Brasil",
+   "periodo": 3,
+   "conjunto": 1161,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [],
+   "apos": "QBI7CA"
+  },
+  {
+   "codigo": "FCH7SB",
+   "nome": "Tecnologia E Sociedade",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE73F",
+   "nome": "Teorias Organizacionais",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE74F",
+   "nome": "Comportamento Organizacional",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QB54B",
+   "nome": "Energia E Meio Ambiente",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XE",
+   "nome": "Políticas Públicas",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "DIN83A",
+   "nome": "Projeto De Interfaces E Experiências Digitais",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SD",
+   "nome": "Sociedade E Política No Brasil",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QB7AH",
+   "nome": "Educação Ambiental",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GE79A",
+   "nome": "Gestão De Pessoas",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GE70H",
+   "nome": "Gestão Financeira",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7T1",
+   "nome": "Tópicos Matemáticos 1",
+   "periodo": 4,
+   "conjunto": 1199,
+   "modelo": "Eletiva",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ],
+ "equivalentes": {
+  "EST70C": [
+   {
+    "codigo": "EST70B",
+    "cht": 60,
+    "grupo": null
+   }
+  ],
+  "FCH7FB": [
+   {
+    "codigo": "ES70H",
+    "cht": 45,
+    "grupo": null
+   }
+  ],
+  "FCH7HA": [
+   {
+    "codigo": "ES81A",
+    "cht": 45,
+    "grupo": null
+   }
+  ],
+  "ICSM46": [
+   {
+    "codigo": "CSM43",
+    "cht": 60,
+    "grupo": null
+   }
+  ],
+  "ICSV30": [
+   {
+    "codigo": "IF69D",
+    "cht": 60,
+    "grupo": null
+   }
+  ],
+  "ICSX41": [
+   {
+    "codigo": "CSX41",
+    "cht": 30,
+    "grupo": null
+   }
+  ],
+  "QBI7CA": [
+   {
+    "codigo": "QB70J",
+    "cht": 30,
+    "grupo": null
+   }
+  ]
+ }
+}
