@@ -9,6 +9,8 @@ import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
   categoriaSimples,
+  ehGrupoOpcao,
+  grupoOpcaoDe,
 } from "../../domain/cursos";
 
 export function renderizarTextoComCodigos(texto: string, matriz: Matriz) {
@@ -98,6 +100,7 @@ export function TelaSituacao(props: {
       obrigatorias: [],
       segundoEstrato: [],
       humanidades: [],
+      opcoes: [],
       eletivas: [],
       extensao: [],
     };
@@ -120,6 +123,12 @@ export function TelaSituacao(props: {
         mapa.segundoEstrato.push(item);
       } else if (dm && categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         mapa.humanidades.push(item);
+      } else if (dm && ehGrupoOpcao(descricaoDoCurso(matriz), dm.conjunto)) {
+        // o crédito é do grupo de topo, não da subárea em que a disciplina está
+        const key = String(grupoOpcaoDe(descricaoDoCurso(matriz), dm.conjunto));
+        if (!mapa[key]) mapa[key] = [];
+        mapa[key].push(item);
+        mapa.opcoes.push(item);
       } else if (dm && contaNoBlocoOptativo(descricaoDoCurso(matriz), dm.conjunto)) {
         const key = String(dm.conjunto);
         if (!mapa[key]) mapa[key] = [];
@@ -339,6 +348,34 @@ export function TelaSituacao(props: {
             onAbrirCatalogo={onAbrirCatalogo}
           />
         )}
+        {painel.opcoes && (
+          <CardProgresso
+            titulo={cursoDesc.rotuloOpcoes ?? "Opções do Curso"}
+            cumprido={painel.opcoes.cumprido}
+            exigido={painel.opcoes.exigido}
+            concluidas={concluidasMapa.opcoes}
+            categoria="todas"
+            onAbrirCatalogo={onAbrirCatalogo}
+            rodape={
+              painel.opcoes.gruposCumpridos === painel.opcoes.grupos.length
+                ? "Todos os grupos de escolha foram cumpridos"
+                : (() => {
+                    const abertos = painel.opcoes!.grupos.filter((g) => g.cumprido < g.exigido);
+                    return (
+                      <div className="flex flex-wrap items-center gap-1.5 leading-relaxed">
+                        <span className="font-bold text-zinc-700 dark:text-zinc-300">
+                          {painel.opcoes!.gruposCumpridos} de {painel.opcoes!.grupos.length} grupos cumpridos.
+                        </span>
+                        <span className="font-semibold text-zinc-500 dark:text-zinc-400">
+                          Em aberto: {abertos.slice(0, 2).map((g) => g.nome).join(", ")}
+                          {abertos.length > 2 && ` … e mais ${abertos.length - 2}`}
+                        </span>
+                      </div>
+                    );
+                  })()
+            }
+          />
+        )}
         {painel.eletivas && (
           <CardProgresso
             titulo="Eletivas"
@@ -436,7 +473,7 @@ export function TelaSituacao(props: {
                   {cursoDesc.rotuloBlocoTrilhas}
                 </h2>
                 <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  Exigência do curso: validação integral de <strong>{trilhasExigidas} trilhas distintas</strong>, com mínimo de {totalExigido3Estrato}h no total.
+                  Exigência do curso: validação integral de <strong>{trilhasExigidas} {trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong>, com mínimo de {totalExigido3Estrato}h no total.
                   {cursoDesc.naoValidaveis.length > 0 &&
                     " As optativas isoladas também somam para o total, mas não validam uma trilha."}
                 </p>
@@ -445,7 +482,7 @@ export function TelaSituacao(props: {
                 tom={painel.trilhasValidadas >= trilhasExigidas ? "ok" : "acento"}
                 classe="px-3 py-1 text-xs font-bold shrink-0"
               >
-                {painel.trilhasValidadas} de {trilhasExigidas} trilhas validadas
+                {painel.trilhasValidadas} de {trilhasExigidas} {trilhasExigidas === 1 ? "trilha validada" : "trilhas validadas"}
               </Badge>
             </div>
 

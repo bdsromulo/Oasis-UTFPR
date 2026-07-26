@@ -33,12 +33,13 @@ import {
 import { renderizarTextoComCodigos } from "./Situacao";
 import {
   descricaoDoCurso,
+  ehGrupoOpcao,
   ehTrilha,
   categoriaSimples,
   exigeExtensao,
 } from "../../domain/cursos";
 
-type Grupo = "todas" | "obrigatorias" | "estrato2" | "trilhas" | "humanidades";
+type Grupo = "todas" | "obrigatorias" | "estrato2" | "opcoes" | "trilhas" | "humanidades";
 
 function grupoDe(e: Elegivel, matriz: Matriz): Grupo {
   const c = e.disciplina.conjunto;
@@ -47,6 +48,9 @@ function grupoDe(e: Elegivel, matriz: Matriz): Grupo {
   const cat = categoriaSimples(curso, c);
   if (cat?.id === "segundoEstrato") return "estrato2";
   if (cat?.id === "humanidades") return "humanidades";
+  // grupo de escolha não é trilha: sem esta linha, as 168 optativas de escolha
+  // da 968 apareceriam no sub-filtro de trilhas, que é do 3º estrato
+  if (ehGrupoOpcao(curso, c)) return "opcoes";
   return "trilhas";
 }
 
@@ -349,6 +353,7 @@ export function TelaPossoCursar(props: {
     ["todas", "Todas"],
     ["obrigatorias", "Obrigatórias"],
     ...curso.categorias.filter((c) => c.id === "segundoEstrato").map(() => ["estrato2", "2º Estrato"] as [Grupo, string]),
+    ...(curso.gruposOpcao?.length ? [["opcoes", curso.rotuloOpcoes ?? "Opções"] as [Grupo, string]] : []),
     ["trilhas", curso.matriz === 981 ? "Trilhas" : "Optativas"],
     ...curso.categorias.filter((c) => c.id === "humanidades").map(() => ["humanidades", "Humanidades"] as [Grupo, string]),
   ], [curso]);

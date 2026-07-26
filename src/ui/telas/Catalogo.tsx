@@ -9,6 +9,7 @@ import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
   categoriaSimples,
+  ehGrupoOpcao,
   exigeExtensao,
 } from "../../domain/cursos";
 
@@ -20,7 +21,7 @@ function normNome(nome: string): string {
     .trim();
 }
 
-export type CategoriaCatalogo = "todas" | "obrigatorias" | "segundoEstrato" | "humanidades" | "trilhas" | "eletivas" | "extensao";
+export type CategoriaCatalogo = "todas" | "obrigatorias" | "segundoEstrato" | "humanidades" | "opcoes" | "trilhas" | "eletivas" | "extensao";
 
 export function TelaCatalogo(props: {
   perfil: PerfilAluno | null;
@@ -69,6 +70,13 @@ export function TelaCatalogo(props: {
     }
     if (categoria === "humanidades" && painel.humanidades) {
       return { titulo: "Ciclo de Humanidades", cumprido: painel.humanidades.cumprido, exigido: painel.humanidades.exigido };
+    }
+    if (categoria === "opcoes" && painel.opcoes) {
+      return {
+        titulo: curso.rotuloOpcoes ?? "Opções do Curso",
+        cumprido: painel.opcoes.cumprido,
+        exigido: painel.opcoes.exigido,
+      };
     }
     if (categoria === "trilhas") {
       const soma =
@@ -167,6 +175,8 @@ export function TelaCatalogo(props: {
         cat = "segundoEstrato";
       } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "humanidades") {
         cat = "humanidades";
+      } else if (ehGrupoOpcao(descricaoDoCurso(matriz), dm.conjunto)) {
+        cat = "opcoes";
       } else if (contaNoBlocoOptativo(descricaoDoCurso(matriz), dm.conjunto)) {
         cat = "trilhas";
       } else if (dm.horas.chext > 0) {
@@ -315,6 +325,9 @@ export function TelaCatalogo(props: {
     ["obrigatorias", curso.matriz === 981 ? "1º Estrato (Obrigatórias)" : "Obrigatórias"],
     ...curso.categorias.filter((c) => c.id === "segundoEstrato").map(() => ["segundoEstrato", "2º Estrato"] as [CategoriaCatalogo, string]),
     ...curso.categorias.filter((c) => c.id === "humanidades").map(() => ["humanidades", "Ciclo de Humanidades"] as [CategoriaCatalogo, string]),
+    ...(curso.gruposOpcao?.length
+      ? [["opcoes", curso.rotuloOpcoes ?? "Opções do Curso"] as [CategoriaCatalogo, string]]
+      : []),
     ["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"],
     ["eletivas", "Eletivas"],
     ...(exigeExtensao(matriz) ? [["extensao", "Extensão"] as [CategoriaCatalogo, string]] : []),
@@ -403,7 +416,7 @@ export function TelaCatalogo(props: {
                 Visão Geral das Trilhas de Aprofundamento
               </h3>
               <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} trilhas distintas</strong> (cada uma somando a carga horária exigida do conjunto).
+                O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} {descricaoDoCurso(matriz).trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong> (cada uma somando a carga horária exigida do conjunto).
               </p>
             </div>
             <div className="flex items-center gap-3">

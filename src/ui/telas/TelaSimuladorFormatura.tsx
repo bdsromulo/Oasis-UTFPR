@@ -112,6 +112,10 @@ const CORES_CATEGORIA: Record<IdCategoria, { chip: string; ponto: string }> = {
     chip: "bg-rose-500/10 text-rose-800 border-rose-500/30 dark:text-rose-300",
     ponto: "bg-rose-500",
   },
+  opcoes: {
+    chip: "bg-cyan-500/10 text-cyan-800 border-cyan-500/30 dark:text-cyan-300",
+    ponto: "bg-cyan-500",
+  },
   trilhas: {
     chip: "bg-indigo-500/10 text-indigo-800 border-indigo-500/30 dark:text-indigo-300",
     ponto: "bg-indigo-500",
@@ -131,6 +135,7 @@ const ROTULO_CURTO: Record<IdCategoria, string> = {
   segundoEstrato: "2º estrato",
   humanidades: "Humanidades",
   expressaoGrafica: "Exp. gráfica",
+  opcoes: "Opção",
   trilhas: "Trilha",
   eletivas: "Eletiva",
   extensao: "Extensão",
@@ -713,7 +718,7 @@ export function TelaSimuladorFormatura(props: {
             </span>
           </div>
           <p className="mt-1 text-[11px] leading-snug text-indigo-900/70 dark:text-indigo-200/70">
-            O bloco optativo exige {resultado.trilhasExigidas} trilhas validadas e a carga horária
+            O bloco optativo exige {resultado.trilhasExigidas} {resultado.trilhasExigidas === 1 ? "trilha validada" : "trilhas validadas"} e a carga horária
             total definida pela matriz. Horas acima do mínimo de uma trilha continuam contando para
             esse bloco.
           </p>

@@ -51,6 +51,14 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
       disponivel: true,
     },
   ],
+  "eng-eletronica-968": [
+    {
+      numero: "968",
+      rotulo: "968 (Vigente)",
+      nota: "Implementada: 1.710h de obrigatórias e 2.385h de optativas, distribuídas em 25 grupos de escolha, no Ciclo de Humanidades e nas Trilhas de Aprofundamento.",
+      disponivel: true,
+    },
+  ],
 };
 
 interface Props {
@@ -89,6 +97,7 @@ export function TelaCheckin(props: Props) {
     { id: "bsi-981", nome: "Bacharelado em Sistemas de Informação (BSI)", nomeCurto: "BSI", disponivel: true },
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
     { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
+    { id: "eng-eletronica-968", nome: "Engenharia Eletrônica", nomeCurto: "Eng. Eletrônica", disponivel: true },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
 
