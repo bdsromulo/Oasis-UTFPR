@@ -9,6 +9,16 @@ materiais-referencia/
 historico*.json
 perfil*.json
 
+# Despejos de texto e scripts de investigação de sessão. Um dump de histórico é
+# o PDF de um aluno em texto puro — nome, RA, identidade, data de nascimento e
+# notas — e o padrão `*.pdf` acima não o alcança. Já houve dois desses soltos na
+# raiz, versionáveis por um `git add .`.
+*_dump.txt
+*_output.txt
+test_*.txt
+test_*.ts
+_*.ts
+
 # node / build (M2 em diante)
 node_modules/
 dist/
