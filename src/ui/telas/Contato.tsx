@@ -80,7 +80,7 @@ export function PilulaFaleConosco() {
         onClick={() => setAberta((v) => !v)}
         aria-expanded={aberta}
         title={`Fale conosco — ${EMAIL_CONTATO}`}
-        className="flex cursor-pointer items-center gap-2 rounded-full border border-zinc-300/80 bg-white/95 px-3.5 py-2 font-display text-xs font-black text-zinc-800 shadow-lg backdrop-blur-md transition-all hover:border-utfpr-500 hover:text-zinc-950 active:scale-95 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-100 dark:hover:border-utfpr-500"
+        className="flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-zinc-300/80 bg-white/95 px-4 py-2 font-display text-xs font-black text-zinc-800 shadow-lg backdrop-blur-md transition-all hover:border-utfpr-500 hover:text-zinc-950 active:scale-95 dark:border-zinc-700 dark:bg-zinc-900/95 dark:text-zinc-100 dark:hover:border-utfpr-500"
       >
         <IconMail className="h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-500" />
         <span>Fale conosco</span>

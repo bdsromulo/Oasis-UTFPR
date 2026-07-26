@@ -213,7 +213,9 @@ export function Botao(props: {
       onClick={props.onClick}
       disabled={props.desabilitado}
       title={props.title}
-      className={`inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm transition-all duration-150 ${variantes[props.variante ?? "sutil"]} ${props.classe ?? ""}`}
+      // max-sm:min-h-11 dá o mínimo confortável de toque no celular sem mexer
+      // na densidade do desktop, onde o cursor não erra 36px
+      className={`inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm transition-all duration-150 max-sm:min-h-11 ${variantes[props.variante ?? "sutil"]} ${props.classe ?? ""}`}
     >
       {props.children}
     </button>
@@ -246,13 +248,19 @@ export function MenuOrdenacao(props: {
   const opAtual = lista.find((x) => x.id === props.valor) ?? lista[0];
 
   useEffect(() => {
-    function clickFora(e: MouseEvent) {
+    function clickFora(e: Event) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setAberto(false);
       }
     }
     document.addEventListener("mousedown", clickFora);
-    return () => document.removeEventListener("mousedown", clickFora);
+    // no toque o `mousedown` só chega depois de o dedo sair, e às vezes nem
+    // chega (rolagem): sem isto o menu fica preso aberto no celular
+    document.addEventListener("touchstart", clickFora);
+    return () => {
+      document.removeEventListener("mousedown", clickFora);
+      document.removeEventListener("touchstart", clickFora);
+    };
   }, []);
 
   return (
@@ -280,7 +288,7 @@ export function MenuOrdenacao(props: {
                     props.onMudar(op.id);
                     setAberto(false);
                   }}
-                  className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left font-display text-xs transition-colors cursor-pointer ${
+                  className={`flex min-h-11 w-full items-center justify-between rounded-xl px-3 py-2 text-left font-display text-xs transition-colors cursor-pointer ${
                     selecionada
                       ? "bg-utfpr-500/15 font-bold text-zinc-950 dark:bg-utfpr-500/10 dark:text-utfpr-400"
                       : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800/80"

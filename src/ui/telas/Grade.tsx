@@ -984,7 +984,9 @@ export function TelaGrade(props: {
             {conflitos.length === 0 ? "Sem conflitos" : `${conflitos.length} conflito(s) detetado(s)`}
           </Badge>
         </div>
-        <div className="flex items-center gap-2.5">
+        {/* no celular estes botões passavam de 570px numa tela de 375 e
+            arrastavam a página inteira de lado; agora quebram em linhas */}
+        <div className="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
           <Botao
             variante="neutro"
             onClick={async () => {
@@ -1255,7 +1257,9 @@ export function TelaGrade(props: {
         <h3 className="font-display text-sm font-bold tracking-tight text-zinc-500 uppercase dark:text-zinc-400">
           Disciplinas selecionadas ({itens.length})
         </h3>
-        <div className="grid gap-2 sm:grid-cols-2">
+        {/* grid-cols-1 explícito: sem ele a coluna implícita vira max-content e
+            um nome longo de disciplina estoura a largura da tela no celular */}
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {itens.map((item, i) => {
             const discMatriz = props.matriz?.disciplinas.find(
               (x) => x.codigo === item.disciplina.codigo || (x.equivalentes || []).some((eq) => eq.codigo === item.disciplina.codigo) || normNome(x.nome) === normNome(item.disciplina.nome)
@@ -1290,6 +1294,15 @@ export function TelaGrade(props: {
                 key={item.selecaoOriginal ? `${item.selecaoOriginal.codDisciplina}-${item.selecaoOriginal.codTurma}` : item.disciplina.codigo}
                 onMouseEnter={() => iniciarHover(codIdentificador, chaveElemento)}
                 onMouseLeave={cancelarHover}
+                // No celular não existe hover: o balão de progresso ficaria
+                // inalcançável. Tocar no card abre e fecha o mesmo balão.
+                onClick={() => {
+                  if (isEsteElemento) {
+                    cancelarHover();
+                  } else {
+                    iniciarHover(codIdentificador, chaveElemento);
+                  }
+                }}
                 className={`relative flex flex-col justify-between gap-3 rounded-xl border p-3.5 shadow-2xs transition-all ${
                   isHovered
                     ? "border-utfpr-500 bg-utfpr-500/5 ring-1 ring-utfpr-500 dark:border-utfpr-400 dark:bg-utfpr-500/10 scale-[1.01] z-40 overflow-visible"
@@ -1336,9 +1349,11 @@ export function TelaGrade(props: {
                   </div>
                   <Botao
                     variante="perigo"
-                    onClick={() =>
-                      setSelecao(selecao.filter((s) => s.codDisciplina !== codIdentificador))
-                    }
+                    onClick={(e?: any) => {
+                      // o card inteiro alterna o balão; remover não pode abrí-lo
+                      e?.stopPropagation?.();
+                      setSelecao(selecao.filter((s) => s.codDisciplina !== codIdentificador));
+                    }}
                   >
                     <IconTrash className="h-3.5 w-3.5" />
                     <span>remover</span>

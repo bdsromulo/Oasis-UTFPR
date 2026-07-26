@@ -25,6 +25,7 @@ import { TelaFluxograma } from "./telas/TelaFluxograma";
 import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
 import { PilulaFaleConosco } from "./telas/Contato";
+import { PainelMenuMobile } from "./MenuMobile";
 import { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./telas/SeletorExclusoes";
 import {
   IconBookOpen,
@@ -33,6 +34,7 @@ import {
   IconEye,
   IconHelp,
   IconInfo,
+  IconMenu,
   IconMoon,
   IconSettings,
   IconSun,
@@ -115,6 +117,7 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
   const [sobreAberta, setSobreAberta] = useState(false);
   const [comoUsarAberta, setComoUsarAberta] = useState(false);
@@ -539,7 +542,34 @@ export function App() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        {/* No celular estas ações viram um único botão de menu: eram cinco
+            ícones de 32px em duas linhas, abaixo do mínimo de toque, e dois
+            deles só mostravam o rótulo no hover. O chip de perfil continua
+            visível, porque é contexto e não ação. */}
+        <div className="flex items-center gap-2 sm:hidden">
+          {perfil ? (
+            <span className="flex min-w-0 items-center gap-1.5 rounded-2xl border border-zinc-200/80 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 dark:border-zinc-800/80 dark:bg-zinc-900/80 dark:text-zinc-300">
+              <IconUser className="h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-500" />
+              <span className="truncate">
+                {perfil.nome.split(" ")[0]}
+                <span className="font-normal text-zinc-400"> · {perfil.periodo}º</span>
+              </span>
+            </span>
+          ) : (
+            checkinConcluido && <Badge tom="neutro">Modo Livre</Badge>
+          )}
+          <button
+            type="button"
+            onClick={() => setMenuMobileAberto(true)}
+            aria-label="Abrir menu"
+            className="flex h-11 min-w-[44px] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-zinc-200/80 bg-white/90 px-3.5 font-display text-sm font-bold text-zinc-700 shadow-2xs active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-900/90 dark:text-zinc-200"
+          >
+            <IconMenu className="h-5 w-5 shrink-0" />
+            <span>Menu</span>
+          </button>
+        </div>
+
+        <div className="hidden flex-wrap items-center gap-3 sm:flex">
           {/* Controles do Cabeçalho visíveis quando já iniciou a plataforma */}
           {(perfil || checkinConcluido) && (
             <>
@@ -688,7 +718,12 @@ export function App() {
           erro={erro}
         />
       ) : (
-        <div className="flex items-start gap-6">
+        // Empilha no celular e vira duas colunas no desktop. `SidebarNavegacao`
+        // devolve DOIS elementos: o aside do desktop e a barra de abas do
+        // mobile. Numa linha flex, essa barra virava uma coluna ao lado do
+        // conteúdo e espremia a coluna principal a zero pixel — a página
+        // inteira passava a rolar de lado no celular.
+        <div className="flex flex-col items-stretch gap-6 lg:flex-row lg:items-start">
           {/* Menu Lateral (Sidebar Desktop / Mobile Drawer) */}
           <SidebarNavegacao
             abaAtiva={aba}
@@ -801,7 +836,7 @@ export function App() {
                         <select
                           value={semestreAtivo}
                           onChange={(e) => mudarSemestre(e.target.value)}
-                          className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
+                          className="cursor-pointer appearance-none bg-transparent font-mono text-sm font-bold text-current focus:outline-none max-sm:min-h-11"
                         >
                           {semestresDisponiveis.map((sem) => {
                             const preMatricula = dadosCurso.semestresPreMatricula.includes(sem);
@@ -1087,7 +1122,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setMobileGradeDrawerAberto(true)}
-                className="shrink-0 ml-3 rounded-xl bg-utfpr-500 px-4 py-2 font-display text-xs font-black text-zinc-950 shadow-md transition-all hover:bg-utfpr-400 active:scale-95 cursor-pointer"
+                className="ml-3 min-h-11 shrink-0 cursor-pointer rounded-xl bg-utfpr-500 px-4 py-2 font-display text-xs font-black text-zinc-950 shadow-md transition-all hover:bg-utfpr-400 active:scale-95"
               >
                 {preview ? "Ver Preview" : "Abrir Grade"}
               </button>
@@ -1169,6 +1204,25 @@ export function App() {
 
       {/* contato sempre à mão, em qualquer tela da plataforma */}
       <PilulaFaleConosco />
+
+      <PainelMenuMobile
+        aberto={menuMobileAberto}
+        onFechar={() => setMenuMobileAberto(false)}
+        temaAtivo={preferencias.tema}
+        onMudarTema={(t) => setPreferencias({ ...preferencias, tema: t })}
+        mostrarConfiguracoes={!!perfil || checkinConcluido}
+        onAbrirConfiguracoes={() => setModalConfigAberto(true)}
+        onAbrirComoUsar={() => {
+          setGiAberta(false);
+          setSobreAberta(false);
+          setComoUsarAberta(true);
+        }}
+        onAbrirSobre={() => {
+          setGiAberta(false);
+          setComoUsarAberta(false);
+          setSobreAberta(true);
+        }}
+      />
     </div>
   );
 }

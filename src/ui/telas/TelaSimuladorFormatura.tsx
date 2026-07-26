@@ -332,7 +332,7 @@ export function TelaSimuladorFormatura(props: {
                 key={n}
                 type="button"
                 onClick={() => setRitmo(n)}
-                className={`h-9 w-9 rounded-xl font-mono text-sm font-black transition-all cursor-pointer ${
+                className={`h-11 w-11 cursor-pointer rounded-xl font-mono text-sm font-black transition-all ${
                   ritmo === n
                     ? "bg-utfpr-500 text-zinc-950 shadow-md"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
@@ -352,7 +352,7 @@ export function TelaSimuladorFormatura(props: {
             value={semestreDePartida}
             disabled={!!gradeFixada}
             onChange={(e) => setSemestreInicial(e.target.value)}
-            className="mt-2 h-9 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 font-mono text-sm font-bold text-zinc-900 outline-none focus:border-utfpr-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+            className="mt-2 h-11 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 px-3 font-mono text-sm font-bold text-zinc-900 outline-none focus:border-utfpr-500 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
             {Array.from(new Set([...semestresIniciais, semestreDePartida])).map((s) => (
               <option key={s} value={s}>
