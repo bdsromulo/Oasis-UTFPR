@@ -12,7 +12,7 @@ import {
 } from "../src/domain/motor/simuladorFormatura";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { detectarConflitos, itensDaSelecao } from "../src/domain/motor/grade";
-import { BSI, ENG_COMP, ENG_COMP_962 } from "../src/domain/dadosCurso";
+import { BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA } from "../src/domain/dadosCurso";
 import { descricaoDoCurso, ehTrilha } from "../src/domain/cursos";
 import type {
   Matriz,
@@ -581,7 +581,7 @@ describe("grade do Planejamento como semestre de partida", () => {
  * equivalentes é histórica e larga.
  */
 describe("motor em todos os cursos cobertos", () => {
-  const cursos = [BSI, ENG_COMP, ENG_COMP_962];
+  const cursos = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
   const ofertasDo = (curso: (typeof cursos)[number]) =>
     Object.keys(curso.ofertas)
       .sort()
@@ -593,9 +593,22 @@ describe("motor em todos os cursos cobertos", () => {
       const ofertasCurso = ofertasDo(curso);
 
       it("espelha a oferta de mesma paridade em qualquer semestre futuro", () => {
-        expect(ofertaReferenciaDoSemestre("2027-1", ofertasCurso)?.semestre).toBe("2026-1");
-        expect(ofertaReferenciaDoSemestre("2027-2", ofertasCurso)?.semestre).toBe("2026-2");
-        expect(ofertaReferenciaDoSemestre("2028-1", ofertasCurso)?.semestre).toBe("2026-1");
+        // Nem todo curso tem as duas paridades importadas — Eng. Eletrônica só
+        // tem 2026-2 —, então a expectativa sai da própria lista de ofertas: a
+        // mais recente de mesma paridade, ou nada quando não existe nenhuma.
+        const maisRecenteDaParidade = (final: string) =>
+          Object.keys(curso.ofertas)
+            .filter((s) => s.endsWith(final))
+            .sort()
+            .reverse()[0];
+
+        for (const futuro of ["2027-1", "2027-2", "2028-1", "2028-2"]) {
+          const esperado = maisRecenteDaParidade(futuro.slice(-1));
+          expect(
+            ofertaReferenciaDoSemestre(futuro, ofertasCurso)?.semestre,
+            `${curso.rotuloCurto} em ${futuro}`,
+          ).toBe(esperado);
+        }
       });
 
       it("não monta semestre em conflito nem repete a mesma turma", () => {
@@ -665,16 +678,43 @@ describe("motor em todos os cursos cobertos", () => {
       });
 
       it("não planeja trilha muito além do piso do bloco optativo", () => {
-        // O excesso é inevitável por granularidade — validar uma trilha de 90h com
-        // optativas de 60h custa 120h —, mas era muito maior: o motor despejava o
-        // saldo do bloco numa trilha já validada (225h para um piso de 90h) e
-        // depois pagava de novo as validações pendentes.
+        // Algum excesso é inevitável por granularidade: fechar uma trilha de 90h
+        // com optativas de 60h custa 120h, e em Eng. Eletrônica o piso de uma
+        // trilha é 270h montada em pedaços de 45h e 60h.
+        //
+        // O que NÃO pode acontecer é pagamento duplo — o motor despejar o saldo
+        // do bloco numa trilha já validada e depois pagar de novo as validações
+        // pendentes. Isso levava uma trilha de piso 90h a 180h na 962. Por isso
+        // a checagem forte é POR TRILHA: nenhuma pode passar do próprio piso por
+        // mais de uma disciplina dela, que é o arredondamento máximo possível.
         for (const ritmo of [4, 5, 6, 7, 8]) {
           const r = simularFormatura(null, curso.matriz, ofertasCurso, {
             ritmo,
             semestreInicial: "2026-2",
           });
           if (!r.semestreFormatura) continue;
+
+          const horasPorConjunto = new Map<number, number>();
+          for (const s of r.semestres) {
+            for (const d of s.disciplinas) {
+              if (d.categoria !== "trilhas" || d.conjunto == null) continue;
+              horasPorConjunto.set(d.conjunto, (horasPorConjunto.get(d.conjunto) ?? 0) + d.horas);
+            }
+          }
+          for (const [conj, horas] of horasPorConjunto) {
+            const piso = curso.matriz.conjuntos[String(conj)]?.ch ?? 90;
+            const maiorDaTrilha = Math.max(
+              ...curso.matriz.disciplinas
+                .filter((d) => d.conjunto === conj)
+                .map((d) => d.horas.total),
+              0,
+            );
+            expect(
+              horas,
+              `${curso.rotuloCurto} ritmo ${ritmo}: conjunto ${conj} com ${horas}h para piso ${piso}h`,
+            ).toBeLessThanOrEqual(piso + maiorDaTrilha);
+          }
+
           const bloco = r.requisitos.find((q) => q.id === "trilhas")!;
           const excesso = bloco.cumprido + bloco.planejado - bloco.exigido;
           expect(excesso, `${curso.rotuloCurto} ritmo ${ritmo}: +${excesso}h`).toBeLessThanOrEqual(
@@ -692,7 +732,7 @@ describe("motor em todos os cursos cobertos", () => {
  * o item no plano e explica, em vez de devolver uma projeção que não fecha.
  */
 describe("exclusões de matéria, professor e trilha", () => {
-  const cursos = [BSI, ENG_COMP, ENG_COMP_962];
+  const cursos = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
   const ofertasDo = (curso: (typeof cursos)[number]) =>
     Object.keys(curso.ofertas)
       .sort()
