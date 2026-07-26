@@ -182,9 +182,21 @@ export function TelaSimuladorFormatura(props: {
   /** grade montada no Planejamento que o motor deve tomar como fato */
   gradeDoPlanejamento?: { semestre: string; grade: string; selecao: SelecaoTurma[] } | null;
   onDescartarGradeDoPlanejamento?: () => void;
+  /**
+   * Ritmo e exclusões vêm controlados pelo pai. A tela troca de aba assim que
+   * o aluno importa uma grade — de propósito, para ele ver o resultado — e
+   * isso desmonta este componente. Um `useState` local voltaria ao padrão a
+   * cada remontagem: o aluno ajustava o ritmo para 7, importava, voltava para
+   * importar o semestre seguinte e o simulador já tinha esquecido o 7.
+   */
+  ritmo: number;
+  onMudarRitmo: (r: number) => void;
+  exclusoes: ValorExclusoes;
+  onMudarExclusoes: (v: ValorExclusoes) => void;
 }) {
-  const { perfil, matriz, ofertas } = props;
-  const [ritmo, setRitmo] = useState(5);
+  const { perfil, matriz, ofertas, ritmo, exclusoes } = props;
+  const setRitmo = props.onMudarRitmo;
+  const setExclusoes = props.onMudarExclusoes;
   const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
   const [menuImportacaoSemestre, setMenuImportacaoSemestre] = useState<string | null>(null);
   const curso = descricaoDoCurso(matriz);
@@ -210,7 +222,6 @@ export function TelaSimuladorFormatura(props: {
 
   const semestreDePartida = gradeFixada?.semestre ?? semestreInicial;
 
-  const [exclusoes, setExclusoes] = useState<ValorExclusoes>(EXCLUSOES_VAZIAS);
   const [painelExclusoesAberto, setPainelExclusoesAberto] = useState(false);
 
   const resultado = useMemo(

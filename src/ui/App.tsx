@@ -25,6 +25,7 @@ import { TelaFluxograma } from "./telas/TelaFluxograma";
 import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
 import { PilulaFaleConosco } from "./telas/Contato";
+import { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./telas/SeletorExclusoes";
 import {
   IconBookOpen,
   IconCalendar,
@@ -210,6 +211,14 @@ export function App() {
     if (!sel || sel.length === 0) return null;
     return { ...gradeParaSimulador, selecao: sel };
   }, [gradeParaSimulador, todasCestasPorSemestre]);
+
+  // Ritmo e exclusões do Simulador de Formatura vivem aqui, e não como useState
+  // dentro da tela: importar uma grade troca de aba de propósito (o aluno vê o
+  // resultado na Grade), o que desmonta o simulador — um estado local voltaria
+  // ao padrão a cada remontagem e o próximo import silenciosamente ignoraria o
+  // ritmo que o aluno tinha acabado de escolher.
+  const [ritmoSimulador, setRitmoSimulador] = useState(5);
+  const [exclusoesSimulador, setExclusoesSimulador] = useState<ValorExclusoes>(EXCLUSOES_VAZIAS);
 
   const cestaExclusoes = useMemo(() => {
     return todasExclusoesPorSemestre[semestreAtivo] ?? {};
@@ -489,6 +498,10 @@ export function App() {
     setLayout("oasis");
     setAba("planejamento");
     setAbaPlanejamento("cursar");
+    setRitmoSimulador(5);
+    setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
   function handleTrocarUsuario() {
@@ -503,6 +516,10 @@ export function App() {
     setSelecao([]);
     setAba("planejamento");
     setAbaPlanejamento("cursar");
+    setRitmoSimulador(5);
+    setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
   return (
@@ -947,6 +964,10 @@ export function App() {
                 onImportarGrade={handleImportarGradeDoSimulador}
                 gradeDoPlanejamento={gradeDoPlanejamentoParaSimulador}
                 onDescartarGradeDoPlanejamento={handleDescartarGradeDoSimulador}
+                ritmo={ritmoSimulador}
+                onMudarRitmo={setRitmoSimulador}
+                exclusoes={exclusoesSimulador}
+                onMudarExclusoes={setExclusoesSimulador}
               />
             )}
 
