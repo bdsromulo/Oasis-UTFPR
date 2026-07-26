@@ -48,15 +48,15 @@ RE_BLOCO_HORARIOS = re.compile(r"\[\s*(.*?)\s*\]")
 RE_HORARIO = re.compile(r"^([2-7])([MTN])(\d)\s*(?:\(\s*(\*{0,2})\s*([^)]*)\))?$")
 
 
-# A página do GNH tem encoding MISTO: os acentos do português foram gravados em
-# cp1252 de byte único (ã = 0xE3), mas o travessão que separa turma e professor
-# saiu em UTF-8 (0xE2 0x80 0x94). Decodificar tudo como cp1252 acerta os acentos
-# e transforma o travessão em "â€”"; decodificar como UTF-8 quebra os acentos.
-# Por isso: decodifica em cp1252 e conserta as sequências conhecidas aqui.
+# Sequências de mojibake que aparecem quando uma página UTF-8 é lida como
+# cp1252 — o caso das cópias antigas do GNH salvas por alguns navegadores.
 MOJIBAKE = {
     "â€”": "—",  # em dash
     "â€“": "–",  # en dash
     "â€™": "’",  # apóstrofo tipográfico
+    "Ã§": "ç", "Ã£": "ã", "Ã¡": "á", "Ã©": "é", "Ãª": "ê",
+    "Ã­": "í", "Ã³": "ó", "Ãµ": "õ", "Ãº": "ú", "Ã´": "ô",
+    "Ãƒ": "Ã", "Ã‡": "Ç", "Ã”": "Ô",
 }
 
 
@@ -64,6 +64,23 @@ def corrigir_mojibake(texto: str) -> str:
     for errado, certo in MOJIBAKE.items():
         texto = texto.replace(errado, certo)
     return texto
+
+
+def ler_pagina(caminho: str) -> str:
+    """Lê a página salva do GNH detectando o encoding em vez de presumi-lo.
+
+    As cópias que temos hoje — BSI, Eng. Comp. e Eng. Eletrônica — são todas
+    UTF-8 válido. Ler tudo como cp1252, como se fazia aqui, produzia
+    "ENG DE COMPUTAÃ‡ÃƒO" no campo `curso` da oferta de 2025.2 já versionada.
+    O caminho cp1252 continua existindo para cópias antigas que de fato usem
+    esse encoding: nelas o UTF-8 estrito falha e a decodificação cai no fallback.
+    """
+    bruto = io.open(caminho, "rb").read()
+    try:
+        return bruto.decode("utf-8")
+    except UnicodeDecodeError:
+        # Um byte inválido isolado não pode derrubar a importação inteira.
+        return corrigir_mojibake(bruto.decode("cp1252", errors="replace"))
 
 
 def limpar_tags(trecho: str) -> str:
@@ -93,11 +110,7 @@ def parse_horario(token: str) -> dict | None:
 
 
 def parse(caminho: str, semestre: str) -> dict:
-    # A página é salva em cp1252. Ler como latin-1 "quase" funciona — os acentos
-    # saem certos — mas o travessão que separa turma e professor (0x97) vira um
-    # caractere de controle e o casamento das turmas falha silenciosamente. Um
-    # byte inválido isolado no arquivo impede o strict, daí o errors="replace".
-    pagina = corrigir_mojibake(io.open(caminho, encoding="cp1252", errors="replace").read())
+    pagina = ler_pagina(caminho)
 
     curso = "DESCONHECIDO"
     m = re.search(r"Curso:\s*<strong>(.*?)</strong>", pagina)
