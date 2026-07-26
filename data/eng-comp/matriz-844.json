@@ -17,6 +17,7 @@
  "conjuntos": {
   "959": {
    "nome": "Optativas",
+   "pai": null,
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 270,
@@ -24,6 +25,7 @@
   },
   "960": {
    "nome": "Trilha Em Controle",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -31,6 +33,7 @@
   },
   "961": {
    "nome": "Trilha Em Processamento Gráfico",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -38,6 +41,7 @@
   },
   "962": {
    "nome": "Trilhas Em Sistemas Inteligentes",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -45,6 +49,7 @@
   },
   "963": {
    "nome": "Trilha Em Algoritmos E Complexidade",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -52,6 +57,7 @@
   },
   "964": {
    "nome": "Trilha Em Redes De Computadores",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -59,6 +65,7 @@
   },
   "965": {
    "nome": "Trilha Em Engenharia De Software",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -66,6 +73,7 @@
   },
   "966": {
    "nome": "Trilha Em Otim, Mod Analíticos E Simul",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -73,6 +81,7 @@
   },
   "967": {
    "nome": "Trilha Em Física",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -80,6 +89,7 @@
   },
   "968": {
    "nome": "Trilha Em Banco De Dados",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -87,6 +97,7 @@
   },
   "969": {
    "nome": "Trilha Em Interação Hum-Comp",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -94,6 +105,7 @@
   },
   "970": {
    "nome": "Trilha Em Engenharia Biomédica",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -101,6 +113,7 @@
   },
   "971": {
    "nome": "Trilha Em Sistemas Embarcados",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -108,6 +121,7 @@
   },
   "972": {
    "nome": "Trilha Em Desenv Bas Em Plataforma",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -115,6 +129,7 @@
   },
   "973": {
    "nome": "Optativas Isoladas",
+   "pai": "959",
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
@@ -7660,7 +7675,7 @@
   {
    "codigo": "CSX43",
    "nome": "Trabalho De Conclusão De Curso 2",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Trabalho De Conclusão",
    "aulas_semanais": {
@@ -7690,7 +7705,7 @@
   {
    "codigo": "EEF31",
    "nome": "Ética, Profissão E Cidadania",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Formação Profissional",
    "aulas_semanais": {
@@ -7728,7 +7743,7 @@
   {
    "codigo": "ENADEC",
    "nome": "Enade Concluinte",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Enade Concluinte",
    "aulas_semanais": {
@@ -7756,7 +7771,7 @@
   {
    "codigo": "ENADEI",
    "nome": "Enade Ingressante",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Enade Ingressante",
    "aulas_semanais": {

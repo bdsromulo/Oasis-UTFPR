@@ -4,12 +4,19 @@
 Fonte: PDF salvo da consulta (paisagem). Extração posicional por coordenadas de
 palavras; cada disciplina termina no link "Turmas", usado como delimitador de bloco.
 
-Uso: python tools/parse_matriz.py "caminho/Lista de Matérias Matriz Curricular.pdf" [saida.json]
+Uso: python tools/parse_matriz.py "caminho/Lista de Matérias Matriz Curricular.pdf" [saida.json] [complemento.json]
+
+O terceiro argumento é opcional e serve para conjuntos que a legenda da matriz
+não declara, embora as disciplinas os citem. Acontece na 968: a legenda para em
+"1226 Sistemas Iot", mas onze disciplinas apontam para 1227..1233 — subáreas que
+só o Histórico Escolar oficial nomeia. O complemento entra como dado à parte,
+com a própria procedência registrada, em vez de a fonte principal ser adulterada.
 """
 import pdfplumber, re, json, sys, os, unicodedata
 
 PDF = sys.argv[1] if len(sys.argv) > 1 else r"I:\Meu Drive\Oásis UTFPR\Lista de Matérias Matriz Curricular.pdf"
 OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "matriz-981.json")
+COMPLEMENTO = sys.argv[3] if len(sys.argv) > 3 else None
 
 # fronteiras de coluna (x0) medidas no PDF (A4 paisagem, 841.92 x 1191.12)
 COLS = [
@@ -129,18 +136,48 @@ def parse():
         for t in raw_cod_toks:
             if not cod_toks and (RE_COD.match(t) or t.startswith("ENADE")):
                 cod_toks.append(t)
+            # "ENADE I" e "ENADE C" são o único código da fonte com espaço no
+            # meio; a letra vem como palavra separada. Sem juntá-la, as duas
+            # linhas viram o mesmo código "ENADE" e uma sobrescreve a outra —
+            # foi o que apagou o Enade Concluinte da 962 e duplicou o código na
+            # 968.
+            elif cod_toks == ["ENADE"] and re.fullmatch(r"[A-Z]", t):
+                cod_toks.append(t)
             else:
                 nome_extra.append(t)
         if not cod_toks:
             continue
         codigo = "".join(cod_toks)
-        
-        nome_parts = nome_extra + cells.get("nome", [])
+
+        # Nome longo terminado em número transborda a coluna por um ponto e o
+        # dígito cai em [modelo]: "TRABALHO DE CONCLUSÃO DE CURSO 1" e "... 2"
+        # viravam duas disciplinas de nome idêntico, indistinguíveis na tela.
+        # Nenhum modelo da fonte começa com dígito, então o dígito solto na
+        # frente do modelo é sempre o fim do nome.
+        modelo_toks = cells.get("modelo", [])
+        sufixo_nome = []
+        if modelo_toks and re.fullmatch(r"\d", modelo_toks[0]):
+            sufixo_nome = [modelo_toks[0]]
+            modelo_toks = modelo_toks[1:]
+
+        nome_parts = nome_extra + cells.get("nome", []) + sufixo_nome
         nome_str = " ".join(nome_parts).title()
-        
-        # Heuristic for numeric columns to bypass non-uniform scaling issues
+
+        # As colunas numéricas são lidas por faixa horizontal, e não por col_of,
+        # porque o escalonamento do PDF varia e joga um dígito para a coluna
+        # vizinha. A faixa sozinha, porém, também captura o cabeçalho da página
+        # quando ele vem centralizado: na matriz 968 o "Matriz: 968 - Matriz 3"
+        # cai no meio da faixa, e o 968 entrava como se fosse aula prática,
+        # empurrando a fileira inteira e zerando a carga horária da primeira
+        # disciplina de cada página. Por isso a leitura começa na fileira que
+        # traz o próprio código da disciplina — antes dela só há moldura.
+        linha_codigo = 0
+        for i, ws in enumerate(blk):
+            if any(w["text"] == cod_toks[0] and col_of(w["x0"]) == "codigo" for w in ws):
+                linha_codigo = i
+                break
         raw_nums = []
-        for ws in blk:
+        for ws in blk[linha_codigo:]:
             for w in ws:
                 if 310 <= w["x0"] <= 645 and re.match(r"^\d+$", w["text"]):
                     raw_nums.append((w["x0"], int(w["text"])))
@@ -163,13 +200,22 @@ def parse():
         m = re.search(r"\[(\d{3,4})\]", " ".join(cells.get("opt", [])))
         if m:
             opt = int(m.group(1))
-        per_vals = [t for t in cells.get("periodo", []) if re.match(r"^\d$", t)]
+        # Dois dígitos: os cursos de engenharia vão até o 10º período, e com um
+        # dígito só toda disciplina do 10º saía com período nulo — some do
+        # Catálogo, do Fluxograma e da projeção do Simulador. A leitura começa na
+        # fileira do código pelo mesmo motivo das colunas numéricas.
+        per_vals = [
+            w["text"]
+            for ws in blk[linha_codigo:]
+            for w in ws
+            if col_of(w["x0"]) == "periodo" and re.fullmatch(r"\d{1,2}", w["text"])
+        ]
         disciplinas.append({
             "codigo": codigo,
             "nome": nome_str,
             "periodo": int(per_vals[0]) if per_vals else None,
             "conjunto": opt,   # null = obrigatória do 1º estrato
-            "modelo": " ".join(cells.get("modelo", [])).title(),
+            "modelo": " ".join(modelo_toks).title(),
             "aulas_semanais": {"teoricas": nums["teoricas"], "praticas": nums["praticas"],
                                "total": nums["total"], "aps": nums["aps"], "apcc": nums["apcc"]},
             "horas": {"ad": nums["ad"], "chext": nums["chext"], "chead": nums["chead"],
@@ -194,39 +240,67 @@ def parse():
         "chext_disc_optativas": fnum("CHEXT_DISCOPTATIVAS"),
         "ch_total_ppc": fnum("CHTOTALPPC"),
     }
+    # ---- legenda das optativas: conjuntos e o aninhamento entre eles ----
+    #
+    # A legenda declara "Período inicial/final" APENAS nos conjuntos de topo;
+    # os subconjuntos vêm logo abaixo do respectivo pai, sem período. É essa a
+    # única marca de hierarquia na fonte, e ela é o que separa um grupo de
+    # escolha de uma subárea dele:
+    #   BSI:            1160 Trilhas Em Computação -> 1162..1173
+    #   Eng. Eletrônica 1174 Ciclo De Humanidades  -> 1213..1217
+    #                   1180 Trilhas De Aprofund.  -> 1181..1186, 1226
+    #                   1187 Opções De Circuitos   -> 1188, 1189
+    # Sem o vínculo, cada subárea aparecia no app como se fosse uma trilha de
+    # topo — em Eng. Eletrônica isso multiplicava por três a lista de trilhas.
     conjuntos = {}
+    pai_atual = None
     for m in re.finditer(r"\[(\d{3,4})\]\s*(.+?)\s*-\s*Créditos:.*?(?:Período inicial/final:\s*(\d+)/(\d+).*?)?Carga [Hh]orária:?\s*0*(\d+)(?:-\s*Carga horária semanal:\s*(\d+))?", foot):
-        conjuntos[m.group(1)] = {
+        cod, ehTopo = m.group(1), m.group(3) is not None
+        conjuntos[cod] = {
             "nome": m.group(2).strip(),
-            # Trilha não declara período na legenda; herda do conjunto
-            # agregador que a precede (BSI: 1160 = 04/08; Eng. Comp.: 959 =
-            # 08/10). Ver ajuste logo abaixo do laço.
-            "periodo_inicial": int(m.group(3)) if m.group(3) else None,
-            "periodo_final": int(m.group(4)) if m.group(4) else None,
+            "pai": None if ehTopo else pai_atual,
+            # subconjunto não declara período; herda o do pai (ajuste abaixo)
+            "periodo_inicial": int(m.group(3)) if ehTopo else None,
+            "periodo_final": int(m.group(4)) if ehTopo else None,
             "ch": int(m.group(5)),
             "ch_semanal": int(m.group(6)) if m.group(6) else None,
         }
-    # A legenda declara período para os conjuntos agregadores, mas não para as
-    # trilhas — que herdam o do agregador ao qual pertencem. Identificamos o
-    # agregador pelo NOME, não pela ordem numérica: em BSI o 1161 (Humanidades,
-    # 03/06) fica entre o 1160 (Trilhas, 04/08) e as trilhas 1162+, então
-    # "o anterior" daria o período errado.
-    #   BSI:        1160 "Terceiro Estrato - Trilhas Em Computação"  -> 04/08
-    #   Eng. Comp.:  959 "Optativas"                                 -> 08/10
-    agregador = None
-    for c in conjuntos.values():
+        if ehTopo:
+            pai_atual = cod
+
+    def periodo_herdado(cod, visitados=()):
+        """Período do primeiro ancestral que o declara."""
+        c = conjuntos.get(cod)
+        if c is None or cod in visitados:
+            return None
+        if c["periodo_inicial"] is not None:
+            return (c["periodo_inicial"], c["periodo_final"])
+        return periodo_herdado(c["pai"], visitados + (cod,))
+
+    for cod, c in conjuntos.items():
         if c["periodo_inicial"] is None:
-            continue
-        nome = c["nome"].lower()
-        if "trilha" in nome:
-            agregador = c  # o mais específico vence
-            break
-        if "optativa" in nome and agregador is None:
-            agregador = c
-    padrao = (agregador["periodo_inicial"], agregador["periodo_final"]) if agregador else (4, 8)
-    for c in conjuntos.values():
-        if c["periodo_inicial"] is None:
-            c["periodo_inicial"], c["periodo_final"] = padrao
+            c["periodo_inicial"], c["periodo_final"] = periodo_herdado(c["pai"]) or (4, 8)
+
+    # Conjunto citado por disciplina que a legenda não declara é anomalia da
+    # fonte, não do parser: na 968 as onze disciplinas de Sistemas IoT apontam
+    # para 1227..1233, que só o Histórico Escolar nomeia. Denunciar alto — o
+    # validador da matriz decide se aceita.
+    citados = {str(d["conjunto"]) for d in disciplinas if d["conjunto"] is not None}
+    if COMPLEMENTO:
+        with open(COMPLEMENTO, encoding="utf-8") as f:
+            extra = json.load(f)
+        for cod, c in extra["conjuntos"].items():
+            if cod in conjuntos:
+                print(f"AVISO: complemento redeclara o conjunto {cod} da legenda", file=sys.stderr)
+                continue
+            conjuntos[cod] = {**c, "fonte": extra["fonte"]}
+    orfaos = sorted(citados - set(conjuntos), key=int)
+    if orfaos:
+        print(
+            "AVISO: conjuntos citados por disciplina e ausentes da legenda: "
+            + ", ".join(orfaos),
+            file=sys.stderr,
+        )
 
     m = re.search(r"Eletiva - Carga horária total:\s*(\d+).*?Período inicial/final:\s*(\d+)/(\d+).*?Pré-Requisito \(Período Inicial\):\s*(\d+)", foot)
     eletiva = ({"ch": int(m.group(1)), "periodo_inicial": int(m.group(2)),

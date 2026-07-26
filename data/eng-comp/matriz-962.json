@@ -17,6 +17,7 @@
  "conjuntos": {
   "1079": {
    "nome": "Opção De Expressão Gráfica",
+   "pai": null,
    "periodo_inicial": 4,
    "periodo_final": 4,
    "ch": 30,
@@ -24,6 +25,7 @@
   },
   "1080": {
    "nome": "Optativas Do Ciclo De Humanidades",
+   "pai": null,
    "periodo_inicial": 2,
    "periodo_final": 10,
    "ch": 120,
@@ -31,6 +33,7 @@
   },
   "1081": {
    "nome": "Optativas Profissionalizantes",
+   "pai": null,
    "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 270,
@@ -38,105 +41,120 @@
   },
   "1082": {
    "nome": "Trilha Em Algoritmos E Complexidade",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1083": {
    "nome": "Trilha Em Banco De Dados",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1084": {
    "nome": "Trilha Em Otimiz, Modelos E Simulação",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1085": {
    "nome": "Trilha Em Engenharia De Software",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1086": {
    "nome": "Trilha Em Interação Humano-Computador",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1087": {
    "nome": "Trilha Em Inteligência Artificial",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1088": {
    "nome": "Trilha Em Desenv Baseado Em Plataformas",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1089": {
    "nome": "Trilha Em Redes De Computadores",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1090": {
    "nome": "Trilha Em Processamento Gráfico",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1091": {
    "nome": "Trilha Em Sis Embarcados E Robótica",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1092": {
    "nome": "Trilha Em Linguagens De Programação",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1093": {
    "nome": "Trilha Em Controle",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1094": {
    "nome": "Trilha Em Física",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1095": {
    "nome": "Trilha Em Engenharia Biomédica",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
   },
   "1096": {
    "nome": "Optativas Isoladas",
-   "periodo_inicial": 2,
+   "pai": "1081",
+   "periodo_inicial": 8,
    "periodo_final": 10,
    "ch": 90,
    "ch_semanal": null
@@ -153,9 +171,9 @@
    "aulas_semanais": {
     "teoricas": 1,
     "praticas": 2,
-    "total": 2,
-    "aps": 4,
-    "apcc": 3
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
    },
    "horas": {
     "ad": 0,
@@ -173,8 +191,8 @@
    ]
   },
   {
-   "codigo": "ENADE",
-   "nome": "I Enade Ingressante",
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
    "periodo": 1,
    "conjunto": null,
    "modelo": "Enade Ingressante",
@@ -6395,7 +6413,7 @@
   {
    "codigo": "ELEF30",
    "nome": "Ética, Profissão E Cidadania",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Formação Profissional",
    "aulas_semanais": {
@@ -6421,9 +6439,31 @@
    ]
   },
   {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
    "codigo": "ICSXG1",
    "nome": "Trabalho De Conclusão De Curso 2",
-   "periodo": null,
+   "periodo": 10,
    "conjunto": null,
    "modelo": "Trabalho De Conclusão",
    "aulas_semanais": {
