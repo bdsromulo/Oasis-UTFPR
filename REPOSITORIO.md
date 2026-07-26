@@ -98,6 +98,11 @@ Respeite os limites arquiteturais: a lógica de domínio (`src/domain/`) não im
    - `motor/situacao.ts`: Converte perfil nas métricas de cumprimento de 1º estrato, 2º estrato, ciclo de humanidades, trilhas em computação e horas de extensão.
    - `motor/elegiveis.ts`: Cruza matérias aprovadas com pré-requisitos da matriz e turmas ativas no semestre.
    - `motor/grade.ts`: Detecta choques de horário (`turno + aula`) e divergências de sede (`Centro`, `Ecoville`, `Neoville`) em um mesmo turno.
+   - `motor/simuladorFormatura.ts`: Projeta a trajetória até a integralização cursando o
+     mínimo de cada categoria. Cada semestre futuro espelha a oferta real conhecida de
+     mesma paridade (2027.1 usa 2026.1; 2027.2 usa 2026.2) e o motor reserva turma sem
+     choque, para a grade projetada nunca conflitar consigo mesma. Aceita `gradeFixada`,
+     a grade montada no Planejamento de Matrícula, como semestre de partida.
    - `motor/grade-magica.ts`: Sistema de Recomendação de Grade (Grade Mágica) maximizando carga horária e avanço em matérias obrigatórias, aplicando pesos diferenciados para turmas S73 (Prioridade 1, +100pts) e S71 (Prioridade 2, +30pts) de BSI, e validando restrições de turnos.
 
 3. **Camada 3 — Interface Visual (`src/ui/`):**

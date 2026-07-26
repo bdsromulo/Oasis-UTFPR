@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { Badge, Card } from "../componentes";
+import { MenuSecoes, type ItemSecao } from "./NavegacaoSecoes";
+import { BotaoFaleConosco } from "./Contato";
 import {
   IconBookOpen,
   IconCalendar,
@@ -176,6 +178,18 @@ const FONTES: Fonte[] = [
   },
 ];
 
+/** As seções são identificadas pelo próprio número que já aparece na tela. */
+const idDaSecao = (numero: string) => `como-usar-${numero}`;
+
+const SECOES: ItemSecao[] = [
+  { numero: "01", titulo: "Por onde começar" },
+  { numero: "02", titulo: "Como o histórico é lido" },
+  { numero: "03", titulo: "O que há em cada página" },
+  { numero: "04", titulo: "De onde vêm os dados" },
+  { numero: "05", titulo: "Semestres" },
+  { numero: "06", titulo: "Princípios" },
+].map((s) => ({ ...s, id: idDaSecao(s.numero) }));
+
 function Secao(props: {
   numero: string;
   titulo: string;
@@ -183,7 +197,7 @@ function Secao(props: {
   children: ReactNode;
 }) {
   return (
-    <section className="space-y-3.5">
+    <section id={idDaSecao(props.numero)} className="scroll-mt-24 space-y-3.5">
       <div>
         <div className="flex items-baseline gap-2.5">
           <span className="rounded-lg bg-utfpr-500/20 px-2 py-0.5 font-mono text-xs font-black text-utfpr-700 dark:text-utfpr-400">
@@ -237,6 +251,12 @@ export function TelaComoUsar() {
           informação que você lê aqui dentro.
         </p>
       </header>
+
+      <MenuSecoes
+        secoes={SECOES}
+        rotulo="Seções do manual"
+        acao={<BotaoFaleConosco compacto />}
+      />
 
       {/* 01 — Começando */}
       <Secao

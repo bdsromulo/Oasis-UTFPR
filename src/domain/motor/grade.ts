@@ -118,6 +118,25 @@ export function haveriaConflito(
   return detectarConflitos([...itensAtual, { disciplina, turma }]).length > 0;
 }
 
+/**
+ * Conflitos que a entrada desta turma criaria — só os que envolvem a turma nova.
+ *
+ * `haveriaConflito` responde sim/não, e isso basta para filtrar lista. Para
+ * barrar o clique, a tela precisa dizer COM QUEM bate e em QUAL horário, senão o
+ * aviso vira um "não pode" sem explicação.
+ *
+ * Os itens da mesma disciplina devem ficar fora de `itensAtuais`: trocar de
+ * turma dentro da mesma matéria substitui a anterior, não soma.
+ */
+export function conflitosDaAdicao(
+  itensAtuais: ItemGrade[],
+  disciplina: DisciplinaOfertada,
+  turma: Turma,
+): Conflito[] {
+  const novo: ItemGrade = { disciplina, turma };
+  return detectarConflitos([...itensAtuais, novo]).filter((c) => c.a === novo || c.b === novo);
+}
+
 /** total de aulas semanais da seleção */
 export function aulasSemanais(itens: ItemGrade[]): number {
   return itens.reduce((s, i) => s + horariosUnicos(i.turma).length, 0);

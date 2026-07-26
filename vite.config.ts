@@ -44,9 +44,11 @@ function csp(): Plugin {
   };
 }
 
-// base: diretório do repositório no GitHub Pages
+// base: raiz do domínio próprio (oasisutfpr.com.br via public/CNAME).
+// Era "/Oasis-UTFPR/" enquanto o site vivia em bdsromulo.github.io/Oasis-UTFPR/;
+// com domínio customizado o GitHub Pages serve a partir da raiz.
 export default defineConfig({
-  base: "/Oasis-UTFPR/",
+  base: "/",
   plugins: [react(), tailwindcss(), csp()],
   test: {
     environment: "node",

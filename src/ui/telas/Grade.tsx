@@ -21,6 +21,7 @@ import {
   IconCheck,
   IconCopy,
   IconDownload,
+  IconGraduationCap,
   IconHourglass,
   IconImage,
   IconInfo,
@@ -400,6 +401,10 @@ export function TelaGrade(props: {
   todasCestasPorSemestre?: Record<string, Record<string, SelecaoTurma[]>>;
   semestreAtivo?: string;
   todasOfertas?: Record<string, OfertaSemestre>;
+  /** manda esta grade para o Simulador de Formatura usar como semestre de partida */
+  onEnviarParaSimulador?: () => void;
+  /** true quando esta grade já é a que alimenta o simulador */
+  gradeNoSimulador?: boolean;
 }) {
   const { oferta, selecao, setSelecao } = props;
   const [copiado, setCopiado] = useState(false);
@@ -566,6 +571,10 @@ export function TelaGrade(props: {
   }
 
   const importacaoBloqueada = (props.semestreAtivo || "2026-2") !== "2026-2" && props.oferta.semestre !== "2026-2" && props.oferta.semestre !== "2026.2";
+  // O simulador só parte de 2026.2: mandar uma grade de semestre passado faria a
+  // projeção começar no que já aconteceu.
+  const semestreDaGrade = (props.semestreAtivo || props.oferta.semestre).replace(".", "-");
+  const podeEnviarAoSimulador = Boolean(props.onEnviarParaSimulador) && semestreDaGrade === "2026-2";
   const chavesGrades = props.cestaGrades ? Object.keys(props.cestaGrades).sort() : ["A"];
   const barraAbas = props.cestaGrades && props.onMudarGradeAtiva && (
     <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-3 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
@@ -975,7 +984,9 @@ export function TelaGrade(props: {
             {conflitos.length === 0 ? "Sem conflitos" : `${conflitos.length} conflito(s) detetado(s)`}
           </Badge>
         </div>
-        <div className="flex items-center gap-2.5">
+        {/* no celular estes botões passavam de 570px numa tela de 375 e
+            arrastavam a página inteira de lado; agora quebram em linhas */}
+        <div className="flex w-full flex-wrap items-center gap-2.5 sm:w-auto">
           <Botao
             variante="neutro"
             onClick={async () => {
@@ -1013,6 +1024,27 @@ export function TelaGrade(props: {
           >
             {<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Sugestão de Grade
           </Botao>
+          {podeEnviarAoSimulador && (
+            <Botao
+              variante="neutro"
+              onClick={props.onEnviarParaSimulador}
+              classe={`transition-all font-semibold cursor-pointer text-xs ${
+                props.gradeNoSimulador
+                  ? "!border-utfpr-500 !text-utfpr-700 dark:!text-utfpr-300"
+                  : "hover:!border-utfpr-500/80"
+              }`}
+              title="Usar esta grade como o semestre de partida do Simulador de Formatura: os semestres seguintes são projetados a partir dela"
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <IconGraduationCap className="h-4 w-4 shrink-0" />
+                <span>
+                  {props.gradeNoSimulador
+                    ? "Atualizar no Simulador de Formatura"
+                    : "Enviar ao Simulador de Formatura"}
+                </span>
+              </span>
+            </Botao>
+          )}
           <Botao
             variante="primario"
             onClick={() => {
@@ -1225,7 +1257,9 @@ export function TelaGrade(props: {
         <h3 className="font-display text-sm font-bold tracking-tight text-zinc-500 uppercase dark:text-zinc-400">
           Disciplinas selecionadas ({itens.length})
         </h3>
-        <div className="grid gap-2 sm:grid-cols-2">
+        {/* grid-cols-1 explícito: sem ele a coluna implícita vira max-content e
+            um nome longo de disciplina estoura a largura da tela no celular */}
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {itens.map((item, i) => {
             const discMatriz = props.matriz?.disciplinas.find(
               (x) => x.codigo === item.disciplina.codigo || (x.equivalentes || []).some((eq) => eq.codigo === item.disciplina.codigo) || normNome(x.nome) === normNome(item.disciplina.nome)
@@ -1260,6 +1294,15 @@ export function TelaGrade(props: {
                 key={item.selecaoOriginal ? `${item.selecaoOriginal.codDisciplina}-${item.selecaoOriginal.codTurma}` : item.disciplina.codigo}
                 onMouseEnter={() => iniciarHover(codIdentificador, chaveElemento)}
                 onMouseLeave={cancelarHover}
+                // No celular não existe hover: o balão de progresso ficaria
+                // inalcançável. Tocar no card abre e fecha o mesmo balão.
+                onClick={() => {
+                  if (isEsteElemento) {
+                    cancelarHover();
+                  } else {
+                    iniciarHover(codIdentificador, chaveElemento);
+                  }
+                }}
                 className={`relative flex flex-col justify-between gap-3 rounded-xl border p-3.5 shadow-2xs transition-all ${
                   isHovered
                     ? "border-utfpr-500 bg-utfpr-500/5 ring-1 ring-utfpr-500 dark:border-utfpr-400 dark:bg-utfpr-500/10 scale-[1.01] z-40 overflow-visible"
@@ -1306,9 +1349,11 @@ export function TelaGrade(props: {
                   </div>
                   <Botao
                     variante="perigo"
-                    onClick={() =>
-                      setSelecao(selecao.filter((s) => s.codDisciplina !== codIdentificador))
-                    }
+                    onClick={(e?: any) => {
+                      // o card inteiro alterna o balão; remover não pode abrí-lo
+                      e?.stopPropagation?.();
+                      setSelecao(selecao.filter((s) => s.codDisciplina !== codIdentificador));
+                    }}
                   >
                     <IconTrash className="h-3.5 w-3.5" />
                     <span>remover</span>

@@ -706,3 +706,20 @@ export function IconLightbulb(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconMenu(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+  );
+}
+
+export function IconMail(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base(props)}>
+      <rect x="2.75" y="5" width="18.5" height="14" rx="2.5" />
+      <path d="m3.5 7.2 7.3 5.2a2 2 0 0 0 2.4 0l7.3-5.2" />
+    </svg>
+  );
+}

@@ -24,6 +24,9 @@ import { TelaGestaoInformacao } from "./telas/TelaGestaoInformacao";
 import { TelaFluxograma } from "./telas/TelaFluxograma";
 import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
+import { PilulaFaleConosco } from "./telas/Contato";
+import { PainelMenuMobile } from "./MenuMobile";
+import { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./telas/SeletorExclusoes";
 import {
   IconBookOpen,
   IconCalendar,
@@ -31,6 +34,7 @@ import {
   IconEye,
   IconHelp,
   IconInfo,
+  IconMenu,
   IconMoon,
   IconSettings,
   IconSun,
@@ -58,6 +62,10 @@ const CHAVE_CHECKIN = "oasis.checkin.v1";
 const CHAVE_CESTA_EXCLUSOES = "oasis.cesta_exclusoes.v1";
 const CHAVE_CESTAS_POR_SEMESTRE = "oasis.cestas_por_semestre.v2";
 const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
+// ponteiro (semestre + letra da grade) para a grade do Planejamento que alimenta
+// o Simulador de Formatura; a seleção em si continua vindo da cesta, para o
+// simulador acompanhar as edições feitas na grade
+const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -109,6 +117,7 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
   const [sobreAberta, setSobreAberta] = useState(false);
   const [comoUsarAberta, setComoUsarAberta] = useState(false);
@@ -180,9 +189,39 @@ export function App() {
     return { "2026-2": {} };
   });
 
+  // Grade do Planejamento escolhida como ponto de partida do Simulador de
+  // Formatura. Guardamos só o ponteiro: a seleção é lida da cesta a cada render,
+  // então mexer na grade replaneja a projeção sem precisar reimportar.
+  const [gradeParaSimulador, setGradeParaSimulador] = useState<{
+    semestre: string;
+    grade: string;
+  } | null>(() => {
+    try {
+      const salvo = JSON.parse(localStorage.getItem(CHAVE_GRADE_SIMULADOR) ?? "null");
+      return salvo && salvo.semestre && salvo.grade ? salvo : null;
+    } catch {
+      return null;
+    }
+  });
+
   const cestaGrades = useMemo(() => {
     return todasCestasPorSemestre[semestreAtivo] ?? { A: [] };
   }, [todasCestasPorSemestre, semestreAtivo]);
+
+  const gradeDoPlanejamentoParaSimulador = useMemo(() => {
+    if (!gradeParaSimulador) return null;
+    const sel = todasCestasPorSemestre[gradeParaSimulador.semestre]?.[gradeParaSimulador.grade];
+    if (!sel || sel.length === 0) return null;
+    return { ...gradeParaSimulador, selecao: sel };
+  }, [gradeParaSimulador, todasCestasPorSemestre]);
+
+  // Ritmo e exclusões do Simulador de Formatura vivem aqui, e não como useState
+  // dentro da tela: importar uma grade troca de aba de propósito (o aluno vê o
+  // resultado na Grade), o que desmonta o simulador — um estado local voltaria
+  // ao padrão a cada remontagem e o próximo import silenciosamente ignoraria o
+  // ritmo que o aluno tinha acabado de escolher.
+  const [ritmoSimulador, setRitmoSimulador] = useState(5);
+  const [exclusoesSimulador, setExclusoesSimulador] = useState<ValorExclusoes>(EXCLUSOES_VAZIAS);
 
   const cestaExclusoes = useMemo(() => {
     return todasExclusoesPorSemestre[semestreAtivo] ?? {};
@@ -411,6 +450,24 @@ export function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  /**
+   * Caminho de volta da importação: a grade montada no Planejamento vira o
+   * primeiro semestre do Simulador de Formatura, e os demais semestres passam a
+   * ser calculados a partir dela.
+   */
+  function handleEnviarGradeParaSimulador(semestreOrigem: string, gradeOrigem: string) {
+    const ponteiro = { semestre: semestreOrigem, grade: gradeOrigem };
+    setGradeParaSimulador(ponteiro);
+    localStorage.setItem(CHAVE_GRADE_SIMULADOR, JSON.stringify(ponteiro));
+    setAba("simulador");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handleDescartarGradeDoSimulador() {
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
+  }
+
   function handleContinuarSemRegistro(dados: DadosCheckin) {
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
@@ -444,6 +501,10 @@ export function App() {
     setLayout("oasis");
     setAba("planejamento");
     setAbaPlanejamento("cursar");
+    setRitmoSimulador(5);
+    setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
   function handleTrocarUsuario() {
@@ -458,6 +519,10 @@ export function App() {
     setSelecao([]);
     setAba("planejamento");
     setAbaPlanejamento("cursar");
+    setRitmoSimulador(5);
+    setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setGradeParaSimulador(null);
+    localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
   return (
@@ -477,7 +542,34 @@ export function App() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        {/* No celular estas ações viram um único botão de menu: eram cinco
+            ícones de 32px em duas linhas, abaixo do mínimo de toque, e dois
+            deles só mostravam o rótulo no hover. O chip de perfil continua
+            visível, porque é contexto e não ação. */}
+        <div className="flex items-center gap-2 sm:hidden">
+          {perfil ? (
+            <span className="flex min-w-0 items-center gap-1.5 rounded-2xl border border-zinc-200/80 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 dark:border-zinc-800/80 dark:bg-zinc-900/80 dark:text-zinc-300">
+              <IconUser className="h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-500" />
+              <span className="truncate">
+                {perfil.nome.split(" ")[0]}
+                <span className="font-normal text-zinc-400"> · {perfil.periodo}º</span>
+              </span>
+            </span>
+          ) : (
+            checkinConcluido && <Badge tom="neutro">Modo Livre</Badge>
+          )}
+          <button
+            type="button"
+            onClick={() => setMenuMobileAberto(true)}
+            aria-label="Abrir menu"
+            className="flex h-11 min-w-[44px] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-2xl border border-zinc-200/80 bg-white/90 px-3.5 font-display text-sm font-bold text-zinc-700 shadow-2xs active:scale-95 dark:border-zinc-800/80 dark:bg-zinc-900/90 dark:text-zinc-200"
+          >
+            <IconMenu className="h-5 w-5 shrink-0" />
+            <span>Menu</span>
+          </button>
+        </div>
+
+        <div className="hidden flex-wrap items-center gap-3 sm:flex">
           {/* Controles do Cabeçalho visíveis quando já iniciou a plataforma */}
           {(perfil || checkinConcluido) && (
             <>
@@ -626,7 +718,12 @@ export function App() {
           erro={erro}
         />
       ) : (
-        <div className="flex items-start gap-6">
+        // Empilha no celular e vira duas colunas no desktop. `SidebarNavegacao`
+        // devolve DOIS elementos: o aside do desktop e a barra de abas do
+        // mobile. Numa linha flex, essa barra virava uma coluna ao lado do
+        // conteúdo e espremia a coluna principal a zero pixel — a página
+        // inteira passava a rolar de lado no celular.
+        <div className="flex flex-col items-stretch gap-6 lg:flex-row lg:items-start">
           {/* Menu Lateral (Sidebar Desktop / Mobile Drawer) */}
           <SidebarNavegacao
             abaAtiva={aba}
@@ -739,7 +836,7 @@ export function App() {
                         <select
                           value={semestreAtivo}
                           onChange={(e) => mudarSemestre(e.target.value)}
-                          className="bg-transparent font-mono text-sm font-bold focus:outline-none cursor-pointer appearance-none text-current"
+                          className="cursor-pointer appearance-none bg-transparent font-mono text-sm font-bold text-current focus:outline-none max-sm:min-h-11"
                         >
                           {semestresDisponiveis.map((sem) => {
                             const preMatricula = dadosCurso.semestresPreMatricula.includes(sem);
@@ -878,6 +975,15 @@ export function App() {
                     todasCestasPorSemestre={todasCestasPorSemestre}
                     semestreAtivo={semestreAtivo}
                     todasOfertas={todasOfertas}
+                    onEnviarParaSimulador={
+                      SIMULADOR_LIBERADO && perfil
+                        ? () => handleEnviarGradeParaSimulador(semestreAtivo, gradeAtiva)
+                        : undefined
+                    }
+                    gradeNoSimulador={
+                      gradeParaSimulador?.semestre === semestreAtivo &&
+                      gradeParaSimulador?.grade === gradeAtiva
+                    }
                   />
                 )}
               </div>
@@ -891,6 +997,12 @@ export function App() {
                 semestreAtivo={semestreAtivo}
                 todasCestasPorSemestre={todasCestasPorSemestre}
                 onImportarGrade={handleImportarGradeDoSimulador}
+                gradeDoPlanejamento={gradeDoPlanejamentoParaSimulador}
+                onDescartarGradeDoPlanejamento={handleDescartarGradeDoSimulador}
+                ritmo={ritmoSimulador}
+                onMudarRitmo={setRitmoSimulador}
+                exclusoes={exclusoesSimulador}
+                onMudarExclusoes={setExclusoesSimulador}
               />
             )}
 
@@ -1010,7 +1122,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setMobileGradeDrawerAberto(true)}
-                className="shrink-0 ml-3 rounded-xl bg-utfpr-500 px-4 py-2 font-display text-xs font-black text-zinc-950 shadow-md transition-all hover:bg-utfpr-400 active:scale-95 cursor-pointer"
+                className="ml-3 min-h-11 shrink-0 cursor-pointer rounded-xl bg-utfpr-500 px-4 py-2 font-display text-xs font-black text-zinc-950 shadow-md transition-all hover:bg-utfpr-400 active:scale-95"
               >
                 {preview ? "Ver Preview" : "Abrir Grade"}
               </button>
@@ -1089,6 +1201,28 @@ export function App() {
       <footer className="mt-20 border-t border-zinc-200/80 pt-6 pb-24 text-center text-xs text-zinc-400 dark:border-zinc-800/80 dark:text-zinc-500">
         Projeto acadêmico independente desenvolvido por e para estudantes da UTFPR — não oficial. Sempre verifique e confirme seus dados no Portal do Aluno da UTFPR.
       </footer>
+
+      {/* contato sempre à mão, em qualquer tela da plataforma */}
+      <PilulaFaleConosco />
+
+      <PainelMenuMobile
+        aberto={menuMobileAberto}
+        onFechar={() => setMenuMobileAberto(false)}
+        temaAtivo={preferencias.tema}
+        onMudarTema={(t) => setPreferencias({ ...preferencias, tema: t })}
+        mostrarConfiguracoes={!!perfil || checkinConcluido}
+        onAbrirConfiguracoes={() => setModalConfigAberto(true)}
+        onAbrirComoUsar={() => {
+          setGiAberta(false);
+          setSobreAberta(false);
+          setComoUsarAberta(true);
+        }}
+        onAbrirSobre={() => {
+          setGiAberta(false);
+          setComoUsarAberta(false);
+          setSobreAberta(true);
+        }}
+      />
     </div>
   );
 }

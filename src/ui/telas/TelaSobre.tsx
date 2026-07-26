@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { Badge, Botao, Card } from "../componentes";
+import { MenuSecoes, type ItemSecao } from "./NavegacaoSecoes";
+import { BotaoFaleConosco, EMAIL_CONTATO } from "./Contato";
 import {
   IconBookOpen,
   IconGithub,
@@ -86,6 +88,18 @@ const ROADMAP: Marco[] = [
   },
 ];
 
+/** As seções são identificadas pelo próprio número que já aparece na tela. */
+const idDaSecao = (numero: string) => `sobre-${numero}`;
+
+const SECOES: ItemSecao[] = [
+  { numero: "01", titulo: "A proposta do site" },
+  { numero: "02", titulo: "Política de dados locais" },
+  { numero: "03", titulo: "Código aberto" },
+  { numero: "04", titulo: "Gestão da Informação" },
+  { numero: "05", titulo: "Créditos" },
+  { numero: "06", titulo: "Roadmap" },
+].map((s) => ({ ...s, id: idDaSecao(s.numero) }));
+
 function Secao(props: {
   numero: string;
   titulo: string;
@@ -93,7 +107,7 @@ function Secao(props: {
   children: ReactNode;
 }) {
   return (
-    <section className="space-y-3.5">
+    <section id={idDaSecao(props.numero)} className="scroll-mt-24 space-y-3.5">
       <div>
         <div className="flex items-baseline gap-2.5">
           <span className="rounded-lg bg-utfpr-500/20 px-2 py-0.5 font-mono text-xs font-black text-utfpr-700 dark:text-utfpr-400">
@@ -153,6 +167,12 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
           próximo semestre. Sem planilha, sem print de grade, sem conversa de corredor.
         </p>
       </header>
+
+      <MenuSecoes
+        secoes={SECOES}
+        rotulo="Seções desta página"
+        acao={<BotaoFaleConosco compacto />}
+      />
 
       {/* 01 — Proposta */}
       <Secao
@@ -371,6 +391,23 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
             </ul>
           </Card>
 
+          {/* Método de desenvolvimento */}
+          <Card>
+            <h4 className="font-display text-base font-black tracking-tight text-zinc-900 dark:text-white">
+              Como o site foi desenvolvido
+            </h4>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              O desenvolvimento contou com o apoio de{" "}
+              <strong className="text-zinc-800 dark:text-zinc-200">
+                LLMs (modelos de linguagem)
+              </strong>{" "}
+              para leitura de documentação e geração de código estruturado. As decisões de
+              produto, a curadoria dos dados e a conferência dos resultados contra os
+              documentos oficiais da UTFPR são de responsabilidade humana — nada entra na
+              plataforma sem passar por validação.
+            </p>
+          </Card>
+
           {/* Inspiração */}
           <Card>
             <h4 className="font-display text-base font-black tracking-tight text-zinc-900 dark:text-white">
@@ -459,6 +496,21 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
         </Card>
       </Secao>
 
+      <Card classe="!border-utfpr-500/40 !border-2 text-center">
+        <h3 className="font-display text-lg font-black tracking-tight text-zinc-900 dark:text-white">
+          Achou um erro? Fale com a gente
+        </h3>
+        <p className="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+          Dado divergente do Portal, pré-requisito que não bate com a prática, bug na grade ou
+          sugestão: o retorno de quem usa é o que corrige a plataforma. Escreva para{" "}
+          <strong className="font-mono text-zinc-800 dark:text-zinc-200">{EMAIL_CONTATO}</strong>.
+        </p>
+        <div className="mt-4 flex justify-center">
+          <BotaoFaleConosco />
+        </div>
+      </Card>
+
+      {/* o respiro final fica na epígrafe, que é o último elemento da página */}
       <p className="text-center text-xs text-zinc-400 dark:text-zinc-500">
         Oásis UTFPR. Projeto independente, sem vínculo institucional com a UTFPR.
       </p>

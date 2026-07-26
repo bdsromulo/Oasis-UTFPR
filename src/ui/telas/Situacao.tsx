@@ -66,14 +66,16 @@ function CardProgresso(props: {
         {props.rodape && <div className="mt-2.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">{props.rodape}</div>}
       </div>
 
-      <div className="mt-3.5 flex items-center justify-end border-t border-zinc-100 pt-2.5 dark:border-zinc-800">
+      <div className="mt-3.5 flex items-center justify-end border-t border-zinc-100 pt-1 dark:border-zinc-800">
+        {/* min-h-11: no celular este link tinha 16px de altura, metade do
+            mínimo confortável de toque */}
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             if (props.onAbrirCatalogo) props.onAbrirCatalogo(props.categoria);
           }}
-          className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+          className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 px-1 font-display text-xs font-black text-utfpr-500 transition-colors hover:text-utfpr-400"
         >
           <span>Exibir Lista</span>
           <span>→</span>
@@ -408,7 +410,7 @@ export function TelaSituacao(props: {
                 e.stopPropagation();
                 if (onAbrirCatalogo) onAbrirCatalogo("todas");
               }}
-              className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+              className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 px-1 font-display text-xs font-black text-utfpr-500 transition-colors hover:text-utfpr-400"
             >
               <span>Exibir Lista</span>
               <span>→</span>
@@ -504,7 +506,7 @@ export function TelaSituacao(props: {
                   e.stopPropagation();
                   if (onAbrirCatalogo) onAbrirCatalogo("trilhas");
                 }}
-                className="inline-flex items-center gap-1.5 font-display text-xs font-black text-utfpr-500 hover:text-utfpr-400 transition-colors cursor-pointer"
+                className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 px-1 font-display text-xs font-black text-utfpr-500 transition-colors hover:text-utfpr-400"
               >
                 <span>Exibir Lista</span>
                 <span>→</span>

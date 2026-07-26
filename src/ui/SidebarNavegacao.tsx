@@ -170,7 +170,7 @@ export function SidebarNavegacao({
               onClick={() => {
                 if (!item.bloqueado) onSelecionarAba(item.id);
               }}
-              className={`flex flex-1 min-w-[120px] items-center justify-center gap-2 rounded-xl p-2.5 font-display text-xs font-black transition-all cursor-pointer ${
+              className={`flex min-h-12 flex-1 min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-xl p-2.5 font-display text-xs font-black transition-all ${
                 item.bloqueado
                   ? "opacity-50 cursor-not-allowed text-zinc-400 dark:text-zinc-600"
                   : ativo
