@@ -21,7 +21,9 @@ dono do projeto. `data/` contém apenas dados públicos derivados.
 
 ## Pipeline de dados
 
-- `tools/parse_matriz.py` + `tools/validate_matriz.py` → `data/matriz-981.json`
+- `tools/parse_matriz.py` + `tools/aplicar_anotacoes.py` + `tools/validate_matriz.py`
+  → `data/matriz-981.json` (a 981 tem camada curada em `data/anotacoes-981.json`;
+  844 e 962 saem só do parse)
 - `tools/parse_turmas_pdf.py` + `tools/validate_turmas.py` → `data/turmas/{sem}.json`
   (fonte primária: PDF oficial de Turmas Abertas)
 - `tools/parse_gnh.py` → leitor secundário (backup do Grade na Hora)
