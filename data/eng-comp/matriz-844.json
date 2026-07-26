@@ -300,6 +300,21 @@
      "codigo": "MA71Y",
      "cht": 90,
      "grupo": null
+    },
+    {
+     "codigo": "MA72I",
+     "cht": 60,
+     "grupo": "10"
+    },
+    {
+     "codigo": "MAT7AL",
+     "cht": 60,
+     "grupo": "99"
+    },
+    {
+     "codigo": "MAT7GA",
+     "cht": 60,
+     "grupo": "99"
     }
    ]
   },
@@ -326,21 +341,6 @@
     "CSF13"
    ],
    "equivalentes": [
-    {
-     "codigo": "MA72I",
-     "cht": 60,
-     "grupo": "10"
-    },
-    {
-     "codigo": "MAT7AL",
-     "cht": 60,
-     "grupo": "99"
-    },
-    {
-     "codigo": "MAT7GA",
-     "cht": 60,
-     "grupo": "99"
-    },
     {
      "codigo": "ICSE20",
      "cht": 60,
@@ -481,6 +481,26 @@
      "codigo": "FI71A",
      "cht": 75,
      "grupo": null
+    },
+    {
+     "codigo": "FI71Y",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72B",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FIS7E1",
+     "cht": 30,
+     "grupo": null
     }
    ]
   },
@@ -508,26 +528,6 @@
     "MA71A"
    ],
    "equivalentes": [
-    {
-     "codigo": "FI71Y",
-     "cht": 30,
-     "grupo": null
-    },
-    {
-     "codigo": "FI72A",
-     "cht": 75,
-     "grupo": null
-    },
-    {
-     "codigo": "FI72B",
-     "cht": 90,
-     "grupo": null
-    },
-    {
-     "codigo": "FIS7E1",
-     "cht": 30,
-     "grupo": null
-    },
     {
      "codigo": "FI72M",
      "cht": 60,
@@ -620,6 +620,16 @@
      "codigo": "QB70I",
      "cht": 90,
      "grupo": null
+    },
+    {
+     "codigo": "QBI7QE",
+     "cht": 30,
+     "grupo": "40"
+    },
+    {
+     "codigo": "QBI7QT",
+     "cht": 60,
+     "grupo": "40"
     }
    ]
   },
@@ -646,16 +656,6 @@
     "CSF20"
    ],
    "equivalentes": [
-    {
-     "codigo": "QBI7QE",
-     "cht": 30,
-     "grupo": "40"
-    },
-    {
-     "codigo": "QBI7QT",
-     "cht": 60,
-     "grupo": "40"
-    },
     {
      "codigo": "ICSF30",
      "cht": 45,
@@ -706,6 +706,11 @@
      "codigo": "ELEB20",
      "cht": 45,
      "grupo": null
+    },
+    {
+     "codigo": "ELP21",
+     "cht": 75,
+     "grupo": null
     }
    ]
   },
@@ -732,11 +737,6 @@
     "EEX11"
    ],
    "equivalentes": [
-    {
-     "codigo": "ELP21",
-     "cht": 75,
-     "grupo": null
-    },
     {
      "codigo": "ELE41",
      "cht": 45,
@@ -828,6 +828,16 @@
      "codigo": "MA70B",
      "cht": 90,
      "grupo": null
+    },
+    {
+     "codigo": "MA70Z",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MAT7ED",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -855,16 +865,6 @@
    ],
    "equivalentes": [
     {
-     "codigo": "MA70Z",
-     "cht": 60,
-     "grupo": null
-    },
-    {
-     "codigo": "MAT7ED",
-     "cht": 60,
-     "grupo": null
-    },
-    {
      "codigo": "EST70A",
      "cht": 60,
      "grupo": null
@@ -877,6 +877,11 @@
     {
      "codigo": "MA65A",
      "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA70F",
+     "cht": 90,
      "grupo": null
     }
    ]
@@ -904,11 +909,6 @@
     "MA72A"
    ],
    "equivalentes": [
-    {
-     "codigo": "MA70F",
-     "cht": 90,
-     "grupo": null
-    },
     {
      "codigo": "MA63A",
      "cht": 60,
@@ -989,6 +989,11 @@
      "codigo": "ELEB21",
      "cht": 45,
      "grupo": null
+    },
+    {
+     "codigo": "ELP32",
+     "cht": 90,
+     "grupo": null
     }
    ]
   },
@@ -1016,11 +1021,6 @@
    ],
    "equivalentes": [
     {
-     "codigo": "ELP32",
-     "cht": 90,
-     "grupo": null
-    },
-    {
      "codigo": "EL65A",
      "cht": 90,
      "grupo": null
@@ -1033,6 +1033,11 @@
     {
      "codigo": "ELEB30",
      "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF41",
+     "cht": 75,
      "grupo": null
     }
    ]
@@ -1058,11 +1063,6 @@
    },
    "prerequisitos": [],
    "equivalentes": [
-    {
-     "codigo": "ELF41",
-     "cht": 75,
-     "grupo": null
-    },
     {
      "codigo": "EL62A",
      "cht": 60,
@@ -1839,6 +1839,11 @@
      "codigo": "ELF74",
      "cht": 60,
      "grupo": null
+    },
+    {
+     "codigo": "ELW74",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -1865,11 +1870,6 @@
     "CSW40"
    ],
    "equivalentes": [
-    {
-     "codigo": "ELW74",
-     "cht": 60,
-     "grupo": null
-    },
     {
      "codigo": "EL68A",
      "cht": 60,
@@ -1925,6 +1925,21 @@
      "codigo": "ELEC20",
      "cht": 60,
      "grupo": null
+    },
+    {
+     "codigo": "ELF62",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET76H",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -1951,21 +1966,6 @@
     "EEQ31"
    ],
    "equivalentes": [
-    {
-     "codigo": "ELF62",
-     "cht": 60,
-     "grupo": null
-    },
-    {
-     "codigo": "ELN77A",
-     "cht": 60,
-     "grupo": null
-    },
-    {
-     "codigo": "ET76H",
-     "cht": 60,
-     "grupo": null
-    },
     {
      "codigo": "EL66D",
      "cht": 60,
@@ -2086,6 +2086,16 @@
      "codigo": "ELEC30",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "ELF72",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET77H",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -2112,16 +2122,6 @@
     "EEX22"
    ],
    "equivalentes": [
-    {
-     "codigo": "ELF72",
-     "cht": 60,
-     "grupo": null
-    },
-    {
-     "codigo": "ET77H",
-     "cht": 60,
-     "grupo": null
-    },
     {
      "codigo": "ELEX22",
      "cht": 45,
@@ -4132,6 +4132,16 @@
      "codigo": "ELTE2",
      "cht": 60,
      "grupo": null
+    },
+    {
+     "codigo": "ICSD41",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "IF6BO",
+     "cht": 60,
+     "grupo": null
     }
    ]
   },
@@ -4158,16 +4168,6 @@
     "CSF30"
    ],
    "equivalentes": [
-    {
-     "codigo": "ICSD41",
-     "cht": 45,
-     "grupo": null
-    },
-    {
-     "codigo": "IF6BO",
-     "cht": 60,
-     "grupo": null
-    },
     {
      "codigo": "ICSD42",
      "cht": 45,
@@ -4600,6 +4600,11 @@
      "codigo": "FI67A",
      "cht": 45,
      "grupo": null
+    },
+    {
+     "codigo": "ME66F",
+     "cht": 45,
+     "grupo": null
     }
    ]
   },
@@ -4626,11 +4631,6 @@
     "FI73S"
    ],
    "equivalentes": [
-    {
-     "codigo": "ME66F",
-     "cht": 45,
-     "grupo": null
-    },
     {
      "codigo": "FI67C",
      "cht": 90,
@@ -6368,6 +6368,11 @@
      "codigo": "ED70V",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "EDU70J",
+     "cht": 45,
+     "grupo": null
     }
    ]
   },
@@ -6394,11 +6399,6 @@
     "ED70T"
    ],
    "equivalentes": [
-    {
-     "codigo": "EDU70J",
-     "cht": 45,
-     "grupo": null
-    },
     {
      "codigo": "ED60G",
      "cht": 30,
@@ -7016,6 +7016,11 @@
      "codigo": "ES81A",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "FCH7HA",
+     "cht": 45,
+     "grupo": null
     }
    ]
   },
@@ -7039,13 +7044,7 @@
     "total": 45
    },
    "prerequisitos": [],
-   "equivalentes": [
-    {
-     "codigo": "FCH7HA",
-     "cht": 45,
-     "grupo": null
-    }
-   ]
+   "equivalentes": []
   },
   {
    "codigo": "FCH7GA",
@@ -7472,6 +7471,11 @@
      "codigo": "QB70K",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "QB77U",
+     "cht": 30,
+     "grupo": null
     }
    ]
   },
@@ -7496,11 +7500,6 @@
    },
    "prerequisitos": [],
    "equivalentes": [
-    {
-     "codigo": "QB77U",
-     "cht": 30,
-     "grupo": null
-    },
     {
      "codigo": "QB56F",
      "cht": 32,
@@ -7722,6 +7721,11 @@
      "codigo": "ET70H",
      "cht": 30,
      "grupo": null
+    },
+    {
+     "codigo": "IF60A",
+     "cht": 30,
+     "grupo": null
     }
    ]
   },
@@ -7745,13 +7749,7 @@
     "total": 0
    },
    "prerequisitos": [],
-   "equivalentes": [
-    {
-     "codigo": "IF60A",
-     "cht": 30,
-     "grupo": null
-    }
-   ]
+   "equivalentes": []
   },
   {
    "codigo": "ENADEI",

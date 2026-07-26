@@ -153,9 +153,9 @@
    "aulas_semanais": {
     "teoricas": 1,
     "praticas": 2,
-    "total": 2,
-    "aps": 4,
-    "apcc": 3
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
    },
    "horas": {
     "ad": 0,
@@ -173,8 +173,8 @@
    ]
   },
   {
-   "codigo": "ENADE",
-   "nome": "I Enade Ingressante",
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
    "periodo": 1,
    "conjunto": null,
    "modelo": "Enade Ingressante",
@@ -6419,6 +6419,28 @@
      "grupo": null
     }
    ]
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": null,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
   },
   {
    "codigo": "ICSXG1",

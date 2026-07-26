@@ -38,7 +38,12 @@ RE_COD = re.compile(r"^[A-Z0-9]{4,7}$")
 # palavras que só ocorrem nas linhas de cabeçalho/moldura da página
 HEADER_MARKS = ("teóricas", "práticas", "requisito(s)", "Equivalentes", "APCC",
                 "Consulta", "Câmpus:", "Curso(s):", "Versão", "primir", "(CHEAD)",
-                "Curricular", "Grupo")
+                "Curricular", "Grupo",
+                # "Matriz: 844 - Matriz 3 De Eng De Computação": o número da
+                # matriz cai na faixa x das colunas numéricas e entrava como
+                # aula/hora da primeira disciplina da página. O cabeçalho é lido
+                # à parte, direto do texto da página 1.
+                "Matriz:")
 
 # Deslocamento horizontal do documento em relação às fronteiras medidas acima.
 # O PDF da matriz de Eng. Comp. tem o mesmo layout do de BSI, porém deslocado
@@ -72,6 +77,12 @@ def col_of(x):
             return name
     return None
 
+def so_equivalencia(ws):
+    """A linha tem células apenas nas colunas de equivalência (Disciplina/CHT/Grupo)?"""
+    cols = [col_of(w["x0"]) for w in ws]
+    return bool(cols) and all(c and c.startswith("eq_") for c in cols)
+
+
 def group_rows(words, tol=3.5):
     rows = []
     for w in sorted(words, key=lambda w: (w["top"], w["x0"])):
@@ -101,6 +112,16 @@ def parse():
                     continue
                 if any(m in line for m in HEADER_MARKS):
                     continue
+                # Sobra de equivalência: quando a lista de equivalentes é mais
+                # longa que o corpo da disciplina, as últimas linhas caem DEPOIS
+                # do "Turmas" que fecha o bloco (e às vezes depois da moldura da
+                # página). Elas só têm células nas colunas de equivalência —
+                # devolvemos ao bloco anterior em vez de deixá-las abrir o bloco
+                # da próxima disciplina, que era o que atribuía QBI7QE/QBI7QT
+                # (de QB70C) à CSF30 e MA70Z/MAT7ED (de MA70G) à MA70H na 844.
+                if not buf and blocks and so_equivalencia(ws):
+                    blocks[-1].append(ws)
+                    continue
                 buf.append(ws)
                 # "Turmas" na coluna código encerra o bloco da disciplina
                 if any(w["text"] == "Turmas" and col_of(w["x0"]) == "codigo" for w in ws):
@@ -128,6 +149,12 @@ def parse():
         nome_extra = []
         for t in raw_cod_toks:
             if not cod_toks and (RE_COD.match(t) or t.startswith("ENADE")):
+                cod_toks.append(t)
+            # ENADEC/ENADEI são os únicos códigos que a fonte quebra em duas
+            # linhas dentro da própria coluna ("ENADE" + "C"/"I"). Qualquer
+            # outra sobra na coluna do código é continuação do nome (em 962
+            # caem ali fragmentos como "EM", "DE", "DA").
+            elif cod_toks == ["ENADE"] and len(t) == 1:
                 cod_toks.append(t)
             else:
                 nome_extra.append(t)

@@ -49,6 +49,37 @@ describe("planejamento de Eng. Comp.", () => {
     expect(normNome(e.oferta.nome)).toBe(normNome(e.disciplina.nome));
   });
 
+  it("não reserva a turma de outra matéria por equivalência herdada do bloco vizinho", () => {
+    // O parser posicional atribuía à disciplina seguinte as linhas de
+    // equivalência que a fonte imprime depois do "Turmas". Com isso CSF30
+    // (Estrutura de Dados 2) herdava QBI7QE, que é Química Geral Experimental
+    // na oferta, e MA70H (Probabilidade) herdava MAT7ED, que é Equações
+    // Diferenciais — a mesma turma que MA70G legitimamente resolve pelo nome.
+    const csf30 = ENG_COMP.matriz.disciplinas.find((d) => d.codigo === "CSF30")!;
+    const ma70h = ENG_COMP.matriz.disciplinas.find((d) => d.codigo === "MA70H")!;
+    expect(csf30.equivalentes.map((e) => e.codigo)).toEqual(["ICSF30", "IF63C"]);
+    expect(ma70h.equivalentes.map((e) => e.codigo)).not.toContain("MAT7ED");
+
+    // ofertas legítimas de cada uma nos semestres disponíveis (EST70A/EST70C
+    // são "Introdução à Estatística", equivalente de fato de Probabilidade)
+    const legitimas: Record<string, string[]> = {
+      CSF30: ["CSF30", "ICSF30", "IF63C"],
+      MA70H: ["MA70H", "EST70A", "EST70C", "MA65A", "MA70F"],
+      MA70G: ["MA70G", "MAT7ED", "FI74K", "MA63B", "MA70B", "MA70Z"],
+    };
+    for (const semestre of semestresDoCurso(ENG_COMP)) {
+      const lista = listarElegiveis(null as any, ENG_COMP.matriz, ENG_COMP.ofertas[semestre]) as any[];
+      for (const [codigo, aceitas] of Object.entries(legitimas)) {
+        const e = lista.find((x) => x.disciplina.codigo === codigo);
+        if (!e?.oferta) continue;
+        expect(
+          aceitas,
+          `${semestre}: ${codigo} puxou a turma de ${e.oferta.codigo} ("${e.oferta.nome}")`,
+        ).toContain(e.oferta.codigo);
+      }
+    }
+  });
+
   it("usa as categorias do próprio curso, sem estrato nem humanidades", () => {
     const categorias = new Set(elegiveis.map((e) => e.categoria));
     expect(categorias.has("obrigatória")).toBe(true);
