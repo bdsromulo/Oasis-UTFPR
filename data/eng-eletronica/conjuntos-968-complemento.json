@@ -1,0 +1,63 @@
+{
+ "matriz": 968,
+ "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)",
+ "motivo": "A legenda da Consulta de Matriz Curricular declara conjuntos até 1226 Sistemas Iot, mas onze disciplinas de IoT (ELTF01..ELTF12) apontam para 1227..1233. Essas subáreas só aparecem nomeadas no Histórico Escolar, nas tabelas 'Detalhamento do Conjunto De Optativas' de 1226 e de 1228. Os valores abaixo são transcrição literal dessas tabelas.",
+ "conjuntos": {
+  "1227": {
+   "nome": "Fundamentos",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 45,
+   "ch_semanal": 3
+  },
+  "1228": {
+   "nome": "Unidades Curriculares Formadoras",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 180,
+   "ch_semanal": 12
+  },
+  "1229": {
+   "nome": "Aplicações",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 45,
+   "ch_semanal": 3
+  },
+  "1230": {
+   "nome": "Programação",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6
+  },
+  "1231": {
+   "nome": "Armazenamento",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6
+  },
+  "1232": {
+   "nome": "Hardware",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1233": {
+   "nome": "Conexão",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6
+  }
+ }
+}

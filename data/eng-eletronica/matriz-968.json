@@ -1,0 +1,5492 @@
+{
+ "matriz": 968,
+ "curso": "ENG ELETRÔNICA (250)",
+ "campus": "Curitiba",
+ "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
+ "cargas": {
+  "obrigatorias": 1710,
+  "optativas": 2385,
+  "extensao": 465,
+  "eletiva": 0,
+  "soma": 4560,
+  "soma_sem_ext": 4095,
+  "chext_disc_obrigatorias": 0,
+  "chext_disc_optativas": 615,
+  "ch_total_ppc": 4560
+ },
+ "conjuntos": {
+  "1174": {
+   "nome": "Ciclo De Humanidades",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": 14
+  },
+  "1213": {
+   "nome": "Ciências Sociais E Aplicadas",
+   "pai": "1174",
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": null
+  },
+  "1214": {
+   "nome": "Ciências Humanas",
+   "pai": "1174",
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": null
+  },
+  "1215": {
+   "nome": "Linguística, Letras E Artes",
+   "pai": "1174",
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": null
+  },
+  "1216": {
+   "nome": "Saúde",
+   "pai": "1174",
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": null
+  },
+  "1217": {
+   "nome": "Eletivas",
+   "pai": "1174",
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 210,
+   "ch_semanal": null
+  },
+  "1175": {
+   "nome": "Opções De Programação De Computador",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 2,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1176": {
+   "nome": "Opções De Expressão Gráfica",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 2,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1177": {
+   "nome": "Opções De Adm, Empreend E Economia",
+   "pai": null,
+   "periodo_inicial": 10,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6
+  },
+  "1180": {
+   "nome": "Trilhas De Aprofundamento",
+   "pai": null,
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 300,
+   "ch_semanal": 20
+  },
+  "1181": {
+   "nome": "Telecomunicações",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 300,
+   "ch_semanal": null
+  },
+  "1182": {
+   "nome": "Engenharia Biomédica",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 270,
+   "ch_semanal": null
+  },
+  "1183": {
+   "nome": "Sistemas Computacionais",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 300,
+   "ch_semanal": null
+  },
+  "1184": {
+   "nome": "Processamento Sinais, Imagens E Padrões",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 300,
+   "ch_semanal": null
+  },
+  "1185": {
+   "nome": "Eletivas",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 300,
+   "ch_semanal": null
+  },
+  "1186": {
+   "nome": "Optativas",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 120,
+   "ch_semanal": null
+  },
+  "1226": {
+   "nome": "Sistemas Iot",
+   "pai": "1180",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 270,
+   "ch_semanal": null
+  },
+  "1187": {
+   "nome": "Opções De Circuitos Elétricos",
+   "pai": null,
+   "periodo_inicial": 3,
+   "periodo_final": 4,
+   "ch": 180,
+   "ch_semanal": 12
+  },
+  "1188": {
+   "nome": "Teoria E Prática Integradas",
+   "pai": "1187",
+   "periodo_inicial": 3,
+   "periodo_final": 4,
+   "ch": 180,
+   "ch_semanal": null
+  },
+  "1189": {
+   "nome": "Teoria E Prática Não Integradas",
+   "pai": "1187",
+   "periodo_inicial": 3,
+   "periodo_final": 4,
+   "ch": 180,
+   "ch_semanal": null
+  },
+  "1190": {
+   "nome": "Opções De Instrumentos E Medidas",
+   "pai": null,
+   "periodo_inicial": 6,
+   "periodo_final": 7,
+   "ch": 120,
+   "ch_semanal": 8
+  },
+  "1191": {
+   "nome": "Conceitos De Instrumentos E Medidas",
+   "pai": "1190",
+   "periodo_inicial": 6,
+   "periodo_final": 7,
+   "ch": 60,
+   "ch_semanal": null
+  },
+  "1192": {
+   "nome": "Aplicações De Instrumentos E Medidas",
+   "pai": "1190",
+   "periodo_inicial": 6,
+   "periodo_final": 7,
+   "ch": 60,
+   "ch_semanal": null
+  },
+  "1193": {
+   "nome": "Opções De Física Aplicada",
+   "pai": null,
+   "periodo_inicial": 5,
+   "periodo_final": 6,
+   "ch": 210,
+   "ch_semanal": 14
+  },
+  "1194": {
+   "nome": "Opções De Ciências Do Ambiente",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 2,
+   "ch": 30,
+   "ch_semanal": 2
+  },
+  "1195": {
+   "nome": "Opções De Estrutura De Dados",
+   "pai": null,
+   "periodo_inicial": 3,
+   "periodo_final": 3,
+   "ch": 45,
+   "ch_semanal": 3
+  },
+  "1196": {
+   "nome": "Opções De Ativ De Síntese E Ic",
+   "pai": null,
+   "periodo_inicial": 3,
+   "periodo_final": 3,
+   "ch": 45,
+   "ch_semanal": 3
+  },
+  "1197": {
+   "nome": "Opções De Paradigmas De Programação",
+   "pai": null,
+   "periodo_inicial": 4,
+   "periodo_final": 4,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1198": {
+   "nome": "Opções De Mecânica Dos Sólidos",
+   "pai": null,
+   "periodo_inicial": 4,
+   "periodo_final": 5,
+   "ch": 105,
+   "ch_semanal": 7
+  },
+  "1199": {
+   "nome": "Opções De Idioma: Circuitos Digitais",
+   "pai": null,
+   "periodo_inicial": 5,
+   "periodo_final": 5,
+   "ch": 75,
+   "ch_semanal": 5
+  },
+  "1200": {
+   "nome": "Opções De Idioma: Microcontroladores",
+   "pai": null,
+   "periodo_inicial": 6,
+   "periodo_final": 6,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1201": {
+   "nome": "Opções De Idioma: Pds",
+   "pai": null,
+   "periodo_inicial": 6,
+   "periodo_final": 6,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1202": {
+   "nome": "Opções De Ativ De Síntese E Ic 2",
+   "pai": null,
+   "periodo_inicial": 7,
+   "periodo_final": 7,
+   "ch": 45,
+   "ch_semanal": 3
+  },
+  "1203": {
+   "nome": "Opções De Idioma: Controle 1",
+   "pai": null,
+   "periodo_inicial": 7,
+   "periodo_final": 7,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1204": {
+   "nome": "Opçoes De Idioma: Arq Org Computador",
+   "pai": null,
+   "periodo_inicial": 7,
+   "periodo_final": 7,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1205": {
+   "nome": "Opções De Idioma: Sistemas Operacionais",
+   "pai": null,
+   "periodo_inicial": 7,
+   "periodo_final": 7,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1206": {
+   "nome": "Opções De Idioma: Controle 2",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 8,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1207": {
+   "nome": "Opções De Idioma: Lógica Reconfigurável",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 8,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1208": {
+   "nome": "Opçoes De Idioma: Sistemas Embarcados",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 8,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1209": {
+   "nome": "Opções De Idioma: Princípios De Comunic",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 8,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1210": {
+   "nome": "Opções De Idioma: Eletrônica De Potência",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 8,
+   "ch": 75,
+   "ch_semanal": 5
+  },
+  "1211": {
+   "nome": "Opções De Idioma: Automação",
+   "pai": null,
+   "periodo_inicial": 9,
+   "periodo_final": 9,
+   "ch": 60,
+   "ch_semanal": 4
+  },
+  "1212": {
+   "nome": "Opções De Idioma: Comunicações Digitais",
+   "pai": null,
+   "periodo_inicial": 9,
+   "periodo_final": 9,
+   "ch": 75,
+   "ch_semanal": 5
+  },
+  "1227": {
+   "nome": "Fundamentos",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 45,
+   "ch_semanal": 3,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1228": {
+   "nome": "Unidades Curriculares Formadoras",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 180,
+   "ch_semanal": 12,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1229": {
+   "nome": "Aplicações",
+   "pai": "1226",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 45,
+   "ch_semanal": 3,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1230": {
+   "nome": "Programação",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1231": {
+   "nome": "Armazenamento",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1232": {
+   "nome": "Hardware",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  },
+  "1233": {
+   "nome": "Conexão",
+   "pai": "1228",
+   "periodo_inicial": 9,
+   "periodo_final": 10,
+   "ch": 90,
+   "ch_semanal": 6,
+   "fonte": "Histórico Escolar - Portal do Aluno UTFPR (Detalhamento do Conjunto De Optativas)"
+  }
+ },
+ "eletiva": null,
+ "disciplinas": [
+  {
+   "codigo": "ELB11",
+   "nome": "Algoritmos De Programação",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EL71E",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN73B",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELE11",
+   "nome": "Eletricidade E Eletrônica Na Prática",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEX11",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX10",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELE15",
+   "nome": "Acolhimento E Introdução À Profissão",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Enade Ingressante",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7GA",
+   "nome": "Geometria Analítica",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP71A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7PC",
+   "nome": "Pré-Cálculo",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QBI7QE",
+   "nome": "Química Geral Experimental",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QBI7QT",
+   "nome": "Química Geral Teórica",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE21",
+   "nome": "Introdução À Comunição E Redes",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELS03",
+   "nome": "Atividades Complementares",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Atividades Complementares",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 15
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "Álgebra Linear",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP72A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C1",
+   "nome": "Cálculo Diferencial E Integral 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7PC"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP71B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB21",
+   "nome": "Programação De Computador",
+   "periodo": 2,
+   "conjunto": 1175,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB11"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL72E",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN74B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB21R",
+   "nome": "Estudos De Programação De Computador",
+   "periodo": 2,
+   "conjunto": 1175,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB11"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELB13",
+   "nome": "Desenho Técnico",
+   "periodo": 2,
+   "conjunto": 1176,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEF11",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF10",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB23",
+   "nome": "Desenho Técnico Aplicado",
+   "periodo": 2,
+   "conjunto": 1176,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEF21",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "EL74H",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF20",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QBI7CA",
+   "nome": "Ciências Do Ambiente",
+   "periodo": 2,
+   "conjunto": 1194,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH04",
+   "nome": "Inovação Tecnológica E Financiamento",
+   "periodo": 2,
+   "conjunto": 1213,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH05",
+   "nome": "Noções Jurídicas Para Empreendedores",
+   "periodo": 2,
+   "conjunto": 1213,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH06",
+   "nome": "Metodologias Ativas Para A Educação Em Engenharia",
+   "periodo": 2,
+   "conjunto": 1213,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH15",
+   "nome": "Inteligência Artificial E Informática Na Educação",
+   "periodo": 2,
+   "conjunto": 1213,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH16",
+   "nome": "Prática De Habilidades Sociais Por Meio De Jogos De Tabuleiros",
+   "periodo": 2,
+   "conjunto": 1213,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FA",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "Teoria Das Ciências Humanas",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "Metropolização Contemporânea: Tecnologia E Território",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HA",
+   "nome": "História Da Técnica E Da Tecnologia",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "História Geral Da Economia",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PA",
+   "nome": "Psicologia Do Trabalho",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PB",
+   "nome": "Relações Interpessoais, Grupo E Poder",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SA",
+   "nome": "Sociologia",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SB",
+   "nome": "Tecnologia E Sociedade",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "Tecnologia, Trabalho E Saúde",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SD",
+   "nome": "Sociedade E Política No Brasil",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XC",
+   "nome": "Presença Africana No Brasil",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "Tecnopolíticas Da Sociedade Contemporânea",
+   "periodo": 2,
+   "conjunto": 1214,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART02",
+   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART03",
+   "nome": "E Contrabaixo Acústico 1 Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART04",
+   "nome": "E Contrabaixo Acústico 2 Prática Artística Musical: Grupos Instrumentais 1",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 6,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART05",
+   "nome": "Prática Artística Musial: Grupos Instrumentais 2",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 6,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART06",
+   "nome": "Prática Artística Musical: Grupos Instrumentais 3",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 6,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART07",
+   "nome": "Prática Artística Musical: Grupos Instrumentais 4",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 6,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70J",
+   "nome": "Libras",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AG",
+   "nome": "Espanhol Para Engenharias 1",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AH",
+   "nome": "Espanhol Para Engenharias 2",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AI",
+   "nome": "Prática De Escrita Para Engenharias",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH02",
+   "nome": "Prática De Grupo E Interações Humanas Com A Música",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7A1",
+   "nome": "Alemão 1",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7A2",
+   "nome": "Alemão 2",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7A3",
+   "nome": "Alemão 3",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7A4",
+   "nome": "Alemão 4",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7A5",
+   "nome": "Alemão 5",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7F1",
+   "nome": "Francês 1",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7F2",
+   "nome": "Francês 2",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7F3",
+   "nome": "Francês 3",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7F4",
+   "nome": "Francês 4",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7F5",
+   "nome": "Francês 5",
+   "periodo": 2,
+   "conjunto": 1215,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH01",
+   "nome": "Fundamentos De Primeiros Socorros",
+   "periodo": 2,
+   "conjunto": 1216,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH07",
+   "nome": "Humanidades 1",
+   "periodo": 2,
+   "conjunto": 1217,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH08",
+   "nome": "Humanidades 2",
+   "periodo": 2,
+   "conjunto": 1217,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH09",
+   "nome": "Humanidades 3",
+   "periodo": 2,
+   "conjunto": 1217,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH10",
+   "nome": "Humanidades 4",
+   "periodo": 2,
+   "conjunto": 1217,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH14",
+   "nome": "Humanidades 5",
+   "periodo": 2,
+   "conjunto": 1217,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FIS7F1",
+   "nome": "Física Teórica 1",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C2",
+   "nome": "Cálculo Diferencial E Integral 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7ED",
+   "nome": "Equações Diferenciais Ordinárias",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP31TP",
+   "nome": "Circuitos Elétricos 1",
+   "periodo": 3,
+   "conjunto": 1188,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP42TP",
+   "nome": "Circuitos Elétricos 2",
+   "periodo": 3,
+   "conjunto": 1188,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELP31TP"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP31T",
+   "nome": "Teoria De Circuitos Elétricos Cc",
+   "periodo": 3,
+   "conjunto": 1189,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP42P",
+   "nome": "Prática De Circuitos Elétricos",
+   "periodo": 3,
+   "conjunto": 1189,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP31T"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP42T",
+   "nome": "Teoria De Circuitos Elétricos Ca",
+   "periodo": 3,
+   "conjunto": 1189,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP31T"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP35",
+   "nome": "Aplicações De Estruturas De Dados E Algoritmos",
+   "periodo": 3,
+   "conjunto": 1195,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELB21"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP35R",
+   "nome": "Estudos De Estruturas De Dados Algoritmos",
+   "periodo": 3,
+   "conjunto": 1195,
+   "modelo": "E Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 45,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE41",
+   "nome": "Oficina De Integração: Eletricidade, Eletrônica E Computação Na Prática",
+   "periodo": 3,
+   "conjunto": 1196,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELB21",
+    "ELE11"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEX21",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX20",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB31",
+   "nome": "Probabilidade E Estatística Aplicadas",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MA70H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELP41",
+   "nome": "Eletrônica Analógica 1: Materiais Semicondutores",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP31T"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ET74C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7F2",
+   "nome": "Física Teórica 2",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP73A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ICSE20",
+   "nome": "Técnicas De Programação",
+   "periodo": 4,
+   "conjunto": 1197,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP35"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE20R",
+   "nome": "Estudos De Técnicas De Programação",
+   "periodo": 4,
+   "conjunto": 1197,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELB51",
+   "nome": "Mecânica Geral",
+   "periodo": 4,
+   "conjunto": 1198,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FI70A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB61",
+   "nome": "Princípios De Resistência Dos Materiais",
+   "periodo": 4,
+   "conjunto": 1198,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELB51"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELB66",
+   "nome": "Sinais E Sistemas",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7C2"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEQ30",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ET75H",
+     "cht": 60,
+     "grupo": "12"
+    },
+    {
+     "codigo": "ET7GF",
+     "cht": 60,
+     "grupo": "12"
+    }
+   ]
+  },
+  {
+   "codigo": "ELP51",
+   "nome": "Eletrônica Analógica 2: Transistores E Aplicações",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP41"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEE31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEE30",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7E1",
+   "nome": "Física Experimental 1",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP73B",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELB52",
+   "nome": "Eletromagnetismo 1: Eletrostática E Magnetostática",
+   "periodo": 5,
+   "conjunto": 1193,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C2"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ET74E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELP64",
+   "nome": "Eletromagnetismo 2: Linhas E Antenas",
+   "periodo": 5,
+   "conjunto": 1193,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB52"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP65",
+   "nome": "Máquinas Elétricas",
+   "periodo": 5,
+   "conjunto": 1193,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB52"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74A",
+   "nome": "Fundamentos De Fenômenos De Transporte",
+   "periodo": 5,
+   "conjunto": 1193,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FIS7F2"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF41",
+   "nome": "Circuitos Digitais",
+   "periodo": 5,
+   "conjunto": 1199,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP41"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEB31",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEB30",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW41",
+   "nome": "Digital Circuits",
+   "periodo": 5,
+   "conjunto": 1199,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP41"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP61",
+   "nome": "Eletrônica Analógica 3: Amplificadores",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP51"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEE32",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEE31",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELP34",
+   "nome": "Medidas Elétricas",
+   "periodo": 6,
+   "conjunto": 1191,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP42P",
+    "ELP42T",
+    "MAT7ED"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT75F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET75F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELP63",
+   "nome": "Instrumentação Industrial",
+   "periodo": 6,
+   "conjunto": 1192,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP34"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL75G",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN75C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELP67",
+   "nome": "Instrumentação Virtual",
+   "periodo": 6,
+   "conjunto": 1192,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF52",
+   "nome": "Sistemas Microcontrolados",
+   "periodo": 6,
+   "conjunto": 1200,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF41"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSW40",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW31",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW52",
+   "nome": "Microcontroller Programming",
+   "periodo": 6,
+   "conjunto": 1200,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF41"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF51",
+   "nome": "Processamento Digital De Sinais",
+   "periodo": 6,
+   "conjunto": 1201,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEQ32",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEQ31",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW51",
+   "nome": "Digital Signal Processing",
+   "periodo": 6,
+   "conjunto": 1201,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP71",
+   "nome": "Eletrônica Analógica 4: Osciladores E Rf",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP61"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELS02",
+   "nome": "Estágio Curricular Obrigatório",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 360
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE64",
+   "nome": "Oficina De Integração",
+   "periodo": 7,
+   "conjunto": 1202,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEX22",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEX21",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELXB1",
+   "nome": "Oficina De Integração - Engenharia Biomédica",
+   "periodo": 7,
+   "conjunto": 1202,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELXT1",
+   "nome": "Oficina De Integração - Telecomunicações",
+   "periodo": 7,
+   "conjunto": 1202,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF62",
+   "nome": "Controle 1",
+   "periodo": 7,
+   "conjunto": 1203,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEC21",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL76A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEC20",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW62",
+   "nome": "Control Systems 1",
+   "periodo": 7,
+   "conjunto": 1203,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ET76H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELF61",
+   "nome": "Arquitetura E Organização De Computadores",
+   "periodo": 7,
+   "conjunto": 1204,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF52"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSW30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW30",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW61",
+   "nome": "Computer Organization And Architecture",
+   "periodo": 7,
+   "conjunto": 1204,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF52"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF66",
+   "nome": "Sistemas Operacionais",
+   "periodo": 7,
+   "conjunto": 1205,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF52"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ICSO30",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW66",
+   "nome": "Operating Systems",
+   "periodo": 7,
+   "conjunto": 1205,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF52"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP66",
+   "nome": "Planejamento E Projeto De Carreira Do Engenheiro Eletrônico",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF72",
+   "nome": "Controle 2",
+   "periodo": 8,
+   "conjunto": 1206,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF62"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET77H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW72",
+   "nome": "Control Systems 2",
+   "periodo": 8,
+   "conjunto": 1206,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF62"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE3",
+   "nome": "Lógica Reconfigurável",
+   "periodo": 8,
+   "conjunto": 1207,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSW42",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW33",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELF74",
+   "nome": "Sistemas Embarcados",
+   "periodo": 8,
+   "conjunto": 1208,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF61",
+    "ELF66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSW41",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW32",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW74",
+   "nome": "Embedded Systems",
+   "periodo": 8,
+   "conjunto": 1208,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF61",
+    "ELF66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELP73",
+   "nome": "Princípios De Comunicações",
+   "periodo": 8,
+   "conjunto": 1209,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66",
+    "ELP71"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELW71",
+   "nome": "Communication Systems",
+   "periodo": 8,
+   "conjunto": 1209,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66",
+    "ELP71"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF84",
+   "nome": "Eletrônica De Potência",
+   "periodo": 8,
+   "conjunto": 1210,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP61"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL76G",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT75E",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ET76C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW84",
+   "nome": "Power Electronics",
+   "periodo": 8,
+   "conjunto": 1210,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP61"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE91",
+   "nome": "Trabalho De Conclusão De Curso 1",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELO91",
+   "nome": "Ética, Profissão E Cidadania",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB1",
+   "nome": "Sistemas De Comunicação",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB2",
+   "nome": "Redes Avançadas",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB3",
+   "nome": "Comunicações Sem Fio",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB31",
+    "ELB66",
+    "ELF73"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB4",
+   "nome": "Comunicações Ópticas",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66",
+    "ELP64",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB5",
+   "nome": "Eletromagnetismo Aplicado",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELB66",
+    "ELP64",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB6",
+   "nome": "Tópicos Avançados Em Comunicações",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP71",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB7",
+   "nome": "Aplicações De Machine Learning Em Comunicações",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF73",
+    "ELP66",
+    "ELTB3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB8",
+   "nome": "Redes De Computadores",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTB9",
+   "nome": "Segurança De Redes E Sistemas",
+   "periodo": 9,
+   "conjunto": 1181,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66",
+    "ELTB8"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA1",
+   "nome": "Princípios De Engenharia Biomédica",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA2",
+   "nome": "Bioengenharia",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA3",
+   "nome": "Engenharia Médica",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA4",
+   "nome": "Engenharia Clínica",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA5",
+   "nome": "Fisiologia Quantitativa Para Engenharia",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA8",
+   "nome": "Aquisição E Processamento De Sinais Biomédicos",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTA9",
+   "nome": "Processamento De Sinais E Imagens Biomédicas",
+   "periodo": 9,
+   "conjunto": 1182,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE12",
+   "nome": "Princípios De Compiladores",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSB30",
+   "nome": "Introdução A Banco De Dados",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD20",
+   "nome": "Introdução À Lógica Para Computação",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSD21",
+   "nome": "Matemática Discreta",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSE30",
+   "nome": "Engenharia De Software",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSF30",
+   "nome": "Estruturas De Dados 2",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSG20",
+   "nome": "Análise E Projeto De Sistemas",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSI30",
+   "nome": "Sistemas Inteligentes",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM46",
+   "nome": "Programação Para Dispositivos Móveis E Sem Fio",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM47",
+   "nome": "Desenvolvimento De Aplicações Web-Front-End",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ICSM48",
+   "nome": "Desenvolvimento De Aplicações Web-Back-End",
+   "periodo": 9,
+   "conjunto": 1183,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD10",
+   "nome": "Processamento Digital De Sinais Avançado",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF51",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD11",
+   "nome": "Oficina De Sinais, Imagens E Padrões",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD12",
+   "nome": "Processamento De Imagens",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD13",
+   "nome": "Aprendizado Profundo",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 60,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD6",
+   "nome": "Fundamentos Matemáticos Para Sinais, Imagens E Padrões",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF51",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD7",
+   "nome": "Introdução Ao Aprendizado De Máquina",
+   "periodo": 9,
+   "conjunto": 1184,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AC",
+   "nome": "Redes Industriais",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELF72",
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT85C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AD",
+   "nome": "Sistemas De Supervisão",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELF72",
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT77J",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT86C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTC1",
+   "nome": "Metodologia Da Pesquisa Científica E Tecnológica",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTC2",
+   "nome": "Amostragem E Planejamento De Experimentos",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTC3",
+   "nome": "Análise De Sobrevivência E Confiabilidade",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTC4",
+   "nome": "Análise Estatística De Dados",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTC5",
+   "nome": "Inferência Estatística",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE1",
+   "nome": "Engenharia De Sistemas",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL75H",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTE10",
+   "nome": "Identificação De Sistemas",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE11",
+   "nome": "Tv Digital",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE13",
+   "nome": "Veículos Elétricos",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE2",
+   "nome": "Programação Matemática",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSD41",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTE4",
+   "nome": "Introdução À Robótica",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EL6AE",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTE5",
+   "nome": "Projeto De Placas De Circuitos Impressos E Simulação De Circuitos Eletrônicos",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE6",
+   "nome": "Energia Fotovoltaica",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE7",
+   "nome": "Física Dos Semicondutores",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE8",
+   "nome": "Sistemas Não Lineares",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE9",
+   "nome": "Controle Automático",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF72",
+    "ELP66"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELX91",
+   "nome": "Oficina De Integração: Prática De Engenharia",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELP66"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEX23",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELX92",
+   "nome": "Prospecção E Estudo De Viabilidade De Projetos",
+   "periodo": 9,
+   "conjunto": 1186,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 30,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF81",
+   "nome": "Controle A Eventos Discretos",
+   "periodo": 9,
+   "conjunto": 1211,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF62"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EEC46",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL76B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELW81",
+   "nome": "Control Of Discrete Event Systems",
+   "periodo": 9,
+   "conjunto": 1211,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELF62"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELF73",
+   "nome": "Comunicações Digitais",
+   "periodo": 9,
+   "conjunto": 1212,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP73"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELW73",
+   "nome": "Digital Communications",
+   "periodo": 9,
+   "conjunto": 1212,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELP73"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF01",
+   "nome": "Introdução E Fundamentos De Internet Das Coisas E Possíveis Aplicações",
+   "periodo": 9,
+   "conjunto": 1227,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF12",
+   "nome": "Aplicações E Solução De Problemas Utilizando Sistemas De Iot",
+   "periodo": 9,
+   "conjunto": 1229,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF02",
+   "nome": "Sistemas Cliente-Servidor E Big Data Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1230,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF04",
+   "nome": "Linguagem De Programação Para Dispositivos E Web Das Coisas",
+   "periodo": 9,
+   "conjunto": 1230,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF05",
+   "nome": "Objetos Inteligentes E Smart Business",
+   "periodo": 9,
+   "conjunto": 1231,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF06",
+   "nome": "Uso De Computação Em Nuvem E Ia Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1231,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF07",
+   "nome": "Linux: Servidores Em Sbcs E Sgbd Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1232,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF08",
+   "nome": "Sistemas Embarcados Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1232,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF09",
+   "nome": "Laboratório De Atuadores E Segurança Utilizando Rssf Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1232,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF10",
+   "nome": "Laboratório De Gateways E Sensores Utilizando Rssf Aplicados Em Iot",
+   "periodo": 9,
+   "conjunto": 1233,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTF11",
+   "nome": "Aplicações Iot",
+   "periodo": 9,
+   "conjunto": 1233,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE92",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Trabalho De Conclusão",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 15,
+    "chext": 0,
+    "chead": 0,
+    "total": 15
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELO92",
+   "nome": "Empreendedorismo",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EL8AA",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GE70T",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7E1",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7A1",
+   "nome": "Fundamentos De Administração",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ME78I",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E3",
+   "nome": "Fundamentos De Economia",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7E5",
+   "nome": "Fundamentos De Engenharia Econômica E Análise De Viabilidade",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7F1",
+   "nome": "Fundamentos De Finanças",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GEE7F2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7G1",
+   "nome": "Fundamentos De Gestão De Pessoas",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G3",
+   "nome": "Fundamentos De Gestão Da Produção",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G5",
+   "nome": "Fundamentos De Gestão De Projeto",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7M1",
+   "nome": "Fundamentos De Marketing",
+   "periodo": 10,
+   "conjunto": 1177,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ]
+}
