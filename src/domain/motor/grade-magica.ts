@@ -1,11 +1,14 @@
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from "../tipos";
 import { listarElegiveis } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao } from "./grade";
+import { criarMapaIdentidade } from "./identidade";
 import {
   cargaAprovadaBlocoOptativo,
+  categoriaSimples,
   contaNoBlocoOptativo,
   descricaoDoCurso,
   ehTrilha,
+  grupoOpcaoDe,
 } from "../cursos";
 
 export interface OpcoesSugestaoGrade {
@@ -226,6 +229,16 @@ export function gerarSugestaoGrade(
   const cjAgregador = curso.agregadorTrilhas;
   const cjEletivas = curso.categorias.find((c) => c.id === "eletivas")?.conjunto ?? null;
 
+  // A disciplina aponta para a folha da árvore de conjuntos; a categoria é do
+  // topo. Comparar o número direto funcionava em BSI e Eng. Comp., onde a
+  // categoria é o próprio conjunto da disciplina, mas em Eng. Eletrônica as
+  // matérias de humanidades ficam em 1213..1217 e o conjunto 1174 nunca aparece
+  // numa disciplina — o teto de humanidades simplesmente não disparava.
+  const ehDaCategoria = (c: number | null, id: string) =>
+    c !== null && categoriaSimples(curso, c)?.id === id;
+  const ehHumanidades = (c: number | null) => ehDaCategoria(c, "humanidades");
+  const ehSegundoEstrato = (c: number | null) => ehDaCategoria(c, "segundoEstrato");
+
   const resumoHumanidades = cjHumanidades === null
     ? undefined
     : perfil?.resumoConjuntos.find((x) => x.conjunto === String(cjHumanidades));
@@ -268,9 +281,33 @@ export function gerarSugestaoGrade(
     chExigidaBlocoOptativo - chCumpridaBlocoOptativo,
   );
 
+  // Sem "Resumo Eletiva" no histórico, o que vale é o que a matriz exige — e não
+  // um piso de 120h, que é número de BSI. Eng. Eletrônica e a Eng. Comp. 962
+  // declaram `cargas.eletiva: 0` e os históricos delas não trazem a tabela de
+  // eletivas: a sugestão gastava duas vagas do semestre em matérias que aquele
+  // currículo não pede.
   const chFaltanteEletivas = perfil
-    ? (perfil.eletivas?.chFaltante ?? Math.max(0, (perfil.eletivas?.chTotal ?? 120) - (perfil.eletivas?.chValidada ?? 0)))
+    ? (perfil.eletivas?.chFaltante ??
+       Math.max(0, (perfil.eletivas?.chTotal ?? matriz.cargas.eletiva) - (perfil.eletivas?.chValidada ?? 0)))
     : matriz.cargas.eletiva;
+
+  // Grupos de escolha ("Opções de …", matriz 968): cada um tem carga própria a
+  // cumprir e não há bloco agregado que os some. Fechar um grupo não paga o
+  // vizinho — 60h de Programação de Computador não substituem 75h de Circuitos
+  // Digitais —, então o teto tem de ser por grupo.
+  const chFaltantePorGrupo = new Map<string, number>();
+  for (const g of curso.gruposOpcao ?? []) {
+    const cod = String(g);
+    const r = perfil?.resumoConjuntos.find((x) => x.conjunto === cod);
+    const exigida = r?.chObrigatoria ?? matriz.conjuntos[cod]?.ch ?? 0;
+    const cumprida = r ? Math.min(r.chCursadaAprovada, exigida) : 0;
+    chFaltantePorGrupo.set(cod, Math.max(0, exigida - cumprida));
+  }
+  /** Grupo de escolha ao qual a disciplina pertence, subindo a hierarquia. */
+  const grupoDa = (c: number | null): string | null => {
+    const g = grupoOpcaoDe(curso, c);
+    return g === null ? null : String(g);
+  };
 
   // Inicializar seleção e contadores de carga horária a partir da seleção inicial (se houver)
   const selecaoFinal: SelecaoTurma[] = selecaoInicial ? [...selecaoInicial] : [];
@@ -279,27 +316,50 @@ export function gerarSugestaoGrade(
   let chAlocadaEstrato2 = 0;
   let chAlocadaTrilhas = 0;
   let chAlocadaEletivas = 0;
+  const chAlocadaPorGrupo = new Map<string, number>();
 
   for (const s of selecaoFinal) {
     const dm = matriz?.disciplinas.find((x) => x.codigo === s.codDisciplina);
     const dOf = oferta.disciplinas.find((x) => x.codigo === s.codDisciplina);
     const h = dm ? dm.horas.total : ((dOf?.aulas_semanais_presenciais || 4) * 15);
     const c = dm?.conjunto ?? null;
+    const grupo = grupoDa(c);
     chTotalAlocada += h;
-    if (cjHumanidades !== null && c === cjHumanidades) chAlocadaHumanidades += h;
-    else if (cjSegundoEstrato !== null && c === cjSegundoEstrato) chAlocadaEstrato2 += h;
+    if (ehHumanidades(c)) chAlocadaHumanidades += h;
+    else if (ehSegundoEstrato(c)) chAlocadaEstrato2 += h;
     else if ((cjEletivas !== null && c === cjEletivas) || (!dm && dOf)) chAlocadaEletivas += h;
+    else if (grupo !== null) chAlocadaPorGrupo.set(grupo, (chAlocadaPorGrupo.get(grupo) ?? 0) + h);
     else if (contaNoBlocoOptativo(curso, c)) chAlocadaTrilhas += h;
   }
+
+  /** Quanto o grupo ainda precisa, já descontado o que a grade em montagem alocou. */
+  const faltaNoGrupo = (grupo: string) =>
+    Math.max(0, (chFaltantePorGrupo.get(grupo) ?? 0) - (chAlocadaPorGrupo.get(grupo) ?? 0));
+
+  // A oferta traz a mesma exigência curricular sob códigos diferentes: em Eng.
+  // Eletrônica `ELN73B` é equivalente declarado de `ELB11`, e as duas abrem
+  // turma. Sem consolidar pelo código canônico, a sugestão punha as duas na
+  // grade — o aluno se matricularia duas vezes na mesma matéria, gastando uma
+  // vaga do semestre em algo que não avança nada.
+  const mapaIdentidade = criarMapaIdentidade(matriz);
+  const canonicosSelecionados = new Set<string>(
+    selecaoFinal.map((s) => mapaIdentidade.resolver(s.codDisciplina)),
+  );
 
   // 2. Obter todas as disciplinas elegíveis (pendentes/liberadas) respeitando se a categoria já foi concluída
   const elegiveis = listarElegiveis(perfil, matriz, oferta).filter((e) => {
     if (e.motivoBloqueio || !e.oferta || e.oferta.turmas.length === 0) return false;
     if (selecaoFinal.some((s) => s.codDisciplina === e.disciplina.codigo)) return false;
     if (disciplinaEstaExcluida(e.disciplina, opcoes.disciplinasExcluidas)) return false;
-    if (cjHumanidades !== null && opcoes.semHumanidades && e.disciplina.conjunto === cjHumanidades) return false;
-    if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades && chFaltanteHumanidades <= 0) return false;
-    if (cjSegundoEstrato !== null && e.disciplina.conjunto === cjSegundoEstrato && chFaltanteEstrato2 <= 0) return false;
+    if (ehHumanidades(e.disciplina.conjunto)) {
+      if (opcoes.semHumanidades) return false;
+      if (chFaltanteHumanidades <= 0) return false;
+    }
+    if (ehSegundoEstrato(e.disciplina.conjunto) && chFaltanteEstrato2 <= 0) return false;
+    // grupo de escolha já cumprido não recebe mais matéria: a hora extra ali não
+    // aproxima da integralização, e o aluno tem outros grupos em aberto
+    const grupoElegivel = grupoDa(e.disciplina.conjunto);
+    if (grupoElegivel !== null && faltaNoGrupo(grupoElegivel) <= 0) return false;
     if (contaNoBlocoOptativo(curso, e.disciplina.conjunto)) {
       if (opcoes.semTrilhas) return false;
       if (opcoes.trilhasExcluidas && opcoes.trilhasExcluidas.includes(String(e.disciplina.conjunto))) return false;
@@ -354,7 +414,17 @@ export function gerarSugestaoGrade(
     }
 
     // Reduzir ligeiramente a prioridade inicial de humanidades frente a disciplinas técnicas/obrigatórias
-    if (cjHumanidades !== null && e.disciplina.conjunto === cjHumanidades) pts -= 15;
+    if (ehHumanidades(e.disciplina.conjunto)) pts -= 15;
+
+    // Grupos de escolha: quanto menos falta para o grupo fechar, mais vale a
+    // matéria — é o mesmo raciocínio das trilhas-alvo. Um grupo em que faltam
+    // 45h fecha neste semestre; espalhar carga por grupos intocados não fecha
+    // nenhum.
+    const grupoPontuado = grupoDa(e.disciplina.conjunto);
+    if (grupoPontuado !== null) {
+      const falta = faltaNoGrupo(grupoPontuado);
+      pts += falta > 0 && falta <= e.disciplina.horas.total ? 55 : 25;
+    }
 
     // Inteligência de Trilhas: priorizar disciplinas que ajudam a fechar as N trilhas exigidas pelo curso
     if (e.disciplina.conjunto !== null && contaNoBlocoOptativo(curso, e.disciplina.conjunto)) {
@@ -420,9 +490,14 @@ export function gerarSugestaoGrade(
     if (opcoes.estrategia === "balanceado" && selecaoFinal.length >= maxDisc) break;
     if (chTotalAlocada + item.elegivel.disciplina.horas.total > 405) continue;
 
+    const canonicoDoItem = mapaIdentidade.resolver(item.elegivel.disciplina.codigo);
+    if (canonicosSelecionados.has(canonicoDoItem)) continue;
+
     const c = item.elegivel.disciplina.conjunto;
-    if (cjHumanidades !== null && c === cjHumanidades && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
-    if (cjSegundoEstrato !== null && c === cjSegundoEstrato && chAlocadaEstrato2 >= chFaltanteEstrato2) continue;
+    const grupoDoItem = grupoDa(c);
+    if (ehHumanidades(c) && chAlocadaHumanidades >= chFaltanteHumanidades) continue;
+    if (ehSegundoEstrato(c) && chAlocadaEstrato2 >= chFaltanteEstrato2) continue;
+    if (grupoDoItem !== null && faltaNoGrupo(grupoDoItem) <= 0) continue;
     if (
       contaNoBlocoOptativo(curso, c) &&
       chAlocadaTrilhas >= chFaltanteBlocoOptativo &&
@@ -477,13 +552,19 @@ export function gerarSugestaoGrade(
         codDisciplina: item.elegivel.disciplina.codigo,
         codTurma: melhorTurma.codigo,
       });
+      canonicosSelecionados.add(canonicoDoItem);
       chTotalAlocada += item.elegivel.disciplina.horas.total;
-      if (cjHumanidades !== null && c === cjHumanidades) {
+      if (ehHumanidades(c)) {
         chAlocadaHumanidades += item.elegivel.disciplina.horas.total;
-      } else if (cjSegundoEstrato !== null && c === cjSegundoEstrato) {
+      } else if (ehSegundoEstrato(c)) {
         chAlocadaEstrato2 += item.elegivel.disciplina.horas.total;
       } else if ((cjEletivas !== null && c === cjEletivas) || item.elegivel.categoria === "eletiva") {
         chAlocadaEletivas += item.elegivel.disciplina.horas.total;
+      } else if (grupoDoItem !== null) {
+        chAlocadaPorGrupo.set(
+          grupoDoItem,
+          (chAlocadaPorGrupo.get(grupoDoItem) ?? 0) + item.elegivel.disciplina.horas.total,
+        );
       } else if (contaNoBlocoOptativo(curso, c)) {
         chAlocadaTrilhas += item.elegivel.disciplina.horas.total;
         if (c !== null && ehTrilha(curso, c)) {
