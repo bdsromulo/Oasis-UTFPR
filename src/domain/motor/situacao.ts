@@ -23,6 +23,19 @@ export interface Painel {
   humanidades: ProgressoConjunto | null;
   trilhas: ProgressoConjunto[];
   trilhasValidadas: number;
+  /**
+   * Grupos de escolha obrigatória, quando o curso os tem (matriz 968).
+   *
+   * Não é um bloco com carga própria declarada: a exigência é a soma das cargas
+   * dos grupos, e um grupo fechado não paga o que falta noutro. Por isso o
+   * painel guarda os dois — o total e a lista, grupo a grupo.
+   */
+  opcoes: {
+    exigido: number;
+    cumprido: number;
+    gruposCumpridos: number;
+    grupos: ProgressoConjunto[];
+  } | null;
   blocoOptativo: { exigido: number; cumprido: number; validado?: number } | null;
   eletivas: { exigido: number; cumprido: number } | null;
   extensao: { exigido: number; cumprido: number } | null;
@@ -73,6 +86,25 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
     ? por.get(String(curso.agregadorTrilhas))
     : undefined;
   const cumpridoBlocoOptativo = cargaAprovadaBlocoOptativo(perfil, curso);
+
+  // Grupos de escolha: cada um tem carga própria e é conferido no Resumo
+  // Optativas do histórico. Sem histórico o cumprido é zero, mas a exigência
+  // continua vindo da matriz.
+  const grupos = (curso.gruposOpcao ?? []).map((g) => {
+    const cod = String(g);
+    const r = por.get(cod);
+    const conj = matriz.conjuntos[cod];
+    return r
+      ? prog(r, false)
+      : {
+          conjunto: cod,
+          nome: conj?.nome ?? cod,
+          exigido: conj?.ch ?? 0,
+          cumprido: 0,
+          validado: false,
+          ehTrilha: false,
+        };
+  });
   const validadoBlocoOptativo =
     curso.matriz === 844 ? resumoOptativas?.aprovada : undefined;
   return {
@@ -81,6 +113,16 @@ export function montarPainel(perfil: PerfilAluno, matriz: Matriz): Painel {
     humanidades: rHumanidades ? prog(rHumanidades, false) : null,
     trilhas,
     trilhasValidadas: trilhas.filter((t) => t.validado).length,
+    opcoes: grupos.length
+      ? {
+          exigido: grupos.reduce((a, g) => a + g.exigido, 0),
+          cumprido: grupos.reduce((a, g) => a + g.cumprido, 0),
+          gruposCumpridos: grupos.filter((g) => g.cumprido >= g.exigido).length,
+          grupos: [...grupos].sort(
+            (a, b) => b.cumprido / (b.exigido || 1) - a.cumprido / (a.exigido || 1) || a.nome.localeCompare(b.nome),
+          ),
+        }
+      : null,
     blocoOptativo: curso.agregadorTrilhas
       ? {
           exigido:

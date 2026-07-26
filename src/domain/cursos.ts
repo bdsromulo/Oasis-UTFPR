@@ -1,4 +1,5 @@
 import type { Matriz, PerfilAluno } from "./tipos";
+import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -54,6 +55,62 @@ export interface DescricaoCurso {
    * contar como uma das duas trilhas exigidas.
    */
   naoValidaveis: number[];
+  /**
+   * Trilhas validáveis, listadas quando não dá para deduzi-las por exclusão.
+   *
+   * Na BSI e em Eng. Comp. todo conjunto que não é o agregador nem categoria é
+   * trilha, e a regra por exclusão basta. Eng. Eletrônica tem 50 conjuntos em
+   * quatro níveis de aninhamento — grupos de escolha, subáreas de humanidades,
+   * subáreas de IoT — e por exclusão quase todos virariam "trilha". Aqui as
+   * cinco trilhas de aprofundamento reais são declaradas.
+   */
+  trilhas?: number[];
+  /**
+   * Grupos de escolha obrigatória fora do bloco de trilhas.
+   *
+   * A 968 organiza quase todo o currículo em "Opções de X": o aluno escolhe
+   * dentro do grupo, e cada grupo tem carga própria a cumprir. São 25 grupos
+   * que somam 1875h — não são trilhas (não se "valida" uma delas para
+   * integralizar o bloco de aprofundamento) nem obrigatórias (há escolha).
+   */
+  gruposOpcao?: number[];
+  /** título do bloco que agrega os grupos de escolha */
+  rotuloOpcoes?: string;
+  /**
+   * Aninhamento dos conjuntos, filho -> pai, lido da própria matriz.
+   *
+   * A disciplina aponta para a folha da árvore ("1215 Linguística, Letras E
+   * Artes"), mas quem tem carga a cumprir é o topo ("1174 Ciclo De
+   * Humanidades") — é assim que o Quadro Resumo do histórico contabiliza. Sem
+   * este mapa, uma matéria de humanidades da 968 não seria reconhecida como
+   * humanidades por ninguém.
+   */
+  hierarquia?: Record<number, number>;
+}
+
+/** filho -> pai, a partir do campo `pai` que o parser da matriz grava. */
+function hierarquiaDe(
+  conjuntos: Record<string, { pai?: string | number | null }>,
+): Record<number, number> {
+  const mapa: Record<number, number> = {};
+  for (const [cod, c] of Object.entries(conjuntos)) {
+    if (c.pai !== null && c.pai !== undefined) mapa[Number(cod)] = Number(c.pai);
+  }
+  return mapa;
+}
+
+/** Ancestrais do conjunto, do próprio até a raiz. */
+function linhagem(curso: DescricaoCurso, conjunto: number): number[] {
+  const caminho = [conjunto];
+  let atual = conjunto;
+  // trava contra ciclo: a árvore da 968 tem quatro níveis
+  for (let i = 0; i < 8; i++) {
+    const pai = curso.hierarquia?.[atual];
+    if (pai === undefined || caminho.includes(pai)) break;
+    caminho.push(pai);
+    atual = pai;
+  }
+  return caminho;
 }
 
 export const BSI_981: DescricaoCurso = {
@@ -103,7 +160,49 @@ export const ENG_COMP_962: DescricaoCurso = {
   naoValidaveis: [1096],
 };
 
-const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844, ENG_COMP_962];
+/**
+ * Engenharia Eletrônica, matriz 968.
+ *
+ * É o primeiro currículo servido pela plataforma em que o bloco optativo é
+ * maior que o obrigatório: 1710h de obrigatórias contra 2385h de optativas.
+ * Não é erro de leitura — a 968 concentra o curso em grupos de escolha, e o
+ * Quadro Resumo do Histórico Escolar confirma os dois números.
+ *
+ * As 2385h se dividem exatamente em três blocos:
+ *    210h  Ciclo de Humanidades (1174)
+ *   1875h  os 25 grupos "Opções de …"
+ *    300h  Trilhas de Aprofundamento (1180)
+ *
+ * Dentro do 1180 há cinco trilhas validáveis; `1185 Eletivas` e `1186
+ * Optativas` são subáreas que somam para as 300h sem nunca valer como trilha,
+ * e o mesmo vale para as subáreas de `1226 Sistemas IoT` (1227..1233), que
+ * pertencem à trilha e não são trilhas por si.
+ *
+ * O histórico declara que o 1180 "utiliza a opção de validar Carga Horária
+ * Parcial em suas subáreas": validar uma trilha credita a CHT dela contra as
+ * 300h e o resto vem de qualquer subárea. Por isso `trilhasExigidas` é 1.
+ */
+export const ENG_ELETRONICA_968: DescricaoCurso = {
+  matriz: 968,
+  agregadorTrilhas: 1180,
+  trilhasExigidas: 1,
+  categorias: [
+    { id: "humanidades", conjunto: 1174, rotulo: "humanidades", rotuloLongo: "Ciclo de Humanidades" },
+  ],
+  estagios: [{ codigo: "ELS02", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
+  rotuloBlocoTrilhas: "Trilhas de Aprofundamento",
+  sufixoTrilha: "",
+  naoValidaveis: [1185, 1186, 1227, 1228, 1229, 1230, 1231, 1232, 1233],
+  trilhas: [1181, 1182, 1183, 1184, 1226],
+  gruposOpcao: [
+    1175, 1176, 1177, 1187, 1190, 1193, 1194, 1195, 1196, 1197, 1198, 1199,
+    1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212,
+  ],
+  rotuloOpcoes: "Opções do Curso",
+  hierarquia: hierarquiaDe(matriz968Json.conjuntos),
+};
+
+const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844, ENG_COMP_962, ENG_ELETRONICA_968];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
 export function descricaoDoCurso(matriz: Matriz | number): DescricaoCurso {
@@ -116,9 +215,38 @@ export function ehTrilha(curso: DescricaoCurso, conjunto: number | string | null
   if (conjunto === null) return false;
   const n = Number(conjunto);
   if (Number.isNaN(n)) return false;
+  // Curso que declara suas trilhas não admite dedução por exclusão: na 968 a
+  // regra por exclusão promoveria a trilha os 25 grupos de escolha e as
+  // subáreas de humanidades.
+  if (curso.trilhas) return curso.trilhas.includes(n);
   if (n === curso.agregadorTrilhas) return false;
   if (curso.naoValidaveis.includes(n)) return false;
   return !curso.categorias.some((c) => c.conjunto === n);
+}
+
+/**
+ * Grupo de escolha ao qual o conjunto pertence, se houver.
+ *
+ * A disciplina pode apontar para uma subárea do grupo — em "Opções De Circuitos
+ * Elétricos" (1187) as disciplinas ficam em "Teoria E Prática Integradas"
+ * (1188) e "Não Integradas" (1189) —, então a busca sobe a hierarquia.
+ */
+export function grupoOpcaoDe(
+  curso: DescricaoCurso,
+  conjunto: number | string | null,
+): number | null {
+  if (conjunto === null || !curso.gruposOpcao) return null;
+  const n = Number(conjunto);
+  if (Number.isNaN(n)) return null;
+  return linhagem(curso, n).find((c) => curso.gruposOpcao!.includes(c)) ?? null;
+}
+
+/** true quando o conjunto é, ou pertence a, um grupo de escolha do curso. */
+export function ehGrupoOpcao(
+  curso: DescricaoCurso,
+  conjunto: number | string | null,
+): boolean {
+  return grupoOpcaoDe(curso, conjunto) !== null;
 }
 
 /**
@@ -183,14 +311,24 @@ export function cargaAprovadaBlocoOptativo(
   return perfil.resumoGeral?.optativas.aprovada ?? 0;
 }
 
-/** Categoria simples correspondente ao conjunto, se houver. */
+/**
+ * Categoria simples correspondente ao conjunto, se houver.
+ *
+ * Sobe a hierarquia: uma disciplina de humanidades da 968 aponta para a área
+ * ("1215 Linguística, Letras E Artes"), e quem é categoria é o pai dela.
+ */
 export function categoriaSimples(
   curso: DescricaoCurso,
   conjunto: number | string | null,
 ): CategoriaSimples | null {
   if (conjunto === null) return null;
   const n = Number(conjunto);
-  return curso.categorias.find((c) => c.conjunto === n) ?? null;
+  if (Number.isNaN(n)) return null;
+  for (const cod of linhagem(curso, n)) {
+    const cat = curso.categorias.find((c) => c.conjunto === cod);
+    if (cat) return cat;
+  }
+  return null;
 }
 
 /**

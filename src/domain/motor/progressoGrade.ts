@@ -5,7 +5,9 @@ import {
   cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
   descricaoDoCurso,
+  ehGrupoOpcao,
   ehTrilha,
+  grupoOpcaoDe,
   categoriaSimples,
   exigeExtensao,
 } from "../cursos";
@@ -134,6 +136,16 @@ export function calcularProgressoMateria(
   } else if (catSimples && catSimples.id !== "eletivas") {
     categoriaId = String(catSimples.conjunto);
     categoriaNome = catSimples.rotuloLongo;
+    const r = perfil?.resumoConjuntos.find((x) => x.conjunto === categoriaId);
+    exigido = r?.chObrigatoria ?? matriz?.conjuntos?.[categoriaId]?.ch ?? 0;
+    cumpridoBase = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
+  } else if (ehGrupoOpcao(curso, conjunto)) {
+    // Grupo de escolha da 968: quem tem carga a cumprir é o grupo de topo, e é
+    // ele que aparece no Resumo Optativas do histórico. A disciplina pode estar
+    // numa subárea ("Teoria E Prática Não Integradas" dentro de "Opções De
+    // Circuitos Elétricos"), então o crédito sobe para o grupo.
+    categoriaId = String(grupoOpcaoDe(curso, conjunto));
+    categoriaNome = matriz?.conjuntos?.[categoriaId]?.nome ?? "Opção do curso";
     const r = perfil?.resumoConjuntos.find((x) => x.conjunto === categoriaId);
     exigido = r?.chObrigatoria ?? matriz?.conjuntos?.[categoriaId]?.ch ?? 0;
     cumpridoBase = r ? Math.min(r.chCursadaAprovada, r.chObrigatoria) : 0;
@@ -331,6 +343,21 @@ export function calcularResumoProgressoGrade(
       categoriasMapa.obrigatorias.impulsoGrade += acrescimo;
       categoriasMapa.obrigatorias.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
     } else if (categoriasMapa[catId] && curso.categorias.some((c) => String(c.conjunto) === catId)) {
+      categoriasMapa[catId].impulsoGrade += acrescimo;
+      categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+    } else if (ehGrupoOpcao(curso, catId)) {
+      // Cada grupo de escolha tem carga própria: o card é do grupo, e não há
+      // bloco agregado que some todos (somar 1875h num card só esconderia que
+      // o aluno pode ter fechado um grupo e não ter tocado noutro).
+      if (!categoriasMapa[catId]) {
+        categoriasMapa[catId] = {
+          nome: info.categoriaNome,
+          exigido: info.exigido,
+          cumpridoBase: info.cumpridoBase,
+          impulsoGrade: 0,
+          disciplinas: [],
+        };
+      }
       categoriasMapa[catId].impulsoGrade += acrescimo;
       categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
     } else if (contaNoBlocoOptativo(curso, catId)) {

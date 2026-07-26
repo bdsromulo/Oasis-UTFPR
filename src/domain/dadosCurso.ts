@@ -8,6 +8,10 @@ import matriz962Json from "../../data/eng-comp/matriz-962.json";
 import turmasEng20262 from "../../data/eng-comp/turmas/2026-2.json";
 import turmasEng20261 from "../../data/eng-comp/turmas/2026-1.json";
 import turmasEng20252 from "../../data/eng-comp/turmas/2025-2.json";
+import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
+import turmasEletronica20262 from "../../data/eng-eletronica/turmas/2026-2.json";
+import turmasEletronica20261 from "../../data/eng-eletronica/turmas/2026-1.json";
+import turmasEletronica20252 from "../../data/eng-eletronica/turmas/2025-2.json";
 
 /**
  * Reúne, por curso, a matriz e as ofertas de turma que a interface consome.
@@ -83,7 +87,27 @@ export const ENG_COMP_962: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
-const CURSOS = [BSI, ENG_COMP, ENG_COMP_962];
+// Eng. Eletrônica tem PDF de Turmas Abertas próprio (curso "ENG ELETRÔNICA"),
+// separado do de Eng. Comp. 2026-2 vem do PDF oficial do Portal; 2026-1 e
+// 2025-2 vêm do backup do Grade na Hora, que é a fonte das ofertas passadas.
+// As duas paridades importam: o Simulador de Formatura espelha cada semestre
+// futuro na oferta real de mesma paridade, e sem 2026-1 os semestres ímpares
+// eram projetados sobre a oferta de um semestre par.
+export const ENG_ELETRONICA: DadosCurso = {
+  id: "eng-eletronica-968",
+  rotulo: "Engenharia Eletrônica (968)",
+  rotuloCurto: "Eng. Eletrônica",
+  matriz: matriz968Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": turmasEletronica20262 as unknown as OfertaSemestre,
+    "2026-1": turmasEletronica20261 as unknown as OfertaSemestre,
+    "2025-2": turmasEletronica20252 as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+const CURSOS = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {

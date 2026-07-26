@@ -11,8 +11,10 @@ import {
   cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
   descricaoDoCurso,
+  ehGrupoOpcao,
   ehTrilha,
   categoriaSimples,
+  grupoOpcaoDe,
 } from "../cursos";
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
 import { buscarOfertaParaPlanejamento, cumpre } from "./elegiveis";
@@ -159,6 +161,8 @@ export type IdCategoria =
   | "humanidades"
   // bloco próprio da matriz 962; cursos sem ele ficam com exigido 0 e somem da lista
   | "expressaoGrafica"
+  // os 25 grupos "Opções de …" da matriz 968, somados; nos demais cursos fica 0
+  | "opcoes"
   | "trilhas"
   | "eletivas"
   // horas de extensão: vêm embutidas no CHEXT das disciplinas, não de um conjunto
@@ -345,6 +349,7 @@ function categoriaDe(d: DisciplinaMatriz, matriz: Matriz): IdCategoria | null {
   const simples = categoriaSimples(curso, d.conjunto);
   // a pool de eletivas é tratada à parte, como vaga genérica
   if (simples) return simples.id === "eletivas" ? null : (simples.id as IdCategoria);
+  if (ehGrupoOpcao(curso, d.conjunto)) return "opcoes";
   if (contaNoBlocoOptativo(curso, d.conjunto)) return "trilhas";
   return null;
 }
@@ -383,6 +388,7 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     segundoEstrato: 0,
     humanidades: 0,
     expressaoGrafica: 0,
+    opcoes: 0,
     trilhas: 0,
     eletivas: 0,
     extensao: 0,
@@ -418,6 +424,9 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
     segundoEstrato: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "segundoEstrato")?.conjunto)),
     humanidades: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "humanidades")?.conjunto)),
     expressaoGrafica: somaConjunto(String(curso.categorias.find((c: { id: string }) => c.id === "expressaoGrafica")?.conjunto)),
+    // Cada grupo de escolha tem linha própria no Resumo Optativas do histórico;
+    // o bloco é a soma delas. Confere com a coluna (E) do Quadro Resumo.
+    opcoes: (curso.gruposOpcao ?? []).reduce((total, g) => total + somaConjunto(String(g)), 0),
     trilhas,
     eletivas: perfil.eletivas ? perfil.eletivas.chTotal - perfil.eletivas.chFaltante : 0,
     extensao: perfil.extensao?.chCursada ?? 0,
@@ -549,6 +558,11 @@ export function simularFormatura(
       conjuntoExpressaoGrafica === undefined
         ? 0
         : matriz.conjuntos[String(conjuntoExpressaoGrafica)]?.ch ?? 0,
+    // Só os grupos de topo entram: as subáreas repetem a carga do pai.
+    opcoes: (cursoDesc.gruposOpcao ?? []).reduce(
+      (total, g) => total + (matriz.conjuntos[String(g)]?.ch ?? 0),
+      0,
+    ),
     trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
     eletivas: matriz.cargas.eletiva,
     // 844 declara 0 e some da lista; BSI pede 330h e a 962, 420h
@@ -588,6 +602,7 @@ export function simularFormatura(
     "segundoEstrato",
     "humanidades",
     "expressaoGrafica",
+    "opcoes",
     "trilhas",
   ];
   const excluidasRestauradas = new Set<string>();
@@ -669,15 +684,21 @@ export function simularFormatura(
     segundoEstrato: 0,
     humanidades: 0,
     expressaoGrafica: 0,
+    opcoes: 0,
     trilhas: 0,
     eletivas: 0,
     extensao: 0,
   };
   const horasPorTrilha = new Map<number, number>();
+  // Cada grupo "Opções de …" tem carga própria a cumprir: 60h de Programação de
+  // Computador não substituem 75h de Circuitos Digitais. Sem o teto por grupo, o
+  // motor fecharia as 1875h do bloco despejando tudo no grupo com mais oferta.
+  const horasPorGrupo = new Map<number, number>();
   if (perfil) {
     for (const r of perfil.resumoConjuntos) {
       const n = Number(r.conjunto);
       if (ehTrilha(cursoDesc, n)) horasPorTrilha.set(n, r.chCursadaAprovada);
+      if ((cursoDesc.gruposOpcao ?? []).includes(n)) horasPorGrupo.set(n, r.chCursadaAprovada);
     }
   }
 
@@ -700,6 +721,18 @@ export function simularFormatura(
    */
   const faltaTerceiroEstrato = () =>
     falta("trilhas") > 0 || trilhasValidadas() < trilhasExigidas;
+
+  /** Horas que ainda faltam para o grupo de escolha cumprir a carga dele. */
+  const faltaNoGrupo = (g: number) =>
+    Math.max(0, (matriz.conjuntos[String(g)]?.ch ?? 0) - (horasPorGrupo.get(g) ?? 0));
+
+  /**
+   * O bloco de opções só fecha quando TODO grupo fecha. A carga agregada não
+   * basta: uma disciplina de 60h num grupo de 45h deixa 15h de sobra que não
+   * valem para nenhum outro grupo.
+   */
+  const faltaAlgumGrupoOpcao = () =>
+    (cursoDesc.gruposOpcao ?? []).some((g) => faltaNoGrupo(g) > 0);
 
   // ---- oferta-espelho de cada semestre projetado -------------------------
   const cacheReferencia = new Map<
@@ -858,6 +891,7 @@ export function simularFormatura(
       falta("humanidades") === 0 &&
       falta("expressaoGrafica") === 0 &&
       falta("extensao") === 0 &&
+      !faltaAlgumGrupoOpcao() &&
       !faltaTerceiroEstrato() &&
       eletivasPendentes === 0 &&
       ![...pendentes].some((c) => categoriaDe(porCodigo.get(c)!, matriz) === "obrigatorias");
@@ -883,6 +917,9 @@ export function simularFormatura(
         if (cat === "trilhas") {
           if (!faltaTerceiroEstrato()) return false;
           if (ehTrilha(cursoDesc, d.conjunto) && !trilhasAlvo.has(d.conjunto!)) return false;
+        } else if (cat === "opcoes") {
+          const grupo = grupoOpcaoDe(cursoDesc, d.conjunto);
+          if (grupo === null || faltaNoGrupo(grupo) === 0) return false;
         } else if (cat !== "obrigatorias" && falta(cat) === 0) {
           return false;
         }
@@ -980,6 +1017,10 @@ export function simularFormatura(
             (horasPorTrilha.get(dMatriz.conjunto) ?? 0) + horas,
           );
         }
+        if (cat === "opcoes") {
+          const grupo = grupoOpcaoDe(cursoDesc, dMatriz?.conjunto ?? null);
+          if (grupo !== null) horasPorGrupo.set(grupo, (horasPorGrupo.get(grupo) ?? 0) + horas);
+        }
         if (dMatriz) {
           if (perfil) perfil.aprovadas.add(dMatriz.codigo);
           else perfil = { aprovadas: new Set([dMatriz.codigo]), cursadas: [] } as any;
@@ -993,7 +1034,9 @@ export function simularFormatura(
       const cat = categoriaDe(d, matriz)!;
       const consome = ocupaVaga(d);
       if (consome && vagas <= 0) continue;
-      if (cat !== "obrigatorias" && cat !== "trilhas" && falta(cat) === 0) continue;
+      const grupoDaOpcao = cat === "opcoes" ? grupoOpcaoDe(cursoDesc, d.conjunto) : null;
+      if (cat === "opcoes" && (grupoDaOpcao === null || faltaNoGrupo(grupoDaOpcao) === 0)) continue;
+      if (cat !== "obrigatorias" && cat !== "trilhas" && cat !== "opcoes" && falta(cat) === 0) continue;
 
       // ---- reserva de turma: a grade do semestre tem de fechar sem choque --
       // A checagem vem ANTES de mexer no estado das trilhas, porque uma
@@ -1080,11 +1123,20 @@ export function simularFormatura(
           if (!trilhasAlvo.has(conj)) continue;
 
           const horasNaTrilha = horasPorTrilha.get(conj) ?? 0;
-          // Trilha já validada só recebe mais disciplina se sobrar horas no bloco
-          // depois de reservar o que as trilhas pendentes ainda vão exigir.
+          // Trilha já validada não recebe mais nada enquanto alguma trilha-alvo
+          // continuar aberta: aquelas horas vão ter de ser pagas de novo lá, e
+          // o bloco estoura duas vezes.
+          //
+          // A reserva por si não basta, porque `custoParaValidar` estima pela
+          // MENOR disciplina pendente da outra trilha — é otimista de
+          // propósito, para não bloquear escolha legítima. Quando a disciplina
+          // que de fato abre é maior que a estimativa, a reserva fica curta e o
+          // excedente escorre para cá: era o que levava uma trilha de piso 90h
+          // a 180h na 962, com o bloco de 270h fechando em 345h.
+          const alvoAindaAberta = [...trilhasAlvo].some((c) => faltaNaTrilha(c) > 0);
           if (
             horasNaTrilha >= chDaTrilha(conj) &&
-            falta("trilhas") <= reservadoParaValidar
+            (alvoAindaAberta || falta("trilhas") <= reservadoParaValidar)
           ) {
             continue;
           }
@@ -1093,6 +1145,10 @@ export function simularFormatura(
           // Optativa isolada não substitui uma trilha completa.
           continue;
         }
+      }
+
+      if (grupoDaOpcao !== null) {
+        horasPorGrupo.set(grupoDaOpcao, (horasPorGrupo.get(grupoDaOpcao) ?? 0) + d.horas.total);
       }
 
       if (turmaEscolhida && ofertaDaDisciplina) {
@@ -1201,6 +1257,28 @@ export function simularFormatura(
 
         if (falta("humanidades") > 0) addPlaceholdersFor("humanidades", "Humanidades");
         if (falta("expressaoGrafica") > 0) addPlaceholdersFor("expressaoGrafica", "Expressão Gráfica");
+        // Opções: o buraco é por grupo, não no agregado — um grupo fechado não
+        // paga o vizinho, então o placeholder é emitido grupo a grupo.
+        for (const g of cursoDesc.gruposOpcao ?? []) {
+          while (faltaNoGrupo(g) > 0 && vagas > 0) {
+            const horas = Math.min(faltaNoGrupo(g), 60);
+            escolhidas.push({
+              codigo: `PLACEHOLDER_opcoes_${g}_${faltaNoGrupo(g)}`,
+              nome: `Optativa de ${matriz.conjuntos[String(g)]?.nome ?? "Opções"} (${horas}h)`,
+              horas,
+              categoria: "opcoes",
+              sazonalidade: "ambos",
+              ocupaVaga: true,
+              conjunto: g,
+              turma: null,
+              codigoOferta: null,
+            });
+            horasPorGrupo.set(g, (horasPorGrupo.get(g) ?? 0) + horas);
+            planejado.opcoes += horas;
+            vagas--;
+            addedPlaceholder = true;
+          }
+        }
         if (falta("segundoEstrato") > 0) addPlaceholdersFor("segundoEstrato", "2º Estrato");
         if (falta("trilhas") > 0) addPlaceholdersFor("trilhas", "Trilha");
         if (falta("obrigatorias") > 0) addPlaceholdersFor("obrigatorias", "Obrigatória");
@@ -1262,7 +1340,8 @@ export function simularFormatura(
       ["segundoEstrato", "2º Estrato"],
       ["humanidades", "Ciclo de Humanidades"],
       ["expressaoGrafica", "Opção de Expressão Gráfica"],
-      ["trilhas", cursoDesc.matriz === 981 ? "Trilhas (3º estrato)" : "Optativas em trilhas e isoladas"],
+      ["opcoes", cursoDesc.rotuloOpcoes ?? "Opções do Curso"],
+      ["trilhas", cursoDesc.matriz === 981 ? "Trilhas (3º estrato)" : cursoDesc.rotuloBlocoTrilhas],
       ["eletivas", "Eletivas"],
       ["extensao", "Extensão Universitária"],
     ] as [IdCategoria, string][]
