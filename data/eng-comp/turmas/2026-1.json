@@ -1,5 +1,5 @@
 {
- "curso": "SIST DE INFORMAÇÃO",
+ "curso": "ENG DE COMPUTAÇÃO",
  "semestre": "2026-1",
  "fonte": "Turmas Abertas - Portal do Aluno",
  "disciplinas": [
@@ -982,10 +982,6 @@
        "curso": "Eng Mecatrônica"
       }
      ],
-     "_hor_lixo": [
-      "6N3(CQ-",
-      "201)"
-     ],
      "horarios": [
       {
        "dia": 6,
@@ -1012,6 +1008,13 @@
        "dia": 6,
        "turno": "N",
        "aula": 2,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
        "sala": "CQ-201",
        "sede": "Centro"
       },
@@ -2740,10 +2743,6 @@
        "curso": "Eng Amb/Sanitária"
       }
      ],
-     "_hor_lixo": [
-      "2M5(*EK-",
-      "204)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -2756,6 +2755,13 @@
        "dia": 2,
        "turno": "M",
        "aula": 4,
+       "sala": "EK-204",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
        "sala": "EK-204",
        "sede": "Ecoville"
       },
@@ -3286,10 +3292,6 @@
        "curso": "Eng Mecânica"
       }
      ],
-     "_hor_lixo": [
-      "2T3(*EK-",
-      "307)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -3302,6 +3304,13 @@
        "dia": 2,
        "turno": "T",
        "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
        "sala": "EK-307",
        "sede": "Ecoville"
       },
@@ -3343,10 +3352,6 @@
        "curso": "Eng Civil"
       }
      ],
-     "_hor_lixo": [
-      "4T3(*EB-",
-      "304)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -3360,6 +3365,13 @@
        "turno": "T",
        "aula": 6,
        "sala": "EB-301",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 3,
+       "sala": "EB-304",
        "sede": "Ecoville"
       },
       {
@@ -4107,10 +4119,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "6M5(*EL-",
-      "211)"
-     ],
      "horarios": [
       {
        "dia": 6,
@@ -4123,6 +4131,13 @@
        "dia": 6,
        "turno": "M",
        "aula": 4,
+       "sala": "EL-211",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 5,
        "sala": "EL-211",
        "sede": "Ecoville"
       }
@@ -4242,10 +4257,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "5M5(*EL-",
-      "208)"
-     ],
      "horarios": [
       {
        "dia": 5,
@@ -4258,6 +4269,13 @@
        "dia": 5,
        "turno": "M",
        "aula": 4,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 5,
        "sala": "EL-208",
        "sede": "Ecoville"
       }
@@ -5550,10 +5568,6 @@
        "curso": "Eng Mecânica"
       }
      ],
-     "_hor_lixo": [
-      "3T5(*EK-",
-      "307)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -5566,6 +5580,13 @@
        "dia": 2,
        "turno": "N",
        "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
        "sala": "EK-307",
        "sede": "Ecoville"
       },
@@ -6993,10 +7014,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "2T4(*EB-",
-      "210)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -7009,6 +7026,13 @@
        "dia": 2,
        "turno": "T",
        "aula": 3,
+       "sala": "EB-210",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
        "sala": "EB-210",
        "sede": "Ecoville"
       },
@@ -7056,10 +7080,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "4N3(*EB-",
-      "309)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -7072,6 +7092,13 @@
        "dia": 4,
        "turno": "N",
        "aula": 2,
+       "sala": "EB-309",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
        "sala": "EB-309",
        "sede": "Ecoville"
       }
@@ -7163,10 +7190,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "3N3(*EB-",
-      "303)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -7179,6 +7202,13 @@
        "dia": 3,
        "turno": "N",
        "aula": 2,
+       "sala": "EB-303",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
        "sala": "EB-303",
        "sede": "Ecoville"
       }
@@ -7291,10 +7321,6 @@
        "curso": "Sist De Informação"
       }
      ],
-     "_hor_lixo": [
-      "5M5(CB-",
-      "201)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -7330,6 +7356,13 @@
        "aula": 4,
        "sala": "CB-201",
        "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-201",
+       "sede": "Centro"
       }
      ],
      "professores_raw": "Leyza Elmeri Baldo Dorini",
@@ -7347,10 +7380,6 @@
        "ordem": 1,
        "curso": "Eng De Computação"
       }
-     ],
-     "_hor_lixo": [
-      "5M5(CB-",
-      "104)"
      ],
      "horarios": [
       {
@@ -7385,6 +7414,13 @@
        "dia": 5,
        "turno": "M",
        "aula": 4,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 5,
        "sala": "CB-104",
        "sede": "Centro"
       }
@@ -8211,10 +8247,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "6T5(*EB-",
-      "202)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -8227,6 +8259,13 @@
        "dia": 4,
        "turno": "T",
        "aula": 2,
+       "sala": "EB-202",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 5,
        "sala": "EB-202",
        "sede": "Ecoville"
       },
@@ -8690,10 +8729,6 @@
        "curso": "Eng Amb/Sanitária"
       }
      ],
-     "_hor_lixo": [
-      "5N1(*EC-",
-      "205)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -8706,6 +8741,13 @@
        "dia": 3,
        "turno": "N",
        "aula": 2,
+       "sala": "EC-205",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
        "sala": "EC-205",
        "sede": "Ecoville"
       },
@@ -9075,10 +9117,6 @@
        "curso": "Eng Mecânica"
       }
      ],
-     "_hor_lixo": [
-      "5T5(*EK-",
-      "107)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -9092,6 +9130,13 @@
        "turno": "T",
        "aula": 6,
        "sala": "EK-101",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EK-107",
        "sede": "Ecoville"
       },
       {
@@ -9120,10 +9165,6 @@
        "curso": "Eng Mecânica"
       }
      ],
-     "_hor_lixo": [
-      "5M4(*EL-",
-      "103)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -9136,6 +9177,13 @@
        "dia": 3,
        "turno": "M",
        "aula": 5,
+       "sala": "EL-103",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 4,
        "sala": "EL-103",
        "sede": "Ecoville"
       },
@@ -9329,10 +9377,6 @@
        "curso": "Eng Amb/Sanitária"
       }
      ],
-     "_hor_lixo": [
-      "4N1(*EL-",
-      "102)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -9345,6 +9389,13 @@
        "dia": 2,
        "turno": "N",
        "aula": 2,
+       "sala": "EL-102",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
        "sala": "EL-102",
        "sede": "Ecoville"
       },
@@ -9472,10 +9523,6 @@
        "curso": "Eng Civil"
       }
      ],
-     "_hor_lixo": [
-      "4N1(*EB-",
-      "304)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -9489,6 +9536,13 @@
        "turno": "T",
        "aula": 6,
        "sala": "EB-302",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "EB-304",
        "sede": "Ecoville"
       },
       {
@@ -9523,10 +9577,6 @@
        "curso": "Eng Amb/Sanitária"
       }
      ],
-     "_hor_lixo": [
-      "4N3(*EL-",
-      "102)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -9539,6 +9589,13 @@
        "dia": 2,
        "turno": "N",
        "aula": 4,
+       "sala": "EL-102",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
        "sala": "EL-102",
        "sede": "Ecoville"
       },
@@ -9621,10 +9678,6 @@
        "curso": "Química"
       }
      ],
-     "_hor_lixo": [
-      "4N1(*EB-",
-      "211)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -9638,6 +9691,13 @@
        "turno": "N",
        "aula": 2,
        "sala": "EB-311",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "EB-211",
        "sede": "Ecoville"
       },
       {
@@ -10256,10 +10316,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "4T5(*EB-",
-      "212)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -10272,6 +10328,13 @@
        "dia": 4,
        "turno": "T",
        "aula": 4,
+       "sala": "EB-212",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
        "sala": "EB-212",
        "sede": "Ecoville"
       }
@@ -13321,10 +13384,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "3N3(*EL-",
-      "211)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -13337,6 +13396,13 @@
        "dia": 3,
        "turno": "N",
        "aula": 2,
+       "sala": "EL-211",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
        "sala": "EL-211",
        "sede": "Ecoville"
       }
@@ -13641,10 +13707,6 @@
        "curso": "Sist De Informação"
       }
      ],
-     "_hor_lixo": [
-      "3N4(CQ-",
-      "205)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -13671,6 +13733,13 @@
        "dia": 3,
        "turno": "N",
        "aula": 3,
+       "sala": "CQ-205",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 4,
        "sala": "CQ-205",
        "sede": "Centro"
       },
@@ -15121,10 +15190,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "4T3(*EB-",
-      "308)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -15137,6 +15202,13 @@
        "dia": 4,
        "turno": "T",
        "aula": 2,
+       "sala": "EB-308",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 3,
        "sala": "EB-308",
        "sede": "Ecoville"
       },
@@ -15163,10 +15235,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "6T4(*EC-",
-      "203)"
-     ],
      "horarios": [
       {
        "dia": 6,
@@ -15179,6 +15247,13 @@
        "dia": 6,
        "turno": "T",
        "aula": 3,
+       "sala": "EC-203",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 4,
        "sala": "EC-203",
        "sede": "Ecoville"
       },
@@ -15210,10 +15285,6 @@
        "curso": "Eng De Computação"
       }
      ],
-     "_hor_lixo": [
-      "4M3(*EB-",
-      "304)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -15226,6 +15297,13 @@
        "dia": 4,
        "turno": "M",
        "aula": 2,
+       "sala": "EB-304",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
        "sala": "EB-304",
        "sede": "Ecoville"
       },
@@ -15274,10 +15352,6 @@
        "curso": "Eng Eletrônica"
       }
      ],
-     "_hor_lixo": [
-      "5M5(CB-",
-      "204)"
-     ],
      "horarios": [
       {
        "dia": 5,
@@ -15304,6 +15378,13 @@
        "dia": 5,
        "turno": "M",
        "aula": 4,
+       "sala": "CB-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 5,
        "sala": "CB-204",
        "sede": "Centro"
       },
@@ -16675,10 +16756,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "3T4(*EB-",
-      "311)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -16691,6 +16768,13 @@
        "dia": 3,
        "turno": "T",
        "aula": 3,
+       "sala": "EB-311",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
        "sala": "EB-311",
        "sede": "Ecoville"
       }
@@ -16846,10 +16930,6 @@
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
      "prioridade_cursos": [],
-     "_hor_lixo": [
-      "2T5(*EB-",
-      "303)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -16862,6 +16942,13 @@
        "dia": 2,
        "turno": "T",
        "aula": 4,
+       "sala": "EB-303",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
        "sala": "EB-303",
        "sede": "Ecoville"
       }
@@ -16909,10 +16996,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "4N3(*EL-",
-      "211)"
-     ],
      "horarios": [
       {
        "dia": 4,
@@ -16925,6 +17008,13 @@
        "dia": 4,
        "turno": "N",
        "aula": 2,
+       "sala": "EL-211",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
        "sala": "EL-211",
        "sede": "Ecoville"
       }
@@ -17131,10 +17221,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "2N3(*EB-",
-      "310)"
-     ],
      "horarios": [
       {
        "dia": 2,
@@ -17147,6 +17233,13 @@
        "dia": 2,
        "turno": "N",
        "aula": 2,
+       "sala": "EB-310",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
        "sala": "EB-310",
        "sede": "Ecoville"
       }
@@ -17248,12 +17341,6 @@
        "curso": "Química Ambiental"
       }
      ],
-     "_hor_lixo": [
-      "5M3(*EL-",
-      "211)",
-      "5M5(*EL-",
-      "211)"
-     ],
      "horarios": [
       {
        "dia": 5,
@@ -17279,6 +17366,13 @@
       {
        "dia": 5,
        "turno": "M",
+       "aula": 3,
+       "sala": "EL-211",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
        "aula": 4,
        "sala": "EL-211",
        "sede": "Ecoville"
@@ -17287,6 +17381,13 @@
        "dia": 5,
        "turno": "M",
        "aula": 4,
+       "sala": "EL-211",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 5,
        "sala": "EL-211",
        "sede": "Ecoville"
       },
@@ -18450,10 +18551,6 @@
        "curso": "Eng Mecânica"
       }
      ],
-     "_hor_lixo": [
-      "6T3(*EK-",
-      "307)"
-     ],
      "horarios": [
       {
        "dia": 3,
@@ -18466,6 +18563,13 @@
        "dia": 3,
        "turno": "T",
        "aula": 4,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
        "sala": "EK-307",
        "sede": "Ecoville"
       },

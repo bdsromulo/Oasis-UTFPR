@@ -85,6 +85,22 @@ def main() -> int:
                 avisos.append(f"{tag}: turma sem horário (permitido para TCC/EaD)")
                 continue
 
+            # A disciplina declara quantas aulas presenciais tem por semana; a
+            # turma tem de trazer um horário para cada uma. Turma com menos
+            # horários que aulas é slot perdido: a grade mostra o horário livre
+            # e o detector de choque não vê a colisão.
+            #
+            # Foi assim que passaram despercebidos 214 dos 326 horários de Eng.
+            # Eletrônica — a coluna do PDF quebra a sala no meio ("3T5(CQ-" numa
+            # linha, "105)" na outra) e o parser descartava o par inteiro.
+            # É aviso, e não erro: a fonte às vezes lista menos horários do que
+            # aulas (ELXB1 declara 3 aulas e publica 2 horários).
+            esperadas = disciplina.get("aulas_semanais_presenciais")
+            if isinstance(esperadas, (int, float)) and len(horarios) < esperadas:
+                avisos.append(
+                    f"{tag}: {len(horarios)} horários para {esperadas:g} aulas semanais presenciais"
+                )
+
             slots: dict[tuple[int, str, int], tuple[object, object]] = {}
             for horario in horarios:
                 total_horarios += 1

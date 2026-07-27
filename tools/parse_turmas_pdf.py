@@ -158,6 +158,14 @@ def parse():
                 line = " ".join(w["text"] for w in ws)
                 # lixo de cabeçalho de tabela / avisos / rodapé
                 line_no_space = line.replace(" ", "")
+                # O cabeçalho "Professor | Optativa (Observar / (Sujeito à
+                # Equivalências) / alteração)" quebra em três linhas, e em
+                # 2026.2 a última vem sozinha. Filtrar só o par colado deixava
+                # esse "alteração)" cair na coluna do professor: 370 turmas com
+                # o nome do docente terminando em "alteração)".
+                if line_no_space in ("alteração)", "alterao)", "Equivalências)", "Equivalncias)",
+                                     "(Observar", "(Sujeitoà", "(Sujeitoa", "Optativa(Observar"):
+                    continue
                 if ("TurmaEnquadramento" in line_no_space or "TotalCalouros" in line_no_space
                         or "alteração)Equivalências)" in line_no_space or "alterao)Equivalncias)" in line_no_space
                         or line.startswith("Turmas Abertas") or "Semestre de" in line
@@ -224,10 +232,26 @@ def parse():
                 t["reserva"] = t["reserva"][:-8].strip()
 
             # horários
+            #
+            # A coluna de horário quebra de linha no meio da sala: a fonte
+            # imprime "3T5(CQ-" numa linha e "105)" na seguinte. Os dois pedaços
+            # falham no casamento — um não fecha parêntese, o outro não abre — e
+            # o horário inteiro era descartado em silêncio. Era o caso de 214 das
+            # 326 turmas de Eng. Eletrônica em 2026.2: a grade mostrava o slot
+            # livre e o detector de choque não via a colisão.
+            #
+            # Remonta antes de casar: enquanto o token tiver parêntese aberto sem
+            # fechar, o próximo é continuação dele.
+            brutos = [tok for tok in t.pop("_hor_raw") if tok != "-"]
+            remontados = []
+            for tok in brutos:
+                if remontados and remontados[-1].count("(") > remontados[-1].count(")"):
+                    remontados[-1] += tok
+                else:
+                    remontados.append(tok)
+
             hors = []
-            for tok in t.pop("_hor_raw"):
-                if tok in ("-",):
-                    continue
+            for tok in remontados:
                 m = RE_HORARIO.match(tok)
                 if m:
                     hors.append({

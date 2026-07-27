@@ -30,7 +30,15 @@ erros, avisos = [], []
 # ---- R1: cobertura de tokens ----
 with pdfplumber.open(PDF) as pdf:
     raw = " ".join(w["text"] for p in pdf.pages for w in p.extract_words())
-raw_h = len(re.findall(r"\b[2-7][MTN]\d\(\*{0,2}[A-Z]{1,2}-?[A-Z0-9]*\)", raw))
+# Conta pelo PREFIXO do horário (dia/turno/aula), sem exigir a sala fechada.
+#
+# A coluna quebra de linha no meio da sala — "3T5(CQ-" numa linha e "105)" duas
+# linhas abaixo, com o nome do professor no meio. No fluxo de palavras os dois
+# pedaços ficam longe um do outro, então nenhuma regex que exija o parêntese
+# fechado acha o horário: era assim que o lado PDF desta checagem herdava o
+# mesmo defeito do parser e "confirmava" um JSON com 232 horários a menos.
+# O prefixo é inequívoco (dia 2..7, turno M/T/N, aula 1..6) e sobrevive à quebra.
+raw_h = len(re.findall(r"(?<![A-Za-z0-9])[2-7][MTN]\d(?![0-9])", raw))
 raw_m = len(re.findall(r"Matriz:\d+", raw))
 raw_d = len(re.findall(r"\b[A-Z0-9]{4,7} - .*?\([\d,]* Aulas semanais presenciais", raw))
 got_h = sum(len(t["horarios"]) for d in ds for t in d["turmas"])
