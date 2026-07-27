@@ -3,6 +3,13 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { createHash } from "node:crypto";
 
+// Únicas exceções de terceiro na CSP: o GoatCounter (analytics sem cookies nem
+// dados pessoais). O count.js vem do CDN gc.zgo.at e registra o hit tentando
+// navigator.sendBeacon() (cai em connect-src) com fallback para um <img>
+// (cai em img-src) — por isso o host do painel precisa aparecer nas duas.
+const GC_SCRIPT = "https://gc.zgo.at";
+const GC_ENDPOINT = "https://oasisutfpr.goatcounter.com";
+
 // Injeta uma Content-Security-Policy restritiva apenas no build de produção
 // (o servidor de dev do Vite usa HMR/eval e seria bloqueado por ela).
 // O hash SHA-256 de cada <script> inline (o anti-flicker de tema em index.html)
@@ -23,12 +30,12 @@ function csp(): Plugin {
       }
       const politica = [
         "default-src 'self'",
-        `script-src 'self' ${hashes.join(" ")}`.trim(),
+        `script-src 'self' ${GC_SCRIPT} ${hashes.join(" ")}`.trim(),
         // React/Tailwind aplicam estilos inline em runtime (baixo risco vs. script)
         "style-src 'self' 'unsafe-inline'",
-        "img-src 'self' data:",
+        `img-src 'self' data: ${GC_ENDPOINT}`,
         "font-src 'self'",
-        "connect-src 'self'",
+        `connect-src 'self' ${GC_ENDPOINT}`,
         // worker do pdf.js: mesma origem (bundle) e, em alguns navegadores, via blob:
         "worker-src 'self' blob:",
         "object-src 'none'",
