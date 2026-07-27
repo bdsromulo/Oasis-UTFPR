@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { gerarSugestaoGrade, type OpcoesSugestaoGrade } from "../../domain/motor/grade-magica";
 import { Botao } from "../componentes";
+import { ModalExplicacaoCalculos } from "../componentes/ModalExplicacaoCalculos";
 import {
   IconBan,
   IconInfo,
@@ -53,6 +54,9 @@ export function ModalSugestaoGrade({
 
   // Definições Avançadas (Toggle)
   const [definicoesAvanadasAbertas, setDefinicoesAvanadasAbertas] = useState(false);
+
+  // Modal de Explicação
+  const [explicacaoAberta, setExplicacaoAberta] = useState(false);
 
   // Exclusões de disciplinas e professores
   const [disciplinasExcluidas, setDisciplinasExcluidas] = useState<{ codigo: string; nome: string }[]>([]);
@@ -252,7 +256,14 @@ export function ModalSugestaoGrade({
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <IconSparkles className="h-4 w-4 shrink-0" /> Sugestão de Grade
+              <IconSparkles className="h-4 w-4 shrink-0 text-utfpr-500" /> Sugestão de Grade
+              <button
+                type="button"
+                onClick={() => setExplicacaoAberta(true)}
+                className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors cursor-help"
+              >
+                <IconInfo className="h-3 w-3 shrink-0" /> Como funciona?
+              </button>
             </h3>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
               O motor Oásis analisa seu progresso e sugere uma grade compatível, respeitando pré-requisitos, exclusões, turnos, sedes e conflitos de horário.
@@ -905,6 +916,12 @@ export function ModalSugestaoGrade({
       </>
       )}
       </div>
+
+      <ModalExplicacaoCalculos
+        aberto={explicacaoAberta}
+        onFechar={() => setExplicacaoAberta(false)}
+        id="modalExplicacaoCalculosGrade"
+      />
     </div>
   );
 }

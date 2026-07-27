@@ -22,7 +22,9 @@ import {
   IconDownload,
   IconGraduationCap,
   IconWarning,
+  IconInfo,
 } from "../icons";
+import { ModalExplicacaoCalculos } from "../componentes/ModalExplicacaoCalculos";
 import {
   EXCLUSOES_VAZIAS,
   SeletorExclusoes,
@@ -204,6 +206,7 @@ export function TelaSimuladorFormatura(props: {
   const setExclusoes = props.onMudarExclusoes;
   const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
   const [menuImportacaoSemestre, setMenuImportacaoSemestre] = useState<string | null>(null);
+  const [explicacaoAberta, setExplicacaoAberta] = useState(false);
   const curso = descricaoDoCurso(matriz);
   const semestresIniciais = useMemo(() => {
     // Por enquanto restringe o simulador a começar apenas no semestre futuro,
@@ -256,8 +259,15 @@ export function TelaSimuladorFormatura(props: {
           <div className="flex items-start gap-4">
             <IconGraduationCap className="h-4 w-4 shrink-0" />
             <div>
-              <h2 className="font-display text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+              <h2 className="font-display text-2xl font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
                 Simulador de Formatura
+                <button
+                  type="button"
+                  onClick={() => setExplicacaoAberta(true)}
+                  className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 transition-colors cursor-help"
+                >
+                  <IconInfo className="h-3 w-3 shrink-0" /> Como funciona?
+                </button>
               </h2>
               <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                 Projeta o caminho mais curto até a integralização assumindo que você cursa{" "}
@@ -743,6 +753,12 @@ export function TelaSimuladorFormatura(props: {
         já entraram no mesmo semestre. Disciplinas de trilha sem oferta registrada ficam fora do
         plano. Confirme sempre no Portal do Aluno.
       </p>
+
+      <ModalExplicacaoCalculos
+        aberto={explicacaoAberta}
+        onFechar={() => setExplicacaoAberta(false)}
+        id="modalExplicacaoCalculosSimulador"
+      />
     </div>
   );
 }

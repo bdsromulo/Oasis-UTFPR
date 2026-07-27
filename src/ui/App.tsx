@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useCamadaHistorico } from "./hooks/useCamadaHistorico";
 import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
 import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
@@ -313,6 +314,15 @@ export function App() {
     }
   }
   const [modalGradeMagica, setModalGradeMagica] = useState(false);
+
+  // Histórico para navegação com o botão voltar nativo do Android:
+  useCamadaHistorico(modalConfigAberto, () => setModalConfigAberto(false), "modalConfigAberto");
+  useCamadaHistorico(menuMobileAberto, () => setMenuMobileAberto(false), "menuMobileAberto");
+  useCamadaHistorico(giAberta, () => setGiAberta(false), "giAberta");
+  useCamadaHistorico(sobreAberta, () => setSobreAberta(false), "sobreAberta");
+  useCamadaHistorico(comoUsarAberta, () => setComoUsarAberta(false), "comoUsarAberta");
+  useCamadaHistorico(mobileGradeDrawerAberto, () => setMobileGradeDrawerAberto(false), "mobileGradeDrawerAberto");
+  useCamadaHistorico(modalGradeMagica, () => setModalGradeMagica(false), "modalGradeMagica");
 
   // Sincronizar tema no DOM
   useEffect(() => {
