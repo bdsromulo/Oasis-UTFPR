@@ -1044,7 +1044,7 @@ export function simularFormatura(
       let turmaEscolhida: Turma | null = null;
       let ofertaDaDisciplina: DisciplinaOfertada | null = null;
       let violacaoDeDocente: DisciplinaPlanejada["exclusaoIgnorada"];
-      if (referencia.oferta) {
+      if (consome && referencia.oferta) {
         ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
         if (ofertaDaDisciplina && ofertaDaDisciplina.turmas.length > 0) {
           const porPrioridade = [...ofertaDaDisciplina.turmas].sort(
@@ -1099,8 +1099,6 @@ export function simularFormatura(
               violacaoDeDocente = { tipo: "professor", alvo: prof, motivo: "única turma ofertada" };
             }
           }
-        } else {
-          if (saz.de(d.codigo) !== "sem_oferta") continue;
         }
       }
 
