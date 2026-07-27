@@ -1099,6 +1099,8 @@ export function simularFormatura(
               violacaoDeDocente = { tipo: "professor", alvo: prof, motivo: "única turma ofertada" };
             }
           }
+        } else {
+          if (saz.de(d.codigo) !== "sem_oferta") continue;
         }
       }
 
