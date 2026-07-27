@@ -15,6 +15,7 @@ import {
   ehTrilha,
   categoriaSimples,
   grupoOpcaoDe,
+  TETO_CH_SEMESTRE,
 } from "../cursos";
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
 import { buscarOfertaParaPlanejamento, cumpre } from "./elegiveis";
@@ -981,6 +982,10 @@ export function simularFormatura(
 
     const escolhidas: DisciplinaPlanejada[] = [];
     let vagas = ritmo;
+    // Carga de sala de aula já reservada neste semestre. O ritmo limita quantas
+    // matérias entram; este teto limita quanto elas pesam — 6 matérias de 90h
+    // são 540h, e a UTFPR não deixa matricular isso.
+    let chAula = 0;
 
     // ---- semestre importado do Planejamento de Matrícula -----------------
     // Aqui não há o que escolher: as matérias e as turmas são as que o aluno já
@@ -1034,6 +1039,11 @@ export function simularFormatura(
       const cat = categoriaDe(d, matriz)!;
       const consome = ocupaVaga(d);
       if (consome && vagas <= 0) continue;
+      // Estoura o teto de matrícula: fica para o próximo semestre, como quem não
+      // acha vaga. A checagem precede a reserva de turma e o estado das trilhas
+      // pelo mesmo motivo — disciplina recusada aqui segue pendente.
+      // Uma menor pode caber no lugar; a lista já vem ordenada por prioridade.
+      if (consome && chAula + d.horas.total > TETO_CH_SEMESTRE) continue;
       const grupoDaOpcao = cat === "opcoes" ? grupoOpcaoDe(cursoDesc, d.conjunto) : null;
       if (cat === "opcoes" && (grupoDaOpcao === null || faltaNoGrupo(grupoDaOpcao) === 0)) continue;
       if (cat !== "obrigatorias" && cat !== "trilhas" && cat !== "opcoes" && falta(cat) === 0) continue;
@@ -1190,12 +1200,21 @@ export function simularFormatura(
       }
       pendentes.delete(d.codigo);
       alturaMemo.clear();
-      if (consome) vagas--;
+      if (consome) {
+        vagas--;
+        chAula += d.horas.total;
+      }
     }
 
     // eletivas entram como vaga genérica: a escolha é livre, fora da matriz
-    while (!fixadoAqui && eletivasPendentes > 0 && vagas > 0) {
-      const horas = Math.min(eletivasPendentes, 60);
+    while (
+      !fixadoAqui &&
+      eletivasPendentes > 0 &&
+      vagas > 0 &&
+      chAula < TETO_CH_SEMESTRE
+    ) {
+      // a eletiva se ajusta ao que sobra do teto, em vez de ficar para depois
+      const horas = Math.min(eletivasPendentes, 60, TETO_CH_SEMESTRE - chAula);
       escolhidas.push({
         codigo: "ELETIVA",
         nome: `Eletiva livre (${horas}h)`,
@@ -1210,6 +1229,7 @@ export function simularFormatura(
       planejado.eletivas += horas;
       eletivasPendentes -= horas;
       vagas--;
+      chAula += horas;
     }
 
     // Sobrando extensão depois de contar o CHEXT das disciplinas planejadas, o
@@ -1246,8 +1266,8 @@ export function simularFormatura(
       if (pendentes.size === 0) {
         let addedPlaceholder = false;
         const addPlaceholdersFor = (cat: IdCategoria, nomeCat: string) => {
-          while (falta(cat) > 0 && vagas > 0) {
-            const horas = Math.min(falta(cat), 60);
+          while (falta(cat) > 0 && vagas > 0 && chAula < TETO_CH_SEMESTRE) {
+            const horas = Math.min(falta(cat), 60, TETO_CH_SEMESTRE - chAula);
             escolhidas.push({
               codigo: `PLACEHOLDER_${cat}_${falta(cat)}`,
               nome: cat === "obrigatorias" ? `Obrigatória pendente (${horas}h)` : `Optativa de ${nomeCat} (${horas}h)`,
@@ -1261,6 +1281,7 @@ export function simularFormatura(
             });
             planejado[cat] += horas;
             vagas--;
+            chAula += horas;
             addedPlaceholder = true;
           }
         };
@@ -1270,8 +1291,8 @@ export function simularFormatura(
         // Opções: o buraco é por grupo, não no agregado — um grupo fechado não
         // paga o vizinho, então o placeholder é emitido grupo a grupo.
         for (const g of cursoDesc.gruposOpcao ?? []) {
-          while (faltaNoGrupo(g) > 0 && vagas > 0) {
-            const horas = Math.min(faltaNoGrupo(g), 60);
+          while (faltaNoGrupo(g) > 0 && vagas > 0 && chAula < TETO_CH_SEMESTRE) {
+            const horas = Math.min(faltaNoGrupo(g), 60, TETO_CH_SEMESTRE - chAula);
             escolhidas.push({
               codigo: `PLACEHOLDER_opcoes_${g}_${faltaNoGrupo(g)}`,
               nome: `Optativa de ${matriz.conjuntos[String(g)]?.nome ?? "Opções"} (${horas}h)`,
@@ -1286,6 +1307,7 @@ export function simularFormatura(
             horasPorGrupo.set(g, (horasPorGrupo.get(g) ?? 0) + horas);
             planejado.opcoes += horas;
             vagas--;
+            chAula += horas;
             addedPlaceholder = true;
           }
         }

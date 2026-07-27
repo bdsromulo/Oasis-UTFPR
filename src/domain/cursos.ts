@@ -13,6 +13,16 @@ import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
  * testar número, e passa a servir os dois currículos sem duplicação.
  */
 
+/**
+ * Teto de carga horária que a UTFPR permite matricular num semestre.
+ *
+ * Conta só o que disputa vaga de aula. Ficam de fora estágio, atividades
+ * complementares e TCC — componentes da matriz que o aluno cursa em paralelo às
+ * aulas, sem ocupar horário — e a atividade extensionista, que nem disciplina é.
+ * Um semestre com Estágio 1 (200h) não perde por isso 200h de grade.
+ */
+export const TETO_CH_SEMESTRE = 405;
+
 export interface CategoriaSimples {
   /** identificador estável usado em chaves de UI e agregação */
   id: string;

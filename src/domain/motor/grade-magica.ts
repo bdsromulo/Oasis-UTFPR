@@ -9,6 +9,7 @@ import {
   descricaoDoCurso,
   ehTrilha,
   grupoOpcaoDe,
+  TETO_CH_SEMESTRE,
 } from "../cursos";
 
 export interface OpcoesSugestaoGrade {
@@ -487,10 +488,10 @@ export function gerarSugestaoGrade(
     return count >= curso.trilhasExigidas;
   };
 
-  // 4. Algoritmo Guloso / Backtracking leve para selecionar turmas sem choque e sem exceder horas necessárias (limite máximo de 405h)
+  // 4. Algoritmo Guloso / Backtracking leve para selecionar turmas sem choque e sem exceder horas necessárias (teto de matrícula do semestre)
   for (const item of candidatas) {
     if (opcoes.estrategia === "balanceado" && selecaoFinal.length >= maxDisc) break;
-    if (chTotalAlocada + item.elegivel.disciplina.horas.total > 405) continue;
+    if (chTotalAlocada + item.elegivel.disciplina.horas.total > TETO_CH_SEMESTRE) continue;
 
     const canonicoDoItem = mapaIdentidade.resolver(item.elegivel.disciplina.codigo);
     if (canonicosSelecionados.has(canonicoDoItem)) continue;

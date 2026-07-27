@@ -13,7 +13,7 @@ import {
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { detectarConflitos, itensDaSelecao } from "../src/domain/motor/grade";
 import { BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA } from "../src/domain/dadosCurso";
-import { descricaoDoCurso, ehTrilha } from "../src/domain/cursos";
+import { descricaoDoCurso, ehTrilha, TETO_CH_SEMESTRE } from "../src/domain/cursos";
 import type {
   Matriz,
   OfertaSemestre,
@@ -673,6 +673,31 @@ describe("motor em todos os cursos cobertos", () => {
             expect(s.materias).toBeLessThanOrEqual(s.disciplinas.length);
             // e o que disputa vaga de aula continua respeitando o ritmo
             expect(s.vagasOcupadas).toBeLessThanOrEqual(ritmo);
+          }
+        }
+      });
+
+      it("nenhum semestre passa do teto de carga horária de matrícula", () => {
+        // Regressão: o ritmo limitava a QUANTIDADE de matérias, não o peso delas.
+        // Com ritmo 8 a projeção da BSI chegava a 635h num semestre — 7 matérias
+        // de sala somando 510h que a UTFPR não deixa matricular.
+        //
+        // O teto vale só para o que disputa vaga de aula: estágio, atividades
+        // complementares, TCC e a atividade extensionista acontecem em paralelo
+        // às aulas e não consomem o limite.
+        for (const ritmo of [3, 4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          for (const s of r.semestres) {
+            const chSala = s.disciplinas
+              .filter((d) => d.ocupaVaga)
+              .reduce((a, d) => a + d.horas, 0);
+            expect(
+              chSala,
+              `${curso.rotuloCurto} ritmo ${ritmo} ${s.semestre}: ${chSala}h de sala`,
+            ).toBeLessThanOrEqual(TETO_CH_SEMESTRE);
           }
         }
       });
