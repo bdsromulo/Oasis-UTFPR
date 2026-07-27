@@ -182,8 +182,11 @@ export function IlustracaoFontes() {
       <text x="20" y="238" className={`${TITULO}`}>O seu Histórico Escolar</text>
 
       {/* convergência */}
-      <Seta x1={292} x2={356} y={96} />
-      <Seta x1={292} x2={356} y={224} />
+      <g className="stroke-zinc-400 dark:stroke-zinc-600" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M 292 96 L 324 96 L 324 124 L 350 124" />
+        <path d="M 292 224 L 324 224 L 324 124 L 350 124" />
+        <polyline points="345,119.5 351,124 345,128.5" />
+      </g>
 
       <Caixa x={356} y={76} w={150} h={96} destaque>
         <text x="431" y="118" textAnchor="middle" className={TITULO}>Oásis</text>
