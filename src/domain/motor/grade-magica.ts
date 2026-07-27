@@ -405,8 +405,10 @@ export function gerarSugestaoGrade(
   const disciplinasPontuadas = elegiveis.map((e) => {
     let pts = 0;
     if (e.categoria === "obrigatória") pts += 80; // Prioridade máxima absoluta para obrigatórias de 1º estrato
-    const periodo = e.disciplina.periodo || 9;
-    pts += (10 - periodo) * 12; // Períodos mais iniciais têm mais peso
+    if (e.categoria === "obrigatória" || e.categoria === "2º estrato") {
+      const periodo = e.disciplina.periodo || 9;
+      pts += (10 - periodo) * 12; // Períodos mais iniciais têm mais peso apenas para obrigatórias/2º estrato
+    }
     pts += Math.min(e.disciplina.horas.total, 90) / 5; // Carga horária
 
     if (opcoes.priorizarExtensionistas && e.disciplina.horas.chext > 0) {
