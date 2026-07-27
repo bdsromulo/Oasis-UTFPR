@@ -43,7 +43,7 @@ function converterParaSelecao(
   const ofertadas = new Map(oferta.disciplinas.map((x) => [x.codigo, x]));
 
   for (const d of disciplinasPlanejadas) {
-    if (!d.ocupaVaga || d.codigo === "ELETIVA" || d.codigo === "EXTENSAO" || d.codigo.startsWith("PLACEHOLDER_")) {
+    if (d.codigo === "ELETIVA" || d.codigo === "EXTENSAO" || d.codigo.startsWith("PLACEHOLDER_")) {
       continue;
     }
 

@@ -1044,7 +1044,7 @@ export function simularFormatura(
       let turmaEscolhida: Turma | null = null;
       let ofertaDaDisciplina: DisciplinaOfertada | null = null;
       let violacaoDeDocente: DisciplinaPlanejada["exclusaoIgnorada"];
-      if (consome && referencia.oferta) {
+      if (referencia.oferta) {
         ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
         if (ofertaDaDisciplina && ofertaDaDisciplina.turmas.length > 0) {
           const porPrioridade = [...ofertaDaDisciplina.turmas].sort(
