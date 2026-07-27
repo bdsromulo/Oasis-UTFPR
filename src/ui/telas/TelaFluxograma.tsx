@@ -243,12 +243,16 @@ export function TelaFluxograma(props: {
   return (
     <div className="space-y-4">
       {/* Abas dos dois boards */}
-      <div className={`grid ${curso.gruposOpcao?.length ? "grid-cols-3" : "grid-cols-2"} gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95`}>
+      <div className={`grid ${boardOpc.faixas.length ? "grid-cols-3" : "grid-cols-2"} gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95`}>
         {(
           [
             { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: <IconGraduationCap className="h-4 w-4 shrink-0" />, qtd: boardObr.nos.length },
-            ...(curso.gruposOpcao?.length
-              ? [{ id: "opcoes" as const, rotulo: curso.rotuloOpcoes ?? "Opções do Curso", icone: "◈", qtd: boardOpc.nos.filter((n) => !n.externo).length }]
+            // A aba aparece quando HÁ o que mostrar, e não só quando o curso
+            // tem grupos "Opções de …". O Ciclo de Humanidades vive aqui, e ele
+            // existe em BSI e na 962 — travar no `gruposOpcao` deixava as
+            // disciplinas montadas no board e inalcançáveis na tela.
+            ...(boardOpc.faixas.length
+              ? [{ id: "opcoes" as const, rotulo: curso.rotuloOpcoes ?? "Escolhas do Curso", icone: "◈", qtd: boardOpc.nos.filter((n) => !n.externo).length }]
               : []),
             { id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
           ]

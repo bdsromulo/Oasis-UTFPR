@@ -548,8 +548,15 @@ export function gerarSugestaoGrade(
         }
       }
 
+      // A seleção tem de apontar para o código sob o qual a turma existe NA
+      // OFERTA, e não para o da matriz. `buscarOfertaParaPlanejamento` casa a
+      // disciplina por equivalência, então os dois divergem sempre que a turma
+      // abre sob outro código — em Eng. Comp. 844, EEC21, CSR41, CSR42 e EEF31.
+      // Gravando o código da matriz, `itensDaSelecao` não achava a disciplina e
+      // ela sumia da grade montada: a sugestão devolvia seis matérias e só duas
+      // apareciam. É o mesmo código que a importação do Simulador já usa.
       selecaoFinal.push({
-        codDisciplina: item.elegivel.disciplina.codigo,
+        codDisciplina: item.elegivel.oferta?.codigo ?? item.elegivel.disciplina.codigo,
         codTurma: melhorTurma.codigo,
       });
       canonicosSelecionados.add(canonicoDoItem);
