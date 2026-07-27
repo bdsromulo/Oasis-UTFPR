@@ -1038,14 +1038,24 @@ export function simularFormatura(
       if (cat === "opcoes" && (grupoDaOpcao === null || faltaNoGrupo(grupoDaOpcao) === 0)) continue;
       if (cat !== "obrigatorias" && cat !== "trilhas" && cat !== "opcoes" && falta(cat) === 0) continue;
 
+      // ---- filtro realista para o semestre atual ---------------------------
+      // Para o semestre IMEDIATO (passo 0), sugerir uma matéria que sabidamente
+      // não está sendo ofertada (mesmo que seja uma optativa ou humanidade) gera
+      // frustração na importação. Então, exigimos que a disciplina exista na oferta
+      // do período (mesmo que não tenha horário, como TCC).
+      let ofertaDaDisciplina: DisciplinaOfertada | null = null;
+      if (passo === 0 && !fixadoAqui && referencia.oferta) {
+        ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
+        if (!ofertaDaDisciplina) continue;
+      }
+
       // ---- reserva de turma: a grade do semestre tem de fechar sem choque --
       // A checagem vem ANTES de mexer no estado das trilhas, porque uma
       // disciplina rejeitada aqui continua pendente para o próximo semestre.
       let turmaEscolhida: Turma | null = null;
-      let ofertaDaDisciplina: DisciplinaOfertada | null = null;
       let violacaoDeDocente: DisciplinaPlanejada["exclusaoIgnorada"];
       if (consome && referencia.oferta) {
-        ofertaDaDisciplina = buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
+        ofertaDaDisciplina = ofertaDaDisciplina || buscarOfertaParaPlanejamento(d, referencia.ofertadas, mapa);
         if (ofertaDaDisciplina && ofertaDaDisciplina.turmas.length > 0) {
           const porPrioridade = [...ofertaDaDisciplina.turmas].sort(
             (x, y) =>
