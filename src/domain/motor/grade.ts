@@ -142,15 +142,9 @@ export function aulasSemanais(itens: ItemGrade[]): number {
   return itens.reduce((s, i) => s + horariosUnicos(i.turma).length, 0);
 }
 
-/** relatório em texto para colar na matrícula do Portal do Aluno */
+/** lista concisa no formato do Grade na Hora para colar na matrícula */
 export function relatorioTexto(itens: ItemGrade[]): string {
-  return itens
-    .map(
-      (i) =>
-        `${i.disciplina.codigo} - ${i.disciplina.nome} | Turma ${i.turma.codigo}` +
-        ` | ${horariosUnicos(i.turma).map(rotuloSlot).join(" ")}`,
-    )
-    .join("\n");
+  return itens.map((i) => `${i.disciplina.codigo} — ${i.turma.codigo}`).join("\n");
 }
 
 export function itensDaSelecao(oferta: OfertaSemestre, selecao: SelecaoTurma[]): ItemGrade[] {
