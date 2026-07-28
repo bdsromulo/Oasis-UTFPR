@@ -641,6 +641,31 @@ describe("motor em todos os cursos cobertos", () => {
         }
       });
 
+      it("respeita o teto de matrícula por semestre", () => {
+        // Regressão: o motor limitava só a QUANTIDADE de matérias (o ritmo), e
+        // nada a carga. Com ritmo 8 a BSI chegava a 635h de sala num semestre —
+        // matrícula que a UTFPR não aceita. O teto conta o que disputa vaga de
+        // aula; estágio, TCC, atividades complementares e extensão correm em
+        // paralelo às aulas e ficam de fora.
+        for (const ritmo of [3, 4, 5, 6, 7, 8]) {
+          const r = simularFormatura(null, curso.matriz, ofertasCurso, {
+            ritmo,
+            semestreInicial: "2026-2",
+          });
+          for (const s of r.semestres) {
+            const chSala = s.disciplinas
+              .filter((d) => d.ocupaVaga)
+              .reduce((a, d) => a + d.horas, 0);
+            expect(
+              chSala,
+              `${curso.rotuloCurto} ritmo ${ritmo} ${s.semestre}`,
+            ).toBeLessThanOrEqual(TETO_CH_SEMESTRE);
+            // o campo publicado para a tela tem de contar a mesma coisa
+            expect(s.chAula, `${curso.rotuloCurto} ${s.semestre} chAula`).toBe(chSala);
+          }
+        }
+      });
+
       it("valida o número de trilhas exigido sempre que a projeção fecha", () => {
         for (const ritmo of [4, 5, 6, 7, 8]) {
           const r = simularFormatura(null, curso.matriz, ofertasCurso, {

@@ -10,7 +10,7 @@ import {
   type IdCategoria,
   type Requisito,
 } from "../../domain/motor/simuladorFormatura";
-import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
+import { descricaoDoCurso, ehTrilha, TETO_CH_SEMESTRE } from "../../domain/cursos";
 import { buscarOfertaParaPlanejamento } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { calcularPesoPrioridadeTurma } from "../../domain/motor/grade-magica";
@@ -557,9 +557,20 @@ export function TelaSimuladorFormatura(props: {
                     )}
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
-                      {s.materias} {s.materias === 1 ? "matéria" : "matérias"} · {s.horas}h
+                    <span
+                      className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400"
+                      title={`Carga em sala de aula: é ela que respeita o teto de ${TETO_CH_SEMESTRE}h por semestre. Estágio, TCC, atividades complementares e extensão acontecem em paralelo às aulas e ficam fora da conta.`}
+                    >
+                      {s.materias} {s.materias === 1 ? "matéria" : "matérias"} · {s.chAula}h de sala
                     </span>
+                    {s.horas !== s.chAula && (
+                      <span
+                        className="font-mono text-[10px] font-semibold text-zinc-400"
+                        title="Soma tudo o que o semestre pede, inclusive o que não ocupa vaga de aula"
+                      >
+                        {s.horas}h no total
+                      </span>
+                    )}
                     {s.semestreReferencia &&
                       s.semestreReferencia.replace(".", "-") !== s.semestre.replace(".", "-") && (
                         <span

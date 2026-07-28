@@ -209,7 +209,15 @@ export interface DisciplinaPlanejada {
 export interface SemestreProjetado {
   semestre: string;
   disciplinas: DisciplinaPlanejada[];
+  /** carga total do semestre, incluindo o que não ocupa vaga de aula */
   horas: number;
+  /**
+   * Carga que disputa vaga de aula — é esta que responde ao teto de matrícula
+   * (`TETO_CH_SEMESTRE`). Fica de fora o que o aluno cursa em paralelo às aulas:
+   * estágio, atividades complementares, TCC e a atividade extensionista. Por
+   * isso um semestre pode mostrar 405h de sala e 605h no total.
+   */
+  chAula: number;
   /**
    * Matérias que o semestre pede — é o número que a tela mostra, e ele tem de
    * bater com a lista logo abaixo dele.
@@ -1329,6 +1337,9 @@ export function simularFormatura(
       semestre: semestreAtual,
       disciplinas: escolhidas,
       horas: escolhidas.reduce((a, d) => a + d.horas, 0),
+      // sai da lista final, e não do contador do laço: o semestre importado do
+      // Planejamento não passa por ele e ficaria com 0h de sala na tela
+      chAula: escolhidas.filter((d) => d.ocupaVaga).reduce((a, d) => a + d.horas, 0),
       // o cabeçalho do semestre conta o que está listado nele, e não só o que
       // disputa vaga de aula: estágio e TCC aparecem na lista e são matéria
       materias: escolhidas.filter((d) => ehMateria(d)).length,
