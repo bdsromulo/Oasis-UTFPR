@@ -99,6 +99,15 @@ function CardDisciplinaPossoCursar({
 
   const [expandido, setExpandido] = useState(false);
 
+  // Identidade usada em `selecao`: a mesma que a Grade Mágica já usa
+  // (grade-magica.ts). Precisa ser o código da OFERTA, não o canônico da
+  // matriz — em Eng. Comp. a turma quase sempre abre sob um código
+  // equivalente (ex.: matriz declara CSW42, a turma só existe como ELEW33).
+  // `itensDaSelecao` resolve por código exato contra `oferta.disciplinas`,
+  // que não conhece o código canônico; gravar o canônico em `selecao` faz a
+  // seleção marcar em Posso Cursar mas nunca aparecer na Grade.
+  const codIdentificador = e.oferta?.codigo ?? e.disciplina.codigo;
+
   const { turmasBSI } = useMemo(() => {
     if (!e.oferta || e.oferta.turmas.length === 0) {
       return { turmasBSI: [] };
@@ -106,14 +115,14 @@ function CardDisciplinaPossoCursar({
     const todas = e.oferta.turmas.filter((t) => {
       if (!filtrarConflitos) return true;
       const marcada = selecao.some(
-        (s) => s.codDisciplina === e.disciplina.codigo && s.codTurma === t.codigo,
+        (s) => s.codDisciplina === codIdentificador && s.codTurma === t.codigo,
       );
       if (marcada) return true;
       return !haveriaConflito(itensSelecao, e.oferta!, t);
     });
 
     return { turmasBSI: todas };
-  }, [e.oferta, filtrarConflitos, selecao, itensSelecao, e.disciplina.codigo]);
+  }, [e.oferta, filtrarConflitos, selecao, itensSelecao, codIdentificador]);
 
   return (
     <Card classe="flex flex-col justify-start !p-0 overflow-hidden">
@@ -172,7 +181,7 @@ function CardDisciplinaPossoCursar({
                 <ul className="space-y-2">
                   {turmasBSI.map((t) => {
                     const marcada = selecao.some(
-                      (s) => s.codDisciplina === e.disciplina.codigo && s.codTurma === t.codigo,
+                      (s) => s.codDisciplina === codIdentificador && s.codTurma === t.codigo,
                     );
                     return (
                       <li
@@ -187,7 +196,7 @@ function CardDisciplinaPossoCursar({
                       >
                         <div
                           className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 select-none"
-                          onClick={() => alternarTurma(e.disciplina.codigo, t.codigo)}
+                          onClick={() => alternarTurma(codIdentificador, t.codigo)}
                         >
                           <input
                             type="checkbox"
@@ -292,7 +301,7 @@ function CardDisciplinaPossoCursar({
                             variante={marcada ? "sutil" : "neutro"}
                             onClick={(evt) => {
                               evt.stopPropagation();
-                              alternarTurma(e.disciplina.codigo, t.codigo);
+                              alternarTurma(codIdentificador, t.codigo);
                             }}
                             classe={`!px-2.5 !py-1 text-xs ${marcada ? "!text-red-600 hover:!bg-red-50 dark:hover:!bg-red-950/40" : ""}`}
                           >
@@ -431,7 +440,7 @@ export function TelaPossoCursar(props: {
       }
       // 5. Filtro de conflitos de horário (se ativo e a matéria tem turmas)
       if (filtrarConflitos && e.oferta && e.oferta.turmas.length > 0) {
-        const temMarcada = selecao.some((s) => s.codDisciplina === e.disciplina.codigo);
+        const temMarcada = selecao.some((s) => s.codDisciplina === (e.oferta?.codigo ?? e.disciplina.codigo));
         if (temMarcada) return true;
         const temCompativel = e.oferta.turmas.some((t) => !haveriaConflito(itensSelecao, e.oferta!, t));
         if (!temCompativel) return false;
