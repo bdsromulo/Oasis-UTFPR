@@ -24,7 +24,9 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RF12 — Estados e Modos de Planejamento do Semestre:** Suporte aos dois estados essenciais de uso: a) *Prévia de Matrícula (Oficial)* para o período que antecede e sucede a matrícula com base nos dados reais divulgados; b) *Período Corrido de Semestre (Simulação)* para organização durante o semestre vigente hipotetizando ofertas similares.
 - `[x]` **RF13 — Edição Contínua e Remoção Rápida na Grade (Loop Estilo GNH):** Botão "X" instantâneo revelado no hover de cada disciplina na minigrade lateral, no modal da grade completa e nos blocos da tabela visual de horários para remoção em um único clique sem perda de contexto.
 - `[x]` **RF14 — Gamificação e Simulação de Impacto da Grade no Progresso:** Ao montar a grade do semestre, simular em tempo real o *impulso* que cada disciplina selecionada dá à integralização de cada categoria curricular (Obrigatórias, 2º Estrato, Humanidades, Trilhas, Eletivas, Extensão e Estágio), sobrepondo o cumprido do histórico ao previsto pela grade (`motor/progressoGrade.ts`), tornando visível o avanço que aquele semestre representa.
-- `[ ]` **RF15 — Avaliações da Comunidade por Disciplina:** Permitir que o aluno registre dificuldade (1–3) e comentário nas disciplinas que já **concluiu** (validadas no próprio histórico), autenticado pelo próprio vínculo, redistribuindo a informação agregada aos demais usuários. Depende de decisão de infraestrutura (ver §5).
+- `[ ]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu** (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Cada avaliação é composta por: nota geral (1–5); classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5); **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **tags de comportamento observável** (seleção múltipla); e comentário livre limitado a 1000 caracteres. A submissão só é possível a partir da tela de quem carregou o histórico, e o conjunto agregado é redistribuído publicamente. Ver §6.
+- `[ ]` **RF16 — Convite de Avaliação Pós-Semestre:** Ao acessar a plataforma, o aluno que tiver histórico carregado recebe um convite único por semestre para avaliar as disciplinas cursadas no **último semestre do documento** (derivado de `periodoDocumento`). O convite é dispensável e não bloqueia o uso; o estado de "já respondido" é registrado por semestre, de modo que um novo semestre volta a convidar uma vez.
+- `[ ]` **RF17 — Consulta de Avaliações no Planejamento de Matrícula:** No planejamento de matrícula, o nome do professor associado a uma turma é acionável e abre um painel lateral com as avaliações daquele professor — agregados por classificação, tags mais frequentes e comentários — permitindo decidir a turma com base na experiência da comunidade.
 
 ### Requisitos Não Funcionais (RNF)
 - `[x]` **RNF01 — Privacidade e Local-First:** Todo parseamento de documentos pessoais ocorre no browser via `pdfjs-dist`. Nenhum histórico escolar transita por rede.
@@ -32,7 +34,9 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RNF03 — Integridade e Invariantes de Dados (Erro Alto):** A ingestão de ofertas semestrais e matriz curricular deve passar por auditoria rigorosa via scripts Python (`validate_turmas.py`, `validate_matriz.py`), reprovando qualquer divergência documental com erro explícito (`0 erros`).
 - `[x]` **RNF04 — Design Visual de Alta Fidelidade (Sem Emojis):** Interface limpa, minimalista e acessível com tipografia de produto (`Outfit` + `Plus Jakarta Sans`) e ícones vetoriais SVG, sem dependência de emojis ou fontes genéricas.
 - `[x]` **RNF05 — Responsividade Absoluta:** O layout deve adaptar-se graciosamente a dispositivos móveis, tablets e monitores desktop amplos.
-- `[/]` **RNF06 — Minimização de Dados e Autenticação por Vínculo (Camada de Comunidade):** Qualquer funcionalidade que exija troca com a rede (avaliações da comunidade) deve enviar o **mínimo indispensável** — nunca o RA em claro, notas, CR, nome do aluno ou o PDF do histórico — e ancorar a identidade em uma **prova de vínculo institucional** que iniba criação em massa de identidades (Sybil) e falsificação de RA, em conformidade com a LGPD (consentimento, finalidade e minimização). Ver §5.
+- `[/]` **RNF06 — Minimização de Dados na Camada de Comunidade:** Qualquer funcionalidade que exija troca com a rede (avaliações da comunidade) envia o **mínimo indispensável**. Permanecem **proibidos de trafegar ou ser publicados**: o PDF do histórico, notas, frequências, CR e a lista de disciplinas reprovadas. O **RA** pode ser coletado para deduplicação e rastreio de abuso, mas fica **restrito ao estágio privado** do pipeline e **nunca** é publicado.
+  - **Exceção homologada pelo dono (2026-08-02) — nome do autor:** o **nome completo** do aluno (ou o **nome social completo**, quando houver) **é publicado** junto da avaliação, revogando neste ponto específico a redação anterior deste requisito e da §5.3. Fundamento: avaliação assinada aumenta a responsabilidade de quem escreve e reduz o risco difamatório na camada de professor (§6.7). O ônus correspondente — consentimento explícito e canal de retratação — está no RNF07.
+- `[ ]` **RNF07 — Consentimento, Retratação e Permanência do Versionamento:** Como a avaliação publicada é assinada e versionada em repositório público, o formulário deve apresentar **consentimento explícito e finalidade declarada** antes do envio, deixando claro que o nome ficará público. Deve existir **canal de retratação** que remova a avaliação das publicações seguintes. Limite honesto a comunicar ao usuário: a remoção **não apaga o histórico do Git** — commits anteriores permanecem; o que se garante é a saída das versões futuras. Ver §6.7.
 
 ---
 
@@ -164,7 +168,7 @@ A interface visual adota as **10 Heurísticas de Nielsen** e princípios moderno
 
 ## 5. Arquitetura da Camada de Comunidade (Avaliações Autenticadas)
 
-> **Status:** proposta em avaliação. **Não implementar sem homologação explícita do dono**, pois cruza a regra "Sem backend" do `CLAUDE.md`/RNF02. Esta seção registra o trade-off e a recomendação para essa decisão.
+> **Status (2026-08-02): NÃO é o caminho adotado.** O dono homologou a alternativa sem back-end descrita na **§6**, que mantém a RNF02 intacta. Esta seção permanece como registro da análise: ela documenta *por que* o caminho com back-end foi preterido e qual é o teto de segurança que nenhuma solução client-side ultrapassa (§5.1) — limite que continua valendo para a §6. Se algum dia a autenticação forte de RA virar requisito, é aqui que a discussão recomeça.
 
 ### 5.1 O problema e o teto de segurança
 A ideia é: cada aluno cadastra seu histórico (como já ocorre, client-side) e, em cada disciplina **concluída** — fato que se valida no próprio histórico —, ganha um botão de avaliar (dificuldade 1–3 + comentário), com a review autenticada pelo RA e redistribuída a todos.
@@ -180,6 +184,8 @@ Em vez de tentar provar o RA a partir do PDF, ancore a identidade no **e-mail in
 - O histórico local continua provando *quais* disciplinas o aluno concluiu; o e-mail prova *que ele é um aluno real da UTFPR*. A conjunção das duas dá: "um aluno verificado afirma ter concluído a disciplina X e a avalia".
 
 ### 5.3 Minimização de dados (RNF06) — o que trafega
+
+> **Superada em parte (2026-08-02):** a regra "nunca trafega nome" abaixo foi **revogada para o campo nome** por decisão do dono — a avaliação é assinada com o nome completo público (ver RNF06 e §6.7). O restante da lista (RA em claro, notas, CR, PDF) continua valendo integralmente.
 Ler avaliações é anônimo e não exige nada. **Apenas para contribuir** o aluno se verifica uma vez. Por review, o cliente envia somente:
 `{ codigoDisciplina, dificuldade(1–3), comentario, tokenVinculo }`.
 - **Nunca** trafegam: RA em claro, notas, CR, nome, ou o PDF.
@@ -201,3 +207,196 @@ Tornar o **repositório privado não ajuda** neste problema: a segurança depend
 
 ### 5.7 Conformidade (LGPD)
 Avaliações atreladas a vínculo institucional são tratamento de dado pessoal: exigem **consentimento explícito**, **finalidade declarada** e **minimização** — exatamente o que a arquitetura acima persegue ao não trafegar RA/notas/nome e ao descartar o e-mail após derivar o hash de unicidade.
+
+---
+
+## 6. Pipeline de Avaliações sem Back-end (Arquitetura Homologada)
+
+> **Status (2026-08-02):** caminho **homologado pelo dono**. Preserva a RNF02 — nenhum serviço em runtime, nenhum segredo versionado, custo zero em todos os estágios. Implementa RF15, RF16 e RF17.
+
+### 6.1 Princípio: Git como banco de dados
+
+A avaliação compartilhada exige *alguma* camada comum, mas não exige um servidor. O acordo é: **a coleta é externa e gratuita; a publicação é um artefato versionado no próprio repositório.** O site consome um JSON commitado, exatamente como já consome `data/turmas/<sem>.json`.
+
+Consequência que sustenta a RNF02: **o site nunca fala com o Google em runtime.** Se a planilha cair, for apagada ou a automação falhar, a plataforma continua servindo o último estado bom. A dependência externa existe só no momento da ingestão semanal, offline, e sua falha é silenciosa e reversível.
+
+### 6.2 Os quatro estágios e a fronteira de confiança
+
+```
+[1] Coleta        Formulário externo (Google Forms)        aberto a quem responde
+[2] Bruto         Aba "Respostas" — NÃO publicada          contém RA; só o moderador vê
+──────────────────────── fronteira de confiança ────────────────────────
+[3] Curadoria     Aba "Homologado" — publicada como CSV    só linhas aprovadas, só colunas públicas
+[4] Publicação    Action semanal → data/reviews.json       público e versionado
+```
+
+A fronteira fica **entre [2] e [3]**, não na entrada. É o que permite ser "público e aberto" sem publicar texto não moderado: o que é público é a *saída curada*.
+
+**A fronteira é física, não convencional.** As duas abas vivem na mesma planilha, mas o recurso *Publicar na web* do Google Sheets opera **por aba**: só a `Homologado` recebe URL pública de CSV; a `Respostas` permanece acessível apenas a quem tem a planilha. A `Homologado` é gerada por fórmula (`FILTER`/`QUERY`) que seleciona **apenas as linhas com `aprovado`** e **apenas as colunas publicáveis** — o RA simplesmente não está entre as colunas projetadas. Logo o CSV público é, por construção, incapaz de conter RA ou linha não moderada; não se depende do validador para removê-los.
+
+Erro a evitar: publicar a aba de respostas brutas. Isso exporia todo texto submetido no instante do envio, anulando o portão de moderação e publicando conteúdo potencialmente difamatório sem revisão.
+
+### 6.3 Unidade de avaliação e esquema do registro
+
+A unidade é o par **professor + disciplina + semestre**, e não a disciplina isolada: é isso que permite a consulta por professor da RF17 e reconhece que a mesma matéria muda completamente conforme quem a ministra.
+
+```jsonc
+{
+  "id":            "hash estável da linha (idempotência da regeneração)",
+  "professorId":   "slug do roster curado — ver 6.4; ausente enquanto pendente",
+  "professorTexto": null,           // preenchido só na rota "Professor Não Ofertado"
+  "codigo":        "ICSD20",
+  "semestre":      "2025/2",        // ver 6.6: vem do histórico, não é digitado
+  "situacao":      "aprovado",      // ou "reprovado" — contexto legítimo da opinião
+  "autor":         "Nome Completo",  // ou nome social completo — RNF06
+  "geral":         4,               // 1–5
+  "didatica":      5,               // 1–5
+  "dificuldade":   3,               // 1–5  (1 = fácil, 5 = difícil)
+  "cargaTrabalho": 2,               // 1–5  (1 = pouca, 5 = muita)
+  "avaliacao":     "provas",        // provas | trabalhos | misto
+  "tags":          ["corrige-rapido", "cobra-so-o-ensinado"],
+  "comentario":    "texto livre, ≤ 1000 caracteres"
+}
+```
+
+**Semestre (resposta ao cenário do item 8):** não é campo digitado nem inferido — `DisciplinaCursada` **já carrega `ano` e `semestre`** desde a ingestão do PDF, e a verificação nos históricos reais de referência confirmou **zero ausências** em 32 cursadas por documento, cobrindo de `2023/2` a `2026/1`. O site preenche o campo a partir do histórico e o validador o reconfere contra a oferta. Isso elimina a classe inteira de erro "aluno lembra errado do semestre" e é o que torna a chave `(professor, disciplina, semestre)` confiável.
+
+**Situação:** `aprovado` ou `reprovado` também vêm prontos do parser. Manter essa marca é deliberado — a avaliação de quem reprovou é informação legítima e o leitor merece o contexto.
+
+### 6.4 Identidade do professor — seleção a partir da oferta
+
+**O professor não é lido do PDF. Ele é escolhido pelo aluno, numa lista montada a partir das ofertas oficiais.** Ao abrir a avaliação de uma disciplina concluída, o formulário apresenta os docentes que constam nas ofertas cobertas daquela disciplina; o aluno marca com quem cursou.
+
+Duas razões sustentam a escolha:
+
+1. **Relevância.** A avaliação só ajuda a decidir turma se o par professor + disciplina puder ser reencontrado por quem lê. Docente que não oferta mais aquela matéria não informa decisão.
+2. **Robustez.** O elenco vem de `data/turmas/<sem>.json`, dado oficial já validado pelo pipeline (RNF03), com grafia canônica. Elimina toda a classe de erro da extração textual.
+
+> **Registro da alternativa descartada.** A extração do professor pelo PDF **é tecnicamente viável** — a coluna `Situação/Professores` é padronizada e o pdf.js entrega `"Nome Completo - Titulação"` num único item, dispensando lógica posicional. Foi descartada por desnecessária, não por impossível. O modo de falha medido era truncamento por largura de coluna (2, 8 e 10 nomes cortados conforme a variante de export), benigno mas exigindo reparo por casamento de sufixo. Se algum dia o pré-preenchimento automático virar requisito, é por aqui.
+
+#### Escopo da lista: união das ofertas cobertas
+
+A lista usa a **união de todos os semestres cobertos** em que a disciplina aparece — não apenas o mais recente. Coleta ampla, filtragem na exibição: assim nada se perde quando um docente volta a ofertar depois de um semestre fora.
+
+Medição nos históricos de referência sustenta a decisão: **127 de 128 cursadas** têm elenco disponível, porque as disciplinas se repetem entre semestres — quem cursou em 2024/1 encontra a matéria ofertada de novo em 2026/x.
+
+#### O elenco não cobre todo mundo — e isso é caminho principal, não borda
+
+A pergunta decisiva não é se a *disciplina* tem elenco, e sim se o *professor com quem a pessoa cursou* está nele. Cruzando os professores reais de cada histórico contra o elenco das ofertas cobertas:
+
+| Histórico | professores no histórico | ausentes do elenco |
+| :--- | ---: | ---: |
+| Aluna A (3 exports) | 25 / 21 / 22 | 2 / 1 / 1 |
+| Aluna B (mais adiantada) | 36 | **11 (31%)** |
+
+Média ~14%, chegando a **31% para quem está mais adiantado** — semestres antigos e disciplinas de humanidades têm rodízio maior de docente. E é um **piso**: a medição casa no nível de conjunto, enquanto na prática o aluno precisa do professor listado *naquela disciplina específica*.
+
+Portanto o escape é rota comum, e não pode ser beco sem saída: descartá-lo jogaria fora justamente as avaliações dos veteranos, as mais informativas.
+
+#### "Professor Não Ofertado" — captura em texto livre + moderação
+
+Quando o docente não estiver na lista, o aluno aciona **Professor Não Ofertado**, que abre um diálogo:
+
+- Explica que a seleção significa que aquele professor **não consta na oferta atual nem na mais recente** daquela disciplina;
+- Pede **confirmação** de que é esse o caso;
+- Oferece contato pela constante `EMAIL_CONTATO` (`src/ui/telas/Contato.tsx`) caso não seja — nunca com o endereço repetido em literal;
+- **Captura o nome do professor em texto livre.**
+
+A avaliação é **aceita e retida**, marcada como pendente de roster. Na curadoria semanal o moderador confere o nome e o acrescenta ao **roster curado de docentes** em `data/`; a partir daí a avaliação passa a ser publicável e aquele professor entra na lista de seleção das próximas.
+
+Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimentado exatamente pelos casos que faltavam. A taxa de escape cai sozinha conforme a plataforma é usada.
+
+#### Identificador
+
+`professorId` é um **slug normalizado** (minúsculas, sem acento, sem titulação), derivado do roster curado, com **mapa de apelidos** para variações de grafia entre fontes — o mesmo padrão que `motor/identidade.ts` já aplica a códigos de disciplina equivalentes. Enquanto pendente de moderação, a avaliação carrega o texto livre em vez do slug.
+
+### 6.5 Taxonomia de tags — critério de admissão
+
+**Regra:** toda tag precisa ser explicável por **comportamento observável**. Tags ancoradas em personalidade ("gente boa") são inadmissíveis: não são verificáveis, não ajudam a decidir turma e são exatamente a superfície de risco difamatório que a TASK-08 isola. Quando a intenção for elogiar postura, traduza para conduta observável.
+
+| Tag | Comportamento observável que a justifica |
+| :--- | :--- |
+| `chamada-rigorosa` | Faz chamada com regularidade e aplica a reprovação por falta |
+| `chamada-flexivel` | Não faz chamada sempre, ou aprova apesar de volume alto de faltas |
+| `acessivel` | Mantém canal aberto e responde em prazo razoável fora de aula |
+| `pouco-acessivel` | Comunicação difícil, demora ou não responde fora de aula |
+| `trata-com-respeito` | Não expõe nem constrange aluno em público *(substitui "gente boa")* |
+| `aberto-a-rever-nota` | Aceita e analisa pedido de revisão de correção |
+| `cobra-so-o-ensinado` | A prova não traz assunto fora do que foi dado em aula e lista |
+| `cobra-alem-do-ensinado` | A prova traz assunto não coberto em aula nem em lista |
+| `slides-bastam` | O material publicado permite estudar sem assistir à aula |
+| `corrige-rapido` | A nota sai antes da avaliação seguinte |
+| `corrige-devagar` | A nota sai perto do fim do semestre |
+| `prazos-rigidos` | Não aceita entrega fora do prazo |
+| `aceita-atraso` | Há política explícita de entrega atrasada |
+| `da-revisao-antes-da-prova` | Existe aula de revisão antes da avaliação |
+| `oferece-substitutiva` | Existe segunda chance formal de avaliação |
+| `trabalho-em-grupo-pesado` | Parcela relevante da nota depende de trabalho em grupo |
+| `aula-pratica` | O tempo de aula é majoritariamente mão na massa |
+
+### 6.6 Submissão restrita à plataforma e ingestão semanal
+
+**Origem restrita (RF15).** O botão *Avaliar* só existe na tela de quem carregou o histórico, e só nas disciplinas concluídas.
+
+**A seleção do professor acontece no site, não no formulário.** Restrição prática: as opções de um Google Form são estáticas e não podem variar por disciplina. Logo é o site — que já tem as ofertas carregadas — quem renderiza a lista da §6.4, e o resultado da escolha viaja como campo **pré-preenchido** na URL do formulário, junto de `codigo`, `semestre`, `situacao` e `turma`. Na rota *Professor Não Ofertado*, o pré-preenchido vai vazio e o aluno digita o nome no campo de texto livre.
+
+São todos campos que a pessoa não teria como preencher de fora com valores coerentes.
+
+Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. A restrição real não é o transporte, é o **validador na fronteira**, que rejeita a linha cujo `(código, turma, semestre)` não fecha com a oferta oficial. É defesa por validação, não por prevenção.
+
+**Regeneração total, nunca append.** A automação semanal reconstrói `data/reviews.json` **inteiro** a partir das linhas aprovadas. Com `id` estável por linha, o JSON é função pura da planilha: rodar duas vezes produz o mesmo resultado, e desaprovar uma linha a remove da próxima publicação. É a mesma disciplina dos parsers de `tools/`.
+
+**Validador (RNF03, `0 erros`).** Segue o padrão de `validate_turmas.py`:
+- `codigo` existe na matriz ou na oferta do semestre declarado;
+- `(código, turma, semestre)` coerente com a oferta oficial, quando ela existe;
+- **professor:** ou `professorId` presente **e existente no roster curado**, ou `professorTexto` preenchido — nunca os dois, nunca nenhum. Linha com `professorTexto` fica **retida** (não publicada) até a moderação promovê-la ao roster;
+- notas dentro de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
+- comentário dentro do limite de 1000 caracteres;
+- **guarda de PII por regex** no texto livre — RA de 7 dígitos, e-mail e telefone reprovam a linha, impedindo vazamento acidental num campo aberto.
+
+**Limiar de exibição.** Agregado com N baixo mente: uma única avaliação vira "100%". Abaixo de um N mínimo, exibe-se o comentário mas **não** a estatística agregada. O valor exato é calibração de produto; a regra é estrutural.
+
+### 6.7 Governança: consentimento, moderação e retratação
+
+- **Consentimento (RNF07):** o formulário declara, antes do envio, que **o nome completo ficará público** e versionado, com a finalidade declarada de orientar a escolha de turmas.
+- **Moderação semanal:** na ausência de verificação institucional, o moderador humano **é** a camada anti-abuso — ele substitui o anti-Sybil da §5.4. Rejeita ataque pessoal, conteúdo não verificável e PII de terceiros.
+- **Camadas segregadas (TASK-08):** avaliação de *disciplina* e avaliação de *professor* permanecem streams distintos no mesmo pipeline, discriminados no registro, para que a de professor possa ter moderação mais rígida sem travar a outra.
+- **Retratação:** desaprovar a linha na planilha remove a avaliação das publicações seguintes. **O histórico do Git não é reescrito** — isso é comunicado ao usuário no consentimento, não escondido.
+
+### 6.8 Funcionamento diário
+
+| Quando | Quem | O quê |
+| :--- | :--- | :--- |
+| Ao acessar após novo semestre | Aluno | Recebe **uma vez por semestre** (RF16) o convite para avaliar as disciplinas de `periodoDocumento`; o estado fica gravado por semestre, então o semestre seguinte convida de novo |
+| A qualquer momento | Aluno | *Avaliar* disponível em toda disciplina concluída, na tela de progresso |
+| Ao montar a grade | Aluno | Clica no professor da turma e abre o painel lateral com o agregado daquele docente (RF17) |
+| 1× por semana | Moderador | Percorre as linhas novas na planilha privada e marca `aprovado` |
+| 1× por semana, automático | GitHub Actions | Baixa o CSV, valida, regenera `data/reviews.json`, commita; o deploy existente publica |
+| Sempre | Site | Lê o JSON versionado — sem rede, sem chave, sem custo |
+
+### 6.9 Controle de abuso por volume — o que é e o que não é possível
+
+**Bloqueio por IP não é implementável nesta arquitetura, e o motivo é anterior ao esforço: o dado não existe.** Duas razões independentes, ambas bloqueantes:
+
+1. **Não há servidor nosso no caminho.** O site é estático e nunca recebe a submissão — ela vai direto do navegador do aluno para o formulário externo. Limitar por IP exige um ponto que veja a requisição e guarde estado entre requisições; a RNF02 exclui exatamente isso.
+2. **O formulário não registra o IP do respondente.** Mesmo com um servidor nosso do lado de fora, o IP não é exposto ao dono do formulário. Não há o que ler.
+
+O que **é** possível sem back-end, em camadas:
+
+| Camada | Mecanismo | Alcance real |
+| :--- | :--- | :--- |
+| Identidade | Exigir login Google no formulário (**sem** limitar a 1 resposta, que quebraria múltiplas avaliações) | Amarra cada envio a uma conta e dá chave de deduplicação; criar contas em massa passa a ter custo |
+| Vazão | Gatilho `onFormSubmit` em **Google Apps Script** (gratuito, sem infra a manter) | Rejeita ou marca envios acima de N por conta por janela de tempo — throttle **por identidade**, não por IP |
+| Publicação | Portão de moderação semanal (§6.2) | Uma enxurrada gera muitas linhas **não aprovadas**: o custo é tempo do moderador, não conteúdo público |
+
+Ou seja: o dano de um flood é **absorvido** pela fronteira de confiança, não evitado na origem. Nada não moderado chega ao público, por construção.
+
+**Se o bloqueio por IP virar requisito firme**, é o gatilho para reabrir a §5: um *edge worker* (Cloudflare Workers + Turnstile) faz rate limiting por IP nativamente e cabe em faixa gratuita — mas isso reintroduz um serviço em runtime. A troca é precisa: preserva o **custo zero**, abandona o **back-end zero**.
+
+### 6.10 Limites honestos desta arquitetura
+
+1. **Não autentica RA.** O PDF do histórico não tem assinatura verificável por terceiros (§5.1). O RA é autodeclarado: encarece a fraude e serve à moderação, não a impede.
+2. **Anti-Sybil é humano.** Sem verificação institucional, a defesa contra enxurrada de avaliações falsas é a revisão semanal. Escala até certo volume; acima dele, a §5 volta à mesa.
+   - **Sem rate limiting por IP** (§6.9): o formulário não expõe IP e não há servidor nosso no caminho. O que existe é throttle por identidade e absorção do flood na moderação.
+3. **Latência de uma semana.** Por desenho — é o preço do portão de moderação e do custo zero.
+4. **Publicação é permanente no Git.** Mitigada por consentimento explícito, não eliminável sem reescrever histórico.

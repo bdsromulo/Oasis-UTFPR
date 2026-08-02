@@ -171,13 +171,42 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 - **TASK-08 — Seção de Feedbacks, Acervo e Documentações de Professores:**
   - Dentro da página própria da disciplina/turma, abrir espaço (via repositório auxiliar ou marcações locais) para agregar documentações antigas, ementas detalhadas e feedbacks construtivos da vivência dos estudantes.
-  - **Governança:** avaliações direcionadas a professores são camada distinta e mais sensível (risco de difamação/LGPD) da avaliação de dificuldade da disciplina descrita na TASK-13 — exigem moderação reforçada e devem ser mantidas separadas.
+  - **Governança:** avaliações direcionadas a professores são camada distinta e mais sensível (risco de difamação/LGPD) da avaliação da disciplina descrita na TASK-13 — exigem moderação reforçada e devem ser mantidas separadas. Na arquitetura homologada (`Estrategia.md` §6.7), as duas camadas convivem no **mesmo pipeline** mas em **streams discriminados no registro**, para que a de professor receba moderação mais rígida sem travar a outra. O critério de admissão de tags (§6.5) — só comportamento observável, nunca traço de personalidade — é a principal salvaguarda contra conteúdo difamatório.
 
-- **TASK-13 — Sistema de Avaliações da Comunidade por Disciplina (Dificuldade + Comentário):**
-  - Em cada disciplina já **concluída** pelo aluno (validada no próprio histórico local), expor um botão *Avaliar*: nota de **dificuldade de 1 a 3 estrelas** e comentário textual opcional. A informação agregada (dificuldade média + comentários) é redistribuída a todos os usuários e exibida na página da disciplina (TASK-07).
-  - **Autenticação por vínculo:** cada review é atrelada ao RA do aluno, autenticado pela submissão do próprio histórico + prova de vínculo institucional, com no máximo **uma avaliação por (aluno, disciplina)** (upsert idempotente), inibindo spam e Sybil.
-  - **Decisão de infraestrutura pendente (viola RNF02 — "Sem backend" até decisão explícita do dono):** o compartilhamento de reviews entre usuários exige *alguma* camada compartilhada. Ver seção dedicada em `Estrategia.md` (§5 — Arquitetura da Camada de Comunidade) com o trade-off de privacidade/segurança e a recomendação de backend gerenciado mínimo (BaaS) + verificação por e-mail institucional. Nenhuma linha de backend é escrita antes da homologação do dono.
-  - **Minimização de dados (RNF06):** nunca enviar à rede o RA em claro, notas, CR, nome ou o PDF; enviar apenas o mínimo indispensável (código da disciplina, dificuldade, comentário e um token de vínculo derivado).
+- **TASK-13 — Sistema de Avaliações da Comunidade (Professor + Disciplina):**
+  - **Status da decisão (2026-08-02):** infraestrutura **homologada** — pipeline sem back-end descrito em `Estrategia.md` §6. A alternativa com BaaS (§5) foi **preterida**; a RNF02 permanece intacta. Implementa RF15.
+  - **Chave da avaliação:** `(professorId, código da disciplina, semestre cursado)` — não a disciplina isolada. A mesma matéria muda conforme quem ministra, e é essa chave que sustenta a consulta por professor da TASK-27.
+  - **Composição (5 estrelas):** nota geral; classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho**; **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **tags de comportamento observável** (vocabulário fechado, `Estrategia.md` §6.5); comentário livre de até **1000 caracteres**.
+  - **Origem restrita:** o botão *Avaliar* só existe na tela de quem carregou o histórico e apenas em disciplinas **concluídas**. O site monta a URL pré-preenchida do formulário com código, semestre, situação, turma e professor. O bloqueio efetivo contra submissão forjada é o **validador na fronteira**, não o transporte.
+  - **Campos vindos prontos do parser (sem trabalho novo):** `ano`/`semestre` e `situacao` (aprovado/reprovado) já existem em `DisciplinaCursada` — verificado em 4 históricos reais, 0 ausências em 32 cursadas por documento.
+  - **Dados publicados (RNF06 + RNF07):** o **nome completo** do autor (ou **nome social completo**) **é público**, por decisão do dono de 2026-08-02, que revoga neste ponto a cláusula de minimização anterior. Permanecem privados ou proibidos: RA, notas, frequência, CR e o PDF. Exige consentimento explícito e canal de retratação.
+  - **Limite honesto:** não autentica RA (o PDF não tem assinatura verificável). O anti-abuso é a moderação humana semanal, não a verificação institucional.
+
+- **TASK-25 — Pipeline de Ingestão Semanal de Avaliações (Git como Banco):**
+  - Formulário externo → planilha **privada** de respostas → coluna `aprovado` revisada semanalmente pelo moderador → GitHub Action agendado que baixa o CSV, valida e **regenera** `data/reviews.json` por inteiro.
+  - **Regeneração total, nunca append:** com `id` estável por linha, o JSON é função pura das linhas aprovadas — rodar duas vezes dá o mesmo resultado, e desaprovar uma linha a remove da publicação seguinte.
+  - **Validador no padrão `validate_turmas.py` (`0 erros`):** código existe na matriz/oferta; `(código, turma, semestre)` coerente com a oferta oficial; notas em 1–5; enum de sistema avaliativo; tags no vocabulário fechado; limite de caracteres; e **guarda de PII por regex** (RA, e-mail, telefone) reprovando a linha.
+  - **Duas abas, fronteira física:** a aba `Respostas` (com RA) **não** é publicada; uma aba `Homologado`, gerada por `FILTER`/`QUERY`, projeta **só as linhas aprovadas e só as colunas públicas** e é essa que recebe a URL de CSV. O RA não está entre as colunas projetadas — o CSV público é incapaz de contê-lo por construção, sem depender do validador.
+  - **Custo zero e sem segredo no repo:** o CSV é lido sem chave de API. O site **nunca** consulta o Google em runtime — se a automação falhar, a plataforma segue servindo o último JSON bom.
+  - **Anti-abuso (`Estrategia.md` §6.9):** **rate limiting por IP não é implementável** — o formulário não expõe IP do respondente e não há servidor próprio no caminho. O disponível é login obrigatório (chave de dedupe), throttle por identidade via gatilho Apps Script, e a absorção do flood pelo portão de moderação. Exigir bloqueio por IP é o gatilho para reabrir a §5.
+
+- **TASK-26 — Convite de Avaliação Pós-Semestre (Pop-up):**
+  - Implementa RF16. Ao acessar com histórico carregado, convidar **uma vez por semestre** para avaliar as disciplinas de `periodoDocumento`.
+  - O estado de "já respondido" é gravado **por semestre** (ex.: `promptRespondido:2026/1`), não global — senão quem reenviar o histórico no semestre seguinte nunca mais seria convidado.
+  - Dispensável e não bloqueante.
+
+- **TASK-27 — Painel Lateral de Avaliações por Professor no Planejamento de Matrícula:**
+  - Implementa RF17. Tornar acionável o nome do professor associado à turma, abrindo painel lateral com agregados por classificação, tags mais frequentes e comentários daquele docente.
+  - **Limiar de exibição:** abaixo de um N mínimo, mostrar comentários mas **não** a estatística agregada — com N baixo, uma única avaliação vira "100%".
+
+- **TASK-28 — Seletor de Professor e Roster Curado (`professorId`):**
+  - Pré-requisito de TASK-13 e TASK-27. Detalhamento em `Estrategia.md` §6.4.
+  - **O professor não é lido do PDF — é selecionado pelo aluno**, numa lista montada a partir da **união das ofertas cobertas** daquela disciplina (`data/turmas/<sem>.json`, dado oficial já validado). Coleta ampla, filtragem na exibição.
+  - **A seleção acontece no site, não no formulário:** opções de Google Form são estáticas e não variam por disciplina. O site renderiza a lista e envia a escolha como campo pré-preenchido na URL.
+  - **Rota "Professor Não Ofertado":** diálogo que explica o significado, pede confirmação, oferece contato via a constante `EMAIL_CONTATO` de `src/ui/telas/Contato.tsx` (**nunca** endereço repetido em literal) e **captura o nome em texto livre**. A avaliação é aceita e **retida**; a moderação semanal promove o docente ao **roster curado** em `data/` e a avaliação passa a ser publicável.
+  - **Dimensionamento medido:** 127 de 128 cursadas dos históricos de referência têm elenco disponível, mas **~14% dos professores reais não constam no elenco** — chegando a **31% na aluna mais adiantada**. O escape é rota comum, não borda; por isso não pode descartar a avaliação. O roster cresce com o uso e a taxa cai sozinha.
+  - Slug normalizado (minúsculas, sem acento, sem titulação) + mapa de apelidos, no mesmo padrão que `motor/identidade.ts` já usa para códigos equivalentes.
+  - **Alternativa descartada (registro):** extrair o professor do PDF é viável — a coluna `Situação/Professores` é padronizada e o pdf.js entrega `"Nome - Titulação"` num único item, sem precisar de lógica posicional. Descartada por desnecessária, não por impossível; o modo de falha era truncamento por largura de coluna (2, 8 e 10 nomes cortados conforme a variante de export). Retomar por aqui se o pré-preenchimento automático virar requisito.
 
 - **TASK-09 — Catálogo Colaborativo de Eletivas e Matérias Externas:**
   - Mapear histórico de alunos fundadores (Yago, Rômulo, Namie) e identificar disciplinas cursadas em outros cursos da UTFPR que foram validadas como Eletivas ou Extensão para BSI, recomendando-as para futuros estudantes.
