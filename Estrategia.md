@@ -223,7 +223,7 @@ Consequência que sustenta a RNF02: **o site nunca fala com o Google em runtime.
 ### 6.2 Os quatro estágios e a fronteira de confiança
 
 ```
-[1] Coleta        Formulário externo (Google Forms)        aberto a quem responde
+[1] Coleta        Formulário NATIVO no site → Apps Script  só na tela de quem tem histórico
 [2] Bruto         Aba "Respostas" — NÃO publicada          contém RA; só o moderador vê
 ──────────────────────── fronteira de confiança ────────────────────────
 [3] Curadoria     Aba "Homologado" — publicada como CSV    só linhas aprovadas, só colunas públicas
@@ -340,9 +340,18 @@ Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimen
 
 **Origem restrita (RF15).** O botão *Avaliar* só existe na tela de quem carregou o histórico, e só nas disciplinas concluídas.
 
-**A seleção do professor acontece no site, não no formulário.** Restrição prática: as opções de um Google Form são estáticas e não podem variar por disciplina. Logo é o site — que já tem as ofertas carregadas — quem renderiza a lista da §6.4, e o resultado da escolha viaja como campo **pré-preenchido** na URL do formulário, junto de `codigo`, `semestre`, `situacao` e `turma`. Na rota *Professor Não Ofertado*, o pré-preenchido vai vazio e o aluno digita o nome no campo de texto livre.
+**O formulário é nativo do site.** O aluno não sai da plataforma: a mesma tela que conhece o histórico monta o seletor de professor da §6.4, pré-preenche `codigo`, `semestre`, `situacao` e `turma`, apresenta o consentimento e o diálogo de *Professor Não Ofertado*, e valida antes de enviar.
 
-São todos campos que a pessoa não teria como preencher de fora com valores coerentes.
+Isso só é possível porque a coleta deixou de depender de um formulário de terceiro com campos fixos: uma lista de professores que muda por disciplina não cabe num Google Form, cujas opções são estáticas.
+
+**O envio vai para um Apps Script publicado como Web App**, vinculado à planilha (`tools/apps-script/recebe-review.gs`). Ele é gratuito, hospedado pelo Google e sem infraestrutura a manter — mesma categoria de dependência que o formulário externo teria —, mas com duas vantagens decisivas:
+
+- **Resposta real de sucesso ou erro.** Um POST direto ao endpoint do Google Forms é *fire-and-forget*: o CORS impede a leitura da resposta e o aluno nunca sabe se o envio valeu.
+- **Validação antes de gravar.** O script rejeita nota fora de 1–5, tag fora do vocabulário, comentário acima do limite, ausência de consentimento, as duas rotas de professor preenchidas ao mesmo tempo, e aplica a guarda de PII e o freio de vazão da §6.9. É uma camada a mais **antes** da fronteira de confiança, não no lugar dela.
+
+*Detalhe de implementação que quebra silenciosamente se ignorado:* o site envia `Content-Type: text/plain` com corpo JSON. Com `application/json` o navegador dispara um preflight `OPTIONS` que o Apps Script não responde, e a requisição falha inteira.
+
+**Limite honesto:** a URL do endpoint é pública e aceita POST de quem a descobrir — exatamente como aconteceria com um formulário externo. A defesa real continua sendo o validador da fronteira (§6.6) somada à moderação; o script apenas encarece o abuso.
 
 Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. A restrição real não é o transporte, é o **validador na fronteira**, que rejeita a linha cujo `(código, turma, semestre)` não fecha com a oferta oficial. É defesa por validação, não por prevenção.
 
