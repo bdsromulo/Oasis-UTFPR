@@ -6,9 +6,9 @@ import { construirRoster } from "../src/domain/reviews/professores";
 import { CURSOS } from "../src/domain/dadosCurso";
 import { LIMITE_COMENTARIO } from "../src/domain/reviews/tipos";
 
-// um docente e uma disciplina que existem de verdade nas ofertas versionadas
+// uma unidade docente e uma disciplina que existem de verdade nas ofertas
 const roster = construirRoster(CURSOS);
-const DOCENTE = roster.docentes.find((d) => d.disciplinas.length > 0)!;
+const DOCENTE = roster.unidades.find((u) => u.disciplinas.length > 0)!;
 const CODIGO = DOCENTE.disciplinas[0];
 
 const CABECALHO = [

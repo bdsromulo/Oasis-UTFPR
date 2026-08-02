@@ -2,7 +2,13 @@
 // os docentes fictícios vêm de ofertas montadas no próprio teste, e o acervo real
 // (data/reviews.json) só é conferido quanto ao formato.
 import { describe, it, expect } from "vitest";
-import { construirRoster, docentesDaTurma, slugProfessor } from "../src/domain/reviews/professores";
+import {
+  construirRoster,
+  docentesDaTurma,
+  idDaUnidade,
+  slugProfessor,
+  unidadeInclui,
+} from "../src/domain/reviews/professores";
 import { agregar, criarConsulta, publicaveis, LIMIAR_ESTATISTICA } from "../src/domain/reviews/acervo";
 import { TAGS, DESCRICAO_TAG, type Review } from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
@@ -102,29 +108,71 @@ describe("slug de professor", () => {
   });
 });
 
+describe("unidade docente: quem divide a turma é avaliado junto", () => {
+  const curso = cursoFicticio("curso-dupla", [
+    { codigo: "ICSD20", turmas: [turma({ professores_raw: "Fulano De Tal, Sicrano Da Silva" })] },
+  ]);
+  const roster = construirRoster([curso]);
+
+  it("a dupla vira UMA opção, não duas", () => {
+    const elenco = roster.elencoDaDisciplina("ICSD20");
+    expect(elenco.length).toBe(1);
+    expect(elenco[0].nomes).toEqual(["Fulano De Tal", "Sicrano Da Silva"]);
+  });
+
+  it("é exibida como \"X / Y\"", () => {
+    expect(roster.elencoDaDisciplina("ICSD20")[0].nome).toBe("Fulano De Tal / Sicrano Da Silva");
+  });
+
+  it("o id junta os slugs em ordem estável", () => {
+    expect(idDaUnidade(["Fulano De Tal", "Sicrano Da Silva"])).toBe("fulano-de-tal+sicrano-da-silva");
+    // a fonte lista os nomes na ordem que quiser: sem ordenar, a mesma dupla
+    // geraria ids diferentes por semestre e fatiaria o acervo da turma em dois
+    expect(idDaUnidade(["Sicrano Da Silva", "Fulano De Tal"])).toBe(idDaUnidade(["Fulano De Tal", "Sicrano Da Silva"]));
+  });
+
+  it("nome repetido na fonte não duplica o id", () => {
+    expect(idDaUnidade(["Fulano De Tal", "FULANO DE TAL"])).toBe("fulano-de-tal");
+  });
+
+  it("a unidade é localizável por qualquer um dos docentes", () => {
+    const id = "fulano-de-tal+sicrano-da-silva";
+    expect(unidadeInclui(id, "fulano-de-tal")).toBe(true);
+    expect(unidadeInclui(id, "sicrano-da-silva")).toBe(true);
+    expect(unidadeInclui(id, "beltrano-souza")).toBe(false);
+    expect(roster.unidadesCom("sicrano-da-silva").map((u) => u.id)).toEqual([id]);
+  });
+
+  it("solo e dupla do mesmo docente são unidades distintas", () => {
+    // a experiência de aula é outra: não podem cair na mesma média
+    const c = cursoFicticio("curso-misto", [
+      { codigo: "ICSD20", turmas: [turma({ professores_raw: "Fulano De Tal" })] },
+      { codigo: "ICSF13", turmas: [turma({ professores_raw: "Fulano De Tal, Sicrano Da Silva" })] },
+    ]);
+    const r = construirRoster([c]);
+    expect(r.unidadesCom("fulano-de-tal").map((u) => u.id).sort()).toEqual([
+      "fulano-de-tal",
+      "fulano-de-tal+sicrano-da-silva",
+    ]);
+  });
+});
+
 describe("roster global entre cursos", () => {
-  // o mesmo docente dá a mesma disciplina em dois cursos: precisa ser UMA entrada
+  // a mesma unidade dá a mesma disciplina em dois cursos: precisa ser UMA entrada
   const cursoA = cursoFicticio("curso-a", [
     { codigo: "ICSD20", turmas: [turma({ professores_raw: "Fulano De Tal" })] },
   ]);
   const cursoB = cursoFicticio("curso-b", [
-    { codigo: "ICSD20", turmas: [turma({ codigo: "S99", professores_raw: "Fulano De Tal, Sicrano Da Silva" })] },
+    { codigo: "ICSD20", turmas: [turma({ codigo: "S99", professores_raw: "Fulano De Tal" })] },
     { codigo: "CSF13", turmas: [turma({ professores_raw: "Beltrano Souza" })] },
   ]);
   const roster = construirRoster([cursoA, cursoB]);
 
-  it("o docente compartilhado aparece uma única vez", () => {
-    expect(roster.docentes.filter((d) => d.id === "fulano-de-tal").length).toBe(1);
+  it("a unidade compartilhada aparece uma única vez", () => {
+    expect(roster.unidades.filter((u) => u.id === "fulano-de-tal").length).toBe(1);
   });
 
-  it("o elenco da disciplina une os docentes dos dois cursos", () => {
-    expect(roster.elencoDaDisciplina("ICSD20").map((d) => d.id).sort()).toEqual([
-      "fulano-de-tal",
-      "sicrano-da-silva",
-    ]);
-  });
-
-  it("registra todas as disciplinas em que o docente aparece", () => {
+  it("registra todas as disciplinas em que a unidade aparece", () => {
     expect(roster.porId("fulano-de-tal")?.disciplinas).toEqual(["ICSD20"]);
     expect(roster.porId("beltrano-souza")?.disciplinas).toEqual(["CSF13"]);
   });
@@ -140,20 +188,26 @@ describe("roster sobre as ofertas reais", () => {
 
   it("o elenco global é maior que o de um curso só", () => {
     // é o que derruba a falha de seleção de 17% para 11% (§6.4)
-    expect(rosterGlobal.docentes.length).toBeGreaterThan(rosterBSI.docentes.length);
+    expect(rosterGlobal.unidades.length).toBeGreaterThan(rosterBSI.unidades.length);
   });
 
-  it("docentes reais têm nome e slug não vazios", () => {
-    for (const d of rosterGlobal.docentes) {
-      expect(d.nome.trim(), `docente sem nome: ${d.id}`).not.toBe("");
-      expect(d.id, `docente sem slug: ${d.nome}`).toMatch(/^[a-z0-9-]+$/);
+  it("unidades reais têm nome e id bem formados", () => {
+    for (const u of rosterGlobal.unidades) {
+      expect(u.nome.trim(), `unidade sem nome: ${u.id}`).not.toBe("");
+      expect(u.id, `id malformado: ${u.nome}`).toMatch(/^[a-z0-9-]+(\+[a-z0-9-]+)*$/);
+      expect(u.nomes.length, `id e nomes divergem: ${u.id}`).toBe(u.id.split("+").length);
     }
+  });
+
+  it("as ofertas reais têm turmas divididas entre docentes", () => {
+    // se isto zerar, a regra da dupla deixou de ter caso real e vale reavaliar
+    expect(rosterGlobal.unidades.filter((u) => u.nomes.length > 1).length).toBeGreaterThan(0);
   });
 
   it("disciplina compartilhada entre cursos tem elenco em ambos", () => {
     // ICSHX0 é ofertada com prioridade para Sist. de Informação e Eng. de Computação
     expect(rosterGlobal.elencoDaDisciplina("ICSHX0").length).toBeGreaterThan(0);
-    expect(construirRoster([ENG_COMP]).docentes.length).toBeGreaterThan(0);
+    expect(construirRoster([ENG_COMP]).unidades.length).toBeGreaterThan(0);
   });
 });
 

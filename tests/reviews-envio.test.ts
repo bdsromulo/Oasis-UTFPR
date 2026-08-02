@@ -92,7 +92,7 @@ describe("recorte por curso", () => {
       ).map((c) => c.id),
     );
     expect(cursosNoRoster.size).toBeGreaterThan(1);
-    expect(roster.docentes.length).toBeGreaterThan(construirRoster([BSI]).docentes.length);
+    expect(roster.unidades.length).toBeGreaterThan(construirRoster([BSI]).unidades.length);
   });
 });
 

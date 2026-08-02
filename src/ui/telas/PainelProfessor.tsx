@@ -5,7 +5,7 @@
 import { useEffect, useMemo } from "react";
 import { Badge } from "../componentes";
 import { criarConsulta, agregar, LIMIAR_ESTATISTICA } from "../../domain/reviews/acervo";
-import { construirRoster, slugProfessor } from "../../domain/reviews/professores";
+import { construirRoster, idDaUnidade, slugProfessor } from "../../domain/reviews/professores";
 import { DESCRICAO_TAG, type AgregadoReviews, type Review } from "../../domain/reviews/tipos";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { CURSOS } from "../../domain/dadosCurso";
@@ -13,16 +13,14 @@ import type { Matriz } from "../../domain/tipos";
 import acervo from "../../../data/reviews.json";
 
 export interface AlvoPainelProfessor {
-  /** Nome como aparece na oferta; o slug é derivado dele. */
-  nome: string;
+  /**
+   * Docentes da turma, como aparecem na oferta. Mais de um quando a turma é
+   * dividida: nesse caso a unidade avaliada é a dupla, não cada pessoa.
+   */
+  nomes: string[];
   /** Quando informado, o painel abre focado nesta disciplina. */
   codigo?: string;
   nomeDisciplina?: string;
-}
-
-/** Converte um nome de professor da oferta no identificador do acervo. */
-export function idDoProfessor(nome: string): string {
-  return slugProfessor(nome);
 }
 
 function Nota(props: { rotulo: string; valor: number | null; escala: string }) {
@@ -151,17 +149,30 @@ export function PainelProfessor(props: {
     // a identidade é a do curso de quem lê: uma avaliação submetida sob código
     // equivalente de outra matriz aparece aqui do mesmo jeito (§6.10)
     const consulta = criarConsulta(acervo.reviews as Review[], criarMapaIdentidade(matriz));
-    const id = idDoProfessor(alvo.nome);
-    const docente = construirRoster(CURSOS).porId(id);
+    const id = idDaUnidade(alvo.nomes);
+    const unidade = construirRoster(CURSOS).porId(id);
+
+    const daUnidade = consulta.doProfessor(id);
     const naDisciplina = alvo.codigo ? consulta.doParProfessorDisciplina(id, alvo.codigo) : [];
-    const todas = consulta.doProfessor(id);
-    const outras = todas.filter((r) => !naDisciplina.some((d) => d.id === r.id));
+    const outrasDaUnidade = daUnidade.filter((r) => !naDisciplina.some((d) => d.id === r.id));
+
+    // turmas em que algum destes docentes lecionou em OUTRA formação — sozinho ou
+    // com outra pessoa. É contexto legítimo, mas não se mistura com a média da
+    // unidade: a experiência avaliada ali foi outra.
+    const idsDaUnidade = new Set(daUnidade.map((r) => r.id));
+    const emOutrasFormacoes = alvo.nomes
+      .flatMap((n) => consulta.doDocenteIndividual(slugProfessor(n)))
+      .filter((r) => !idsDaUnidade.has(r.id))
+      .filter((r, i, arr) => arr.findIndex((o) => o.id === r.id) === i);
+
     return {
-      nomeCanonico: docente?.nome ?? alvo.nome,
+      nomeCanonico: unidade?.nome ?? alvo.nomes.join(" / "),
+      dupla: alvo.nomes.length > 1,
       naDisciplina: agregar(naDisciplina),
-      geral: agregar(todas),
-      outras,
-      total: todas.length,
+      geral: agregar(daUnidade),
+      outrasDaUnidade,
+      emOutrasFormacoes,
+      total: daUnidade.length,
     };
   }, [alvo, matriz]);
 
@@ -190,6 +201,12 @@ export function PainelProfessor(props: {
             {alvo.nomeDisciplina && (
               <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                 em {alvo.nomeDisciplina}
+              </p>
+            )}
+            {dados.dupla && (
+              <p className="mt-1 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                Turma dividida entre os dois docentes — as avaliações são da dupla,
+                não de cada um separadamente.
               </p>
             )}
           </div>
@@ -224,12 +241,28 @@ export function PainelProfessor(props: {
               </p>
             )}
 
-            {dados.outras.length > 0 && (
+            {dados.outrasDaUnidade.length > 0 && (
               <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
-                <Resumo titulo="Em todas as disciplinas" ag={dados.geral} />
+                <Resumo
+                  titulo={dados.dupla ? "Em todas as disciplinas da dupla" : "Em todas as disciplinas"}
+                  ag={dados.geral}
+                />
                 <div className="mt-2">
-                  <ListaReviews reviews={dados.outras} />
+                  <ListaReviews reviews={dados.outrasDaUnidade} />
                 </div>
+              </div>
+            )}
+
+            {dados.emOutrasFormacoes.length > 0 && (
+              <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
+                <h4 className="font-display text-sm font-bold text-zinc-800 dark:text-zinc-100">
+                  Em turmas com outra composição
+                </h4>
+                <p className="mb-2 mt-0.5 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                  Estes docentes também lecionaram em turmas de composição diferente. É
+                  outro contexto, então essas avaliações não entram na média acima.
+                </p>
+                <ListaReviews reviews={dados.emOutrasFormacoes} />
               </div>
             )}
           </div>

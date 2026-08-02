@@ -274,6 +274,16 @@ Duas razões sustentam a escolha:
 
 > **Registro da alternativa descartada.** A extração do professor pelo PDF **é tecnicamente viável** — a coluna `Situação/Professores` é padronizada e o pdf.js entrega `"Nome Completo - Titulação"` num único item, dispensando lógica posicional. Foi descartada por desnecessária, não por impossível. O modo de falha medido era truncamento por largura de coluna (2, 8 e 10 nomes cortados conforme a variante de export), benigno mas exigindo reparo por casamento de sufixo. Se algum dia o pré-preenchimento automático virar requisito, é por aqui.
 
+#### A unidade avaliada é a turma, não a pessoa
+
+Quando dois docentes dividem **a mesma turma no mesmo horário**, eles formam uma **unidade** e são avaliados juntos, exibidos como `Fulano / Sicrano`.
+
+O motivo é semântico, não de conveniência: a didática, o sistema de avaliação e a carga que o aluno viveu são os da turma **como ela foi ministrada**. Deixar escolher só um dos dois obrigaria a atribuir a uma pessoa uma nota de didática que descreve a dupla — um dado que ninguém deu. Multi-seleção com notas compartilhadas teria o mesmo defeito, multiplicado.
+
+- **Id da unidade:** slugs individuais **ordenados** e unidos por `+` (`fulano-de-tal+sicrano-da-silva`). A ordenação é obrigatória: a fonte lista os nomes na ordem que quiser, e sem ela a mesma dupla geraria ids diferentes conforme o semestre, fatiando o acervo de uma turma em dois.
+- **Solo e dupla são unidades distintas.** Quem deu sozinho numa turma e acompanhado em outra gera duas entradas — foram duas experiências de aula diferentes, e não podem cair na mesma média.
+- **A unidade é localizável por qualquer um dos seus membros**, então o painel de um docente ainda encontra as turmas em que ele lecionou em dupla. Elas aparecem numa seção própria, *fora* da média da unidade consultada, porque descrevem outro contexto.
+
 #### Escopo da lista: união das ofertas cobertas
 
 A lista usa a **união de todos os semestres cobertos** em que a disciplina aparece — não apenas o mais recente. Coleta ampla, filtragem na exibição: assim nada se perde quando um docente volta a ofertar depois de um semestre fora.

@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Botao } from "../componentes";
 import { EMAIL_CONTATO } from "./Contato";
-import { construirRoster, type Docente } from "../../domain/reviews/professores";
+import { construirRoster, type UnidadeDocente } from "../../domain/reviews/professores";
 import { enviarReview, type EnvioReview } from "../../domain/reviews/envio";
 import { coletaHabilitada } from "../../domain/reviews/config";
 import {
@@ -97,11 +97,13 @@ export function ModalAvaliacao(props: {
   const [enviado, setEnviado] = useState(false);
 
   // o elenco vem das ofertas de TODOS os cursos: o mesmo docente leciona a mesma
-  // matéria em BSI e Eng. Comp., e o acervo é único (§6.10)
-  const elenco: Docente[] = useMemo(
+  // matéria em BSI e Eng. Comp., e o acervo é único (§6.10). Cada item é uma
+  // UNIDADE: quem dividiu a turma no mesmo horário aparece como uma opção só.
+  const elenco: UnidadeDocente[] = useMemo(
     () => (alvo ? construirRoster(CURSOS).elencoDaDisciplina(alvo.codigo) : []),
     [alvo],
   );
+  const temDupla = elenco.some((u) => u.nomes.length > 1);
 
   useEffect(() => {
     if (!alvo) return;
@@ -218,12 +220,19 @@ export function ModalAvaliacao(props: {
                     className="mt-2 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-800 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                   >
                     <option value="">Selecione…</option>
-                    {elenco.map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.nome}
+                    {elenco.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.nome}
                       </option>
                     ))}
                   </select>
+                  {temDupla && (
+                    <p className="mt-1.5 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                      Turmas divididas aparecem como <strong>Fulano / Sicrano</strong>: quem
+                      deu a mesma turma no mesmo horário é avaliado em conjunto, porque a
+                      experiência foi da dupla.
+                    </p>
+                  )}
                   <button
                     type="button"
                     onClick={() => setNaoOfertado(true)}

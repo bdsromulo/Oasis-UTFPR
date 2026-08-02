@@ -1291,9 +1291,10 @@ export function TelaGrade(props: {
                 ? catRaw.charAt(0).toUpperCase() + catRaw.slice(1)
                 : "Eletiva";
 
-            // um por um, e não a string junta: cada docente vira um acionador do
-            // painel de avaliações. `professores_raw` é o campo completo da fonte
-            // (2575 das 2618 turmas), então ele vem primeiro.
+            // A turma inteira é a unidade avaliada: quem divide a mesma turma no
+            // mesmo horário é avaliado junto, porque a didática que o aluno viveu
+            // é a da dupla. `professores_raw` é o campo completo da fonte (2575
+            // das 2618 turmas), então ele vem primeiro.
             const listaProfessores: string[] =
               item.turma.professores_raw?.trim()
                 ? item.turma.professores_raw.split(/\s*,\s*/).filter(Boolean)
@@ -1359,30 +1360,27 @@ export function TelaGrade(props: {
                       <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
                         <IconUser className="h-4 w-4 shrink-0" />
                         {reviewsLigadas && listaProfessores.length > 0 ? (
-                          <span className="truncate" title={nomesProfessores}>
-                            {listaProfessores.map((nome, idx) => (
-                              <span key={nome}>
-                                {idx > 0 && ", "}
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    // o card inteiro alterna o balão de progresso;
-                                    // abrir o painel não pode disparar isso junto
-                                    e.stopPropagation();
-                                    setProfPainel({
-                                      nome,
-                                      codigo: item.disciplina.codigo,
-                                      nomeDisciplina: item.disciplina.nome,
-                                    });
-                                  }}
-                                  className="cursor-pointer underline decoration-dotted decoration-utfpr-500 underline-offset-2 transition-colors hover:text-utfpr-600 dark:hover:text-utfpr-400"
-                                  title={`Ver avaliações de ${nome}`}
-                                >
-                                  {nome}
-                                </button>
-                              </span>
-                            ))}
-                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              // o card inteiro alterna o balão de progresso; abrir
+                              // o painel não pode disparar isso junto
+                              e.stopPropagation();
+                              setProfPainel({
+                                nomes: listaProfessores,
+                                codigo: item.disciplina.codigo,
+                                nomeDisciplina: item.disciplina.nome,
+                              });
+                            }}
+                            className="cursor-pointer truncate underline decoration-dotted decoration-utfpr-500 underline-offset-2 transition-colors hover:text-utfpr-600 dark:hover:text-utfpr-400"
+                            title={
+                              listaProfessores.length > 1
+                                ? `Ver avaliações desta turma (${nomesProfessores})`
+                                : `Ver avaliações de ${nomesProfessores}`
+                            }
+                          >
+                            {nomesProfessores}
+                          </button>
                         ) : (
                           <span className="truncate">{nomesProfessores}</span>
                         )}

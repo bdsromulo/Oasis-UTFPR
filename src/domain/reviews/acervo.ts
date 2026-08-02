@@ -4,6 +4,7 @@
 // SEU curso: se a mesma exigência curricular tem código distinto entre matrizes,
 // as avaliações continuam sendo um acervo só do ponto de vista do leitor.
 import type { MapaIdentidade } from "../motor/identidade";
+import { unidadeInclui } from "./professores";
 import type { AgregadoReviews, Review, SistemaAvaliativo, Tag } from "./tipos";
 
 /**
@@ -62,11 +63,17 @@ export function agregar(reviews: Review[], limiar = LIMIAR_ESTATISTICA): Agregad
 export interface ConsultaAcervo {
   /** Avaliações de uma disciplina, somando todos os códigos equivalentes. */
   daDisciplina(codigo: string): Review[];
-  /** Avaliações de um docente, em todas as disciplinas que deu. */
-  doProfessor(professorId: string): Review[];
-  /** O par que a TASK-27 exibe: um docente numa disciplina específica. */
-  doParProfessorDisciplina(professorId: string, codigo: string): Review[];
-  /** Docentes com avaliação registrada para uma disciplina. */
+  /** Avaliações de uma unidade docente (pessoa ou dupla), em todas as disciplinas. */
+  doProfessor(unidadeId: string): Review[];
+  /** O par que a TASK-27 exibe: uma unidade numa disciplina específica. */
+  doParProfessorDisciplina(unidadeId: string, codigo: string): Review[];
+  /**
+   * Avaliações de QUALQUER unidade que inclua este docente individual — inclusive
+   * as turmas em que ele dividiu a disciplina com outra pessoa. É o que permite
+   * ver o histórico de alguém sem perder as turmas ministradas em dupla.
+   */
+  doDocenteIndividual(slugDocente: string): Review[];
+  /** Unidades docentes com avaliação registrada para uma disciplina. */
   professoresAvaliados(codigo: string): string[];
 }
 
@@ -91,9 +98,11 @@ export function criarConsulta(reviews: Review[], mapa: MapaIdentidade): Consulta
 
   return {
     daDisciplina,
-    doProfessor: (professorId) => publicas.filter((r) => r.professorId === professorId),
-    doParProfessorDisciplina: (professorId, codigo) =>
-      daDisciplina(codigo).filter((r) => r.professorId === professorId),
+    doProfessor: (unidadeId) => publicas.filter((r) => r.professorId === unidadeId),
+    doParProfessorDisciplina: (unidadeId, codigo) =>
+      daDisciplina(codigo).filter((r) => r.professorId === unidadeId),
+    doDocenteIndividual: (slugDocente) =>
+      publicas.filter((r) => unidadeInclui(r.professorId!, slugDocente)),
     professoresAvaliados: (codigo) => [
       ...new Set(daDisciplina(codigo).map((r) => r.professorId!)),
     ],
