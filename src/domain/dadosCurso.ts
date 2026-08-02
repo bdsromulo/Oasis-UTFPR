@@ -107,7 +107,12 @@ export const ENG_ELETRONICA: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
-const CURSOS = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
+/**
+ * Todos os cursos cobertos. Exportado porque o roster de docentes das avaliações
+ * é global — ele varre as ofertas de todos os cursos, não só o do aluno (§6.10),
+ * e manter uma segunda lista lá dentro daria drift assim que um curso novo entrar.
+ */
+export const CURSOS = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {

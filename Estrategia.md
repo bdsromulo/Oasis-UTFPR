@@ -284,14 +284,16 @@ Medição nos históricos de referência sustenta a decisão: **127 de 128 cursa
 
 A pergunta decisiva não é se a *disciplina* tem elenco, e sim se o *professor com quem a pessoa cursou* está nele. Cruzando os professores reais de cada histórico contra o elenco das ofertas cobertas:
 
-| Histórico | professores no histórico | ausentes do elenco |
-| :--- | ---: | ---: |
-| Aluna A (3 exports) | 25 / 21 / 22 | 2 / 1 / 1 |
-| Aluna B (mais adiantada) | 36 | **11 (31%)** |
+| Histórico | professores no histórico | ausentes (elenco BSI) | ausentes (elenco global) |
+| :--- | ---: | ---: | ---: |
+| Aluna A (3 exports) | 25 / 21 / 22 | 0 / 0 / 0 | 0 / 0 / 0 |
+| Aluna B (mais adiantada) | 36 | 6 (17%) | **4 (11%)** |
 
-Média ~14%, chegando a **31% para quem está mais adiantado** — semestres antigos e disciplinas de humanidades têm rodízio maior de docente. E é um **piso**: a medição casa no nível de conjunto, enquanto na prática o aluno precisa do professor listado *naquela disciplina específica*.
+Para quem está no meio do curso, o elenco cobre **tudo**. A falha se concentra em quem está mais adiantado — semestres antigos e disciplinas de humanidades têm rodízio maior de docente. É um **piso**: a medição casa no nível de conjunto, enquanto na prática o aluno precisa do professor listado *naquela disciplina específica*, então a taxa real é maior.
 
-Portanto o escape é rota comum, e não pode ser beco sem saída: descartá-lo jogaria fora justamente as avaliações dos veteranos, as mais informativas.
+> **Evidência para o elenco global (§6.11):** unir o elenco de **todos os cursos cobertos** — e não só o do curso do aluno — derruba a falha de 17% para 11% no caso mais adiantado. Professores lecionam em mais de um curso; o roster tem de ser global.
+
+O escape, portanto, é minoria mas não é desprezível, e cresce com a senioridade de quem avalia — justamente quem tem mais o que dizer. Não pode ser beco sem saída.
 
 #### "Professor Não Ofertado" — captura em texto livre + moderação
 
@@ -393,7 +395,21 @@ Ou seja: o dano de um flood é **absorvido** pela fronteira de confiança, não 
 
 **Se o bloqueio por IP virar requisito firme**, é o gatilho para reabrir a §5: um *edge worker* (Cloudflare Workers + Turnstile) faz rate limiting por IP nativamente e cabe em faixa gratuita — mas isso reintroduz um serviço em runtime. A troca é precisa: preserva o **custo zero**, abandona o **back-end zero**.
 
-### 6.10 Limites honestos desta arquitetura
+### 6.10 Compartilhamento entre cursos
+
+Uma avaliação de *Professor X em Estruturas de Dados* vale para quem cursa BSI e para quem cursa Engenharia de Computação — é a mesma pessoa dando a mesma matéria. O acervo, portanto, **não é particionado por curso**.
+
+**Evidência no dado:** as ofertas já registram turmas compartilhadas. A turma `S73` de `ICSHX0` traz `prioridade_cursos: [Eng De Computação, Sist De Informação]` e `optativa_matrizes: ["981", "962"]` — um único professor, uma única turma, dois cursos.
+
+Três consequências de arquitetura:
+
+1. **Um único acervo.** `data/reviews.json` fica na raiz de `data/`, não sob a pasta de um curso. A chave `(professorId, código, semestre)` não é namespaced por curso.
+2. **Roster global.** O elenco de docentes é construído a partir das ofertas de **todos** os cursos cobertos, não só o do aluno. Além de correto, é medível: reduz a falha de seleção de 17% para 11% (§6.4).
+3. **Leitura resolve por equivalência.** Ao exibir avaliações de uma disciplina, o curso em que o leitor está resolve o código pelo seu próprio `MapaIdentidade` (`motor/identidade.ts`) e reúne as avaliações de **todos os códigos equivalentes**. Assim, se a mesma exigência curricular tem código distinto entre matrizes, o acervo continua único do ponto de vista de quem lê.
+
+O primeiro curso a receber a interface é **BSI 981**, mas nada no formato do dado é específico dele: habilitar outro curso é ligar a tela, não migrar acervo.
+
+### 6.11 Limites honestos desta arquitetura
 
 1. **Não autentica RA.** O PDF do histórico não tem assinatura verificável por terceiros (§5.1). O RA é autodeclarado: encarece a fraude e serve à moderação, não a impede.
 2. **Anti-Sybil é humano.** Sem verificação institucional, a defesa contra enxurrada de avaliações falsas é a revisão semanal. Escala até certo volume; acima dele, a §5 volta à mesa.
