@@ -22,6 +22,19 @@
  * `application/json` o navegador dispara preflight OPTIONS, que o Apps Script não
  * responde, e a requisição falha. O corpo continua sendo JSON — só o rótulo do
  * tipo é que muda.
+ *
+ * ---------------------------------------------------------------------------
+ * O QUE ESTE ENDPOINT NÃO PROTEGE
+ *
+ * A URL `/exec` é pública e não tem como deixar de ser: ela precisa estar no
+ * JavaScript que roda no navegador do aluno, então basta abrir o DevTools para
+ * lê-la. Repositório privado, repositório separado ou variável de ambiente não
+ * mudam nada — o Vite inlina `VITE_*` no bundle. Front-end estático não guarda
+ * segredo (Estrategia.md §5.6).
+ *
+ * O raio de dano de quem descobrir a URL é limitado de propósito: envios caem na
+ * aba PRIVADA e só viram acervo público depois de um humano marcar `aprovado`
+ * (§6.2). Ou seja, spam custa tempo de moderação e cota — não polui o site.
  * ---------------------------------------------------------------------------
  */
 
@@ -40,9 +53,72 @@ var TAGS = [
 var SISTEMAS = ['provas', 'trabalhos', 'misto'];
 var LIMITE_COMENTARIO = 1000;
 
-/** Janela e teto do freio de vazão por identidade (§6.9). */
+/**
+ * Freio de vazão (§6.9). São dois, porque um só não basta.
+ *
+ * O freio POR IDENTIDADE só funciona quando a implantação exige Conta do Google
+ * E o e-mail é legível pelo script. Numa implantação aberta a qualquer pessoa,
+ * `Session.getActiveUser().getEmail()` devolve string vazia — e o freio vira
+ * no-op silencioso. Por isso existe o teto GLOBAL abaixo, que não depende de
+ * identidade nenhuma e protege a cota do Apps Script e o tamanho da planilha.
+ *
+ * Nenhum dos dois é rate limiting por IP: o Apps Script não expõe o IP de quem
+ * chama, exatamente como o formulário externo não expunha.
+ */
 var JANELA_MINUTOS = 10;
 var MAX_NA_JANELA = 5;
+
+/** Teto global de envios por minuto, somando todo mundo. */
+var MAX_GLOBAL_POR_MINUTO = 20;
+
+/**
+ * Chave secreta do Cloudflare Turnstile, se configurada.
+ *
+ * Este é o ÚNICO ponto de todo o desenho onde cabe um segredo: as Script
+ * Properties do Apps Script são server-side de verdade, fora do bundle servido
+ * ao navegador. Configurar em: Apps Script → Configurações do projeto →
+ * Propriedades do script → `TURNSTILE_SECRET`.
+ *
+ * Sem a propriedade definida, a verificação é pulada e o endpoint segue
+ * funcionando — só sem defesa contra bot.
+ */
+function segredoTurnstile() {
+  return PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET') || '';
+}
+
+function turnstileValido(token) {
+  var segredo = segredoTurnstile();
+  if (!segredo) return true; // não configurado: não bloqueia
+  if (!token) return false;
+  try {
+    var resposta = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      payload: { secret: segredo, response: token },
+      muteHttpExceptions: true
+    });
+    return JSON.parse(resposta.getContentText()).success === true;
+  } catch (err) {
+    return false; // na dúvida, recusa
+  }
+}
+
+/** Conta os envios do minuto corrente, para todo mundo somado. */
+function excedeuTetoGlobal() {
+  var cache = CacheService.getScriptCache();
+  var chave = 'envios-' + Math.floor(Date.now() / 60000);
+  var trava = LockService.getScriptLock();
+  try {
+    trava.waitLock(2000);
+    var atual = parseInt(cache.get(chave) || '0', 10);
+    if (atual >= MAX_GLOBAL_POR_MINUTO) return true;
+    cache.put(chave, String(atual + 1), 120);
+    return false;
+  } catch (err) {
+    return false; // falha ao travar não pode derrubar envio legítimo
+  } finally {
+    try { trava.releaseLock(); } catch (err) {}
+  }
+}
 
 /**
  * Padrões que não podem entrar num campo aberto. É a guarda de PII: o texto é
@@ -56,7 +132,21 @@ var PII = [
 
 function doPost(e) {
   try {
+    // o teto global vem primeiro: é o que segura uma enxurrada antes de ela
+    // custar leitura de planilha e cota de execução
+    if (excedeuTetoGlobal()) {
+      return responder(429, {
+        ok: false,
+        erros: ['O serviço está recebendo envios demais agora. Tente de novo em instantes.']
+      });
+    }
+
     var dados = JSON.parse(e.postData.contents);
+
+    if (!turnstileValido(dados.turnstileToken)) {
+      return responder(403, { ok: false, erros: ['Verificação anti-robô falhou.'] });
+    }
+
     var erros = validar(dados);
     if (erros.length) return responder(400, { ok: false, erros: erros });
 

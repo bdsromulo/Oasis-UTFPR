@@ -392,12 +392,17 @@ Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. 
 1. **Não há servidor nosso no caminho.** O site é estático e nunca recebe a submissão — ela vai direto do navegador do aluno para o formulário externo. Limitar por IP exige um ponto que veja a requisição e guarde estado entre requisições; a RNF02 exclui exatamente isso.
 2. **O formulário não registra o IP do respondente.** Mesmo com um servidor nosso do lado de fora, o IP não é exposto ao dono do formulário. Não há o que ler.
 
+**O endpoint de escrita também não tem como ficar oculto.** A URL do Apps Script precisa estar no JavaScript servido ao navegador; DevTools a revela. Repositório privado, repositório separado ou variável de ambiente não mudam isso — o Vite inlina `VITE_*` no bundle (§5.6). Assumir o contrário é o erro; o desenho parte de que a URL é conhecida.
+
+**Raio de dano de quem a descobrir, e é aqui que a fronteira paga:** envios caem na aba **privada** e só viram acervo público depois de um humano marcar `aprovado`. Spam custa **tempo de moderação e cota**, não polui o site. O acervo público é imune por construção — a mesma propriedade que segura conteúdo difamatório.
+
 O que **é** possível sem back-end, em camadas:
 
 | Camada | Mecanismo | Alcance real |
 | :--- | :--- | :--- |
-| Identidade | Exigir login Google no formulário (**sem** limitar a 1 resposta, que quebraria múltiplas avaliações) | Amarra cada envio a uma conta e dá chave de deduplicação; criar contas em massa passa a ter custo |
-| Vazão | Gatilho `onFormSubmit` em **Google Apps Script** (gratuito, sem infra a manter) | Rejeita ou marca envios acima de N por conta por janela de tempo — throttle **por identidade**, não por IP |
+| **Anti-robô** | **Cloudflare Turnstile**, com a chave secreta em *Script Properties* do Apps Script | Defesa efetiva contra bot. É o **único ponto de todo o desenho onde cabe um segredo**, porque as Script Properties são server-side de verdade, fora do bundle |
+| Teto global | Contador por minuto em `CacheService`, somando todos os envios | Não depende de identidade: segura enxurrada e protege a cota do Apps Script e o tamanho da planilha |
+| Identidade | Exigir Conta do Google na implantação + freio por conta e janela | **Degrada em silêncio:** numa implantação aberta a qualquer pessoa, `Session.getActiveUser().getEmail()` devolve vazio e o freio vira no-op. Só vale com login exigido e e-mail legível |
 | Publicação | Portão de moderação semanal (§6.2) | Uma enxurrada gera muitas linhas **não aprovadas**: o custo é tempo do moderador, não conteúdo público |
 
 Ou seja: o dano de um flood é **absorvido** pela fronteira de confiança, não evitado na origem. Nada não moderado chega ao público, por construção.
