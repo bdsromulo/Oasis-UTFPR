@@ -6,7 +6,7 @@ import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
 import { ModalAvaliacao, type AlvoAvaliacao } from "./ModalAvaliacao";
-import { coletaHabilitada } from "../../domain/reviews/config";
+import { coletaHabilitada, reviewsHabilitadasPara } from "../../domain/reviews/config";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -581,7 +581,8 @@ export function TelaSituacao(props: {
         </Card>
       </section>
 
-      {coletaHabilitada() && doUltimoSemestre.itens.length > 0 && (
+      {/* por enquanto só a BSI 981 expõe a camada de avaliações (§6.10) */}
+      {reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && doUltimoSemestre.itens.length > 0 && (
         <section className="space-y-3">
           <h2 className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
             Avaliar o semestre {doUltimoSemestre.semestre}

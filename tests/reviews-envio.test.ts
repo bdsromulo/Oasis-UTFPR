@@ -2,8 +2,15 @@
 // Não toca a rede: a coleta nasce desabilitada, e é isso que estes testes fixam.
 import { describe, it, expect } from "vitest";
 import { validarEnvio, enviarReview, type EnvioReview } from "../src/domain/reviews/envio";
-import { coletaHabilitada, URL_ENDPOINT_REVIEWS } from "../src/domain/reviews/config";
+import {
+  coletaHabilitada,
+  reviewsHabilitadasPara,
+  MATRIZES_COM_REVIEWS,
+  URL_ENDPOINT_REVIEWS,
+} from "../src/domain/reviews/config";
 import { LIMITE_COMENTARIO } from "../src/domain/reviews/tipos";
+import { construirRoster } from "../src/domain/reviews/professores";
+import { BSI, CURSOS } from "../src/domain/dadosCurso";
 
 function envio(parcial: Partial<EnvioReview> = {}): EnvioReview {
   return {
@@ -52,6 +59,40 @@ describe("configuração da coleta", () => {
     } finally {
       globalThis.fetch = original;
     }
+  });
+});
+
+describe("recorte por curso", () => {
+  it("por enquanto só a BSI 981 expõe a camada", () => {
+    expect(MATRIZES_COM_REVIEWS).toEqual([981]);
+    expect(reviewsHabilitadasPara(981)).toBe(true);
+  });
+
+  it("os demais cursos cobertos ficam de fora", () => {
+    // 844 e 962 (Eng. Comp.) e 968 (Eng. Eletrônica)
+    for (const matriz of [844, 962, 968]) {
+      expect(reviewsHabilitadasPara(matriz), `matriz ${matriz}`).toBe(false);
+    }
+  });
+
+  it("sem matriz detectada, não expõe", () => {
+    expect(reviewsHabilitadasPara(null)).toBe(false);
+    expect(reviewsHabilitadasPara(undefined)).toBe(false);
+  });
+
+  it("o recorte é de superfície: o roster segue global", () => {
+    // habilitar um curso novo não pode exigir migrar acervo (§6.10) — o roster
+    // já enxerga docentes de todos os cursos, inclusive os ainda não habilitados
+    const roster = construirRoster(CURSOS);
+    const cursosNoRoster = new Set(
+      CURSOS.filter((c) =>
+        Object.values(c.ofertas).some((o) =>
+          o.disciplinas.some((d) => d.turmas.some((t) => t.professores_raw?.trim())),
+        ),
+      ).map((c) => c.id),
+    );
+    expect(cursosNoRoster.size).toBeGreaterThan(1);
+    expect(roster.docentes.length).toBeGreaterThan(construirRoster([BSI]).docentes.length);
   });
 });
 

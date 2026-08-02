@@ -37,6 +37,7 @@ import {
 } from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
 import { PainelProfessor, type AlvoPainelProfessor } from "./PainelProfessor";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
@@ -410,8 +411,9 @@ export function TelaGrade(props: {
   const { oferta, selecao, setSelecao } = props;
   const [copiado, setCopiado] = useState(false);
   const [modalGradeMagica, setModalGradeMagica] = useState(false);
-  // painel lateral de avaliações do docente (RF17)
+  // painel lateral de avaliações do docente (RF17) — por enquanto só na BSI 981
   const [profPainel, setProfPainel] = useState<AlvoPainelProfessor | null>(null);
+  const reviewsLigadas = reviewsHabilitadasPara(props.matriz?.matriz);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
   const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
@@ -658,7 +660,7 @@ export function TelaGrade(props: {
 
   const modaisJSX = (
     <>
-      {props.matriz && (
+      {props.matriz && reviewsLigadas && (
         <PainelProfessor
           alvo={profPainel}
           matriz={props.matriz}
@@ -1356,7 +1358,7 @@ export function TelaGrade(props: {
                       </div>
                       <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
                         <IconUser className="h-4 w-4 shrink-0" />
-                        {listaProfessores.length > 0 ? (
+                        {reviewsLigadas && listaProfessores.length > 0 ? (
                           <span className="truncate" title={nomesProfessores}>
                             {listaProfessores.map((nome, idx) => (
                               <span key={nome}>
