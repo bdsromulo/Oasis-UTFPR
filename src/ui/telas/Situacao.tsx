@@ -1,10 +1,12 @@
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 import { montarPainel } from "../../domain/motor/situacao";
 import { nomeDeEletiva } from "../../domain/eletivas";
-import { Badge, Barra, Card, Rosca } from "../componentes";
+import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
+import { ModalAvaliacao, type AlvoAvaliacao } from "./ModalAvaliacao";
+import { coletaHabilitada } from "../../domain/reviews/config";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -94,6 +96,32 @@ export function TelaSituacao(props: {
   onAbrirCatalogo?: (cat: CategoriaCatalogo) => void;
 }) {
   const { perfil, matriz, onAbrirCatalogo } = props;
+  const [avaliando, setAvaliando] = useState<AlvoAvaliacao | null>(null);
+
+  /**
+   * Disciplinas do último semestre do histórico — o conjunto que a RF16 convida a
+   * avaliar. O semestre vem pronto de `DisciplinaCursada`, sem inferência.
+   * Reprovadas entram de propósito: a opinião de quem reprovou é contexto legítimo.
+   */
+  const doUltimoSemestre = useMemo(() => {
+    if (!perfil) return { semestre: null as string | null, itens: [] as AlvoAvaliacao[] };
+    const avaliaveis = perfil.cursadas.filter(
+      (c) => c.ano && c.semestre && (c.situacao === "aprovado" || c.situacao === "reprovado"),
+    );
+    if (!avaliaveis.length) return { semestre: null, itens: [] };
+    const periodo = (c: { ano: number | null; semestre: number | null }) => `${c.ano}/${c.semestre}`;
+    const ultimo = avaliaveis.map(periodo).sort().at(-1)!;
+    const itens = avaliaveis
+      .filter((c) => periodo(c) === ultimo)
+      .map((c) => ({
+        codigo: c.codigo,
+        nome: matriz.disciplinas.find((d) => d.codigo === c.codigo)?.nome ?? nomeDeEletiva(c.codigo) ?? c.codigo,
+        semestre: ultimo,
+        situacao: c.situacao === "reprovado" ? ("reprovado" as const) : ("aprovado" as const),
+      }))
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+    return { semestre: ultimo, itens };
+  }, [perfil, matriz]);
 
   const concluidasMapa = useMemo(() => {
     const mapa: Record<string, { codigo: string; nome: string; cht?: number | null }[]> = {
@@ -552,6 +580,48 @@ export function TelaSituacao(props: {
           </div>
         </Card>
       </section>
+
+      {coletaHabilitada() && doUltimoSemestre.itens.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            Avaliar o semestre {doUltimoSemestre.semestre}
+          </h2>
+          <Card>
+            <p className="mb-3 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+              Sua experiência ajuda quem vai escolher turma. A avaliação é pública e
+              assinada com o seu nome; seu RA não é publicado.
+            </p>
+            <div className="space-y-1.5">
+              {doUltimoSemestre.itens.map((d) => (
+                <div
+                  key={`${d.codigo}-${d.semestre}`}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 px-3 py-2 dark:border-zinc-800/70"
+                >
+                  <span className="min-w-0 text-sm text-zinc-700 dark:text-zinc-200">
+                    <span className="font-mono text-xs font-bold">{d.codigo}</span>{" "}
+                    <span className="truncate">{d.nome}</span>
+                    {d.situacao === "reprovado" && (
+                      <span className="ml-1.5 text-[10px] font-bold text-orange-600 dark:text-orange-400">
+                        reprovada
+                      </span>
+                    )}
+                  </span>
+                  <Botao onClick={() => setAvaliando(d)} variante="sutil" classe="shrink-0 !px-3 !py-1.5 !text-xs">
+                    Avaliar
+                  </Botao>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </section>
+      )}
+
+      <ModalAvaliacao
+        alvo={avaliando}
+        autor={perfil.nome}
+        ra={perfil.matricula}
+        onFechar={() => setAvaliando(null)}
+      />
 
       {perfil.dependencias.length > 0 && (
         <section className="space-y-3">
