@@ -36,6 +36,7 @@ import {
   IconWarning,
 } from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
+import { PainelProfessor, type AlvoPainelProfessor } from "./PainelProfessor";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
@@ -409,6 +410,8 @@ export function TelaGrade(props: {
   const { oferta, selecao, setSelecao } = props;
   const [copiado, setCopiado] = useState(false);
   const [modalGradeMagica, setModalGradeMagica] = useState(false);
+  // painel lateral de avaliações do docente (RF17)
+  const [profPainel, setProfPainel] = useState<AlvoPainelProfessor | null>(null);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
   const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
@@ -655,6 +658,14 @@ export function TelaGrade(props: {
 
   const modaisJSX = (
     <>
+      {props.matriz && (
+        <PainelProfessor
+          alvo={profPainel}
+          matriz={props.matriz}
+          onFechar={() => setProfPainel(null)}
+        />
+      )}
+
       <ModalGradeMagica
         aberto={modalGradeMagica}
         onFechar={() => setModalGradeMagica(false)}
@@ -1278,10 +1289,14 @@ export function TelaGrade(props: {
                 ? catRaw.charAt(0).toUpperCase() + catRaw.slice(1)
                 : "Eletiva";
 
-            const nomesProfessores =
-              item.turma.professores && item.turma.professores.length > 0
-                ? item.turma.professores.join(", ")
-                : item.turma.professores_raw || "Professor a definir";
+            // um por um, e não a string junta: cada docente vira um acionador do
+            // painel de avaliações. `professores_raw` é o campo completo da fonte
+            // (2575 das 2618 turmas), então ele vem primeiro.
+            const listaProfessores: string[] =
+              item.turma.professores_raw?.trim()
+                ? item.turma.professores_raw.split(/\s*,\s*/).filter(Boolean)
+                : (item.turma.professores ?? []).filter(Boolean);
+            const nomesProfessores = listaProfessores.join(", ") || "Professor a definir";
 
             const codIdentificador = item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo;
             const chaveElemento = `card-${codIdentificador}-${item.turma.codigo}-${i}`;
@@ -1341,9 +1356,34 @@ export function TelaGrade(props: {
                       </div>
                       <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
                         <IconUser className="h-4 w-4 shrink-0" />
-                        <span className="truncate" title={nomesProfessores}>
-                          {nomesProfessores}
-                        </span>
+                        {listaProfessores.length > 0 ? (
+                          <span className="truncate" title={nomesProfessores}>
+                            {listaProfessores.map((nome, idx) => (
+                              <span key={nome}>
+                                {idx > 0 && ", "}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    // o card inteiro alterna o balão de progresso;
+                                    // abrir o painel não pode disparar isso junto
+                                    e.stopPropagation();
+                                    setProfPainel({
+                                      nome,
+                                      codigo: item.disciplina.codigo,
+                                      nomeDisciplina: item.disciplina.nome,
+                                    });
+                                  }}
+                                  className="cursor-pointer underline decoration-dotted decoration-utfpr-500 underline-offset-2 transition-colors hover:text-utfpr-600 dark:hover:text-utfpr-400"
+                                  title={`Ver avaliações de ${nome}`}
+                                >
+                                  {nome}
+                                </button>
+                              </span>
+                            ))}
+                          </span>
+                        ) : (
+                          <span className="truncate">{nomesProfessores}</span>
+                        )}
                       </div>
                     </div>
                   </div>

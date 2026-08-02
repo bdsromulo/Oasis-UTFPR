@@ -355,15 +355,49 @@ Isso só é possível porque a coleta deixou de depender de um formulário de te
 
 Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. A restrição real não é o transporte, é o **validador na fronteira**, que rejeita a linha cujo `(código, turma, semestre)` não fecha com a oferta oficial. É defesa por validação, não por prevenção.
 
+#### Da planilha ao site, coluna a coluna
+
+A aba `Respostas` é criada pelo próprio Apps Script com este layout. A coluna `aprovado` é a que o moderador preenche:
+
+| | A | B | C | D | E | F | G | H | I | J | K–N | O | P | Q | R | S |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| | carimbo | identidade | **ra** | autor | codigo | semestre | situacao | turma | professorId | professorTexto | notas | avaliacao | tags | comentario | consentimento | **aprovado** |
+
+A aba `Homologado` projeta **só o que é público**, e é ela — e só ela — que recebe URL de CSV:
+
+```
+=QUERY(Respostas!A:S; "select A,D,E,F,G,H,I,K,L,M,N,O,P,Q where S = 'SIM' and I <> ''"; 1)
+```
+
+Três coisas que essa fórmula garante por construção, sem depender de disciplina de ninguém:
+
+- **`B` e `C` ficam de fora.** A identidade de quem enviou e o RA não estão entre as colunas projetadas, então o CSV público é *incapaz* de contê-los.
+- **`where S = 'SIM'`** — nada não aprovado sai.
+- **`and I <> ''`** — linha da rota *Professor Não Ofertado* só publica depois que o moderador escreve o `professorId` no lugar do texto livre, promovendo o docente ao roster.
+
 **Regeneração total, nunca append.** A automação semanal reconstrói `data/reviews.json` **inteiro** a partir das linhas aprovadas. Com `id` estável por linha, o JSON é função pura da planilha: rodar duas vezes produz o mesmo resultado, e desaprovar uma linha a remove da próxima publicação. É a mesma disciplina dos parsers de `tools/`.
 
-**Validador (RNF03, `0 erros`).** Segue o padrão de `validate_turmas.py`:
-- `codigo` existe na matriz ou na oferta do semestre declarado;
-- `(código, turma, semestre)` coerente com a oferta oficial, quando ela existe;
-- **professor:** ou `professorId` presente **e existente no roster curado**, ou `professorTexto` preenchido — nunca os dois, nunca nenhum. Linha com `professorTexto` fica **retida** (não publicada) até a moderação promovê-la ao roster;
-- notas dentro de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
+**Validador (RNF03, `0 erros`).** Implementado em `scripts/ingerir-reviews.ts`, no espírito de `validate_turmas.py`: **qualquer erro aborta a ingestão inteira e nada é publicado.**
+
+Escrito em TypeScript, e não em Python como o resto de `tools/`, por correção: o vocabulário de tags, os limites e o tipo `Review` moram no domínio TS. Reimplementá-los em Python criaria duas fontes da verdade divergindo em silêncio — exatamente o que o validador existe para impedir.
+
+*Estrutura do CSV:*
+- colunas obrigatórias presentes;
+- **colunas `ra` e `identidade` ausentes** — se aparecerem, a projeção da aba foi alterada e está vazando dado privado: recusa o CSV inteiro;
+- parsing conforme RFC 4180, escrito à mão, porque o comentário é texto livre e pode conter vírgula, aspas e quebra de linha. Um `split(",")` corromperia essas linhas em silêncio.
+
+*Coerência com o dado oficial — o que o Apps Script não consegue checar:*
+- `codigo` existe em alguma matriz ou oferta versionada;
+- `professorId` existe no **roster** construído a partir das ofertas de todos os cursos;
+- linha sem `professorId` é **pendente de roster**: não publica e **não é erro** — fica aguardando a promoção pela moderação.
+
+*Forma e vocabulário:*
+- `semestre` em `AAAA/S`; `situacao` em aprovado/reprovado; `autor` não vazio;
+- notas inteiras de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
 - comentário dentro do limite de 1000 caracteres;
-- **guarda de PII por regex** no texto livre — RA de 7 dígitos, e-mail e telefone reprovam a linha, impedindo vazamento acidental num campo aberto.
+- **guarda de PII por regex** — RA de 7 dígitos, e-mail e telefone reprovam a linha.
+
+*Determinismo:* o `id` é hash estável de `(carimbo, autor, codigo, semestre, professorId)`, e a saída é ordenada por ele. Rodar duas vezes produz byte a byte o mesmo arquivo, e `geradoEm` só avança quando o conteúdo muda de fato — sem isso o Action commitaria ruído toda semana.
 
 **Limiar de exibição.** Agregado com N baixo mente: uma única avaliação vira "100%". Abaixo de um N mínimo, exibe-se o comentário mas **não** a estatística agregada. O valor exato é calibração de produto; a regra é estrutural.
 

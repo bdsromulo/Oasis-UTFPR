@@ -199,6 +199,7 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 - **TASK-27 — Painel Lateral de Avaliações por Professor no Planejamento de Matrícula:**
   - Implementa RF17. Tornar acionável o nome do professor associado à turma, abrindo painel lateral com agregados por classificação, tags mais frequentes e comentários daquele docente.
   - **Limiar de exibição:** abaixo de um N mínimo, mostrar comentários mas **não** a estatística agregada — com N baixo, uma única avaliação vira "100%".
+  - Implementado em `src/ui/telas/PainelProfessor.tsx`, acionado pelos nomes de docente nos cards de turma de `Grade.tsx`. Cada docente da turma é um acionador próprio (a fonte traz vários por turma, separados por vírgula em `professores_raw`). O painel separa "nesta disciplina" de "em todas as disciplinas" e resolve equivalência de código pela matriz do curso de quem lê (§6.10).
 
 - **TASK-28 — Seletor de Professor e Roster Curado (`professorId`):**
   - Pré-requisito de TASK-13 e TASK-27. Detalhamento em `Estrategia.md` §6.4.
