@@ -20,7 +20,14 @@ import type { DisciplinaCursada, PerfilAluno, ResumoConjunto, Situacao } from ".
 // aprovada por suficiência desaparecer do sistema sem aviso.
 const RE_NUCLEO =
   /(?:^|\s)(\d{1,3})\s+(\d{1,3})\s+(\d{1,3})(?:\s+(\d{1,3}))?\s+([\d,.]+|\*)\s+([\d,.]+|\*)\s+([12])\s*(20\d{2})/;
-const RE_CODIGO = /^[A-Z]{2,4}[0-9][A-Z0-9]{1,3}$|^[A-Z]{3,5}[0-9]{2}[A-Z0-9]?$/;
+// Forma de um código de disciplina: 2 a 5 letras, o primeiro dígito, e até 3
+// caracteres alfanuméricos de sufixo. O limite anterior de 4 letras rejeitava 44
+// códigos reais — a família ICSHX*/ICSIX*/ICSXG* da 981 e toda a ELT** da Eng.
+// Eletrônica — e exigir sufixo derrubava as ELXB1/ELTA1 de 5 caracteres. Como
+// `acharCodigo` só chega aqui via `ehCodigo`, que já limita a 5–7 caracteres,
+// exige ao menos um dígito e descarta turmas, afrouxar aqui não abre a porta para
+// tokens de texto corrido. É a mesma forma que RE_CODIGO_ELETIVA já usava.
+const RE_CODIGO = /^[A-Z]{2,5}[0-9][A-Z0-9]{0,3}$/;
 const RE_TURMA = /^[A-Z]\d{2}$/;
 
 // A tabela "Detalhes das Disciplinas Eletivas" tem schema próprio, diferente do das
@@ -107,11 +114,22 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
 
   // ---------- cabeçalho ----------
   for (const l of linhas) {
-    let m = l.match(/Aluno:\s*(\d+)\s*-\s*(.+?)\s+Identidade/);
+    // O nome de uso é sempre o do campo "Aluno:" — é ele que carrega o nome
+    // social de quem tem um registrado. Nesse caso o portal acrescenta uma linha
+    // "Nome Civil:" e empurra a "Identidade-UF:" para um y intermediário, que o
+    // agrupamento por Y manda para uma linha própria; ancorar o fim do nome em
+    // "Identidade" deixava nome e matrícula vazios e a importação era recusada
+    // inteira. Os terminadores são opcionais: o nome vai até o fim da linha.
+    let m = l.match(/Aluno:\s*(\d+)\s*-\s*(.+?)(?:\s+Identidade|\s+Nome Civil|\s*$)/);
     if (m) {
       perfil.matricula = m[1];
       perfil.nome = m[2].trim();
     }
+    // O campo "Nome Civil:" não é lido para lugar nenhum, de propósito: o perfil
+    // é persistido em localStorage e alimenta o cabeçalho da página, e o nome
+    // civil de quem usa nome social não pode aparecer em nenhum dos dois. Ele
+    // entra acima apenas como terminador, para o caso de o agrupamento por Y
+    // juntá-lo à linha do "Aluno:" e ele acabar colado no fim do nome.
     m = l.match(/Curso:\s*(\d+\s*-\s*.+?)\s+Período:\s*(\d+)/);
     if (m) {
       perfil.curso = m[1].trim();

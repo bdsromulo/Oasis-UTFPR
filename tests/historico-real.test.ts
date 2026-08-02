@@ -2,14 +2,14 @@
 // (dados pessoais). Quando os arquivos não existem (CI, outra máquina), os testes
 // são pulados — a fixture sintética em historico-sintetico.test.ts roda sempre.
 import { describe, it, expect } from "vitest";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, globSync } from "node:fs";
 import { extrairLinhas } from "../src/domain/historico/extrair-linhas";
 import { parseHistorico } from "../src/domain/historico/parser";
 import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { nomeDeEletiva } from "../src/domain/eletivas";
-import { ENG_COMP, semestresDoCurso } from "../src/domain/dadosCurso";
+import { ENG_COMP, dadosDoCursoPorMatriz, semestresDoCurso } from "../src/domain/dadosCurso";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
 import turmasJson from "../data/turmas/2026-1.json";
@@ -237,5 +237,55 @@ describe.skipIf(!existsSync(CASOS_844[1]))("fatos específicos 844: aprovação 
     }
     const elegiveis = listarElegiveis(perfil, matriz844, ENG_COMP.ofertas["2026-2"]) as any[];
     expect(elegiveis.some((e) => ["CSF13", "MA71A"].includes(e.disciplina.codigo))).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Varredura de `materiais-referencia/` — a pasta local (gitignorada) onde ficam
+// os históricos reais desta máquina. Ao contrário dos casos acima, nada aqui é
+// nomeado no código: a lista sai do disco em tempo de execução, o curso sai da
+// matriz lida do próprio PDF, e as asserções são as invariantes gerais. Assim um
+// histórico novo passa a ser coberto só de ser copiado para a pasta, sem que
+// nome de aluno nenhum entre num repositório público.
+//
+// A primeira asserção é a porta de entrada da UI (App.tsx, analisarPDFParaPreview):
+// sem nome ou sem cursadas o PDF é recusado inteiro no check-in.
+const HISTORICOS_LOCAIS = globSync("materiais-referencia/**/*.pdf").sort();
+
+describe.skipIf(HISTORICOS_LOCAIS.length === 0)("históricos locais de referência", () => {
+  it.each(HISTORICOS_LOCAIS)("%s é aceito e fecha com o próprio histórico", async (arquivo) => {
+    const perfil = await carregar(arquivo);
+
+    expect(perfil.nome, "nome do aluno — a UI recusa o PDF sem ele").not.toBe("");
+    expect(perfil.cursadas.length, "disciplinas cursadas").toBeGreaterThan(0);
+    expect(perfil.avisos, perfil.avisos.join("; ")).toEqual([]);
+
+    const curso = dadosDoCursoPorMatriz(perfil.matriz);
+    expect(curso, `matriz ${perfil.matriz} não é coberta`).not.toBeNull();
+    const matrizCurso = curso!.matriz;
+    const mapaCurso = criarMapaIdentidade(matrizCurso);
+
+    // INVARIANTE FORTE: obrigatória cumprida XOR listada como faltante
+    const faltantes = new Set(perfil.obrigatoriasFaltantes.map((f) => f.codigo));
+    const problemas: string[] = [];
+    for (const d of matrizCurso.disciplinas) {
+      if (d.conjunto !== null || d.codigo.startsWith("ENADE")) continue;
+      const ok = cumpre(d.codigo, perfil, mapaCurso);
+      if (ok === faltantes.has(d.codigo)) {
+        problemas.push(`${d.codigo}: cumprida=${ok} listadaComoFaltante=${faltantes.has(d.codigo)}`);
+      }
+    }
+    expect(problemas, problemas.join("; ")).toEqual([]);
+
+    expect(montarPainel(perfil, matrizCurso).inconsistencias).toEqual([]);
+
+    // nada já cumprido pode ser oferecido como elegível, em nenhuma das ofertas
+    for (const semestre of semestresDoCurso(curso!)) {
+      const elegiveis = listarElegiveis(perfil, matrizCurso, curso!.ofertas[semestre]) as any[];
+      const jaCumpridas = elegiveis
+        .filter((e) => cumpre(e.disciplina.codigo, perfil, mapaCurso))
+        .map((e) => e.disciplina.codigo);
+      expect(jaCumpridas, `${semestre}: ${jaCumpridas.join(",")}`).toEqual([]);
+    }
   });
 });

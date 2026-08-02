@@ -149,3 +149,60 @@ describe("histórico sintético", () => {
     expect(perfil.avisos).toEqual([]);
   });
 });
+
+// Quem tem nome social registrado recebe um cabeçalho de três linhas: o portal
+// acrescenta a linha "Nome Civil:" e a "Identidade-UF:" sai centralizada entre
+// as duas (y intermediário), caindo numa linha própria no agrupamento por Y.
+// Exigir "Identidade" na mesma linha do "Aluno:" derrubava o nome e a matrícula,
+// e sem nome a importação inteira era recusada na tela de check-in.
+const LINHAS_NOME_SOCIAL = [
+  "Ministério da Educação",
+  "Universidade Tecnológica Federal do Paraná",
+  "Histórico Escolar",
+  "Aluno: 9999999 - NOME SOCIAL DA SILVA",
+  "Identidade-UF: 000000000-PR",
+  "Nome Civil: NOME CIVIL DA SILVA",
+  "Data Nascimento: 01/01/2005 Naturalidade: Curitiba - PR Nacionalidade: Brasileira",
+  "Curso: 236 - Sist De Informação Período: 5",
+  "Turno: Integral (T/N) Matriz: 981 - Matriz 3 De Sistemas De Informação Situação: Regular",
+  "Coeficiente absoluto: 0,7000",
+  "Ingresso: 1/2024 Data da colação: --/--/----",
+  "Coeficiente normalizado: 0,5000",
+  "Disciplinas Obrigatórias",
+  "Disciplinas Obrigatórias Cursadas",
+  "Per.Disc/Matriz Tipo CHS CHT CHEXT Freq.",
+  // código de 5 letras + 1 dígito: forma real da matriz 981 (ICSHX0/ICSHX1/ICSIX0)
+  // e de toda a família ELT** da Eng. Eletrônica
+  "4 ICSHX0 Acessibilidade E Inclusão Digital S73 R 3 45 45 8,1 81,3 2 2025 Aprovado Por Nota/Frequência",
+  "(0) Período da disciplina na matriz (1) Tipo Turma: R - Regular",
+];
+
+describe("histórico com nome social", () => {
+  const perfil = parseHistorico(LINHAS_NOME_SOCIAL);
+
+  it("lê nome e matrícula com a Identidade-UF em linha separada", () => {
+    expect(perfil.nome).toBe("NOME SOCIAL DA SILVA");
+    expect(perfil.matricula).toBe("9999999");
+    expect(perfil.periodo).toBe(5);
+  });
+
+  it("o nome civil não entra no perfil em lugar nenhum", () => {
+    // o perfil é persistido em localStorage e alimenta a tela: o nome civil de
+    // quem usa nome social não pode vazar por nenhum campo
+    const serializado = JSON.stringify({ ...perfil, aprovadas: [...perfil.aprovadas] });
+    expect(serializado).not.toContain("NOME CIVIL");
+    expect(perfil.nome).not.toContain("Nome Civil");
+  });
+
+  it("código de 5 letras + 1 dígito é reconhecido", () => {
+    const d = perfil.cursadas.find((c) => c.codigo === "ICSHX0");
+    expect(d, `cursadas: ${perfil.cursadas.map((c) => c.codigo).join(",")}`).toBeDefined();
+    expect(d).toMatchObject({ situacao: "aprovado", cht: 45, media: 8.1, ano: 2025 });
+    expect(perfil.aprovadas.has("ICSHX0")).toBe(true);
+  });
+
+  it("nenhuma anomalia de cabeçalho ou de código", () => {
+    const relevantes = perfil.avisos.filter((a) => !/Resumo Optativas/.test(a));
+    expect(relevantes, relevantes.join("; ")).toEqual([]);
+  });
+});
