@@ -25,15 +25,33 @@ function envio(parcial: Partial<EnvioReview> = {}): EnvioReview {
 }
 
 describe("configuração da coleta", () => {
-  it("nasce desabilitada: sem endpoint, não há para onde enviar", () => {
-    expect(URL_ENDPOINT_REVIEWS).toBe("");
-    expect(coletaHabilitada()).toBe(false);
+  it("a coleta só está ligada quando há endpoint", () => {
+    expect(coletaHabilitada()).toBe(URL_ENDPOINT_REVIEWS.trim().length > 0);
   });
 
-  it("com a coleta desligada, o envio falha antes de tocar a rede", async () => {
-    const r = await enviarReview(envio());
-    expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.erros[0]).toMatch(/não está configurada/i);
+  it("o endpoint configurado é uma URL /exec do Apps Script", () => {
+    // guarda contra a armadilha da URL /dev, que o editor também exibe: ela só
+    // funciona para quem está logado como dono e falha para todo o resto
+    if (!URL_ENDPOINT_REVIEWS) return;
+    expect(URL_ENDPOINT_REVIEWS).toMatch(
+      /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/,
+    );
+  });
+
+  it("envio inválido falha na validação, sem tocar a rede", async () => {
+    const original = globalThis.fetch;
+    let chamou = false;
+    globalThis.fetch = (async () => {
+      chamou = true;
+      throw new Error("a rede não deveria ter sido tocada");
+    }) as typeof fetch;
+    try {
+      const r = await enviarReview(envio({ consentimento: false }));
+      expect(r.ok).toBe(false);
+      expect(chamou, "validação precisa barrar antes do fetch").toBe(false);
+    } finally {
+      globalThis.fetch = original;
+    }
   });
 });
 

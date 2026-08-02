@@ -11,10 +11,19 @@
 
 /**
  * URL `/exec` do Apps Script publicado como App da Web.
+ *
  * Vazio desliga a submissão: a plataforma segue exibindo avaliações, mas não
  * oferece o botão de avaliar. É a degradação pretendida enquanto não há endpoint.
+ *
+ * Precisa terminar em `/exec`. A URL `/dev`, que o editor do Apps Script também
+ * mostra, só funciona para quem está logado como dono do script — passa nos
+ * testes de quem publicou e falha para todo o resto.
+ *
+ * Ao editar o script, republique pela implantação EXISTENTE
+ * (Gerenciar implantações → editar → Nova versão) para preservar esta URL.
  */
-export const URL_ENDPOINT_REVIEWS = "";
+export const URL_ENDPOINT_REVIEWS =
+  "https://script.google.com/macros/s/AKfycbxOgninI_XB2h-FiYdzMzpJ0S6_z_dAJ4c2HSiG9I7ybZMj04-peJ4KL86VgNibM6Fm/exec";
 
 /**
  * Site key do Cloudflare Turnstile (pública, pertence ao bundle).
