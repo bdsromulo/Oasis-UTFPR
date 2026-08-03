@@ -10,7 +10,7 @@ import {
   unidadeInclui,
 } from "../src/domain/reviews/professores";
 import { agregar, criarConsulta, publicaveis, LIMIAR_ESTATISTICA } from "../src/domain/reviews/acervo";
-import { TAGS, DESCRICAO_TAG, type Review } from "../src/domain/reviews/tipos";
+import { TAGS, DESCRICAO_TAG, LIMITE_COMENTARIO, type Review } from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { BSI, ENG_COMP, CURSOS } from "../src/domain/dadosCurso";
 import type { DadosCurso } from "../src/domain/dadosCurso";
@@ -346,7 +346,51 @@ describe("vocabulário de tags", () => {
 describe("acervo publicado", () => {
   it("data/reviews.json tem o formato esperado e nasce vazio", () => {
     expect(Array.isArray(acervoJson.reviews)).toBe(true);
-    expect(acervoJson.reviews).toEqual([]);
     expect(acervoJson.fonte).toBeTruthy();
+  });
+
+  // Este bloco roda no Action DEPOIS da ingestão semanal: é a última barreira
+  // antes de um acervo malformado ser commitado. Por isso valida o conteúdo real
+  // do arquivo, e não que ele esteja vazio — afirmar vazio quebraria o workflow
+  // na primeira ingestão bem-sucedida.
+  it("toda avaliação publicada é bem formada", () => {
+    const roster = construirRoster(CURSOS);
+    const codigos = new Set<string>();
+    for (const c of CURSOS) {
+      for (const d of c.matriz.disciplinas) codigos.add(d.codigo);
+      for (const o of Object.values(c.ofertas)) for (const d of o.disciplinas) codigos.add(d.codigo);
+    }
+
+    const problemas: string[] = [];
+    const ids = new Set<string>();
+    for (const r of acervoJson.reviews as Review[]) {
+      const onde = `${r.id ?? "(sem id)"}`;
+      if (!r.id) problemas.push("avaliação sem id");
+      if (ids.has(r.id)) problemas.push(`${onde}: id duplicado`);
+      ids.add(r.id);
+
+      // publicado sem professorId significa que uma linha pendente de roster vazou
+      if (!r.professorId) problemas.push(`${onde}: sem professorId`);
+      else if (!roster.porId(r.professorId)) problemas.push(`${onde}: unidade "${r.professorId}" fora do roster`);
+
+      if (!codigos.has(r.codigo)) problemas.push(`${onde}: código "${r.codigo}" desconhecido`);
+      if (!/^20\d{2}\/[12]$/.test(r.semestre)) problemas.push(`${onde}: semestre "${r.semestre}" malformado`);
+      if (!["aprovado", "reprovado"].includes(r.situacao)) problemas.push(`${onde}: situação inválida`);
+      if (!r.autor?.trim()) problemas.push(`${onde}: autor vazio`);
+
+      for (const campo of ["geral", "didatica", "dificuldade", "cargaTrabalho"] as const) {
+        const v = r[campo];
+        if (!Number.isInteger(v) || v < 1 || v > 5) problemas.push(`${onde}: ${campo} fora de 1–5`);
+      }
+      for (const t of r.tags ?? []) {
+        if (!TAGS.includes(t)) problemas.push(`${onde}: tag desconhecida "${t}"`);
+      }
+      if ((r.comentario ?? "").length > LIMITE_COMENTARIO) problemas.push(`${onde}: comentário longo demais`);
+      // o RA nunca é publicado; se aparecer no texto livre, vazou
+      if (/\b\d{7}\b|[\w.+-]+@[\w-]+\.[\w.]+/.test(r.comentario ?? "")) {
+        problemas.push(`${onde}: dado pessoal no comentário`);
+      }
+    }
+    expect(problemas, problemas.join("; ")).toEqual([]);
   });
 });
