@@ -143,6 +143,23 @@ describe("unidade docente: quem divide a turma é avaliado junto", () => {
     expect(roster.unidadesCom("sicrano-da-silva").map((u) => u.id)).toEqual([id]);
   });
 
+  it("turmas distintas da mesma disciplina, com docentes distintos, são unidades distintas", () => {
+    // é o outro lado da regra: juntos na MESMA turma viram um; em turmas
+    // separadas, com horários próprios, são avaliados separadamente
+    const c = cursoFicticio("curso-turmas", [
+      {
+        codigo: "ICSD20",
+        turmas: [
+          turma({ codigo: "S71", professores_raw: "Fulano De Tal" }),
+          turma({ codigo: "S73", professores_raw: "Sicrano Da Silva" }),
+        ],
+      },
+    ]);
+    const elenco = construirRoster([c]).elencoDaDisciplina("ICSD20");
+    expect(elenco.map((u) => u.id).sort()).toEqual(["fulano-de-tal", "sicrano-da-silva"]);
+    expect(elenco.every((u) => u.nomes.length === 1)).toBe(true);
+  });
+
   it("solo e dupla do mesmo docente são unidades distintas", () => {
     // a experiência de aula é outra: não podem cair na mesma média
     const c = cursoFicticio("curso-misto", [
@@ -202,6 +219,33 @@ describe("roster sobre as ofertas reais", () => {
   it("as ofertas reais têm turmas divididas entre docentes", () => {
     // se isto zerar, a regra da dupla deixou de ter caso real e vale reavaliar
     expect(rosterGlobal.unidades.filter((u) => u.nomes.length > 1).length).toBeGreaterThan(0);
+  });
+
+  it("dupla que a fonte grava sem vírgula não vira uma segunda unidade", () => {
+    // ICSR30 sai como "A, B" em 2025/2 e como "A B" em 2026/1 e 2026/2. Sem o
+    // passe de vocabulário, isso partia o acervo da mesma turma em dois.
+    // Detecta o resíduo pelo próprio critério do parser: um nome individual que
+    // começa com o nome inteiro de OUTRO docente conhecido ainda é concatenação.
+    const solo = rosterGlobal.unidades.filter((u) => u.nomes.length === 1).map((u) => u.nomes[0]);
+    const naoPartidas = solo.filter((n) =>
+      solo.some((o) => o !== n && n.startsWith(o + " ") && n.slice(o.length + 1).split(/\s+/).length >= 2),
+    );
+    expect(naoPartidas, "concatenação não partida sobrando no roster").toEqual([]);
+  });
+
+  it("nenhuma dupla é registrada em duas grafias", () => {
+    const duplas = rosterGlobal.unidades.filter((u) => u.nomes.length > 1);
+    const chaves = duplas.map((u) => [...u.nomes].sort().join("|"));
+    expect(new Set(chaves).size, "mesma dupla registrada duas vezes").toBe(chaves.length);
+  });
+
+  it("nome de docente não carrega hífen solto da extração do PDF", () => {
+    // `data/turmas/2026-1.json` traz dezenas de entradas como "- Fulano"
+    for (const u of rosterGlobal.unidades) {
+      for (const n of u.nomes) {
+        expect(n, `nome com hífen na ponta: ${JSON.stringify(n)}`).toMatch(/^[A-Za-zÀ-ÿ].*[A-Za-zÀ-ÿ.]$/);
+      }
+    }
   });
 
   it("disciplina compartilhada entre cursos tem elenco em ambos", () => {

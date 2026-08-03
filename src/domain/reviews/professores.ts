@@ -29,15 +29,81 @@ const SEPARADOR_NOME = " / ";
  * já parseado só existe em 1197 delas, e usá-lo como primário deixa quase metade
  * do elenco de fora (foi o que inflou uma medição anterior desta arquitetura).
  */
-export function docentesDaTurma(turma: Turma): string[] {
+/**
+ * Remove hífens soltos nas pontas do nome.
+ *
+ * `data/turmas/2026-1.json` traz dezenas de entradas como `"- Juliano Mourao
+ * Vieira"`, e uma como `"- Clayton Moura Belo Leandra Ulbricht -"` — resíduo da
+ * extração do PDF de Turmas Abertas. O slug já descartava o hífen, então a
+ * unidade não se duplicava; mas o RÓTULO exibido saía com ele, e o casamento
+ * contra o vocabulário falhava, impedindo partir as duplas dessas linhas.
+ */
+function limparNome(nome: string): string {
+  return nome.replace(/^[\s\-–—]+/, "").replace(/[\s\-–—]+$/, "").trim();
+}
+
+export function docentesDaTurma(turma: Turma, vocabulario?: string[]): string[] {
   const bruto = turma.professores_raw;
   if (typeof bruto === "string" && bruto.trim()) {
-    return bruto
+    const partes = bruto
       .split(/\s*,\s*/)
-      .map((n) => n.trim())
+      .map(limparNome)
       .filter(Boolean);
+    // sem vírgula, a string ainda pode ser uma dupla concatenada — ver `partir`
+    if (partes.length === 1 && vocabulario) return partir(partes[0], vocabulario) ?? partes;
+    return partes;
   }
-  return (turma.professores ?? []).map((n) => n.trim()).filter(Boolean);
+  return (turma.professores ?? []).map(limparNome).filter(Boolean);
+}
+
+/**
+ * Vocabulário de docentes individuais confiáveis, extraído das entradas que
+ * TÊM vírgula — as únicas em que a fronteira entre nomes é explícita.
+ *
+ * Descarta o que é claramente concatenação (um nome que começa com outro nome
+ * inteiro seguido de espaço), para o vocabulário não se contaminar com os
+ * próprios defeitos que ele serve para corrigir.
+ */
+function vocabularioDeDocentes(brutos: string[]): string[] {
+  const individuais = new Set<string>();
+  for (const raw of brutos) {
+    for (const parte of raw.split(/\s*,\s*/)) {
+      const p = limparNome(parte);
+      if (p) individuais.add(p);
+    }
+  }
+  const lista = [...individuais];
+  return lista
+    .filter((n) => !lista.some((o) => o !== n && n.startsWith(o + " ")))
+    .sort((a, b) => b.length - a.length); // o mais longo casa primeiro
+}
+
+/**
+ * Tenta partir uma string sem vírgula em docentes conhecidos.
+ *
+ * A fonte é inconsistente: a mesma dupla sai como
+ * `"Anelise Munaretto Fonseca, Mauro Sergio Pereira Fonseca"` em 2025/2 e como
+ * `"Anelise Munaretto Fonseca Mauro Sergio Pereira Fonseca"` em 2026/1 e 2026/2.
+ * Sem tratar isso, a mesma dupla vira DUAS unidades e o acervo da turma se parte
+ * ao meio — foram 16 duplas fragmentadas nas ofertas versionadas.
+ *
+ * Cada parte precisa ter ao menos duas palavras: sem essa trava, um docente cujo
+ * nome por acaso comece com o nome inteiro de outro seria partido indevidamente.
+ * Não casando nada, devolve `null` e a string segue intacta — falhar preservando
+ * o dado é melhor do que inventar uma separação.
+ */
+function partir(raw: string, vocabulario: string[]): string[] | null {
+  const duasPalavras = (s: string) => s.trim().split(/\s+/).length >= 2;
+  for (const nome of vocabulario) {
+    if (raw === nome) return null;
+    if (!raw.startsWith(nome + " ")) continue;
+    const resto = raw.slice(nome.length + 1).trim();
+    if (!duasPalavras(nome) || !duasPalavras(resto)) continue;
+    if (vocabulario.includes(resto)) return [nome, resto];
+    const adiante = partir(resto, vocabulario);
+    if (adiante) return [nome, ...adiante];
+  }
+  return null;
 }
 
 /**
@@ -107,11 +173,28 @@ export function construirRoster(cursos: DadosCurso[]): Roster {
   const porUnidade = new Map<string, { nomes: string[]; disciplinas: Set<string> }>();
   const porDisciplina = new Map<string, Set<string>>();
 
+  // Passe 1: vocabulário de docentes individuais, tirado das entradas com vírgula.
+  // Passe 2: usa esse vocabulário para partir as entradas em que a fonte perdeu a
+  // vírgula. Sem isso a mesma dupla vira duas unidades conforme o semestre.
+  const brutos: string[] = [];
   for (const curso of cursos) {
     for (const oferta of Object.values(curso.ofertas)) {
       for (const disciplina of oferta.disciplinas) {
         for (const turma of disciplina.turmas) {
-          const nomes = docentesDaTurma(turma);
+          if (turma.professores_raw?.trim()) brutos.push(turma.professores_raw.trim());
+        }
+      }
+    }
+  }
+  const vocabulario = vocabularioDeDocentes(brutos);
+
+  for (const curso of cursos) {
+    for (const oferta of Object.values(curso.ofertas)) {
+      for (const disciplina of oferta.disciplinas) {
+        for (const turma of disciplina.turmas) {
+          // a unidade é a composição docente DAQUELA turma: turmas diferentes da
+          // mesma disciplina, com docentes diferentes, são unidades diferentes
+          const nomes = docentesDaTurma(turma, vocabulario);
           const id = idDaUnidade(nomes);
           if (!id) continue;
 
