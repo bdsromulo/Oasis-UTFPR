@@ -11,13 +11,16 @@ import { construirRoster, type UnidadeDocente } from "../../domain/reviews/profe
 import { enviarReview, type EnvioReview } from "../../domain/reviews/envio";
 import { coletaHabilitada } from "../../domain/reviews/config";
 import {
+  CATEGORIAS_TAG,
   DESCRICAO_TAG,
   LIMITE_COMENTARIO,
-  TAGS,
+  MAX_AVALIACOES_NO_SEMESTRE,
+  opostaDe,
   type Estrelas,
   type SistemaAvaliativo,
   type Tag,
 } from "../../domain/reviews/tipos";
+import { IconStar } from "../icons";
 import { CURSOS } from "../../domain/dadosCurso";
 
 /** Disciplina concluída que o aluno escolheu avaliar. */
@@ -35,6 +38,54 @@ const SISTEMAS: { id: SistemaAvaliativo; rotulo: string }[] = [
   { id: "trabalhos", rotulo: "Trabalhos" },
   { id: "misto", rotulo: "Misto" },
 ];
+
+/**
+ * Avaliação geral em estrelas.
+ *
+ * Só a nota geral vira estrela. Nas outras três a escala não é "mais = melhor" —
+ * 5 em Dificuldade significa matéria pesada, e estrela ali leria como elogio.
+ * Essas seguem numéricas, com a legenda da escala à vista.
+ */
+function EstrelasGeral(props: { valor: Estrelas | 0; onChange: (v: Estrelas) => void }) {
+  const [passando, setPassando] = useState<number>(0);
+  const ativo = passando || props.valor;
+  const LEGENDA = ["", "Ruim", "Fraca", "Regular", "Boa", "Excelente"];
+  return (
+    <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50 p-4 text-center dark:border-zinc-800/80 dark:bg-zinc-950/50">
+      <div className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">Avaliação geral</div>
+      <div
+        className="mt-2 flex justify-center gap-1"
+        role="radiogroup"
+        aria-label="Avaliação geral"
+        onMouseLeave={() => setPassando(0)}
+      >
+        {([1, 2, 3, 4, 5] as Estrelas[]).map((n) => (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={props.valor === n}
+            aria-label={`${n} de 5`}
+            onMouseEnter={() => setPassando(n)}
+            onClick={() => props.onChange(n)}
+            className="cursor-pointer p-0.5 transition-transform hover:scale-110"
+          >
+            <IconStar
+              className={`h-8 w-8 ${
+                ativo >= n
+                  ? "fill-utfpr-500 text-utfpr-500"
+                  : "fill-transparent text-zinc-300 dark:text-zinc-700"
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+      <div className="mt-1 h-4 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+        {LEGENDA[ativo] ?? ""}
+      </div>
+    </div>
+  );
+}
 
 function Estrelinhas(props: {
   rotulo: string;
@@ -90,6 +141,9 @@ export function ModalAvaliacao(props: {
   const [cargaTrabalho, setCargaTrabalho] = useState<Estrelas | 0>(0);
   const [avaliacao, setAvaliacao] = useState<SistemaAvaliativo | "">("");
   const [tags, setTags] = useState<Tag[]>([]);
+  const [detalheAberto, setDetalheAberto] = useState(false);
+  const [qtdProvas, setQtdProvas] = useState("");
+  const [qtdTrabalhos, setQtdTrabalhos] = useState("");
   const [comentario, setComentario] = useState("");
   const [consentimento, setConsentimento] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -116,6 +170,9 @@ export function ModalAvaliacao(props: {
     setCargaTrabalho(0);
     setAvaliacao("");
     setTags([]);
+    setDetalheAberto(false);
+    setQtdProvas("");
+    setQtdTrabalhos("");
     setComentario("");
     setConsentimento(false);
     setErros([]);
@@ -134,7 +191,14 @@ export function ModalAvaliacao(props: {
   if (!alvo) return null;
 
   function alternarTag(t: Tag) {
-    setTags((atual) => (atual.includes(t) ? atual.filter((x) => x !== t) : [...atual, t]));
+    setTags((atual) => {
+      if (atual.includes(t)) return atual.filter((x) => x !== t);
+      // marcar uma tag desmarca a oposta: "acessível" e "pouco acessível" juntas
+      // não são opinião matizada, são dado incoerente
+      const oposta = opostaDe(t);
+      const limpo = oposta ? atual.filter((x) => x !== oposta) : atual;
+      return [...limpo, t];
+    });
   }
 
   async function submeter() {
@@ -154,6 +218,9 @@ export function ModalAvaliacao(props: {
       dificuldade: dificuldade as Estrelas,
       cargaTrabalho: cargaTrabalho as Estrelas,
       avaliacao: avaliacao as SistemaAvaliativo,
+      // campo vazio é "não informado", e não zero — por isso undefined
+      qtdProvas: qtdProvas === "" ? undefined : Number(qtdProvas),
+      qtdTrabalhos: qtdTrabalhos === "" ? undefined : Number(qtdTrabalhos),
       tags,
       comentario: comentario.trim(),
       consentimento,
@@ -276,9 +343,17 @@ export function ModalAvaliacao(props: {
               )}
             </div>
 
-            {/* notas */}
+            {/* avaliação geral: seção própria, em estrelas */}
+            <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
+              <EstrelasGeral valor={geral} onChange={setGeral} />
+            </div>
+
+            {/* classificações específicas: numéricas, porque a escala não é
+                "mais = melhor" em Dificuldade nem em Carga */}
             <div className="space-y-3 border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
-              <Estrelinhas rotulo="Avaliação geral" ajuda="1 = ruim, 5 = excelente" valor={geral} onChange={setGeral} />
+              <div className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                Classificações específicas
+              </div>
               <Estrelinhas rotulo="Didática" ajuda="1 = ruim, 5 = excelente" valor={didatica} onChange={setDidatica} />
               <Estrelinhas rotulo="Dificuldade" ajuda="1 = fácil, 5 = difícil" valor={dificuldade} onChange={setDificuldade} />
               <Estrelinhas rotulo="Carga de trabalho" ajuda="1 = pouca, 5 = muita" valor={cargaTrabalho} onChange={setCargaTrabalho} />
@@ -307,29 +382,90 @@ export function ModalAvaliacao(props: {
               </div>
             </div>
 
-            {/* tags */}
+            {/* detalhamento opcional da composição da nota */}
+            <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
+              <button
+                type="button"
+                onClick={() => setDetalheAberto((v) => !v)}
+                aria-expanded={detalheAberto}
+                className="flex w-full cursor-pointer items-center justify-between text-sm font-semibold text-zinc-800 dark:text-zinc-200"
+              >
+                <span>
+                  Detalhamento{" "}
+                  <span className="font-normal text-zinc-400">· opcional</span>
+                </span>
+                <span className="text-xs text-zinc-400">{detalheAberto ? "▲" : "▼"}</span>
+              </button>
+              {detalheAberto && (
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  {[
+                    { rotulo: "Quantas provas?", valor: qtdProvas, set: setQtdProvas, id: "qtd-provas" },
+                    { rotulo: "Quantos trabalhos?", valor: qtdTrabalhos, set: setQtdTrabalhos, id: "qtd-trabalhos" },
+                  ].map((campo) => (
+                    <div key={campo.id}>
+                      <label htmlFor={campo.id} className="text-xs text-zinc-600 dark:text-zinc-300">
+                        {campo.rotulo}
+                      </label>
+                      <input
+                        id={campo.id}
+                        type="number"
+                        min={0}
+                        max={MAX_AVALIACOES_NO_SEMESTRE}
+                        inputMode="numeric"
+                        value={campo.valor}
+                        onChange={(e) => campo.set(e.target.value)}
+                        placeholder="—"
+                        className="mt-1 w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+                      />
+                    </div>
+                  ))}
+                  <p className="col-span-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                    Deixar em branco significa "não informado" — diferente de zero.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* tags, agrupadas por natureza */}
             <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
               <div className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
                 O que descreve a experiência?
               </div>
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                Opcional. Passe o mouse para ver o que cada uma quer dizer.
+                Opcional. Passe o mouse para ver o que cada uma quer dizer. Marcar uma
+                opção desmarca a que a contradiz.
               </p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {TAGS.map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    title={DESCRICAO_TAG[t].comportamento}
-                    onClick={() => alternarTag(t)}
-                    className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors ${
-                      tags.includes(t)
-                        ? "border-utfpr-500/40 bg-utfpr-500/20 text-zinc-900 dark:text-zinc-100"
-                        : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
-                    }`}
-                  >
-                    {DESCRICAO_TAG[t].rotulo}
-                  </button>
+              <div className="mt-3 space-y-3">
+                {CATEGORIAS_TAG.map((cat) => (
+                  <div key={cat.id}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                      {cat.rotulo}
+                    </div>
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {cat.tags.map((t) => {
+                        const oposta = opostaDe(t);
+                        return (
+                          <button
+                            key={t}
+                            type="button"
+                            aria-pressed={tags.includes(t)}
+                            title={
+                              DESCRICAO_TAG[t].comportamento +
+                              (oposta ? `\n(exclui "${DESCRICAO_TAG[oposta].rotulo}")` : "")
+                            }
+                            onClick={() => alternarTag(t)}
+                            className={`rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors ${
+                              tags.includes(t)
+                                ? "border-utfpr-500/40 bg-utfpr-500/20 text-zinc-900 dark:text-zinc-100"
+                                : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+                            }`}
+                          >
+                            {DESCRICAO_TAG[t].rotulo}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

@@ -1,5 +1,14 @@
 // Submissão de uma avaliação ao endpoint de coleta (Estrategia.md §6.6).
-import { LIMITE_COMENTARIO, TAGS, type Estrelas, type SistemaAvaliativo, type Tag } from "./tipos";
+import {
+  LIMITE_COMENTARIO,
+  MAX_AVALIACOES_NO_SEMESTRE,
+  TAGS,
+  TAGS_OPOSTAS,
+  DESCRICAO_TAG,
+  type Estrelas,
+  type SistemaAvaliativo,
+  type Tag,
+} from "./tipos";
 import { URL_ENDPOINT_REVIEWS, coletaHabilitada } from "./config";
 
 /** O que o formulário nativo envia. Espelha o `validar()` do Apps Script. */
@@ -21,6 +30,9 @@ export interface EnvioReview {
   dificuldade: Estrelas;
   cargaTrabalho: Estrelas;
   avaliacao: SistemaAvaliativo;
+  /** Detalhamento opcional: ausente significa "não informado", não zero. */
+  qtdProvas?: number;
+  qtdTrabalhos?: number;
   tags: Tag[];
   comentario: string;
   consentimento: boolean;
@@ -56,6 +68,22 @@ export function validarEnvio(dados: EnvioReview): string[] {
 
   for (const t of dados.tags) {
     if (!TAGS.includes(t)) erros.push(`Tag desconhecida: ${t}`);
+  }
+  for (const [a, b] of TAGS_OPOSTAS) {
+    if (dados.tags.includes(a) && dados.tags.includes(b)) {
+      erros.push(`"${DESCRICAO_TAG[a].rotulo}" e "${DESCRICAO_TAG[b].rotulo}" se contradizem.`);
+    }
+  }
+
+  for (const [campo, rotulo] of [
+    ["qtdProvas", "provas"],
+    ["qtdTrabalhos", "trabalhos"],
+  ] as const) {
+    const v = dados[campo];
+    if (v === undefined) continue; // não informado é legítimo
+    if (!Number.isInteger(v) || v < 0 || v > MAX_AVALIACOES_NO_SEMESTRE) {
+      erros.push(`Quantidade de ${rotulo} precisa ser um inteiro de 0 a ${MAX_AVALIACOES_NO_SEMESTRE}.`);
+    }
   }
   if (dados.comentario.length > LIMITE_COMENTARIO) {
     erros.push(`O comentário passa de ${LIMITE_COMENTARIO} caracteres.`);

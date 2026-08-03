@@ -43,12 +43,25 @@ var ABA_RESPOSTAS = 'Respostas';
 
 /** Vocabulário fechado de tags (§6.5). Precisa espelhar `src/domain/reviews/tipos.ts`. */
 var TAGS = [
-  'chamada-rigorosa', 'chamada-flexivel', 'acessivel', 'pouco-acessivel',
-  'trata-com-respeito', 'aberto-a-rever-nota', 'cobra-so-o-ensinado',
-  'cobra-alem-do-ensinado', 'slides-bastam', 'corrige-rapido', 'corrige-devagar',
-  'prazos-rigidos', 'aceita-atraso', 'da-revisao-antes-da-prova',
-  'oferece-substitutiva', 'trabalho-em-grupo-pesado', 'aula-pratica'
+  'cobra-so-o-ensinado', 'cobra-alem-do-ensinado', 'prova-com-consulta',
+  'da-revisao-antes-da-prova', 'oferece-substitutiva', 'trabalho-em-grupo-pesado',
+  'slides-bastam', 'aula-pratica', 'resolve-exercicio-em-aula', 'aula-gravada',
+  'acessivel', 'pouco-acessivel', 'trata-com-respeito', 'aberto-a-rever-nota',
+  'chamada-rigorosa', 'chamada-flexivel', 'prazos-rigidos', 'aceita-atraso',
+  'corrige-rapido', 'corrige-devagar'
 ];
+
+/** Pares que se contradizem: marcar os dois é dado incoerente, não opinião matizada. */
+var TAGS_OPOSTAS = [
+  ['cobra-so-o-ensinado', 'cobra-alem-do-ensinado'],
+  ['acessivel', 'pouco-acessivel'],
+  ['chamada-rigorosa', 'chamada-flexivel'],
+  ['prazos-rigidos', 'aceita-atraso'],
+  ['corrige-rapido', 'corrige-devagar']
+];
+
+/** Teto de sanidade do detalhamento opcional. */
+var MAX_AVALIACOES = 20;
 
 var SISTEMAS = ['provas', 'trabalhos', 'misto'];
 var LIMITE_COMENTARIO = 1000;
@@ -177,10 +190,12 @@ function doPost(e) {
       dados.dificuldade,                 // M
       dados.cargaTrabalho,               // N
       dados.avaliacao,                   // O
-      (dados.tags || []).join('|'),      // P
-      dados.comentario || '',            // Q
-      dados.consentimento === true,      // R
-      ''                                 // S aprovado — preenchido na curadoria
+      numeroOuVazio(dados.qtdProvas),    // P  (vazio = não informado, ≠ zero)
+      numeroOuVazio(dados.qtdTrabalhos), // Q
+      (dados.tags || []).join('|'),      // R
+      dados.comentario || '',            // S
+      dados.consentimento === true,      // T
+      ''                                 // U aprovado — preenchido na curadoria
     ]);
 
     return responder(200, { ok: true });
@@ -218,9 +233,26 @@ function validar(d) {
   if (SISTEMAS.indexOf(d.avaliacao) === -1) erros.push('Sistema avaliativo inválido.');
 
   var tags = d.tags || [];
-  if (!Array.isArray(tags)) erros.push('Tags em formato inválido.');
-  else tags.forEach(function (t) {
-    if (TAGS.indexOf(t) === -1) erros.push('Tag desconhecida: ' + t);
+  if (!Array.isArray(tags)) {
+    erros.push('Tags em formato inválido.');
+  } else {
+    tags.forEach(function (t) {
+      if (TAGS.indexOf(t) === -1) erros.push('Tag desconhecida: ' + t);
+    });
+    TAGS_OPOSTAS.forEach(function (par) {
+      if (tags.indexOf(par[0]) !== -1 && tags.indexOf(par[1]) !== -1) {
+        erros.push('Tags contraditórias: ' + par[0] + ' e ' + par[1] + '.');
+      }
+    });
+  }
+
+  // detalhamento é opcional: ausente é legítimo, presente precisa ser plausível
+  ['qtdProvas', 'qtdTrabalhos'].forEach(function (campo) {
+    var v = d[campo];
+    if (v === undefined || v === null || v === '') return;
+    if (!Number.isInteger(v) || v < 0 || v > MAX_AVALIACOES) {
+      erros.push('Campo "' + campo + '" precisa ser inteiro de 0 a ' + MAX_AVALIACOES + '.');
+    }
   });
 
   var comentario = d.comentario || '';
@@ -263,10 +295,16 @@ function criarAba(planilha) {
   aba.appendRow([
     'carimbo', 'identidade', 'ra', 'autor', 'codigo', 'semestre', 'situacao',
     'turma', 'professorId', 'professorTexto', 'geral', 'didatica', 'dificuldade',
-    'cargaTrabalho', 'avaliacao', 'tags', 'comentario', 'consentimento', 'aprovado'
+    'cargaTrabalho', 'avaliacao', 'qtdProvas', 'qtdTrabalhos', 'tags',
+    'comentario', 'consentimento', 'aprovado'
   ]);
   aba.setFrozenRows(1);
   return aba;
+}
+
+/** Campo numérico opcional: em branco significa "não informado", e não zero. */
+function numeroOuVazio(v) {
+  return (v === null || v === undefined || v === '') ? '' : v;
 }
 
 function responder(codigo, corpo) {

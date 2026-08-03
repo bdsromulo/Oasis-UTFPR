@@ -19,7 +19,14 @@
 //   URL_CSV_REVIEWS=<url> npx tsx scripts/ingerir-reviews.ts
 import { createHash } from "node:crypto";
 import { writeFileSync, readFileSync } from "node:fs";
-import { TAGS, LIMITE_COMENTARIO, type Review, type Tag } from "../src/domain/reviews/tipos";
+import {
+  TAGS,
+  TAGS_OPOSTAS,
+  LIMITE_COMENTARIO,
+  MAX_AVALIACOES_NO_SEMESTRE,
+  type Review,
+  type Tag,
+} from "../src/domain/reviews/tipos";
 import { construirRoster } from "../src/domain/reviews/professores";
 import { CURSOS } from "../src/domain/dadosCurso";
 
@@ -150,6 +157,22 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     for (const t of tags) {
       if (!TAGS.includes(t as Tag)) problemas.push(`tag desconhecida "${t}"`);
     }
+    for (const [a, b] of TAGS_OPOSTAS) {
+      if (tags.includes(a) && tags.includes(b)) problemas.push(`tags contraditórias "${a}" e "${b}"`);
+    }
+
+    // detalhamento opcional: célula vazia é "não informado", e não zero
+    const quantidades: Record<string, number | undefined> = {};
+    for (const campo of ["qtdProvas", "qtdTrabalhos"]) {
+      const bruto = campos[campo] ?? "";
+      if (bruto === "") continue;
+      const v = Number(bruto);
+      if (!Number.isInteger(v) || v < 0 || v > MAX_AVALIACOES_NO_SEMESTRE) {
+        problemas.push(`${campo} "${bruto}" fora de 0–${MAX_AVALIACOES_NO_SEMESTRE}`);
+      } else {
+        quantidades[campo] = v;
+      }
+    }
 
     if (campos.comentario.length > LIMITE_COMENTARIO) {
       problemas.push(`comentário com ${campos.comentario.length} caracteres (máximo ${LIMITE_COMENTARIO})`);
@@ -183,6 +206,8 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
       dificuldade: notas.dificuldade as Review["dificuldade"],
       cargaTrabalho: notas.cargaTrabalho as Review["cargaTrabalho"],
       avaliacao: campos.avaliacao as Review["avaliacao"],
+      ...(quantidades.qtdProvas !== undefined ? { qtdProvas: quantidades.qtdProvas } : {}),
+      ...(quantidades.qtdTrabalhos !== undefined ? { qtdTrabalhos: quantidades.qtdTrabalhos } : {}),
       tags: tags as Tag[],
       comentario: campos.comentario,
     });

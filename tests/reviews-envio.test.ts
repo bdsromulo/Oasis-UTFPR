@@ -8,7 +8,7 @@ import {
   MATRIZES_COM_REVIEWS,
   URL_ENDPOINT_REVIEWS,
 } from "../src/domain/reviews/config";
-import { LIMITE_COMENTARIO } from "../src/domain/reviews/tipos";
+import { LIMITE_COMENTARIO, TAGS_OPOSTAS } from "../src/domain/reviews/tipos";
 import { construirRoster } from "../src/domain/reviews/professores";
 import { BSI, CURSOS } from "../src/domain/dadosCurso";
 
@@ -131,6 +131,29 @@ describe("validação do envio", () => {
 
   it("recusa tag fora do vocabulário fechado", () => {
     expect(validarEnvio(envio({ tags: ["gente-boa" as never] })).join(" ")).toMatch(/desconhecida/i);
+  });
+
+  it("recusa tags que se contradizem", () => {
+    for (const [a, b] of TAGS_OPOSTAS) {
+      const erros = validarEnvio(envio({ tags: [a, b] }));
+      expect(erros.join(" "), `${a} + ${b}`).toMatch(/se contradizem/);
+    }
+  });
+
+  it("aceita cada lado de um par oposto isoladamente", () => {
+    for (const [a, b] of TAGS_OPOSTAS) {
+      expect(validarEnvio(envio({ tags: [a] })), a).toEqual([]);
+      expect(validarEnvio(envio({ tags: [b] })), b).toEqual([]);
+    }
+  });
+
+  it("detalhamento é opcional, mas precisa ser plausível quando informado", () => {
+    expect(validarEnvio(envio())).toEqual([]); // ausente
+    expect(validarEnvio(envio({ qtdProvas: 0, qtdTrabalhos: 0 }))).toEqual([]); // zero é válido
+    expect(validarEnvio(envio({ qtdProvas: 3, qtdTrabalhos: 2 }))).toEqual([]);
+    expect(validarEnvio(envio({ qtdProvas: -1 })).join(" ")).toMatch(/provas/);
+    expect(validarEnvio(envio({ qtdTrabalhos: 999 })).join(" ")).toMatch(/trabalhos/);
+    expect(validarEnvio(envio({ qtdProvas: 2.5 })).join(" ")).toMatch(/provas/);
   });
 
   it("recusa comentário acima do limite", () => {

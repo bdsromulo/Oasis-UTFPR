@@ -24,7 +24,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RF12 — Estados e Modos de Planejamento do Semestre:** Suporte aos dois estados essenciais de uso: a) *Prévia de Matrícula (Oficial)* para o período que antecede e sucede a matrícula com base nos dados reais divulgados; b) *Período Corrido de Semestre (Simulação)* para organização durante o semestre vigente hipotetizando ofertas similares.
 - `[x]` **RF13 — Edição Contínua e Remoção Rápida na Grade (Loop Estilo GNH):** Botão "X" instantâneo revelado no hover de cada disciplina na minigrade lateral, no modal da grade completa e nos blocos da tabela visual de horários para remoção em um único clique sem perda de contexto.
 - `[x]` **RF14 — Gamificação e Simulação de Impacto da Grade no Progresso:** Ao montar a grade do semestre, simular em tempo real o *impulso* que cada disciplina selecionada dá à integralização de cada categoria curricular (Obrigatórias, 2º Estrato, Humanidades, Trilhas, Eletivas, Extensão e Estágio), sobrepondo o cumprido do histórico ao previsto pela grade (`motor/progressoGrade.ts`), tornando visível o avanço que aquele semestre representa.
-- `[ ]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu** (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Cada avaliação é composta por: nota geral (1–5); classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5); **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **tags de comportamento observável** (seleção múltipla); e comentário livre limitado a 1000 caracteres. A submissão só é possível a partir da tela de quem carregou o histórico, e o conjunto agregado é redistribuído publicamente. Ver §6.
+- `[ ]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu** (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Cada avaliação é composta por: **nota geral em estrelas** (1–5), em seção própria; classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5, numéricas porque a escala não é "mais = melhor"); **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **detalhamento opcional** com quantidade de provas e de trabalhos; **tags de comportamento observável** agrupadas por categoria, com pares contraditórios mutuamente exclusivos; e comentário livre limitado a 1000 caracteres. A submissão só é possível de dentro da plataforma, por dois caminhos: o convite da RF16 na tela de progresso e um acionador no menu do topo que lista **todas** as disciplinas concluídas. O conjunto agregado é redistribuído publicamente. Ver §6.
 - `[ ]` **RF16 — Convite de Avaliação Pós-Semestre:** Ao acessar a plataforma, o aluno que tiver histórico carregado recebe um convite único por semestre para avaliar as disciplinas cursadas no **último semestre do documento** (derivado de `periodoDocumento`). O convite é dispensável e não bloqueia o uso; o estado de "já respondido" é registrado por semestre, de modo que um novo semestre volta a convidar uma vez.
 - `[ ]` **RF17 — Consulta de Avaliações no Planejamento de Matrícula:** No planejamento de matrícula, o nome do professor associado a uma turma é acionável e abre um painel lateral com as avaliações daquele professor — agregados por classificação, tags mais frequentes e comentários — permitindo decidir a turma com base na experiência da comunidade.
 
@@ -254,6 +254,8 @@ A unidade é o par **professor + disciplina + semestre**, e não a disciplina is
   "dificuldade":   3,               // 1–5  (1 = fácil, 5 = difícil)
   "cargaTrabalho": 2,               // 1–5  (1 = pouca, 5 = muita)
   "avaliacao":     "provas",        // provas | trabalhos | misto
+  "qtdProvas":     2,               // detalhamento OPCIONAL — ausente ≠ zero
+  "qtdTrabalhos":  1,
   "tags":          ["corrige-rapido", "cobra-so-o-ensinado"],
   "comentario":    "texto livre, ≤ 1000 caracteres"
 }
@@ -326,6 +328,10 @@ Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimen
 
 **Regra:** toda tag precisa ser explicável por **comportamento observável**. Tags ancoradas em personalidade ("gente boa") são inadmissíveis: não são verificáveis, não ajudam a decidir turma e são exatamente a superfície de risco difamatório que a TASK-08 isola. Quando a intenção for elogiar postura, traduza para conduta observável.
 
+As tags são agrupadas em quatro categorias — **Conteúdo e avaliação**, **Didática e material**, **Comunicação e trato** e **Rotina e prazos** —, o que reduz a lista a blocos legíveis e coloca cada par contraditório lado a lado.
+
+**Pares opostos são mutuamente exclusivos.** Marcar *Acessível* e *Pouco acessível* juntas não é opinião matizada, é dado incoerente: ninguém teve um professor que respondia rápido e não respondia. A interface troca um pelo outro ao clicar, e as três camadas de validação recusam quem insistir. Os pares são `cobra-so-o-ensinado`/`cobra-alem-do-ensinado`, `acessivel`/`pouco-acessivel`, `chamada-rigorosa`/`chamada-flexivel`, `prazos-rigidos`/`aceita-atraso` e `corrige-rapido`/`corrige-devagar`.
+
 | Tag | Comportamento observável que a justifica |
 | :--- | :--- |
 | `chamada-rigorosa` | Faz chamada com regularidade e aplica a reprovação por falta |
@@ -369,14 +375,14 @@ Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. 
 
 A aba `Respostas` é criada pelo próprio Apps Script com este layout. A coluna `aprovado` é a que o moderador preenche:
 
-| | A | B | C | D | E | F | G | H | I | J | K–N | O | P | Q | R | S |
-| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| | carimbo | identidade | **ra** | autor | codigo | semestre | situacao | turma | professorId | professorTexto | notas | avaliacao | tags | comentario | consentimento | **aprovado** |
+| | A | B | C | D | E | F | G | H | I | J | K–N | O | P | Q | R | S | T | U |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| | carimbo | identidade | **ra** | autor | codigo | semestre | situacao | turma | professorId | professorTexto | notas | avaliacao | qtdProvas | qtdTrabalhos | tags | comentario | consentimento | **aprovado** |
 
 A aba `Homologado` projeta **só o que é público**, e é ela — e só ela — que recebe URL de CSV:
 
 ```
-=QUERY(Respostas!A:S; "select A,D,E,F,G,H,I,K,L,M,N,O,P,Q where S = 'SIM' and I <> ''"; 1)
+=QUERY(Respostas!A:U; "select A,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S where U = 'SIM' and I <> ''"; 1)
 ```
 
 Três coisas que essa fórmula garante por construção, sem depender de disciplina de ninguém:

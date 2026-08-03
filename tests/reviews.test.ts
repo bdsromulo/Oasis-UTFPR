@@ -10,7 +10,15 @@ import {
   unidadeInclui,
 } from "../src/domain/reviews/professores";
 import { agregar, criarConsulta, publicaveis, LIMIAR_ESTATISTICA } from "../src/domain/reviews/acervo";
-import { TAGS, DESCRICAO_TAG, LIMITE_COMENTARIO, type Review } from "../src/domain/reviews/tipos";
+import {
+  TAGS,
+  DESCRICAO_TAG,
+  CATEGORIAS_TAG,
+  TAGS_OPOSTAS,
+  opostaDe,
+  LIMITE_COMENTARIO,
+  type Review,
+} from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { BSI, ENG_COMP, CURSOS } from "../src/domain/dadosCurso";
 import type { DadosCurso } from "../src/domain/dadosCurso";
@@ -340,6 +348,34 @@ describe("vocabulário de tags", () => {
       expect(DESCRICAO_TAG[t]?.comportamento, `tag sem comportamento: ${t}`).toBeTruthy();
     }
     expect(Object.keys(DESCRICAO_TAG).sort()).toEqual([...TAGS].sort());
+  });
+
+  it("toda tag pertence a exatamente uma categoria", () => {
+    const categorizadas = CATEGORIAS_TAG.flatMap((c) => c.tags);
+    expect(categorizadas.sort()).toEqual([...TAGS].sort());
+    expect(new Set(categorizadas).size, "tag em mais de uma categoria").toBe(categorizadas.length);
+  });
+
+  it("os pares opostos existem no vocabulário e são recíprocos", () => {
+    for (const [a, b] of TAGS_OPOSTAS) {
+      expect(TAGS, `${a} fora do vocabulário`).toContain(a);
+      expect(TAGS, `${b} fora do vocabulário`).toContain(b);
+      expect(opostaDe(a), `oposta de ${a}`).toBe(b);
+      expect(opostaDe(b), `oposta de ${b}`).toBe(a);
+    }
+  });
+
+  it("uma tag não pode ser oposta de duas", () => {
+    const envolvidas = TAGS_OPOSTAS.flat();
+    expect(new Set(envolvidas).size).toBe(envolvidas.length);
+  });
+
+  it("tags opostas moram na mesma categoria, para ficarem lado a lado", () => {
+    for (const [a, b] of TAGS_OPOSTAS) {
+      const catA = CATEGORIAS_TAG.find((c) => c.tags.includes(a))?.id;
+      const catB = CATEGORIAS_TAG.find((c) => c.tags.includes(b))?.id;
+      expect(catA, `${a} e ${b} em categorias diferentes`).toBe(catB);
+    }
   });
 });
 
