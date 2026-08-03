@@ -85,6 +85,14 @@ export function validarEnvio(dados: EnvioReview): string[] {
       erros.push(`Quantidade de ${rotulo} precisa ser um inteiro de 0 a ${MAX_AVALIACOES_NO_SEMESTRE}.`);
     }
   }
+  // o detalhamento tem de casar com o sistema avaliativo: contar provas em quem
+  // marcou "Trabalhos" é dado que o próprio formulário não chegou a mostrar
+  if (dados.avaliacao === "trabalhos" && dados.qtdProvas !== undefined) {
+    erros.push("Quem avalia só por trabalhos não informa quantidade de provas.");
+  }
+  if (dados.avaliacao === "provas" && dados.qtdTrabalhos !== undefined) {
+    erros.push("Quem avalia só por provas não informa quantidade de trabalhos.");
+  }
   if (dados.comentario.length > LIMITE_COMENTARIO) {
     erros.push(`O comentário passa de ${LIMITE_COMENTARIO} caracteres.`);
   }

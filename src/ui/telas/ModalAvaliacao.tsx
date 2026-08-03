@@ -190,6 +190,22 @@ export function ModalAvaliacao(props: {
 
   if (!alvo) return null;
 
+  /**
+   * Trocar o sistema avaliativo limpa o detalhamento que deixa de fazer sentido.
+   *
+   * Sem isso, quem preenche "3 trabalhos" e depois muda para "Provas" enviaria um
+   * número de trabalhos que o formulário nem mostra mais — dado fantasma, invisível
+   * para quem o produziu.
+   */
+  function escolherSistema(s: SistemaAvaliativo) {
+    setAvaliacao(s);
+    if (s === "provas") setQtdTrabalhos("");
+    if (s === "trabalhos") setQtdProvas("");
+  }
+
+  const mostraProvas = avaliacao === "provas" || avaliacao === "misto";
+  const mostraTrabalhos = avaliacao === "trabalhos" || avaliacao === "misto";
+
   function alternarTag(t: Tag) {
     setTags((atual) => {
       if (atual.includes(t)) return atual.filter((x) => x !== t);
@@ -369,7 +385,7 @@ export function ModalAvaliacao(props: {
                   <button
                     key={s.id}
                     type="button"
-                    onClick={() => setAvaliacao(s.id)}
+                    onClick={() => escolherSistema(s.id)}
                     className={`rounded-xl border px-3 py-1.5 text-xs font-bold transition-colors ${
                       avaliacao === s.id
                         ? "border-utfpr-500/40 bg-utfpr-500 text-zinc-950"
@@ -396,11 +412,22 @@ export function ModalAvaliacao(props: {
                 </span>
                 <span className="text-xs text-zinc-400">{detalheAberto ? "▲" : "▼"}</span>
               </button>
-              {detalheAberto && (
-                <div className="mt-3 grid grid-cols-2 gap-3">
+              {detalheAberto && !avaliacao && (
+                <p className="mt-3 rounded-xl border border-zinc-200/70 bg-zinc-50 p-3 text-xs leading-relaxed text-zinc-600 dark:border-zinc-800/70 dark:bg-zinc-950/50 dark:text-zinc-300">
+                  Escolha acima como a nota era composta — os campos aqui dependem disso.
+                </p>
+              )}
+              {detalheAberto && avaliacao && (
+                <div className={`mt-3 grid gap-3 ${avaliacao === "misto" ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {/* os campos seguem o sistema avaliativo: perguntar quantas provas
+                      a quem marcou "Trabalhos" só produz resposta sem sentido */}
                   {[
-                    { rotulo: "Quantas provas?", valor: qtdProvas, set: setQtdProvas, id: "qtd-provas" },
-                    { rotulo: "Quantos trabalhos?", valor: qtdTrabalhos, set: setQtdTrabalhos, id: "qtd-trabalhos" },
+                    ...(mostraProvas
+                      ? [{ rotulo: "Quantas provas?", valor: qtdProvas, set: setQtdProvas, id: "qtd-provas" }]
+                      : []),
+                    ...(mostraTrabalhos
+                      ? [{ rotulo: "Quantos trabalhos?", valor: qtdTrabalhos, set: setQtdTrabalhos, id: "qtd-trabalhos" }]
+                      : []),
                   ].map((campo) => (
                     <div key={campo.id}>
                       <label htmlFor={campo.id} className="text-xs text-zinc-600 dark:text-zinc-300">
@@ -419,7 +446,7 @@ export function ModalAvaliacao(props: {
                       />
                     </div>
                   ))}
-                  <p className="col-span-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                  <p className="col-span-full text-[11px] text-zinc-500 dark:text-zinc-400">
                     Deixar em branco significa "não informado" — diferente de zero.
                   </p>
                 </div>

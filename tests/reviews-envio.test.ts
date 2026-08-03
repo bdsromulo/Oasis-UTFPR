@@ -148,12 +148,25 @@ describe("validação do envio", () => {
   });
 
   it("detalhamento é opcional, mas precisa ser plausível quando informado", () => {
-    expect(validarEnvio(envio())).toEqual([]); // ausente
-    expect(validarEnvio(envio({ qtdProvas: 0, qtdTrabalhos: 0 }))).toEqual([]); // zero é válido
-    expect(validarEnvio(envio({ qtdProvas: 3, qtdTrabalhos: 2 }))).toEqual([]);
+    expect(validarEnvio(envio({ avaliacao: "misto" }))).toEqual([]); // ausente
+    expect(validarEnvio(envio({ avaliacao: "misto", qtdProvas: 0, qtdTrabalhos: 0 }))).toEqual([]);
+    expect(validarEnvio(envio({ avaliacao: "misto", qtdProvas: 3, qtdTrabalhos: 2 }))).toEqual([]);
     expect(validarEnvio(envio({ qtdProvas: -1 })).join(" ")).toMatch(/provas/);
-    expect(validarEnvio(envio({ qtdTrabalhos: 999 })).join(" ")).toMatch(/trabalhos/);
+    expect(validarEnvio(envio({ avaliacao: "trabalhos", qtdTrabalhos: 999 })).join(" ")).toMatch(/trabalhos/);
     expect(validarEnvio(envio({ qtdProvas: 2.5 })).join(" ")).toMatch(/provas/);
+  });
+
+  it("o detalhamento tem de casar com o sistema avaliativo", () => {
+    // é o que a interface já garante escondendo o campo; aqui vira regra
+    expect(validarEnvio(envio({ avaliacao: "trabalhos", qtdProvas: 2 })).join(" ")).toMatch(
+      /só por trabalhos não informa quantidade de provas/,
+    );
+    expect(validarEnvio(envio({ avaliacao: "provas", qtdTrabalhos: 2 })).join(" ")).toMatch(
+      /só por provas não informa quantidade de trabalhos/,
+    );
+    // cada um com o seu, e "misto" aceita ambos
+    expect(validarEnvio(envio({ avaliacao: "provas", qtdProvas: 2 }))).toEqual([]);
+    expect(validarEnvio(envio({ avaliacao: "trabalhos", qtdTrabalhos: 2 }))).toEqual([]);
   });
 
   it("recusa comentário acima do limite", () => {
