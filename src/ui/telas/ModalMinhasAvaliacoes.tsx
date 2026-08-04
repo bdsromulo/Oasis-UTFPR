@@ -126,14 +126,26 @@ export function ModalMinhasAvaliacoes(props: {
                           key={`${d.codigo}-${d.semestre}`}
                           className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 px-3 py-2 dark:border-zinc-800/70"
                         >
-                          <span className="min-w-0 text-sm text-zinc-700 dark:text-zinc-200">
-                            <span className="font-mono text-xs font-bold">{d.codigo}</span>{" "}
-                            <span className="truncate">{d.nome}</span>
-                            {d.situacao === "reprovado" && (
-                              <span className="ml-1.5 text-[10px] font-bold text-orange-600 dark:text-orange-400">
-                                reprovada
+                          {/* Duas linhas fixas, código acima e nome abaixo: com o
+                              código inline o item quebrava em uma ou duas linhas
+                              conforme o comprimento do nome, e a lista ficava
+                              serrilhada. O `truncate` precisa de bloco para valer —
+                              inline ele é ignorado e o nome longo passava por baixo
+                              do botão. */}
+                          <span className="min-w-0 flex-1">
+                            <span className="flex items-center gap-1.5">
+                              <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                                {d.codigo}
                               </span>
-                            )}
+                              {d.situacao === "reprovado" && (
+                                <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400">
+                                  reprovada
+                                </span>
+                              )}
+                            </span>
+                            <span className="block truncate text-sm text-zinc-700 dark:text-zinc-200">
+                              {d.nome}
+                            </span>
                           </span>
                           <Botao
                             onClick={() => setAvaliando(d)}

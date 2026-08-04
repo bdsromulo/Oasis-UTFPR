@@ -599,14 +599,22 @@ export function TelaSituacao(props: {
                   key={`${d.codigo}-${d.semestre}`}
                   className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 px-3 py-2 dark:border-zinc-800/70"
                 >
-                  <span className="min-w-0 text-sm text-zinc-700 dark:text-zinc-200">
-                    <span className="font-mono text-xs font-bold">{d.codigo}</span>{" "}
-                    <span className="truncate">{d.nome}</span>
-                    {d.situacao === "reprovado" && (
-                      <span className="ml-1.5 text-[10px] font-bold text-orange-600 dark:text-orange-400">
-                        reprovada
+                  {/* mesma estrutura de duas linhas do seletor completo: o código
+                      inline fazia a altura do item variar com o comprimento do nome */}
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-1.5">
+                      <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                        {d.codigo}
                       </span>
-                    )}
+                      {d.situacao === "reprovado" && (
+                        <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400">
+                          reprovada
+                        </span>
+                      )}
+                    </span>
+                    <span className="block truncate text-sm text-zinc-700 dark:text-zinc-200">
+                      {d.nome}
+                    </span>
                   </span>
                   <Botao onClick={() => setAvaliando(d)} variante="sutil" classe="shrink-0 !px-3 !py-1.5 !text-xs">
                     Avaliar

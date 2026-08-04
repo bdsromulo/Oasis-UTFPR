@@ -12,6 +12,60 @@ import { Botao } from "../componentes";
 /** Marca a rota "não está na lista" sem se confundir com "ainda não escolhi". */
 const FORA_DO_ELENCO = "__fora__";
 
+/**
+ * Uma opção da lista de professores.
+ *
+ * Desenhada como rádio, e não como linha de texto clicável: a escolha é
+ * obrigatória e excludente, e sem a marca redonda a lista se lia como legenda —
+ * dava para ficar olhando sem perceber que era preciso escolher.
+ */
+function OpcaoProfessor(props: {
+  rotulo: string;
+  auxiliar?: string;
+  marcada: boolean;
+  onEscolher: () => void;
+}) {
+  const { rotulo, auxiliar, marcada, onEscolher } = props;
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={marcada}
+      onClick={onEscolher}
+      className={`flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition ${
+        marcada
+          ? "border-utfpr-500 bg-utfpr-500/15 dark:border-utfpr-500 dark:bg-utfpr-500/10"
+          : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/60"
+      }`}
+    >
+      <span
+        aria-hidden
+        className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition ${
+          marcada
+            ? "border-utfpr-600 dark:border-utfpr-400"
+            : "border-zinc-300 dark:border-zinc-600"
+        }`}
+      >
+        {marcada && <span className="h-2 w-2 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />}
+      </span>
+      <span className="min-w-0">
+        <span
+          className={`block text-sm ${
+            marcada
+              ? "font-semibold text-zinc-900 dark:text-zinc-100"
+              : "text-zinc-700 dark:text-zinc-200"
+          }`}
+        >
+          {rotulo}
+        </span>
+        {auxiliar && (
+          <span className="block text-xs text-zinc-500 dark:text-zinc-400">{auxiliar}</span>
+        )}
+      </span>
+    </button>
+  );
+}
+
 export function ModalEnvioForms(props: {
   alvo: AlvoAvaliacao | null;
   autor: string;
@@ -78,7 +132,10 @@ export function ModalEnvioForms(props: {
         </p>
 
         <label className="mt-4 block text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-          Quem deu a disciplina?
+          Quem deu a disciplina?{" "}
+          <span className="font-normal text-zinc-500 dark:text-zinc-400">
+            Escolha uma opção
+          </span>
         </label>
         <input
           type="search"
@@ -88,37 +145,25 @@ export function ModalEnvioForms(props: {
           className="mt-2 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-utfpr-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
         />
 
-        <div className="mt-2 max-h-56 space-y-1 overflow-y-auto">
+        <div className="mt-2 max-h-56 space-y-1.5 overflow-y-auto p-0.5" role="radiogroup">
           {filtrado.map((u) => (
-            <button
+            <OpcaoProfessor
               key={u.id}
-              onClick={() => setEscolhido(u.id)}
-              className={`w-full rounded-xl px-3 py-2 text-left text-sm transition ${
-                escolhido === u.id
-                  ? "bg-utfpr-500/30 font-semibold text-zinc-900 dark:text-zinc-100"
-                  : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
-              }`}
-            >
-              {u.nome}
-            </button>
+              rotulo={u.nome}
+              marcada={escolhido === u.id}
+              onEscolher={() => setEscolhido(u.id)}
+            />
           ))}
 
           {/* Sempre presente, mesmo com a busca vazia: ~14% dos docentes reais não
               constam do elenco das ofertas, e 31% para quem está adiantado. É rota
               comum, e a interface a trata como escolha legítima, não como erro. */}
-          <button
-            onClick={() => setEscolhido(FORA_DO_ELENCO)}
-            className={`w-full rounded-xl px-3 py-2 text-left text-sm transition ${
-              escolhido === FORA_DO_ELENCO
-                ? "bg-utfpr-500/30 font-semibold text-zinc-900 dark:text-zinc-100"
-                : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800"
-            }`}
-          >
-            Meu professor não está na lista
-            <span className="block text-xs font-normal text-zinc-500 dark:text-zinc-400">
-              Você digita o nome no formulário
-            </span>
-          </button>
+          <OpcaoProfessor
+            rotulo="Meu professor não está na lista"
+            auxiliar="Você digita o nome no formulário"
+            marcada={escolhido === FORA_DO_ELENCO}
+            onEscolher={() => setEscolhido(FORA_DO_ELENCO)}
+          />
         </div>
 
         <div className="mt-4 rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
