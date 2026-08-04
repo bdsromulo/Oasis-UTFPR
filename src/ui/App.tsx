@@ -1322,6 +1322,10 @@ export function App() {
         temaAtivo={preferencias.tema}
         onMudarTema={(t) => setPreferencias({ ...preferencias, tema: t })}
         mostrarConfiguracoes={!!perfil || checkinConcluido}
+        mostrarAvaliar={
+          !!perfil && reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada()
+        }
+        onAvaliar={() => setModalAvaliacoesAberto(true)}
         onAbrirConfiguracoes={() => setModalConfigAberto(true)}
         onAbrirComoUsar={() => {
           setGiAberta(false);

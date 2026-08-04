@@ -86,15 +86,20 @@ export function ModalNovidades(props: {
                 Onde avaliar
               </h3>
               <p className="mt-1 text-[13px] text-zinc-600 dark:text-zinc-300">
-                No topo desta página, à direita, a estrela abre a lista das disciplinas que você
-                já concluiu. Dá para avaliar qualquer uma delas, não só as do último semestre.
+                A estrela abre a lista das disciplinas que você já concluiu. Dá para avaliar
+                qualquer uma delas, não só as do último semestre.
               </p>
+              {/* O caminho muda com a largura da tela, e citar só o do computador
+                  mandaria quem está no celular procurar um canto vazio. */}
               <div className="mt-2 flex items-center gap-2">
                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                   <IconStar className="h-4 w-4" />
                 </span>
                 <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                  fica ao lado direito do botão Novidades
+                  <span className="hidden sm:inline">
+                    no topo da página, à direita, ao lado do botão Novidades
+                  </span>
+                  <span className="sm:hidden">no topo da página, dentro do Menu</span>
                 </span>
               </div>
             </div>
