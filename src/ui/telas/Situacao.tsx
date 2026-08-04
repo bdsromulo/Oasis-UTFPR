@@ -5,8 +5,9 @@ import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
-import { ModalAvaliacao, type AlvoAvaliacao } from "./ModalAvaliacao";
-import { coletaHabilitada, reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { ModalEnvioForms } from "./ModalEnvioForms";
+import { coletaHabilitada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -617,10 +618,9 @@ export function TelaSituacao(props: {
         </section>
       )}
 
-      <ModalAvaliacao
+      <ModalEnvioForms
         alvo={avaliando}
         autor={perfil.nome}
-        ra={perfil.matricula}
         onFechar={() => setAvaliando(null)}
       />
 

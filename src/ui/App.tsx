@@ -45,7 +45,8 @@ import {
   LogoUTFPR,
 } from "./icons";
 import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
-import { coletaHabilitada, reviewsHabilitadasPara } from "../domain/reviews/config";
+import { reviewsHabilitadasPara } from "../domain/reviews/config";
+import { coletaHabilitada } from "../domain/reviews/forms";
 
 export interface SelecaoTurma {
   codDisciplina: string;

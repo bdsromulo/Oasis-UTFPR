@@ -5,7 +5,8 @@
 // É o caminho para quem quer avaliar uma matéria antiga sem esperar convite.
 import { useEffect, useMemo, useState } from "react";
 import { Botao } from "../componentes";
-import { ModalAvaliacao, type AlvoAvaliacao } from "./ModalAvaliacao";
+import { ModalEnvioForms } from "./ModalEnvioForms";
+import type { AlvoAvaliacao } from "../../domain/reviews/forms";
 import { nomeDeEletiva } from "../../domain/eletivas";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 
@@ -159,10 +160,9 @@ export function ModalMinhasAvaliacoes(props: {
       </div>
 
       {perfil && (
-        <ModalAvaliacao
+        <ModalEnvioForms
           alvo={avaliando}
           autor={perfil.nome}
-          ra={perfil.matricula}
           onFechar={() => setAvaliando(null)}
         />
       )}
