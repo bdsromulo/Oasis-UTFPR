@@ -6,7 +6,7 @@ import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
 import { ModalEnvioForms } from "./ModalEnvioForms";
-import { coletaHabilitada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { coletaHabilitada, podeSerAvaliada, type AlvoAvaliacao } from "../../domain/reviews/forms";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -116,13 +116,14 @@ export function TelaSituacao(props: {
   /**
    * Disciplinas do último semestre do histórico — o conjunto que a RF16 convida a
    * avaliar. O semestre vem pronto de `DisciplinaCursada`, sem inferência.
-   * Reprovadas entram de propósito: a opinião de quem reprovou é contexto legítimo.
+   *
+   * O que entra é decidido por `podeSerAvaliada`, no domínio. Reprovadas já
+   * entraram, sob o argumento de que a opinião de quem reprovou é contexto
+   * legítimo; hoje o escopo exige aprovação.
    */
   const doUltimoSemestre = useMemo(() => {
     if (!perfil) return { semestre: null as string | null, itens: [] as AlvoAvaliacao[] };
-    const avaliaveis = perfil.cursadas.filter(
-      (c) => c.ano && c.semestre && (c.situacao === "aprovado" || c.situacao === "reprovado"),
-    );
+    const avaliaveis = perfil.cursadas.filter(podeSerAvaliada);
     if (!avaliaveis.length) return { semestre: null, itens: [] };
     const periodo = (c: { ano: number | null; semestre: number | null }) => `${c.ano}/${c.semestre}`;
     const ultimo = avaliaveis.map(periodo).sort().at(-1)!;
@@ -132,7 +133,7 @@ export function TelaSituacao(props: {
         codigo: c.codigo,
         nome: matriz.disciplinas.find((d) => d.codigo === c.codigo)?.nome ?? nomeDeEletiva(c.codigo) ?? c.codigo,
         semestre: ultimo,
-        situacao: c.situacao === "reprovado" ? ("reprovado" as const) : ("aprovado" as const),
+        situacao: "aprovado" as const,
       }))
       .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
     return { semestre: ultimo, itens };
@@ -611,11 +612,6 @@ export function TelaSituacao(props: {
                       <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
                         {d.codigo}
                       </span>
-                      {d.situacao === "reprovado" && (
-                        <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400">
-                          reprovada
-                        </span>
-                      )}
                     </span>
                     <span className="block truncate text-sm text-zinc-700 dark:text-zinc-200">
                       {d.nome}

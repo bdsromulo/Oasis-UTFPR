@@ -2,11 +2,46 @@ import { describe, it, expect } from "vitest";
 import {
   montarUrlDeAvaliacao,
   coletaHabilitada,
+  podeSerAvaliada,
   CAMPOS_FORMS,
   URL_BASE_FORMS,
 } from "../src/domain/reviews/forms";
+import type { DisciplinaCursada } from "../src/domain/tipos";
 
 const alvo = { codigo: "DAINF31", nome: "Estruturas de Dados 1", semestre: "2025/2" };
+
+function cursada(over: Partial<DisciplinaCursada>): DisciplinaCursada {
+  return {
+    codigo: "DAINF31",
+    nome: "Estruturas de Dados 1",
+    situacao: "aprovado",
+    origem: "obrigatoria",
+    ano: 2025,
+    semestre: 2,
+    ...over,
+  } as DisciplinaCursada;
+}
+
+describe("podeSerAvaliada", () => {
+  it("aceita disciplina aprovada com semestre conhecido", () => {
+    expect(podeSerAvaliada(cursada({}))).toBe(true);
+  });
+
+  it("recusa reprovada", () => {
+    expect(podeSerAvaliada(cursada({ situacao: "reprovado" }))).toBe(false);
+  });
+
+  it("recusa quem não chegou a cursar", () => {
+    for (const situacao of ["dispensado", "consignado", "cancelado", "cursando"] as const) {
+      expect(podeSerAvaliada(cursada({ situacao })), situacao).toBe(false);
+    }
+  });
+
+  it("recusa sem ano ou semestre: o formulário precisa do período", () => {
+    expect(podeSerAvaliada(cursada({ ano: null }))).toBe(false);
+    expect(podeSerAvaliada(cursada({ semestre: null }))).toBe(false);
+  });
+});
 
 describe("montarUrlDeAvaliacao", () => {
   it("preenche os cinco campos na URL", () => {

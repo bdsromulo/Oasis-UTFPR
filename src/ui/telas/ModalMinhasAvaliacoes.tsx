@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Botao } from "../componentes";
 import { ModalEnvioForms } from "./ModalEnvioForms";
-import type { AlvoAvaliacao } from "../../domain/reviews/forms";
+import { podeSerAvaliada, type AlvoAvaliacao } from "../../domain/reviews/forms";
 import { nomeDeEletiva } from "../../domain/eletivas";
 import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -53,9 +53,7 @@ export function ModalMinhasAvaliacoes(props: {
   /** Concluídas agrupadas por semestre, do mais recente para o mais antigo. */
   const porSemestre = useMemo(() => {
     if (!perfil) return [];
-    const avaliaveis = perfil.cursadas.filter(
-      (c) => c.ano && c.semestre && (c.situacao === "aprovado" || c.situacao === "reprovado"),
-    );
+    const avaliaveis = perfil.cursadas.filter(podeSerAvaliada);
     const mapa = new Map<string, AlvoAvaliacao[]>();
     for (const c of avaliaveis) {
       const sem = `${c.ano}/${c.semestre}`;
@@ -64,12 +62,7 @@ export function ModalMinhasAvaliacoes(props: {
         nomeDeEletiva(c.codigo) ??
         c.codigo;
       if (!mapa.has(sem)) mapa.set(sem, []);
-      mapa.get(sem)!.push({
-        codigo: c.codigo,
-        nome,
-        semestre: sem,
-        situacao: c.situacao === "reprovado" ? "reprovado" : "aprovado",
-      });
+      mapa.get(sem)!.push({ codigo: c.codigo, nome, semestre: sem, situacao: "aprovado" });
     }
     const termo = busca.trim().toLowerCase();
     return [...mapa]
@@ -163,11 +156,6 @@ export function ModalMinhasAvaliacoes(props: {
                               <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
                                 {d.codigo}
                               </span>
-                              {d.situacao === "reprovado" && (
-                                <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400">
-                                  reprovada
-                                </span>
-                              )}
                             </span>
                             <span className="block truncate text-sm text-zinc-700 dark:text-zinc-200">
                               {d.nome}

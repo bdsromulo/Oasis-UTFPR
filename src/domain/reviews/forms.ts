@@ -8,6 +8,8 @@
 // Nada aqui é segredo: o formulário é público por natureza, e a fronteira de
 // confiança fica na planilha, onde envio nenhum vira acervo sem aprovação humana.
 
+import type { DisciplinaCursada } from "../tipos";
+
 /** Alvo da avaliação: uma disciplina cursada num semestre específico. */
 export interface AlvoAvaliacao {
   codigo: string;
@@ -50,6 +52,27 @@ export const CAMPOS_FORMS = {
 /** A coleta só existe quando há formulário para onde mandar. */
 export function coletaHabilitada(): boolean {
   return URL_BASE_FORMS.trim().length > 0;
+}
+
+/**
+ * Quem pode ser avaliada: aprovação no histórico, com o período conhecido.
+ *
+ * A reprovação já esteve dentro do escopo, sob o argumento de que a opinião de
+ * quem reprovou é contexto legítimo. Ficou de fora por decisão do projeto: a
+ * avaliação passa a exigir ter concluído a disciplina.
+ *
+ * Dispensa, consignação e cancelamento nunca entraram, por outro motivo — nesses
+ * casos a pessoa não assistiu à disciplina com aquele professor, então não tem o
+ * que relatar.
+ *
+ * `ano` e `semestre` são exigidos porque o formulário grava o período, e a
+ * ingestão recusa semestre fora do formato AAAA/S.
+ *
+ * Predicado único de propósito: três telas decidem o que é avaliável, e cada uma
+ * com a sua cópia da regra é como elas divergem sem ninguém perceber.
+ */
+export function podeSerAvaliada(c: DisciplinaCursada): boolean {
+  return c.situacao === "aprovado" && Boolean(c.ano) && Boolean(c.semestre);
 }
 
 /**
