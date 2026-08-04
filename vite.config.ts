@@ -51,12 +51,56 @@ function csp(): Plugin {
   };
 }
 
-// base: raiz do domínio próprio (oasisutfpr.com.br via public/CNAME).
-// Era "/Oasis-UTFPR/" enquanto o site vivia em bdsromulo.github.io/Oasis-UTFPR/;
-// com domínio customizado o GitHub Pages serve a partir da raiz.
+/**
+ * Ambiente de testes aberto, servido por outro repositório no GitHub Pages.
+ *
+ * Ligado por `OASIS_BETA=1` no build. Muda três coisas e nada mais, para que o
+ * beta continue sendo o mesmo código do site — um beta que diverge do produto
+ * deixa de testar o produto.
+ */
+const BETA = process.env.OASIS_BETA === "1";
+
+/**
+ * Prefixo do caminho servido.
+ *
+ * A produção vive na raiz do domínio próprio (oasisutfpr.com.br via
+ * public/CNAME). Um repositório comum no GitHub Pages serve em SUBPASTA
+ * (usuario.github.io/repo/), e nesse caso `base` precisa ser essa subpasta com
+ * as barras nas duas pontas — senão o HTML carrega e todo o JS e CSS dá 404,
+ * resultando numa página em branco sem erro visível.
+ */
+const BASE = process.env.OASIS_BASE ?? "/";
+
+/**
+ * No beta, pede para os buscadores não indexarem.
+ *
+ * É o ponto que importa deste ambiente: o beta serve as mesmas avaliações, com
+ * nome completo de gente real. Sem o noindex, o buscador indexa essas pessoas
+ * duas vezes, e o consentimento que elas deram fala do site do Oásis, não de uma
+ * cópia paralela.
+ *
+ * A remoção do `public/CNAME` — que reivindicaria oasisutfpr.com.br para o
+ * repositório do beta — NÃO mora aqui: `public/` é copiado pelo Vite fora do
+ * bundle e depois dos hooks, então o workflow apaga o arquivo do `dist`.
+ */
+function beta(): Plugin {
+  return {
+    name: "oasis-beta",
+    apply: "build",
+    enforce: "post",
+    transformIndexHtml(html) {
+      if (!BETA) return html;
+      return html.replace(
+        "</head>",
+        '  <meta name="robots" content="noindex, nofollow" />\n  </head>',
+      );
+    },
+  };
+}
+
 export default defineConfig({
-  base: "/",
-  plugins: [react(), tailwindcss(), csp()],
+  base: BASE,
+  plugins: [react(), tailwindcss(), csp(), beta()],
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],

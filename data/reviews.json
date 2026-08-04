@@ -1,5 +1,32 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-04T18:00:00.000Z",
-  "reviews": []
+  "geradoEm": "2026-08-04T19:47:34.315Z",
+  "reviews": [
+    {
+      "id": "be1434de0b67",
+      "professorId": "sandro-marlus-wambier",
+      "codigo": "FCH7HC",
+      "semestre": "2025/2",
+      "autor": "ROMULO BARBOSA DA SILVA",
+      "personalidade": 4,
+      "didatica": 2,
+      "dificuldade": 1,
+      "cargaTrabalho": 1,
+      "avaliacao": "provas",
+      "comentario": "Matéria bem tranquila, o professor é um tanto flexível na chamada e a prova final é um texto simples de \"Escreva algo do conteúdo\". As explicações são legais e o professor claramente manja bastante do conteúdo até pra conversar com ele depois da aula, só que a aula ser à noite e ele orientar todo o conteúdo escrevendo no quadro (e sem disponibilizar nada além do material base online) torna a experiência um pouco mais difícil. Dá pra passar bem tranquilo se você fizer o absoluto mínimo e dá pra farmar CR se você fizer um pouco mais do que o mínimo."
+    },
+    {
+      "id": "d8a4ffbf0ff5",
+      "professorId": "rita-cristina-galarraga-berardi",
+      "codigo": "ICSG31",
+      "semestre": "2026/1",
+      "autor": "ROMULO BARBOSA DA SILVA",
+      "personalidade": 5,
+      "didatica": 4,
+      "dificuldade": 3,
+      "cargaTrabalho": 4,
+      "avaliacao": "misto",
+      "comentario": "A Rita é maneira, a aula dela é boa e ela costuma liberar metade da aula depois de passar o conteúdo pra fazer o trabalho final, que se você parar pra fazer e consultar com ela, torna a matéria bem mais de boas inclusive pra estudar pra prova. A matéria em si também é bem maneira, não à toa tem uma seção de Gestão da Informação dentro do Oásis baseado no conteúdo dela."
+    }
+  ]
 }
