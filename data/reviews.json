@@ -1,7 +1,20 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-04T20:59:18.027Z",
+  "geradoEm": "2026-08-04T22:06:08.601Z",
   "reviews": [
+    {
+      "id": "29b263a69955",
+      "professorId": "laudelino-cordeiro-bastos",
+      "codigo": "ICSG20",
+      "semestre": "2026/1",
+      "autor": "GUILHERME OLIVER SILVA PEREIRA",
+      "personalidade": 5,
+      "didatica": 1,
+      "dificuldade": 1,
+      "cargaTrabalho": 1,
+      "avaliacao": "trabalhos",
+      "comentario": "Disciplina super tranquila, apenas um trabalho que tem duas entregas principais."
+    },
     {
       "id": "3b84f8f3b5a5",
       "professorId": "gean-carlos-tomazzoni",
