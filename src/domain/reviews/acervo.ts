@@ -102,3 +102,52 @@ export function criarConsulta(reviews: Review[], mapa: MapaIdentidade): Consulta
     ],
   };
 }
+
+/**
+ * Códigos que uma pessoa já avaliou, casando pelo nome público do autor.
+ *
+ * Funciona porque a assinatura é pública por decisão do projeto: o acervo carrega
+ * o nome completo de quem escreveu, e o histórico carrega o nome de quem está
+ * lendo. Comparar os dois é o que permite dizer "esta você já avaliou" sem
+ * qualquer identificador de sessão — que um site estático não teria como manter.
+ *
+ * Limites que o chamador precisa conhecer:
+ *
+ * - **Homônimos colidem.** Duas pessoas de mesmo nome se confundem, e a segunda
+ *   veria a avaliação da primeira como sendo dela. Por isso isto serve para
+ *   ORIENTAR a interface — ocultar convite redundante —, nunca para autorizar
+ *   ou bloquear coisa alguma.
+ * - **Nome editado no formulário desfaz o casamento.** Quem alterou o nome
+ *   pré-preenchido continua vendo o convite. Falha para o lado seguro: no
+ *   máximo convida de novo, jamais esconde uma avaliação que existe.
+ */
+export function codigosJaAvaliadosPor(
+  reviews: Review[],
+  nomeDoAutor: string,
+  mapa: MapaIdentidade,
+): Set<string> {
+  const alvo = normalizarNomeDeAutor(nomeDoAutor);
+  if (!alvo) return new Set();
+  const codigos = new Set<string>();
+  for (const r of publicaveis(reviews)) {
+    if (normalizarNomeDeAutor(r.autor) === alvo) codigos.add(mapa.resolver(r.codigo));
+  }
+  return codigos;
+}
+
+/**
+ * Nome comparável: sem acento, sem caixa, sem pontuação e sem espaço duplicado.
+ *
+ * O histórico grava "ROMULO BARBOSA DA SILVA" e o formulário pode receber
+ * "Rômulo Barbosa da Silva" — a mesma pessoa, escrita de dois jeitos. Sem esta
+ * normalização o casamento falharia justamente no caso mais comum.
+ */
+export function normalizarNomeDeAutor(nome: string): string {
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}

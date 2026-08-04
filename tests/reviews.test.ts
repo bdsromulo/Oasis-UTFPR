@@ -9,7 +9,13 @@ import {
   slugProfessor,
   unidadeInclui,
 } from "../src/domain/reviews/professores";
-import { agregar, criarConsulta, publicaveis, LIMIAR_ESTATISTICA } from "../src/domain/reviews/acervo";
+import {
+  agregar,
+  criarConsulta,
+  publicaveis,
+  codigosJaAvaliadosPor,
+  LIMIAR_ESTATISTICA,
+} from "../src/domain/reviews/acervo";
 import { LIMITE_COMENTARIO, type Review } from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { BSI, ENG_COMP, CURSOS } from "../src/domain/dadosCurso";
@@ -370,5 +376,31 @@ describe("acervo publicado", () => {
       }
     }
     expect(problemas, problemas.join("; ")).toEqual([]);
+  });
+});
+
+describe("avaliações já feitas por quem está lendo", () => {
+  const mapa = criarMapaIdentidade(BSI.matriz);
+  const codigo = BSI.matriz.disciplinas[0].codigo;
+
+  it("casa o nome do histórico com o do acervo, ignorando acento e caixa", () => {
+    const rs = [review({ autor: "ROMULO BARBOSA DA SILVA", codigo })];
+    const feitas = codigosJaAvaliadosPor(rs, "Rômulo Barbosa da Silva", mapa);
+    expect(feitas.has(codigo)).toBe(true);
+  });
+
+  it("não casa nomes de pessoas diferentes", () => {
+    const rs = [review({ autor: "Outra Pessoa", codigo })];
+    expect(codigosJaAvaliadosPor(rs, "Rômulo Barbosa da Silva", mapa).size).toBe(0);
+  });
+
+  it("nome vazio não casa com ninguém", () => {
+    const rs = [review({ autor: "Alguem", codigo })];
+    expect(codigosJaAvaliadosPor(rs, "", mapa).size).toBe(0);
+  });
+
+  it("ignora avaliação ainda pendente de roster", () => {
+    const rs = [review({ autor: "Fulano", codigo, professorId: undefined })];
+    expect(codigosJaAvaliadosPor(rs, "Fulano", mapa).size).toBe(0);
   });
 });

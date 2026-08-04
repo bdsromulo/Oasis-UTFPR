@@ -407,3 +407,53 @@ export function FaixaFiltro(props: { filtro: FiltroNota; n: number; onLimpar: ()
 export function useFiltroNota() {
   return useState<FiltroNota | null>(null);
 }
+
+/**
+ * Gatilho para abrir as avaliações. Estrela e contagem, nada mais.
+ *
+ * Discreto de propósito: ele aparece em card de catálogo e em linha de turma, ao
+ * lado de dado que a pessoa foi buscar ali (carga horária, horário, professor).
+ * Uma faixa larga competiria com esse dado em centenas de itens — a estrela é
+ * reconhecível no tamanho pequeno e some no fundo quando não interessa.
+ *
+ * Sem avaliação o gatilho permanece visível, porém apagado e inerte: esconder
+ * faria a ausência parecer defeito da interface, e a dica explica o que houve.
+ */
+export function BotaoReviews(props: {
+  n: number;
+  onAbrir: () => void;
+  rotuloAlvo?: string;
+  classe?: string;
+}) {
+  const { n, onAbrir, rotuloAlvo = "desta disciplina" } = props;
+  const vazio = n === 0;
+  return (
+    <button
+      type="button"
+      disabled={vazio}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onAbrir();
+      }}
+      title={
+        vazio
+          ? `Ainda não há avaliações ${rotuloAlvo}`
+          : `Ver ${n} avaliação${n > 1 ? "ões" : ""} ${rotuloAlvo}`
+      }
+      aria-label={
+        vazio ? `Sem avaliações ${rotuloAlvo}` : `Ver ${n} avaliações ${rotuloAlvo}`
+      }
+      className={`inline-flex shrink-0 items-center gap-0.5 rounded-lg px-1.5 py-0.5 text-[11px] font-bold transition ${
+        vazio
+          ? "cursor-not-allowed text-zinc-300 dark:text-zinc-700"
+          : "text-utfpr-600 hover:bg-utfpr-500/15 dark:text-utfpr-400"
+      } ${props.classe ?? ""}`}
+    >
+      <span aria-hidden className="text-xs leading-none">
+        {vazio ? "☆" : "★"}
+      </span>
+      {!vazio && <span>{n}</span>}
+    </button>
+  );
+}

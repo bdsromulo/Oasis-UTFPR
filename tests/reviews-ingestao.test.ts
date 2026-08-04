@@ -187,3 +187,37 @@ describe("tradução do formulário para o domínio", () => {
     expect(resolverProfessor("Ninguem Dos Santos", roster)).toBe(null);
   });
 });
+
+describe("uma avaliação por pessoa e disciplina", () => {
+  it("mantém só a mais recente quando a mesma pessoa reenvia", () => {
+    const antiga = linha({ carimbo: "2026-08-01T10:00:00Z", didatica: "2" });
+    const nova = linha({ carimbo: "2026-08-04T10:00:00Z", didatica: "5" });
+    const r = validarEConverter(tabela(antiga, nova));
+    expect(r.erros).toEqual([]);
+    expect(r.reviews.length).toBe(1);
+    expect(r.reviews[0].didatica).toBe(5);
+  });
+
+  it("o descarte independe da ordem das linhas na planilha", () => {
+    const antiga = linha({ carimbo: "2026-08-01T10:00:00Z", didatica: "2" });
+    const nova = linha({ carimbo: "2026-08-04T10:00:00Z", didatica: "5" });
+    const direta = validarEConverter(tabela(antiga, nova)).reviews;
+    const invertida = validarEConverter(tabela(nova, antiga)).reviews;
+    expect(direta.map((x) => x.didatica)).toEqual([5]);
+    expect(invertida.map((x) => x.didatica)).toEqual([5]);
+  });
+
+  it("não descarta avaliações de pessoas diferentes sobre a mesma disciplina", () => {
+    const r = validarEConverter(
+      tabela(linha({ autor: "Alguem Ficticio" }), linha({ autor: "Outra Pessoa Ficticia" })),
+    );
+    expect(r.reviews.length).toBe(2);
+  });
+
+  it("não descarta avaliações da mesma pessoa sobre disciplinas diferentes", () => {
+    const outro = DOCENTE.disciplinas[1];
+    if (!outro) return;
+    const r = validarEConverter(tabela(linha(), linha({ codigo: outro })));
+    expect(r.reviews.length).toBe(2);
+  });
+});

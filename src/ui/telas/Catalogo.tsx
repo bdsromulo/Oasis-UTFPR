@@ -6,6 +6,7 @@ import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
 import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
+import { BotaoReviews } from "./reviewsComuns";
 import { criarConsulta } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
@@ -642,6 +643,12 @@ export function TelaCatalogo(props: {
                       <span className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                         {d.periodo ? `${d.periodo}º Período` : "Optativa"}
                       </span>
+                      {reviewsHabilitadasPara(matriz.matriz) && (
+                        <BotaoReviews
+                          n={contagemReviews.get(d.codigo) ?? 0}
+                          onAbrir={() => setRevisando({ codigo: d.codigo, nome: d.nome })}
+                        />
+                      )}
                     </div>
                     {concluida ? (
                       <Badge tom="ok" icon={<IconCheck className="h-3 w-3" />}>
@@ -686,19 +693,6 @@ export function TelaCatalogo(props: {
                     )}
                   </div>
                 </div>
-
-                {/* Só aparece quando há o que ler: um "0 avaliações" em toda
-                    disciplina do catálogo seria ruído em centenas de cards. */}
-                {contagemReviews.has(d.codigo) && (
-                  <button
-                    type="button"
-                    onClick={() => setRevisando({ codigo: d.codigo, nome: d.nome })}
-                    className="mt-3 w-full rounded-xl border border-utfpr-500/40 bg-utfpr-500/10 px-3 py-1.5 text-xs font-semibold text-utfpr-700 transition hover:bg-utfpr-500/20 dark:text-utfpr-400"
-                  >
-                    Ver {contagemReviews.get(d.codigo)} avaliação
-                    {contagemReviews.get(d.codigo)! > 1 ? "ões" : ""} da comunidade
-                  </button>
-                )}
 
                 <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-2.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
                   <div className="flex items-center gap-3 font-mono text-[11px]">

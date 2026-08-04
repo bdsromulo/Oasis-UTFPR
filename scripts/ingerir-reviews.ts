@@ -109,6 +109,9 @@ export function resolverProfessor(nome: string, roster: Roster): string | null {
   return id && roster.porId(id) ? id : null;
 }
 
+/** Avaliação com os campos que só a ingestão usa, retirados antes de publicar. */
+type ReviewEmTriagem = Review & { chavePessoa: string; carimbo: string };
+
 export interface ResultadoIngestao {
   reviews: Review[];
   erros: string[];
@@ -145,7 +148,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     }
   }
 
-  const reviews: Review[] = [];
+  const reviews: ReviewEmTriagem[] = [];
   const vistos = new Set<string>();
   let ignoradas = 0;
 
@@ -205,14 +208,38 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     }
 
     const id = idDaLinha(campos);
-    if (vistos.has(id)) {
-      // mesma pessoa, mesma disciplina, mesmo semestre e professor: a última vence
-      const anterior = reviews.findIndex((r) => r.id === id);
-      if (anterior >= 0) reviews.splice(anterior, 1);
+
+    /**
+     * Uma avaliação por pessoa e por disciplina — a mais recente vence.
+     *
+     * O carimbo entra no `id`, então reenviar em vez de editar a resposta produz
+     * duas linhas distintas, e as duas contariam na média: a pessoa pesaria em
+     * dobro. A chave do desempate é (autor, disciplina), e não o `id`.
+     *
+     * Deliberadamente NÃO inclui o professor nem o semestre: quem cursou a mesma
+     * disciplina duas vezes, com docentes diferentes, mantém só a leitura mais
+     * recente. É perda real de informação, aceita para que a regra continue
+     * simples de explicar a quem responde — uma pessoa, uma opinião por matéria.
+     *
+     * A comparação é por carimbo, e não por posição na planilha: o CSV vem na
+     * ordem de chegada, mas depender disso deixaria o resultado à mercê de
+     * qualquer reordenação da aba.
+     */
+    const chavePessoa = `${campos.autor.trim().toLowerCase()}|${campos.codigo}`;
+    const anterior = reviews.findIndex((r) => r.chavePessoa === chavePessoa);
+    if (anterior >= 0) {
+      if (reviews[anterior].carimbo > campos.carimbo) {
+        ignoradas++;
+        continue;
+      }
+      reviews.splice(anterior, 1);
+      ignoradas++;
     }
     vistos.add(id);
 
     reviews.push({
+      chavePessoa,
+      carimbo: campos.carimbo,
       id,
       professorId,
       codigo: campos.codigo,
@@ -232,7 +259,9 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   // ordem determinística: sem isso o JSON muda de ordem a cada execução e o Action
   // commita ruído mesmo quando nada mudou de fato
   reviews.sort((a, b) => a.id.localeCompare(b.id));
-  return { reviews, erros, ignoradas };
+  // os campos de triagem não pertencem ao acervo publicado
+  const publicaveis = reviews.map(({ chavePessoa: _c, carimbo: _t, ...r }) => r);
+  return { reviews: publicaveis, erros, ignoradas };
 }
 
 async function principal() {

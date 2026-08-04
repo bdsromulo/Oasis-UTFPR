@@ -8,6 +8,10 @@ import { Botao } from "../componentes";
 import { ModalEnvioForms } from "./ModalEnvioForms";
 import type { AlvoAvaliacao } from "../../domain/reviews/forms";
 import { nomeDeEletiva } from "../../domain/eletivas";
+import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
 
 export function ModalMinhasAvaliacoes(props: {
@@ -19,6 +23,22 @@ export function ModalMinhasAvaliacoes(props: {
   const { aberto, perfil, matriz, onFechar } = props;
   const [avaliando, setAvaliando] = useState<AlvoAvaliacao | null>(null);
   const [busca, setBusca] = useState("");
+
+  /**
+   * O que esta pessoa já avaliou, casado pelo nome público do autor.
+   *
+   * Orienta a interface e não a autoriza: homônimo colide, e quem editou o nome
+   * no formulário não casa. Nos dois casos o erro é para o lado seguro — no
+   * máximo convida a avaliar de novo.
+   */
+  const jaAvaliadas = useMemo(() => {
+    if (!perfil?.nome) return new Set<string>();
+    return codigosJaAvaliadosPor(
+      (acervoReviews as AcervoReviews).reviews,
+      perfil.nome,
+      criarMapaIdentidade(matriz),
+    );
+  }, [perfil?.nome, matriz]);
 
   useEffect(() => {
     if (!aberto) return;
@@ -147,6 +167,14 @@ export function ModalMinhasAvaliacoes(props: {
                               {d.nome}
                             </span>
                           </span>
+                          {jaAvaliadas.has(d.codigo) ? (
+                            <span
+                              title="Você já avaliou esta disciplina. Para mudar, edite sua resposta no formulário."
+                              className="shrink-0 cursor-help rounded-lg bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400"
+                            >
+                              ✓ avaliada
+                            </span>
+                          ) : (
                           <Botao
                             onClick={() => setAvaliando(d)}
                             variante="sutil"
@@ -154,6 +182,7 @@ export function ModalMinhasAvaliacoes(props: {
                           >
                             Avaliar
                           </Botao>
+                          )}
                         </div>
                       ))}
                     </div>

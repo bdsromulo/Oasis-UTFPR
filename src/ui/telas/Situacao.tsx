@@ -8,6 +8,10 @@ import type { CategoriaCatalogo } from "./Catalogo";
 import { ModalEnvioForms } from "./ModalEnvioForms";
 import { coletaHabilitada, type AlvoAvaliacao } from "../../domain/reviews/forms";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -98,6 +102,16 @@ export function TelaSituacao(props: {
 }) {
   const { perfil, matriz, onAbrirCatalogo } = props;
   const [avaliando, setAvaliando] = useState<AlvoAvaliacao | null>(null);
+
+  /** O que esta pessoa já avaliou — ver `codigosJaAvaliadosPor` para os limites. */
+  const jaAvaliadas = useMemo(() => {
+    if (!perfil?.nome) return new Set<string>();
+    return codigosJaAvaliadosPor(
+      (acervoReviews as AcervoReviews).reviews,
+      perfil.nome,
+      criarMapaIdentidade(matriz),
+    );
+  }, [perfil?.nome, matriz]);
 
   /**
    * Disciplinas do último semestre do histórico — o conjunto que a RF16 convida a
@@ -616,9 +630,18 @@ export function TelaSituacao(props: {
                       {d.nome}
                     </span>
                   </span>
-                  <Botao onClick={() => setAvaliando(d)} variante="sutil" classe="shrink-0 !px-3 !py-1.5 !text-xs">
-                    Avaliar
-                  </Botao>
+                  {jaAvaliadas.has(d.codigo) ? (
+                    <span
+                      title="Você já avaliou esta disciplina. Para mudar, edite sua resposta no formulário."
+                      className="shrink-0 cursor-help rounded-lg bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400"
+                    >
+                      ✓ avaliada
+                    </span>
+                  ) : (
+                    <Botao onClick={() => setAvaliando(d)} variante="sutil" classe="shrink-0 !px-3 !py-1.5 !text-xs">
+                      Avaliar
+                    </Botao>
+                  )}
                 </div>
               ))}
             </div>
