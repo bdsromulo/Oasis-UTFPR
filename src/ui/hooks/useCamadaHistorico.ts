@@ -31,9 +31,19 @@ export function useCamadaHistorico(aberto: boolean, fechar: () => void, id: stri
 
       // Se o componente foi desmontado ou fechado por meio de um botão "X",
       // precisamos remover o estado do topo da pilha de forma silenciosa.
-      if (window.history.state?.camada === id) {
-        window.history.back();
-      }
+      //
+      // A checagem é adiada para depois do commit: quando esta camada fecha
+      // no mesmo evento em que OUTRA abre (ex.: menu do celular fecha e "Como
+      // Usar" abre), o efeito da camada nova já rodou seu pushState antes de
+      // este microtask executar, então o topo da pilha já não é mais `id` e o
+      // back() sai daqui. Sem o adiamento, os dois efeitos corriam na mesma
+      // volta síncrona: o back() (assíncrono) chegava a cancelar o pushState
+      // da camada que estava abrindo, fechando-a sozinha logo em seguida.
+      queueMicrotask(() => {
+        if (window.history.state?.camada === id) {
+          window.history.back();
+        }
+      });
     };
   }, [aberto, id]);
 }

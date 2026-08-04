@@ -38,11 +38,14 @@ import {
   IconMenu,
   IconMoon,
   IconSettings,
+  IconStar,
   IconSun,
   IconUser,
   IconWarning,
   LogoUTFPR,
 } from "./icons";
+import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
+import { coletaHabilitada, reviewsHabilitadasPara } from "../domain/reviews/config";
 
 export interface SelecaoTurma {
   codDisciplina: string;
@@ -118,6 +121,7 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [modalAvaliacoesAberto, setModalAvaliacoesAberto] = useState(false);
   const [menuMobileAberto, setMenuMobileAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
   const [sobreAberta, setSobreAberta] = useState(false);
@@ -634,6 +638,18 @@ export function App() {
                 <IconSettings className="h-4 w-4" />
               </Botao>
             </div>
+
+            {/* Avaliar não vive só na tela de progresso: quem quer opinar sobre
+                uma matéria antiga precisa de um caminho direto (RF15). */}
+            {perfil && reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && (
+              <BotaoIconeComDica
+                dica="Avaliar uma disciplina"
+                classe="text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+                onClick={() => setModalAvaliacoesAberto(true)}
+              >
+                <IconStar className="h-4 w-4" />
+              </BotaoIconeComDica>
+            )}
             </>
           )}
 
@@ -1103,6 +1119,13 @@ export function App() {
         onTrocarUsuario={handleTrocarUsuario}
         onLimparDados={handleLimparDados}
         carregandoPDF={carregando}
+      />
+
+      <ModalMinhasAvaliacoes
+        aberto={modalAvaliacoesAberto}
+        perfil={perfil}
+        matriz={matriz}
+        onFechar={() => setModalAvaliacoesAberto(false)}
       />
 
       {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta).

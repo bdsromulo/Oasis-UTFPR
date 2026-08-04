@@ -24,7 +24,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[x]` **RF12 — Estados e Modos de Planejamento do Semestre:** Suporte aos dois estados essenciais de uso: a) *Prévia de Matrícula (Oficial)* para o período que antecede e sucede a matrícula com base nos dados reais divulgados; b) *Período Corrido de Semestre (Simulação)* para organização durante o semestre vigente hipotetizando ofertas similares.
 - `[x]` **RF13 — Edição Contínua e Remoção Rápida na Grade (Loop Estilo GNH):** Botão "X" instantâneo revelado no hover de cada disciplina na minigrade lateral, no modal da grade completa e nos blocos da tabela visual de horários para remoção em um único clique sem perda de contexto.
 - `[x]` **RF14 — Gamificação e Simulação de Impacto da Grade no Progresso:** Ao montar a grade do semestre, simular em tempo real o *impulso* que cada disciplina selecionada dá à integralização de cada categoria curricular (Obrigatórias, 2º Estrato, Humanidades, Trilhas, Eletivas, Extensão e Estágio), sobrepondo o cumprido do histórico ao previsto pela grade (`motor/progressoGrade.ts`), tornando visível o avanço que aquele semestre representa.
-- `[ ]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu** (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Cada avaliação é composta por: nota geral (1–5); classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5); **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **tags de comportamento observável** (seleção múltipla); e comentário livre limitado a 1000 caracteres. A submissão só é possível a partir da tela de quem carregou o histórico, e o conjunto agregado é redistribuído publicamente. Ver §6.
+- `[ ]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu** (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Cada avaliação é composta por: **nota geral em estrelas** (1–5), em seção própria; classificações específicas de **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5, numéricas porque a escala não é "mais = melhor"); **sistema avaliativo principal** (Provas Síncronas | Trabalhos | Misto); **detalhamento opcional** com quantidade de provas e de trabalhos; **tags de comportamento observável** agrupadas por categoria, com pares contraditórios mutuamente exclusivos; e comentário livre limitado a 1000 caracteres. A submissão só é possível de dentro da plataforma, por dois caminhos: o convite da RF16 na tela de progresso e um acionador no menu do topo que lista **todas** as disciplinas concluídas. O conjunto agregado é redistribuído publicamente. Ver §6.
 - `[ ]` **RF16 — Convite de Avaliação Pós-Semestre:** Ao acessar a plataforma, o aluno que tiver histórico carregado recebe um convite único por semestre para avaliar as disciplinas cursadas no **último semestre do documento** (derivado de `periodoDocumento`). O convite é dispensável e não bloqueia o uso; o estado de "já respondido" é registrado por semestre, de modo que um novo semestre volta a convidar uma vez.
 - `[ ]` **RF17 — Consulta de Avaliações no Planejamento de Matrícula:** No planejamento de matrícula, o nome do professor associado a uma turma é acionável e abre um painel lateral com as avaliações daquele professor — agregados por classificação, tags mais frequentes e comentários — permitindo decidir a turma com base na experiência da comunidade.
 
@@ -223,7 +223,7 @@ Consequência que sustenta a RNF02: **o site nunca fala com o Google em runtime.
 ### 6.2 Os quatro estágios e a fronteira de confiança
 
 ```
-[1] Coleta        Formulário externo (Google Forms)        aberto a quem responde
+[1] Coleta        Formulário NATIVO no site → Apps Script  só na tela de quem tem histórico
 [2] Bruto         Aba "Respostas" — NÃO publicada          contém RA; só o moderador vê
 ──────────────────────── fronteira de confiança ────────────────────────
 [3] Curadoria     Aba "Homologado" — publicada como CSV    só linhas aprovadas, só colunas públicas
@@ -254,6 +254,8 @@ A unidade é o par **professor + disciplina + semestre**, e não a disciplina is
   "dificuldade":   3,               // 1–5  (1 = fácil, 5 = difícil)
   "cargaTrabalho": 2,               // 1–5  (1 = pouca, 5 = muita)
   "avaliacao":     "provas",        // provas | trabalhos | misto
+  "qtdProvas":     2,               // detalhamento OPCIONAL — ausente ≠ zero
+  "qtdTrabalhos":  1,
   "tags":          ["corrige-rapido", "cobra-so-o-ensinado"],
   "comentario":    "texto livre, ≤ 1000 caracteres"
 }
@@ -274,6 +276,16 @@ Duas razões sustentam a escolha:
 
 > **Registro da alternativa descartada.** A extração do professor pelo PDF **é tecnicamente viável** — a coluna `Situação/Professores` é padronizada e o pdf.js entrega `"Nome Completo - Titulação"` num único item, dispensando lógica posicional. Foi descartada por desnecessária, não por impossível. O modo de falha medido era truncamento por largura de coluna (2, 8 e 10 nomes cortados conforme a variante de export), benigno mas exigindo reparo por casamento de sufixo. Se algum dia o pré-preenchimento automático virar requisito, é por aqui.
 
+#### A unidade avaliada é a turma, não a pessoa
+
+Quando dois docentes dividem **a mesma turma no mesmo horário**, eles formam uma **unidade** e são avaliados juntos, exibidos como `Fulano / Sicrano`.
+
+O motivo é semântico, não de conveniência: a didática, o sistema de avaliação e a carga que o aluno viveu são os da turma **como ela foi ministrada**. Deixar escolher só um dos dois obrigaria a atribuir a uma pessoa uma nota de didática que descreve a dupla — um dado que ninguém deu. Multi-seleção com notas compartilhadas teria o mesmo defeito, multiplicado.
+
+- **Id da unidade:** slugs individuais **ordenados** e unidos por `+` (`fulano-de-tal+sicrano-da-silva`). A ordenação é obrigatória: a fonte lista os nomes na ordem que quiser, e sem ela a mesma dupla geraria ids diferentes conforme o semestre, fatiando o acervo de uma turma em dois.
+- **Solo e dupla são unidades distintas.** Quem deu sozinho numa turma e acompanhado em outra gera duas entradas — foram duas experiências de aula diferentes, e não podem cair na mesma média.
+- **A unidade é localizável por qualquer um dos seus membros**, então o painel de um docente ainda encontra as turmas em que ele lecionou em dupla. Elas aparecem numa seção própria, *fora* da média da unidade consultada, porque descrevem outro contexto.
+
 #### Escopo da lista: união das ofertas cobertas
 
 A lista usa a **união de todos os semestres cobertos** em que a disciplina aparece — não apenas o mais recente. Coleta ampla, filtragem na exibição: assim nada se perde quando um docente volta a ofertar depois de um semestre fora.
@@ -284,14 +296,16 @@ Medição nos históricos de referência sustenta a decisão: **127 de 128 cursa
 
 A pergunta decisiva não é se a *disciplina* tem elenco, e sim se o *professor com quem a pessoa cursou* está nele. Cruzando os professores reais de cada histórico contra o elenco das ofertas cobertas:
 
-| Histórico | professores no histórico | ausentes do elenco |
-| :--- | ---: | ---: |
-| Aluna A (3 exports) | 25 / 21 / 22 | 2 / 1 / 1 |
-| Aluna B (mais adiantada) | 36 | **11 (31%)** |
+| Histórico | professores no histórico | ausentes (elenco BSI) | ausentes (elenco global) |
+| :--- | ---: | ---: | ---: |
+| Aluna A (3 exports) | 25 / 21 / 22 | 0 / 0 / 0 | 0 / 0 / 0 |
+| Aluna B (mais adiantada) | 36 | 6 (17%) | **4 (11%)** |
 
-Média ~14%, chegando a **31% para quem está mais adiantado** — semestres antigos e disciplinas de humanidades têm rodízio maior de docente. E é um **piso**: a medição casa no nível de conjunto, enquanto na prática o aluno precisa do professor listado *naquela disciplina específica*.
+Para quem está no meio do curso, o elenco cobre **tudo**. A falha se concentra em quem está mais adiantado — semestres antigos e disciplinas de humanidades têm rodízio maior de docente. É um **piso**: a medição casa no nível de conjunto, enquanto na prática o aluno precisa do professor listado *naquela disciplina específica*, então a taxa real é maior.
 
-Portanto o escape é rota comum, e não pode ser beco sem saída: descartá-lo jogaria fora justamente as avaliações dos veteranos, as mais informativas.
+> **Evidência para o elenco global (§6.11):** unir o elenco de **todos os cursos cobertos** — e não só o do curso do aluno — derruba a falha de 17% para 11% no caso mais adiantado. Professores lecionam em mais de um curso; o roster tem de ser global.
+
+O escape, portanto, é minoria mas não é desprezível, e cresce com a senioridade de quem avalia — justamente quem tem mais o que dizer. Não pode ser beco sem saída.
 
 #### "Professor Não Ofertado" — captura em texto livre + moderação
 
@@ -313,6 +327,10 @@ Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimen
 ### 6.5 Taxonomia de tags — critério de admissão
 
 **Regra:** toda tag precisa ser explicável por **comportamento observável**. Tags ancoradas em personalidade ("gente boa") são inadmissíveis: não são verificáveis, não ajudam a decidir turma e são exatamente a superfície de risco difamatório que a TASK-08 isola. Quando a intenção for elogiar postura, traduza para conduta observável.
+
+As tags são agrupadas em quatro categorias — **Conteúdo e avaliação**, **Didática e material**, **Comunicação e trato** e **Rotina e prazos** —, o que reduz a lista a blocos legíveis e coloca cada par contraditório lado a lado.
+
+**Pares opostos são mutuamente exclusivos.** Marcar *Acessível* e *Pouco acessível* juntas não é opinião matizada, é dado incoerente: ninguém teve um professor que respondia rápido e não respondia. A interface troca um pelo outro ao clicar, e as três camadas de validação recusam quem insistir. Os pares são `cobra-so-o-ensinado`/`cobra-alem-do-ensinado`, `acessivel`/`pouco-acessivel`, `chamada-rigorosa`/`chamada-flexivel`, `prazos-rigidos`/`aceita-atraso` e `corrige-rapido`/`corrige-devagar`.
 
 | Tag | Comportamento observável que a justifica |
 | :--- | :--- |
@@ -338,21 +356,64 @@ Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimen
 
 **Origem restrita (RF15).** O botão *Avaliar* só existe na tela de quem carregou o histórico, e só nas disciplinas concluídas.
 
-**A seleção do professor acontece no site, não no formulário.** Restrição prática: as opções de um Google Form são estáticas e não podem variar por disciplina. Logo é o site — que já tem as ofertas carregadas — quem renderiza a lista da §6.4, e o resultado da escolha viaja como campo **pré-preenchido** na URL do formulário, junto de `codigo`, `semestre`, `situacao` e `turma`. Na rota *Professor Não Ofertado*, o pré-preenchido vai vazio e o aluno digita o nome no campo de texto livre.
+**O formulário é nativo do site.** O aluno não sai da plataforma: a mesma tela que conhece o histórico monta o seletor de professor da §6.4, pré-preenche `codigo`, `semestre`, `situacao` e `turma`, apresenta o consentimento e o diálogo de *Professor Não Ofertado*, e valida antes de enviar.
 
-São todos campos que a pessoa não teria como preencher de fora com valores coerentes.
+Isso só é possível porque a coleta deixou de depender de um formulário de terceiro com campos fixos: uma lista de professores que muda por disciplina não cabe num Google Form, cujas opções são estáticas.
+
+**O envio vai para um Apps Script publicado como Web App**, vinculado à planilha (`tools/apps-script/recebe-review.gs`). Ele é gratuito, hospedado pelo Google e sem infraestrutura a manter — mesma categoria de dependência que o formulário externo teria —, mas com duas vantagens decisivas:
+
+- **Resposta real de sucesso ou erro.** Um POST direto ao endpoint do Google Forms é *fire-and-forget*: o CORS impede a leitura da resposta e o aluno nunca sabe se o envio valeu.
+- **Validação antes de gravar.** O script rejeita nota fora de 1–5, tag fora do vocabulário, comentário acima do limite, ausência de consentimento, as duas rotas de professor preenchidas ao mesmo tempo, e aplica a guarda de PII e o freio de vazão da §6.9. É uma camada a mais **antes** da fronteira de confiança, não no lugar dela.
+
+*Detalhe de implementação que quebra silenciosamente se ignorado:* o site envia `Content-Type: text/plain` com corpo JSON. Com `application/json` o navegador dispara um preflight `OPTIONS` que o Apps Script não responde, e a requisição falha inteira.
+
+**Limite honesto:** a URL do endpoint é pública e aceita POST de quem a descobrir — exatamente como aconteceria com um formulário externo. A defesa real continua sendo o validador da fronteira (§6.6) somada à moderação; o script apenas encarece o abuso.
 
 Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. A restrição real não é o transporte, é o **validador na fronteira**, que rejeita a linha cujo `(código, turma, semestre)` não fecha com a oferta oficial. É defesa por validação, não por prevenção.
 
+#### Da planilha ao site, coluna a coluna
+
+A aba `Respostas` é criada pelo próprio Apps Script com este layout. A coluna `aprovado` é a que o moderador preenche:
+
+| | A | B | C | D | E | F | G | H | I | J | K–N | O | P | Q | R | S | T | U |
+| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
+| | carimbo | identidade | **ra** | autor | codigo | semestre | situacao | turma | professorId | professorTexto | notas | avaliacao | qtdProvas | qtdTrabalhos | tags | comentario | consentimento | **aprovado** |
+
+A aba `Homologado` projeta **só o que é público**, e é ela — e só ela — que recebe URL de CSV:
+
+```
+=QUERY(Respostas!A:U; "select A,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S where U = 'SIM' and I <> ''"; 1)
+```
+
+Três coisas que essa fórmula garante por construção, sem depender de disciplina de ninguém:
+
+- **`B` e `C` ficam de fora.** A identidade de quem enviou e o RA não estão entre as colunas projetadas, então o CSV público é *incapaz* de contê-los.
+- **`where S = 'SIM'`** — nada não aprovado sai.
+- **`and I <> ''`** — linha da rota *Professor Não Ofertado* só publica depois que o moderador escreve o `professorId` no lugar do texto livre, promovendo o docente ao roster.
+
 **Regeneração total, nunca append.** A automação semanal reconstrói `data/reviews.json` **inteiro** a partir das linhas aprovadas. Com `id` estável por linha, o JSON é função pura da planilha: rodar duas vezes produz o mesmo resultado, e desaprovar uma linha a remove da próxima publicação. É a mesma disciplina dos parsers de `tools/`.
 
-**Validador (RNF03, `0 erros`).** Segue o padrão de `validate_turmas.py`:
-- `codigo` existe na matriz ou na oferta do semestre declarado;
-- `(código, turma, semestre)` coerente com a oferta oficial, quando ela existe;
-- **professor:** ou `professorId` presente **e existente no roster curado**, ou `professorTexto` preenchido — nunca os dois, nunca nenhum. Linha com `professorTexto` fica **retida** (não publicada) até a moderação promovê-la ao roster;
-- notas dentro de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
+**Validador (RNF03, `0 erros`).** Implementado em `scripts/ingerir-reviews.ts`, no espírito de `validate_turmas.py`: **qualquer erro aborta a ingestão inteira e nada é publicado.**
+
+Escrito em TypeScript, e não em Python como o resto de `tools/`, por correção: o vocabulário de tags, os limites e o tipo `Review` moram no domínio TS. Reimplementá-los em Python criaria duas fontes da verdade divergindo em silêncio — exatamente o que o validador existe para impedir.
+
+*Estrutura do CSV:*
+- colunas obrigatórias presentes;
+- **colunas `ra` e `identidade` ausentes** — se aparecerem, a projeção da aba foi alterada e está vazando dado privado: recusa o CSV inteiro;
+- parsing conforme RFC 4180, escrito à mão, porque o comentário é texto livre e pode conter vírgula, aspas e quebra de linha. Um `split(",")` corromperia essas linhas em silêncio.
+
+*Coerência com o dado oficial — o que o Apps Script não consegue checar:*
+- `codigo` existe em alguma matriz ou oferta versionada;
+- `professorId` existe no **roster** construído a partir das ofertas de todos os cursos;
+- linha sem `professorId` é **pendente de roster**: não publica e **não é erro** — fica aguardando a promoção pela moderação.
+
+*Forma e vocabulário:*
+- `semestre` em `AAAA/S`; `situacao` em aprovado/reprovado; `autor` não vazio;
+- notas inteiras de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
 - comentário dentro do limite de 1000 caracteres;
-- **guarda de PII por regex** no texto livre — RA de 7 dígitos, e-mail e telefone reprovam a linha, impedindo vazamento acidental num campo aberto.
+- **guarda de PII por regex** — RA de 7 dígitos, e-mail e telefone reprovam a linha.
+
+*Determinismo:* o `id` é hash estável de `(carimbo, autor, codigo, semestre, professorId)`, e a saída é ordenada por ele. Rodar duas vezes produz byte a byte o mesmo arquivo, e `geradoEm` só avança quando o conteúdo muda de fato — sem isso o Action commitaria ruído toda semana.
 
 **Limiar de exibição.** Agregado com N baixo mente: uma única avaliação vira "100%". Abaixo de um N mínimo, exibe-se o comentário mas **não** a estatística agregada. O valor exato é calibração de produto; a regra é estrutural.
 
@@ -381,19 +442,42 @@ Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. 
 1. **Não há servidor nosso no caminho.** O site é estático e nunca recebe a submissão — ela vai direto do navegador do aluno para o formulário externo. Limitar por IP exige um ponto que veja a requisição e guarde estado entre requisições; a RNF02 exclui exatamente isso.
 2. **O formulário não registra o IP do respondente.** Mesmo com um servidor nosso do lado de fora, o IP não é exposto ao dono do formulário. Não há o que ler.
 
+**O endpoint de escrita também não tem como ficar oculto.** A URL do Apps Script precisa estar no JavaScript servido ao navegador; DevTools a revela. Repositório privado, repositório separado ou variável de ambiente não mudam isso — o Vite inlina `VITE_*` no bundle (§5.6). Assumir o contrário é o erro; o desenho parte de que a URL é conhecida.
+
+**Raio de dano de quem a descobrir, e é aqui que a fronteira paga:** envios caem na aba **privada** e só viram acervo público depois de um humano marcar `aprovado`. Spam custa **tempo de moderação e cota**, não polui o site. O acervo público é imune por construção — a mesma propriedade que segura conteúdo difamatório.
+
 O que **é** possível sem back-end, em camadas:
 
 | Camada | Mecanismo | Alcance real |
 | :--- | :--- | :--- |
-| Identidade | Exigir login Google no formulário (**sem** limitar a 1 resposta, que quebraria múltiplas avaliações) | Amarra cada envio a uma conta e dá chave de deduplicação; criar contas em massa passa a ter custo |
-| Vazão | Gatilho `onFormSubmit` em **Google Apps Script** (gratuito, sem infra a manter) | Rejeita ou marca envios acima de N por conta por janela de tempo — throttle **por identidade**, não por IP |
+| **Anti-robô** | **Cloudflare Turnstile**, com a chave secreta em *Script Properties* do Apps Script | Defesa efetiva contra bot. É o **único ponto de todo o desenho onde cabe um segredo**, porque as Script Properties são server-side de verdade, fora do bundle |
+| Teto global | Contador por minuto em `CacheService`, somando todos os envios | Não depende de identidade: segura enxurrada e protege a cota do Apps Script e o tamanho da planilha |
+| Identidade | Exigir Conta do Google na implantação + freio por conta e janela | **Degrada em silêncio:** numa implantação aberta a qualquer pessoa, `Session.getActiveUser().getEmail()` devolve vazio e o freio vira no-op. Só vale com login exigido e e-mail legível |
 | Publicação | Portão de moderação semanal (§6.2) | Uma enxurrada gera muitas linhas **não aprovadas**: o custo é tempo do moderador, não conteúdo público |
 
 Ou seja: o dano de um flood é **absorvido** pela fronteira de confiança, não evitado na origem. Nada não moderado chega ao público, por construção.
 
 **Se o bloqueio por IP virar requisito firme**, é o gatilho para reabrir a §5: um *edge worker* (Cloudflare Workers + Turnstile) faz rate limiting por IP nativamente e cabe em faixa gratuita — mas isso reintroduz um serviço em runtime. A troca é precisa: preserva o **custo zero**, abandona o **back-end zero**.
 
-### 6.10 Limites honestos desta arquitetura
+### 6.10 Compartilhamento entre cursos
+
+Uma avaliação de *Professor X em Estruturas de Dados* vale para quem cursa BSI e para quem cursa Engenharia de Computação — é a mesma pessoa dando a mesma matéria. O acervo, portanto, **não é particionado por curso**.
+
+**Evidência no dado:** as ofertas já registram turmas compartilhadas. A turma `S73` de `ICSHX0` traz `prioridade_cursos: [Eng De Computação, Sist De Informação]` e `optativa_matrizes: ["981", "962"]` — um único professor, uma única turma, dois cursos.
+
+Três consequências de arquitetura:
+
+1. **Um único acervo.** `data/reviews.json` fica na raiz de `data/`, não sob a pasta de um curso. A chave `(professorId, código, semestre)` não é namespaced por curso.
+2. **Roster global.** O elenco de docentes é construído a partir das ofertas de **todos** os cursos cobertos, não só o do aluno. Além de correto, é medível: reduz a falha de seleção de 17% para 11% (§6.4).
+3. **Leitura resolve por equivalência.** Ao exibir avaliações de uma disciplina, o curso em que o leitor está resolve o código pelo seu próprio `MapaIdentidade` (`motor/identidade.ts`) e reúne as avaliações de **todos os códigos equivalentes**. Assim, se a mesma exigência curricular tem código distinto entre matrizes, o acervo continua único do ponto de vista de quem lê.
+
+O primeiro curso a receber a interface é **BSI 981**, mas nada no formato do dado é específico dele: habilitar outro curso é ligar a tela, não migrar acervo.
+
+**O recorte é de superfície, e vive num lugar só.** `MATRIZES_COM_REVIEWS`, em `src/domain/reviews/config.ts`, lista as matrizes cujo curso já expõe a camada — hoje `[981]`. Enquanto uma matriz não estiver ali, o aluno daquele curso não vê a seção de avaliar nem o painel de professor.
+
+O que **não** é recortado: o acervo continua único e o roster segue sendo construído sobre as ofertas de **todos** os cursos, habilitados ou não. A consequência é a pretendida — no instante em que uma matriz entra na lista, os alunos dela já enxergam as avaliações escritas por alunos de outros cursos sobre os docentes que compartilham. Habilitar é uma linha; não há migração, reprocessamento nem acervo separado.
+
+### 6.11 Limites honestos desta arquitetura
 
 1. **Não autentica RA.** O PDF do histórico não tem assinatura verificável por terceiros (§5.1). O RA é autodeclarado: encarece a fraude e serve à moderação, não a impede.
 2. **Anti-Sybil é humano.** Sem verificação institucional, a defesa contra enxurrada de avaliações falsas é a revisão semanal. Escala até certo volume; acima dele, a §5 volta à mesa.

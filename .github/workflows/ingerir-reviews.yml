@@ -1,0 +1,60 @@
+name: Ingestão semanal de avaliações
+
+# Baixa o CSV da aba `Homologado` (só linhas aprovadas, só colunas públicas),
+# valida contra a matriz, a oferta e o vocabulário, e regenera data/reviews.json.
+# Ver Estrategia.md §6.6.
+#
+# A URL do CSV é pública e fica em `vars.URL_CSV_REVIEWS` (variável do
+# repositório, NÃO secret): não há segredo nenhum neste pipeline, e tratá-la como
+# secret só esconderia da revisão uma informação que já é pública.
+# Configurar em: Settings → Secrets and variables → Actions → Variables.
+
+on:
+  schedule:
+    # segundas às 09:00 UTC (06:00 em Brasília) — a curadoria roda antes
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ingestao-reviews
+  cancel-in-progress: false
+
+jobs:
+  ingerir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Ingerir e validar avaliações
+        env:
+          URL_CSV_REVIEWS: ${{ vars.URL_CSV_REVIEWS }}
+        run: |
+          if [ -z "$URL_CSV_REVIEWS" ]; then
+            echo "::error::A variável URL_CSV_REVIEWS não está configurada no repositório."
+            exit 1
+          fi
+          npx tsx scripts/ingerir-reviews.ts
+
+      # a suíte roda DEPOIS da ingestão: o acervo recém-gerado precisa passar
+      # pelos mesmos testes que o resto do dado versionado
+      - run: npm test
+
+      - name: Commitar o acervo se mudou
+        run: |
+          if git diff --quiet -- data/reviews.json; then
+            echo "Sem mudanças no acervo."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reviews.json
+          git commit -m "chore(reviews): ingestão semanal do acervo da comunidade"
+          git push
