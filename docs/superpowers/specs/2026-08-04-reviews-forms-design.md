@@ -90,9 +90,12 @@ Detalhes que importam:
   — a escala linear do Forms não aceita rótulo por ponto intermediário. Régua em §3.3.
 - **Pergunta 10:** opções exatamente `Provas`, `Trabalhos`, `Provas e trabalhos` →
   mapeadas na ingestão para `provas` / `trabalhos` / `misto`.
-- **Pergunta 11:** Validação de resposta › *Comprimento máximo do caractere* igual a
-  `LIMITE_COMENTARIO`. Texto de ajuda: descreva o que aconteceu na disciplina, não
-  a pessoa. Nada de RA, e-mail ou telefone — a ingestão recusa a linha inteira.
+- **Pergunta 11:** **não obrigatória** (ver §3.4). Ativar ⋮ › *Validação de resposta* ›
+  *Comprimento* › *Máximo de caracteres* = `LIMITE_COMENTARIO` (1000). Sem essa
+  validação o limite só é aplicado na ingestão, e a linha cai depois de a pessoa ter
+  escrito. Texto de apoio em §3.4; ele pode ficar num bloco "Título e descrição" acima
+  da pergunta ou na descrição dela — o bloco separado é mais legível, mas não acompanha
+  a pergunta se o formulário for reordenado.
 - **Pergunta 12:** caixa única, obrigatória, com o texto abaixo. Caixa de seleção e
   não múltipla escolha porque o consentimento precisa ser ato positivo isolado.
 
@@ -222,15 +225,23 @@ correta antes de responder é o que separa este formulário de uma avaliação i
 > Não inclua RA, e-mail, telefone ou nome de colegas — respostas com esses dados são
 > descartadas inteiras.
 >
-> Toda resposta passa por moderação antes de ir ao site. Comentário reprovado não é
-> publicado, **mas suas notas continuam valendo** — elas entram na média mesmo sem o
-> texto.
+> Toda resposta passa por moderação antes de ir ao site, e avaliações com comentário
+> reprovado não são publicadas — **nem o texto, nem as notas**. Por isso, se preferir,
+> deixe em branco: as notas sozinhas já ajudam.
 >
 > Opcional. Máximo de 1000 caracteres.
 
-A última garantia é deliberada: sem ela, quem tem medo de ter o texto barrado tende a
-abandonar o envio inteiro, e a nota se perde junto. Separar o destino do comentário do
-destino das notas protege o dado quantitativo, que é o que sustenta as médias.
+**Moderação é tudo ou nada por linha** (decisão do dono): comentário reprovado derruba
+o envio inteiro, notas incluídas. Isso simplifica o pipeline — a aprovação parcial
+exigiria uma segunda coluna `comentario_aprovado` e um caminho de publicação com texto
+vazio e notas válidas; com a regra tudo-ou-nada, `aprovado = SIM` segue sendo o único
+portão e a aba `Homologado` não muda.
+
+A contrapartida é que a pergunta **precisa continuar opcional**. Comentário obrigatório
+somado a reprovação total significa que todo texto mal calibrado leva junto quatro notas
+aproveitáveis, e que quem não tem o que dizer escreve "foi ok" só para passar do campo.
+Opcional, quem não quer comentar entrega só as notas — e é isso que a última frase do
+texto convida a fazer.
 
 ### 3.5 Estética
 
