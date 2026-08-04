@@ -38,6 +38,7 @@ import {
   IconMenu,
   IconMoon,
   IconSettings,
+  IconSparkles,
   IconStar,
   IconSun,
   IconUser,
@@ -45,6 +46,7 @@ import {
   LogoUTFPR,
 } from "./icons";
 import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
+import { ModalNovidades } from "./telas/ModalNovidades";
 import { reviewsHabilitadasPara } from "../domain/reviews/config";
 import { coletaHabilitada } from "../domain/reviews/forms";
 
@@ -71,6 +73,10 @@ const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 // o Simulador de Formatura; a seleção em si continua vindo da cesta, para o
 // simulador acompanhar as edições feitas na grade
 const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
+// Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
+// novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
+// precisar de lógica de comparação de datas.
+const CHAVE_NOVIDADES = "oasis.novidades_lidas.reviews_v1";
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -123,6 +129,20 @@ export function App() {
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
   const [modalAvaliacoesAberto, setModalAvaliacoesAberto] = useState(false);
+  const [modalNovidadesAberto, setModalNovidadesAberto] = useState(false);
+  // O realce vale uma vez. Depois de aberto o botão continua lá, porém calado:
+  // um destaque permanente vira mobília e deixa de ser notado.
+  const [novidadesLidas, setNovidadesLidas] = useState(
+    () => localStorage.getItem(CHAVE_NOVIDADES) === "true",
+  );
+
+  const abrirNovidades = () => {
+    setModalNovidadesAberto(true);
+    if (!novidadesLidas) {
+      localStorage.setItem(CHAVE_NOVIDADES, "true");
+      setNovidadesLidas(true);
+    }
+  };
   const [menuMobileAberto, setMenuMobileAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
   const [sobreAberta, setSobreAberta] = useState(false);
@@ -573,6 +593,25 @@ export function App() {
           ) : (
             checkinConcluido && <Badge tom="neutro">Modo Livre</Badge>
           )}
+          {/* No celular só o ícone cabe ao lado do chip de perfil e do Menu; o
+              rótulo iria empurrar o Menu para uma segunda linha. */}
+          {reviewsHabilitadasPara(matriz.matriz) && (
+            <button
+              type="button"
+              onClick={abrirNovidades}
+              aria-label="Novidades"
+              title="Conheça as avaliações da comunidade"
+              className="relative flex h-11 min-w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3 text-utfpr-800 shadow-2xs active:scale-95 dark:border-utfpr-500/50 dark:text-utfpr-300"
+            >
+              <IconSparkles className="h-5 w-5 shrink-0" />
+              {!novidadesLidas && (
+                <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                </span>
+              )}
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setMenuMobileAberto(true)}
@@ -652,6 +691,27 @@ export function App() {
               </BotaoIconeComDica>
             )}
             </>
+          )}
+
+          {/* Novidades fica fora do bloco acima de propósito: é anúncio, e vale
+              inclusive para quem ainda não importou histórico — essa pessoa é
+              justamente a que não sabe que o sistema de avaliações existe. */}
+          {reviewsHabilitadasPara(matriz.matriz) && (
+            <button
+              type="button"
+              onClick={abrirNovidades}
+              title="Conheça as avaliações da comunidade"
+              className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
+            >
+              <IconSparkles className="h-4 w-4 shrink-0" />
+              <span>Novidades</span>
+              {!novidadesLidas && (
+                <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                </span>
+              )}
+            </button>
           )}
 
           {/* Ajuda e "Sobre" acompanham a engrenagem, mas valem para qualquer
@@ -1105,6 +1165,21 @@ export function App() {
           setModalGradeMagica(false);
           setAbaPlanejamento("grade");
         }}
+      />
+
+      {/* Apresentação do sistema de avaliações. "Ver avaliações" leva ao
+          Planejamento porque é lá que o botão por turma aparece; "Avaliar" só
+          existe com histórico, que é o que prova ter cursado a matéria. */}
+      <ModalNovidades
+        aberto={modalNovidadesAberto}
+        onFechar={() => setModalNovidadesAberto(false)}
+        onVerAvaliacoes={() => {
+          setAba("planejamento");
+          setAbaPlanejamento("cursar");
+        }}
+        onAvaliar={
+          perfil && coletaHabilitada() ? () => setModalAvaliacoesAberto(true) : undefined
+        }
       />
 
       {/* Modal de Configurações Centralizadas (TASK-01) */}
