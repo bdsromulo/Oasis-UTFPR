@@ -55,7 +55,29 @@ export function coletaHabilitada(): boolean {
 }
 
 /**
- * Quem pode ser avaliada: aprovação no histórico, com o período conhecido.
+ * Registros que existem no histórico mas não são aula com professor.
+ *
+ * Avaliar didática, personalidade e carga de trabalho pressupõe alguém dando
+ * aula. O ENADE é prova externa; o estágio acontece na empresa, com supervisor
+ * que não é o docente; e as atividades complementares são um saldo de horas
+ * somadas de eventos, cursos e projetos variados. Nos três casos as quatro
+ * verticais não têm sobre o que responder, e a nota resultante mediria outra
+ * coisa qualquer.
+ *
+ * Casado por nome, e não por lista de códigos, porque o código muda a cada
+ * matriz — as atividades complementares são CSX50 na 806, ICSX50 na 981, CSX53
+ * na 844, ICSXG3 na 962 e ELS03 na 968. Os códigos de estágio ainda entram por
+ * fora, vindos da descrição do curso, para o caso de a fonte abreviar o nome.
+ */
+const NAO_AVALIAVEIS = [
+  /^enade/i,
+  /atividades?\s+complementares/i,
+  /est[áa]gio/i,
+];
+
+/**
+ * Quem pode ser avaliada: aprovação no histórico, com o período conhecido, e
+ * desde que seja de fato uma disciplina com aula.
  *
  * A reprovação já esteve dentro do escopo, sob o argumento de que a opinião de
  * quem reprovou é contexto legítimo. Ficou de fora por decisão do projeto: a
@@ -68,11 +90,20 @@ export function coletaHabilitada(): boolean {
  * `ano` e `semestre` são exigidos porque o formulário grava o período, e a
  * ingestão recusa semestre fora do formato AAAA/S.
  *
+ * `codigosDeEstagio` vem de `descricaoDoCurso(matriz).estagios`. É opcional para
+ * a regra por nome continuar valendo sozinha, e não para o curso ser dispensável.
+ *
  * Predicado único de propósito: três telas decidem o que é avaliável, e cada uma
  * com a sua cópia da regra é como elas divergem sem ninguém perceber.
  */
-export function podeSerAvaliada(c: DisciplinaCursada): boolean {
-  return c.situacao === "aprovado" && Boolean(c.ano) && Boolean(c.semestre);
+export function podeSerAvaliada(
+  c: DisciplinaCursada,
+  codigosDeEstagio: readonly string[] = [],
+): boolean {
+  if (c.situacao !== "aprovado" || !c.ano || !c.semestre) return false;
+  if (codigosDeEstagio.includes(c.codigo)) return false;
+  if (/^ENADE/i.test(c.codigo)) return false;
+  return !NAO_AVALIAVEIS.some((re) => re.test(c.nome ?? ""));
 }
 
 /**

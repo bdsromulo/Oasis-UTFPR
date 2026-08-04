@@ -4,18 +4,19 @@
 // domínio UTFPR, e não há endpoint próprio nem segredo a guardar deste lado.
 
 /**
- * Matrizes cujo curso já expõe a camada de avaliações na interface.
+ * Matrizes cujo curso expõe a camada de avaliações na interface.
  *
- * A restrição é de SUPERFÍCIE, não de dado: o acervo permanece único e global
- * (§6.10), e o roster de docentes continua sendo construído sobre as ofertas de
- * todos os cursos. Habilitar um curso novo é acrescentar a matriz a esta lista —
- * e no mesmo instante os alunos dele passam a enxergar as avaliações já escritas
- * por alunos de outros cursos sobre os professores que os dois compartilham.
+ * A restrição é de SUPERFÍCIE, não de dado: o acervo sempre foi único e global
+ * (§6.10), e o roster de docentes sempre foi construído sobre as ofertas de
+ * todos os cursos. A BSI 981 foi primeiro por ser o curso de origem do projeto e
+ * o de maior massa de oferta — era um piloto, não um recorte permanente.
  *
- * A BSI 981 vai primeiro por ser o curso de origem do projeto e o de maior massa
- * de dados de oferta.
+ * Com o piloto de pé, a lista abre para todas as matrizes cobertas. O ganho é
+ * imediato e cruzado: professores são compartilhados entre cursos, então um
+ * aluno de Eng. Eletrônica passa a ler o que alunos de BSI escreveram sobre o
+ * docente que os dois têm, sem que ninguém precise escrever nada de novo.
  */
-export const MATRIZES_COM_REVIEWS: number[] = [981];
+export const MATRIZES_COM_REVIEWS: number[] = [981, 806, 844, 962, 968];
 
 /** A interface de avaliações aparece para esta matriz? */
 export function reviewsHabilitadasPara(matriz: number | null | undefined): boolean {

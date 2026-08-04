@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Botao } from "../componentes";
 import { ModalEnvioForms } from "./ModalEnvioForms";
 import { podeSerAvaliada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { descricaoDoCurso } from "../../domain/cursos";
 import { nomeDeEletiva } from "../../domain/eletivas";
 import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -53,7 +54,8 @@ export function ModalMinhasAvaliacoes(props: {
   /** Concluídas agrupadas por semestre, do mais recente para o mais antigo. */
   const porSemestre = useMemo(() => {
     if (!perfil) return [];
-    const avaliaveis = perfil.cursadas.filter(podeSerAvaliada);
+    const codigosDeEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
+    const avaliaveis = perfil.cursadas.filter((c) => podeSerAvaliada(c, codigosDeEstagio));
     const mapa = new Map<string, AlvoAvaliacao[]>();
     for (const c of avaliaveis) {
       const sem = `${c.ano}/${c.semestre}`;

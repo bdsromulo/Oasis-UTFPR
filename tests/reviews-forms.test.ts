@@ -41,6 +41,39 @@ describe("podeSerAvaliada", () => {
     expect(podeSerAvaliada(cursada({ ano: null }))).toBe(false);
     expect(podeSerAvaliada(cursada({ semestre: null }))).toBe(false);
   });
+
+  // Não são aula com professor: o ENADE é prova externa, o estágio acontece na
+  // empresa e as atividades complementares são saldo de horas de eventos e
+  // projetos variados. As quatro verticais não teriam sobre o que responder.
+  it("recusa o ENADE, pelo código", () => {
+    expect(podeSerAvaliada(cursada({ codigo: "ENADEI", nome: "Enade Ingressante" }))).toBe(false);
+    expect(podeSerAvaliada(cursada({ codigo: "ENADEC", nome: "Enade Concluinte" }))).toBe(false);
+  });
+
+  it("recusa atividades complementares em qualquer matriz", () => {
+    // o código muda por matriz; o nome não
+    for (const [codigo, nome] of [
+      ["CSX50", "Atividades Complementares"],
+      ["ICSX50", "Atividades Complementares Complementares"],
+      ["CSX53", "Atividades Complementares Complementares"],
+      ["ICSXG3", "Atividades Complementares"],
+      ["ELS03", "Atividades Complementares"],
+    ]) {
+      expect(podeSerAvaliada(cursada({ codigo, nome })), codigo).toBe(false);
+    }
+  });
+
+  it("recusa estágio, pelo nome e pelo código do curso", () => {
+    expect(podeSerAvaliada(cursada({ codigo: "CSX51", nome: "Estágio 1" }))).toBe(false);
+    expect(podeSerAvaliada(cursada({ codigo: "ICSXG2", nome: "Estágio Supervisionado" }))).toBe(false);
+    expect(podeSerAvaliada(cursada({ codigo: "ELS02", nome: "Estágio Curricular Obrigatório" }))).toBe(false);
+    // e mesmo que a fonte abrevie o nome, o código do curso ainda barra
+    expect(podeSerAvaliada(cursada({ codigo: "CSX54", nome: "Sup." }), ["CSX54"])).toBe(false);
+  });
+
+  it("continua aceitando disciplina comum", () => {
+    expect(podeSerAvaliada(cursada({ codigo: "CSF13", nome: "Fundamentos De Programação 1" }))).toBe(true);
+  });
 });
 
 describe("montarUrlDeAvaliacao", () => {

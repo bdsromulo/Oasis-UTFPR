@@ -123,7 +123,8 @@ export function TelaSituacao(props: {
    */
   const doUltimoSemestre = useMemo(() => {
     if (!perfil) return { semestre: null as string | null, itens: [] as AlvoAvaliacao[] };
-    const avaliaveis = perfil.cursadas.filter(podeSerAvaliada);
+    const codigosDeEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
+    const avaliaveis = perfil.cursadas.filter((c) => podeSerAvaliada(c, codigosDeEstagio));
     if (!avaliaveis.length) return { semestre: null, itens: [] };
     const periodo = (c: { ano: number | null; semestre: number | null }) => `${c.ano}/${c.semestre}`;
     const ultimo = avaliaveis.map(periodo).sort().at(-1)!;
