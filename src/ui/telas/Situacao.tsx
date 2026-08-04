@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
-import { montarPainel } from "../../domain/motor/situacao";
+import { montarPainel, progressoGlobalDoCurso } from "../../domain/motor/situacao";
 import { nomeDeEletiva } from "../../domain/eletivas";
 import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
@@ -203,26 +203,11 @@ export function TelaSituacao(props: {
 
   const qtdEstagio = estagios.filter((e) => e.feito).length;
 
-  const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
-  // A carga aprovada sai do Quadro Resumo do histórico, que já aplica os tetos por
-  // categoria — eletivas, por exemplo, param no teto da matriz mesmo quando o aluno
-  // cursou mais horas do que ele. Somar as cursadas devolveria um número acima do
-  // oficial. A soma só é usada como fallback em histórico sem Quadro Resumo.
-  const horasAprovadasGlobal = useMemo(() => {
-    if (!perfil) return 0;
-    const resumo = perfil.resumoGeral;
-    if (resumo) {
-      const oficial = resumo.obrigatorias.aprovada + resumo.optativas.aprovada + resumo.eletivas.aprovada;
-      return Math.min(oficial, horasTotalPPC);
-    }
-    let soma = 0;
-    for (const c of perfil.cursadas) {
-      if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {
-        soma += c.cht || 0;
-      }
-    }
-    return Math.min(soma, horasTotalPPC);
-  }, [perfil, horasTotalPPC]);
+  // Régua única, compartilhada com o Simulador de Formatura: as duas telas
+  // respondem "quanto do curso já fiz" e precisam do mesmo número.
+  const global = useMemo(() => progressoGlobalDoCurso(perfil, matriz), [perfil, matriz]);
+  const horasTotalPPC = global.total;
+  const horasAprovadasGlobal = global.cumprido;
 
   if (!perfil) {
     return (

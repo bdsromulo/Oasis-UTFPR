@@ -11,6 +11,7 @@ import {
   type Requisito,
 } from "../../domain/motor/simuladorFormatura";
 import { descricaoDoCurso, ehTrilha, TETO_CH_SEMESTRE } from "../../domain/cursos";
+import { progressoGlobalDoCurso } from "../../domain/motor/situacao";
 import { buscarOfertaParaPlanejamento } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { calcularPesoPrioridadeTurma } from "../../domain/motor/grade-magica";
@@ -249,8 +250,15 @@ export function TelaSimuladorFormatura(props: {
 
   const totalMaterias = resultado.semestres.reduce((a, s) => a + s.materias, 0);
   const totalHoras = resultado.semestres.reduce((a, s) => a + s.horas, 0);
-  const horasCumpridas = resultado.requisitos.reduce((a, r) => a + r.cumprido, 0);
-  const horasExigidas = resultado.requisitos.reduce((a, r) => a + r.exigido, 0);
+  // O "já concluído" usa a MESMA régua de Minha Situação. Somar o `cumprido` e o
+  // `exigido` dos requisitos daria outro número: a extensão entra ali como bloco
+  // próprio, mas suas horas já vêm embutidas no CHEXT das disciplinas contadas em
+  // obrigatórias e optativas, e o total das categorias (3280h na 981) repete essas
+  // horas em vez de fechar no ch_total_ppc (3220h). A lista de requisitos abaixo
+  // segue valendo para dizer o que falta em cada bloco — só não serve de global.
+  const global = useMemo(() => progressoGlobalDoCurso(perfil, matriz), [perfil, matriz]);
+  const horasCumpridas = global.cumprido;
+  const horasExigidas = global.total;
 
   return (
     <div className="space-y-6">
@@ -282,7 +290,7 @@ export function TelaSimuladorFormatura(props: {
               Já concluído
             </span>
             <div className="mt-1 font-display text-2xl font-black text-zinc-900 dark:text-zinc-100">
-              {Math.round((horasCumpridas / Math.max(1, horasExigidas)) * 100)}
+              {global.percentual}
               <span className="text-sm text-zinc-400">%</span>
               <span className="ml-2 font-sans text-xs font-semibold text-zinc-400">
                 {horasCumpridas} / {horasExigidas}h
