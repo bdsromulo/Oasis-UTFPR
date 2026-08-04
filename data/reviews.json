@@ -1,7 +1,20 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-04T19:47:34.315Z",
+  "geradoEm": "2026-08-04T20:59:18.027Z",
   "reviews": [
+    {
+      "id": "3b84f8f3b5a5",
+      "professorId": "gean-carlos-tomazzoni",
+      "codigo": "GEE74F",
+      "semestre": "2026/1",
+      "autor": "YAGO AUGUSTO CONSTANTINO RIBEIRO",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "misto",
+      "comentario": ""
+    },
     {
       "id": "be1434de0b67",
       "professorId": "sandro-marlus-wambier",
@@ -27,6 +40,19 @@
       "cargaTrabalho": 4,
       "avaliacao": "misto",
       "comentario": "A Rita é maneira, a aula dela é boa e ela costuma liberar metade da aula depois de passar o conteúdo pra fazer o trabalho final, que se você parar pra fazer e consultar com ela, torna a matéria bem mais de boas inclusive pra estudar pra prova. A matéria em si também é bem maneira, não à toa tem uma seção de Gestão da Informação dentro do Oásis baseado no conteúdo dela."
+    },
+    {
+      "id": "ea0f094899ed",
+      "professorId": "leandro-batista-de-almeida",
+      "codigo": "ICSB60",
+      "semestre": "2026/1",
+      "autor": "ROMULO BARBOSA DA SILVA",
+      "personalidade": 4,
+      "didatica": 3,
+      "dificuldade": 3,
+      "cargaTrabalho": 4,
+      "avaliacao": "misto",
+      "comentario": "A matéria é bem interessante, bem técnica e prática e traz observações legais. Tem uma quantidade de trabalho até que razoável mas não é muito tensa de fazer, se colocar um pouco de energia vai. Tem 1 prova só e o resto da nota tá em 2 trabalhos maiores e umas atividades menores."
     }
   ]
 }
