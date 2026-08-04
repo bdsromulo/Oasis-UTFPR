@@ -19,7 +19,7 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path
 COMPLEMENTO = sys.argv[3] if len(sys.argv) > 3 else None
 
 # fronteiras de coluna (x0) medidas no PDF (A4 paisagem, 841.92 x 1191.12)
-COLS = [
+COLS_PADRAO = [
     ("periodo",   30,  69),
     ("opt",       69, 102.5),
     ("codigo",   102.5, 141),
@@ -39,6 +39,52 @@ COLS = [
     ("eq_cht",   761, 784),
     ("eq_grupo", 784, 842),
 ]
+# A matriz 806 saiu do Portal com as MESMAS colunas, porém com larguras próprias.
+# O deslocamento global calibrado pelo âncora "Turmas" acerta o miolo numérico e
+# erra as duas pontas: o nome da disciplina invade a coluna de código, o "modelo
+# de disciplina" invade o nome, e CHEAD e carga horária caem uma casa adiante —
+# saíam 162 disciplinas com 0h e nome contaminado. Medido palavra a palavra no
+# cabeçalho e numa linha de disciplina do PDF de referência.
+COLS_806 = [
+    ("periodo",   30,  70),
+    ("opt",       70,  92),
+    ("codigo",    92, 122),
+    ("nome",     122, 215),
+    ("modelo",   215, 288),
+    ("teoricas", 288, 340),
+    ("praticas", 340, 390),
+    ("total",    390, 432),
+    ("aps",      432, 462),
+    ("apcc",     462, 498),
+    ("ad",       498, 536),
+    ("chext",    536, 576),
+    ("chead",    576, 626),
+    ("ch",       626, 666),
+    ("prereq",   666, 720),
+    ("eq_disc",  720, 758),
+    ("eq_cht",   758, 778),
+    ("eq_grupo", 778, 842),
+]
+
+# Perfil de layout por matriz: âncora de calibração, colunas e a faixa onde vivem
+# os números. A calibração fina por deslocamento continua valendo DENTRO do
+# perfil: ela resolve o mesmo layout impresso com folga diferente, que é o caso
+# da Eng. Comp. em relação à BSI 981.
+#
+# A faixa numérica é separada das colunas de propósito. Os números não são lidos
+# por `col_of`, e sim por posição relativa dentro da faixa, porque o escalonamento
+# do PDF joga um dígito para a coluna vizinha. O preço é que a faixa precisa
+# começar ANTES da primeira coluna numérica e terminar DEPOIS da última: na 806
+# ela começa em 296, e a faixa da 981 descartava esse primeiro valor, escorregando
+# todas as leituras uma casa — a carga horária caía em CHEAD e a disciplina saía
+# com 0h.
+PERFIS = {
+    "padrao": (102.9, COLS_PADRAO, (310, 645)),
+    "806": (95.0, COLS_806, (288, 666)),
+}
+
+COLS = COLS_PADRAO
+FAIXA_NUM = (310, 645)
 NUM_COLS = ("teoricas", "praticas", "total", "aps", "apcc", "ad", "chext", "chead", "ch")
 RE_COD = re.compile(r"^[A-Z0-9]{4,7}$")
 
@@ -61,7 +107,14 @@ X_TURMAS_REFERENCIA = 102.9
 _offset = 0.0
 
 
-def calibrar(paginas) -> float:
+def escolher_perfil(texto_pagina1: str):
+    """Perfil de colunas pela matriz declarada no cabeçalho da página 1."""
+    m = re.search(r"Matriz:\s*(\d+)", texto_pagina1)
+    numero = m.group(1) if m else ""
+    return PERFIS.get(numero, PERFIS["padrao"]), numero
+
+
+def calibrar(paginas, x_referencia: float) -> float:
     """Mede o deslocamento do documento pela posição do âncora 'Turmas'."""
     xs = [
         w["x0"]
@@ -74,7 +127,7 @@ def calibrar(paginas) -> float:
     # moda arredondada: robusta a uma ocorrência fora de lugar
     from collections import Counter
     modal = Counter(round(x, 1) for x in xs).most_common(1)[0][0]
-    return modal - X_TURMAS_REFERENCIA
+    return modal - x_referencia
 
 
 def col_of(x):
@@ -100,11 +153,14 @@ def group_rows(words, tol=3.5):
     return [sorted(ws, key=lambda w: w["x0"]) for _, ws in rows]
 
 def parse():
-    global _offset
+    global _offset, COLS, FAIXA_NUM
     blocks, buf, footer_lines, in_footer = [], [], [], False
     with pdfplumber.open(PDF) as pdf:
-        _offset = calibrar(pdf.pages)
         cabecalho_texto = pdf.pages[0].extract_text() or ""
+        (x_referencia, COLS, FAIXA_NUM), numero_matriz = escolher_perfil(cabecalho_texto)
+        if COLS is not COLS_PADRAO:
+            print(f"layout: perfil de colunas próprio da matriz {numero_matriz}", file=sys.stderr)
+        _offset = calibrar(pdf.pages, x_referencia)
         if abs(_offset) > 0.05:
             print(f"calibração: documento deslocado {_offset:+.1f}pt", file=sys.stderr)
         for page in pdf.pages:
@@ -201,7 +257,7 @@ def parse():
         raw_nums = []
         for ws in blk[linha_codigo:]:
             for w in ws:
-                if 310 <= w["x0"] <= 645 and re.match(r"^\d+$", w["text"]):
+                if FAIXA_NUM[0] <= w["x0"] <= FAIXA_NUM[1] and re.match(r"^\d+$", w["text"]):
                     raw_nums.append((w["x0"], int(w["text"])))
         raw_nums.sort()
         nums = {}

@@ -143,6 +143,38 @@ export const BSI_981: DescricaoCurso = {
   naoValidaveis: [],
 };
 
+/**
+ * BSI, matriz 806 — a anterior à 981.
+ *
+ * Mesma arquitetura de estratos da 981, com três diferenças que importam ao
+ * motor. Não tem extensão curricular: o rodapé da matriz declara 0h, e por isso
+ * a categoria de extensão some sozinha da lista de requisitos. O bloco de
+ * humanidades chama-se apenas "Optativas" (948), sem o rótulo longo que a 981
+ * usa, mas reúne as mesmas famílias de disciplina. E as eletivas não formam
+ * conjunto: a exigência de 180h vive só no rodapé e no bloco de eletivas do
+ * Histórico Escolar, então não há o equivalente do 1199 da 981 para declarar.
+ *
+ * A oferta de turmas é a mesma da 981 — existe uma só para a BSI —, e o
+ * casamento entre o código ofertado (ICS…) e o da matriz (CS…) acontece pela
+ * camada de equivalências, que a 806 traz em 127 das 162 disciplinas.
+ */
+export const BSI_806: DescricaoCurso = {
+  matriz: 806,
+  agregadorTrilhas: 934,
+  trilhasExigidas: 3,
+  categorias: [
+    { id: "segundoEstrato", conjunto: 947, rotulo: "2º estrato", rotuloLongo: "2º Estrato" },
+    { id: "humanidades", conjunto: 948, rotulo: "optativas", rotuloLongo: "Optativas" },
+  ],
+  estagios: [
+    { codigo: "CSX51", rotulo: "Estágio 1", ch: 200 },
+    { codigo: "CSX52", rotulo: "Estágio 2", ch: 200 },
+  ],
+  rotuloBlocoTrilhas: "Trilhas em Computação (3º Estrato - Geral)",
+  sufixoTrilha: " (3º Estrato)",
+  naoValidaveis: [],
+};
+
 export const ENG_COMP_844: DescricaoCurso = {
   matriz: 844,
   agregadorTrilhas: 959,
@@ -212,7 +244,7 @@ export const ENG_ELETRONICA_968: DescricaoCurso = {
   hierarquia: hierarquiaDe(matriz968Json.conjuntos),
 };
 
-const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844, ENG_COMP_962, ENG_ELETRONICA_968];
+const CURSOS: DescricaoCurso[] = [BSI_981, BSI_806, ENG_COMP_844, ENG_COMP_962, ENG_ELETRONICA_968];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
 export function descricaoDoCurso(matriz: Matriz | number): DescricaoCurso {

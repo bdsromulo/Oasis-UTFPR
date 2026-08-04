@@ -1,5 +1,6 @@
 import type { Matriz, OfertaSemestre } from "./tipos";
 import matriz981Json from "../../data/matriz-981.json";
+import matriz806Json from "../../data/matriz-806.json";
 import turmasBsi20262 from "../../data/turmas/2026-2.json";
 import turmasBsi20261 from "../../data/turmas/2026-1.json";
 import turmasBsi20252 from "../../data/turmas/2025-2.json";
@@ -46,6 +47,25 @@ export const BSI: DadosCurso = {
   rotulo: "Bacharelado em Sistemas de Informação",
   rotuloCurto: "BSI",
   matriz: matriz981Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": bsi20262,
+    "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
+    "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+// A BSI tem uma oferta só por semestre, publicada com os códigos da matriz nova.
+// A 806 lê a mesma oferta pela camada de equivalências — 66 das 77 disciplinas
+// ofertadas em 2026-1 resolvem para ela, 8 pelo código direto e 58 por
+// equivalência. As 11 restantes existem apenas na 981, o que é esperado numa
+// oferta compartilhada entre matrizes.
+export const BSI_806: DadosCurso = {
+  id: "bsi-806",
+  rotulo: "Bacharelado em Sistemas de Informação (806)",
+  rotuloCurto: "BSI (806)",
+  matriz: matriz806Json as unknown as Matriz,
   ofertas: {
     "2026-2": bsi20262,
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
@@ -112,7 +132,7 @@ export const ENG_ELETRONICA: DadosCurso = {
  * é global — ele varre as ofertas de todos os cursos, não só o do aluno (§6.10),
  * e manter uma segunda lista lá dentro daria drift assim que um curso novo entrar.
  */
-export const CURSOS = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
+export const CURSOS = [BSI, BSI_806, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {
