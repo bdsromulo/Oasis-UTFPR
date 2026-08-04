@@ -313,6 +313,20 @@ export function TelaSimuladorFormatura(props: {
         </div>
       )}
 
+      {/* Antes da lista de semestres, e não depois dela: extensão e estágio
+          saíram do plano semestre a semestre justamente por não serem turma que
+          se escolhe. Se o aviso ficasse no rodapé, a pessoa leria a projeção
+          inteira acreditando que basta cursar o que está listado. */}
+      {resultado.avisos.map((a) => (
+        <div
+          key={a}
+          className="flex items-start gap-2.5 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-xs font-medium text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/50 dark:text-amber-200"
+        >
+          <IconWarning className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{a}</span>
+        </div>
+      ))}
+
       {gradeFixada && (
         <div className="flex flex-wrap items-start justify-between gap-3 rounded-2xl border-2 border-utfpr-500/50 bg-gradient-to-r from-utfpr-500/10 via-amber-500/5 to-transparent p-4 dark:border-utfpr-500/40">
           <div className="flex items-start gap-2.5">
@@ -496,16 +510,6 @@ export function TelaSimuladorFormatura(props: {
           </ul>
         </section>
       )}
-
-      {resultado.avisos.map((a) => (
-        <div
-          key={a}
-          className="flex items-start gap-2.5 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-xs font-medium text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/50 dark:text-amber-200"
-        >
-          <IconWarning className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>{a}</span>
-        </div>
-      ))}
 
       {/* Requisitos por categoria */}
       <section>

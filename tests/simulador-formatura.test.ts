@@ -940,7 +940,7 @@ describe("extensão curricular na projeção", () => {
     expect(ext).toMatchObject({ exigido: 330, cumprido: 60 });
   });
 
-  it("planeja atividades extensionistas até cobrir o que falta", () => {
+  it("cobre a extensão na conta sem listá-la nos semestres", () => {
     const perfil = perfilFake({
       extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
     });
@@ -949,26 +949,34 @@ describe("extensão curricular na projeção", () => {
       semestreInicial: "2026-1",
       horizonte: 12,
     });
+    // a projeção continua fechando: a carga entra no planejado da categoria
     const ext = r.requisitos.find((x) => x.id === "extensao")!;
     expect(ext.cumprido + ext.planejado).toBeGreaterThanOrEqual(ext.exigido);
 
+    // mas some da lista de cada semestre: extensão não é matéria que se cursa em
+    // turma, é atividade que o aluno procura em paralelo, e repetir "Extensão a
+    // definir (90h)" em todo semestre dava a entender que já estava resolvida
     const atividades = r.semestres
       .flatMap((s) => s.disciplinas)
-      .filter((d) => d.categoria === "extensao");
-    expect(atividades.length).toBeGreaterThan(0);
-    for (const a of atividades) {
-      expect(a.codigo).toBe("EXTENSAO");
-      expect(a.horas).toBeLessThanOrEqual(90);
-      // atividade extensionista não é turma: não disputa vaga com as disciplinas
-      expect(a.ocupaVaga).toBe(false);
-    }
-    // no máximo uma atividade por semestre, para a carga acumular aos poucos
+      .filter((d) => d.categoria === "extensao" || d.codigo === "EXTENSAO");
+    expect(atividades, "extensão não deve aparecer como item de semestre").toEqual([]);
+  });
+
+  it("não deixa semestre vazio quando só a extensão avança", () => {
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
     for (const s of r.semestres) {
-      expect(s.disciplinas.filter((d) => d.categoria === "extensao").length).toBeLessThanOrEqual(1);
+      expect(s.disciplinas.length, `semestre ${s.semestre} ficou sem nada`).toBeGreaterThan(0);
     }
   });
 
-  it("avisa que o aluno precisa buscar as atividades por conta própria", () => {
+  it("avisa que o aluno precisa buscar extensão e estágio por conta própria", () => {
     const perfil = perfilFake({
       extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
     });
@@ -982,6 +990,31 @@ describe("extensão curricular na projeção", () => {
     expect(aviso).toContain("buscar matérias ou projetos extensionistas");
     // o aviso informa quantas horas ainda não têm disciplina para apontar
     expect(aviso).toMatch(/\d+h de extensão/);
+    // e o estágio pendente entra no mesmo aviso: é a outra coisa que não se
+    // resolve escolhendo turma
+    expect(aviso).toMatch(/[Ee]stágio/);
+  });
+
+  it("não fala de estágio para quem já o concluiu", () => {
+    const codigosEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
+    const perfil = perfilFake({
+      extensao: { chTotal: 330, chCursada: 0, chFaltante: 330 },
+      aprovadas: new Set(codigosEstagio),
+      cursadas: codigosEstagio.map((codigo) => ({
+        codigo,
+        nome: "Estágio",
+        situacao: "aprovado",
+        cht: 200,
+      })) as PerfilAluno["cursadas"],
+    });
+    const r = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 5,
+      semestreInicial: "2026-1",
+      horizonte: 12,
+    });
+    const aviso = r.avisos.find((a) => /extensionistas/.test(a));
+    expect(aviso).toBeDefined();
+    expect(aviso).not.toMatch(/[Ee]stágio/);
   });
 
   it("não avisa quando nenhuma hora genérica foi necessária", () => {

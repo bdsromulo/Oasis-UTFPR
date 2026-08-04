@@ -535,6 +535,13 @@ export function simularFormatura(
 
   const cumprido = cumpridoPorCategoria(perfil, matriz);
 
+  // Medido AQUI, contra o histórico, e não depois do laço: a projeção vai
+  // marcando as obrigatórias como cumpridas conforme planeja, e o estágio é uma
+  // delas. Consultado no fim, ele apareceria sempre resolvido.
+  const estagiosPendentes = cursoDesc.estagios.filter(
+    (e) => !cumpre(e.codigo, perfilOriginal, mapa),
+  );
+
   // Obrigatórias: o cumprido sai do próprio roster (soma exatamente a carga da
   // matriz), e não do Quadro Resumo. Assim o "já concluído" e o "a planejar"
   // falam da mesma lista de disciplinas e nunca somam mais que o exigido.
@@ -1241,29 +1248,31 @@ export function simularFormatura(
     }
 
     // Sobrando extensão depois de contar o CHEXT das disciplinas planejadas, o
-    // saldo vira atividade extensionista genérica: não existe disciplina formal
-    // da matriz para apontar, porque o aluno escolhe a atividade.
+    // saldo é carga que o aluno cumpre em projeto que ele mesmo escolhe.
     //
-    // Ela não disputa vaga de turma, pela mesma razão do estágio e das
-    // atividades complementares: acontece junto das aulas do semestre. Se
-    // disputasse, as obrigatórias tomariam todas as vagas e a extensão nunca
-    // seria planejada — a projeção fechava ignorando 330h na BSI.
-    // Uma atividade por semestre, para a carga acumular em ritmo plausível.
+    // Ela entra na CONTA do semestre e não na LISTA dele. Listar "Extensão a
+    // definir (90h)" em cada semestre dava a entender que a projeção já tinha
+    // resolvido o assunto, quando é o oposto: não existe disciplina da matriz
+    // para apontar, e é justamente o item que depende de o aluno correr atrás.
+    // O aviso no topo da tela diz isso uma vez, com o total.
+    //
+    // A carga segue acumulando 90h por semestre projetado, para o ritmo ficar
+    // plausível, e continua sem disputar vaga de turma: acontece junto das aulas.
+    let progrediuExtensao = false;
     if (falta("extensao") > 0) {
       const horas = Math.min(falta("extensao"), 90);
       horasExtensaoGenerica += horas;
-      escolhidas.push({
-        codigo: "EXTENSAO",
-        nome: `Extensão a definir (${horas}h)`,
-        horas,
-        categoria: "extensao",
-        sazonalidade: "ambos",
-        ocupaVaga: false,
-        conjunto: null,
-        turma: null,
-        codigoOferta: null,
-      });
       planejado.extensao += horas;
+      progrediuExtensao = true;
+    }
+
+    // Extensão avançando sozinha não é semestre: sem disciplina nenhuma, o card
+    // apareceria vazio na tela. O laço segue para o próximo semestre e a carga
+    // continua acumulando fora da grade.
+    if (escolhidas.length === 0 && progrediuExtensao) {
+      semestresSemProgresso = 0;
+      semestreAtual = proximoSemestre(semestreAtual);
+      continue;
     }
 
     if (escolhidas.length === 0) {
@@ -1371,10 +1380,23 @@ export function simularFormatura(
   // O plano cobre as horas, mas não diz em quê: essas horas não saíram de uma
   // disciplina da matriz, e sim de atividade que o aluno ainda vai escolher.
   // Sem este aviso, a tela daria a entender que basta cursar o que está listado.
+  //
+  // O estágio entra no mesmo aviso, e só quando ainda não consta como concluído
+  // no histórico: é a outra exigência que não se resolve escolhendo turma, e
+  // quem já cumpriu não precisa ler cobrança sobre ela.
   if (horasExtensaoGenerica > 0) {
-    avisos.push(
+    const partes = [
       `Você ainda deve buscar matérias ou projetos extensionistas para concluir o curso nesses próximos períodos: faltam ${horasExtensaoGenerica}h de extensão que não estão vinculadas a uma disciplina da sua matriz.`,
-    );
+    ];
+    if (estagiosPendentes.length > 0) {
+      const total = estagiosPendentes.reduce((a, e) => a + e.ch, 0);
+      partes.push(
+        estagiosPendentes.length > 1
+          ? `O mesmo vale para o estágio: faltam ${estagiosPendentes.length} etapas, ${total}h no total, e a vaga é você que procura.`
+          : `O mesmo vale para o estágio supervisionado, ${total}h, cuja vaga é você que procura.`,
+      );
+    }
+    avisos.push(partes.join(" "));
   }
 
   const requisitos: Requisito[] = (
