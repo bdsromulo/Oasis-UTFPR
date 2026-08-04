@@ -96,14 +96,18 @@ Detalhes que importam:
 - **Pergunta 12:** caixa única, obrigatória, com o texto abaixo. Caixa de seleção e
   não múltipla escolha porque o consentimento precisa ser ato positivo isolado.
 
-> Confirmo que **o nome preenchido no primeiro campo é meu** e concordo que ele seja
+Enunciado da pergunta: **Confirmação**. Caixa única:
+
+> Confirmo que o nome preenchido no primeiro campo é meu e concordo que ele seja
 > publicado junto desta avaliação no site do Oásis, de forma pública, enquanto a
-> avaliação estiver publicada. O nome foi preenchido a partir do histórico escolar que
-> eu mesmo carreguei no site, e posso corrigi-lo acima antes de enviar. Meu e-mail
-> institucional é registrado para autenticar o envio, mas **não** é publicado; meu RA
-> e minhas notas também não. Posso pedir a remoção a qualquer momento editando esta
-> resposta ou entrando em contato — a remoção vale para as publicações seguintes, e o
-> histórico do Git guarda as versões já publicadas.
+> avaliação estiver no ar. Entendo que meu e-mail institucional é registrado para
+> autenticar o envio e não é publicado. Posso pedir a remoção a qualquer momento
+> editando esta resposta ou entrando em contato — a remoção vale para as publicações
+> seguintes.
+
+A permanência no histórico do Git **não** entra aqui: é verdadeira, mas explicar
+versionamento dentro de uma caixa de consentimento gasta a atenção do respondente no
+ponto errado. Fica na página de ajuda do site, linkada a partir do formulário.
 
 Três coisas que o texto precisa acertar, e que a redação acima corrige em relação a um
 "obtido da minha conta Google":
@@ -116,7 +120,8 @@ Três coisas que o texto precisa acertar, e que a redação acima corrige em rel
 2. **O campo é editável.** Como o prefill não trava campo, o consentimento é sobre o
    valor que estiver no campo 1 no momento do envio, não sobre o que o site sugeriu.
    Daí "o nome preenchido no primeiro campo é meu" em vez de "meu nome": é confirmação
-   de titularidade, e é ela que sustenta o `alerta_nome` da moderação.
+   de titularidade — e, como não há conferência automática contra o e-mail (§4.1), ela
+   é a única coisa que responsabiliza quem assina.
 3. **Papel do e-mail.** Ele é coletado e é PII; o texto declara para que serve
    (autenticar) e o que não acontece com ele (publicação). Silenciar sobre um dado
    coletado é pior que declará-lo.
@@ -175,7 +180,84 @@ não — 5 ali é informação, não defeito. Essas duas nunca são pintadas com
 alerta nem entram em média com as outras, sob pena de o painel afirmar que disciplina
 difícil é disciplina ruim.
 
-### 3.4 URL de prefill
+### 3.4 Textos do formulário
+
+**Título:** Avaliação de disciplinas — Oásis UTFPR
+
+**Descrição (topo):**
+
+> Este formulário coleta avaliações de disciplinas que você **já cursou** em
+> Bacharelado em Sistemas de Informação — UTFPR Curitiba. As respostas alimentam o
+> **Oásis**, projeto independente feito por estudantes, **sem vínculo oficial com a
+> UTFPR**.
+>
+> Sua avaliação é **pública e assinada com seu nome**. Seu e-mail institucional é
+> registrado apenas para confirmar que você é da UTFPR e **nunca é publicado**; seu RA
+> e suas notas também não.
+>
+> Os primeiros campos chegam preenchidos quando você abre o formulário pelo botão
+> "Avaliar" dentro do Oásis. Se algum estiver vazio ou errado, corrija antes de enviar.
+>
+> Leva cerca de 2 minutos. Avalie **uma disciplina por envio** — para avaliar outra,
+> abra o formulário de novo pelo site.
+>
+> Todas as respostas passam por moderação antes de aparecer no site, e a publicação
+> acontece em lote, uma vez por semana.
+
+A declaração de não-oficialidade é a primeira coisa dita de propósito: ver a expectativa
+correta antes de responder é o que separa este formulário de uma avaliação institucional.
+
+**Descrição do campo de comentário (pergunta 11):**
+
+> Conte como foi cursar essa disciplina com esse professor: como eram as aulas, o
+> material, as provas e os trabalhos, o que você faria diferente. O que ajuda quem vem
+> depois é o **concreto** — "as provas cobravam exercícios iguais aos da lista" vale
+> mais que "as provas eram justas".
+>
+> Escreva sobre **a disciplina e a forma como ela foi conduzida**, não sobre a pessoa.
+> Não são publicados: xingamento, ofensa, apelido, baixo calão, ironia agressiva,
+> acusação sobre algo que você não presenciou, ou qualquer afirmação sobre a vida
+> pessoal do professor.
+>
+> Não inclua RA, e-mail, telefone ou nome de colegas — respostas com esses dados são
+> descartadas inteiras.
+>
+> Toda resposta passa por moderação antes de ir ao site. Comentário reprovado não é
+> publicado, **mas suas notas continuam valendo** — elas entram na média mesmo sem o
+> texto.
+>
+> Opcional. Máximo de 1000 caracteres.
+
+A última garantia é deliberada: sem ela, quem tem medo de ter o texto barrado tende a
+abandonar o envio inteiro, e a nota se perde junto. Separar o destino do comentário do
+destino das notas protege o dado quantitativo, que é o que sustenta as médias.
+
+### 3.5 Estética
+
+O Forms customiza pouco: cor de tema, cor de fundo, banner de topo e um preset de
+fonte. Outfit e Plus Jakarta não estão disponíveis nos campos — a tipografia da marca
+só aparece se estiver desenhada dentro do banner.
+
+- **Banner:** ~1600×400 px, PNG. Fundo `#18181b` (o zinc do favicon), a palmeira do
+  favicon à esquerda em traço branco, "Oásis UTFPR" ao lado em Outfit Bold branco,
+  faixa fina `#fecd0f` como acento. O Forms recorta o banner diferente em celular e
+  desktop: tudo dentro dos 60% centrais, nada de texto junto às bordas.
+- **Tema:** amarelo mais próximo de `#fecd0f`, fundo claro neutro. Subir o banner antes
+  faz o Forms sugerir a paleta a partir dele. Preset de fonte *Básico*.
+
+Três proibições, cada uma por um motivo distinto:
+
+1. **Nada de brasão ou marca oficial da UTFPR.** Um formulário que avalia professores
+   ostentando a marca da instituição se apresenta como avaliação institucional, que não
+   é. É risco concreto de reclamação, e é o que a primeira linha da descrição neutraliza.
+2. **Nenhuma foto de pessoa** — professor, aluno ou banco de imagens de sala de aula.
+   Além do direito de imagem, foto de gente num formulário sobre gente empurra o tom
+   para o pessoal, exatamente o que a descrição do comentário trabalha para evitar.
+3. **Nada de areia, duna, camelo ou palmeira tropical.** A convenção do projeto é
+   explícita: a identidade não deriva do nome "Oásis" — amarelo UTFPR sobre base
+   neutra. A palmeira do favicon é marca gráfica, não tema de deserto.
+
+### 3.6 URL de prefill
 
 Em *Obter link pré-preenchido*, preencher os campos 1–5 com valores marcadores e copiar
 o link gerado. Ele traz os `entry.NNNNNNN` de cada campo. Esses IDs vão para um único
@@ -191,10 +273,12 @@ colunas auxiliares à direita da última coluna do Forms, que é área livre.
 
 - `aprovado` — preenchida à mão com `SIM`. Só isso publica a linha. O padrão é vazio,
   ou seja, nada é publicado por omissão.
-- `alerta_nome` — fórmula que compara o primeiro nome declarado com a parte local do
-  e-mail autenticado. `Rômulo` contra `romulosilva@alunos...` bate; divergência acende
-  o alerta. **Alerta, nunca bloqueio:** nome social e sobrenome composto divergem
-  legitimamente, e o parser de histórico já trata nome social.
+- Nome declarado **não é conferido contra o e-mail**. Chegou a estar no desenho e foi
+  removido: o e-mail institucional da UTFPR costuma ser abreviado (`rsilva`, `rbsilva`,
+  `silva.r`), então a heurística erraria na maioria dos casos legítimos, e alerta que
+  quase sempre está errado é alerta que se aprende a ignorar — pior que não ter. Não
+  há substituto automático: o e-mail autenticado fica na aba privada e permite rastrear
+  a autoria se houver disputa. Mitigação reativa, que é o que dá para ter sem backend.
 - `alerta_pii` — fórmula que procura padrão de RA (7 dígitos), e-mail e telefone no
   comentário. Redundante com a guarda da ingestão de propósito: melhor pegar na
   planilha, onde dá para editar, do que na Action, onde a linha inteira cai.
