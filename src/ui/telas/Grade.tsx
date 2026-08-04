@@ -39,10 +39,7 @@ import { ModalGradeMagica } from "./ModalGradeMagica";
 import { PainelProfessor, type AlvoPainelProfessor } from "./PainelProfessor";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
-import { idDaUnidade } from "../../domain/reviews/professores";
-import { criarMapaIdentidade } from "../../domain/motor/identidade";
-import type { AcervoReviews } from "../../domain/reviews/tipos";
-import acervoReviews from "../../../data/reviews.json";
+import { useContagemPorTurma } from "./reviewsComuns";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
@@ -421,28 +418,7 @@ export function TelaGrade(props: {
   const reviewsLigadas = reviewsHabilitadasPara(props.matriz?.matriz);
   const [turmaRevisada, setTurmaRevisada] = useState<AlvoPainelDisciplina | null>(null);
 
-  /**
-   * Quantas avaliações existem por par (disciplina, unidade docente).
-   *
-   * É a chave que o card de turma pergunta: não basta a disciplina ter avaliação,
-   * porque quem escolhe turma quer saber daquela combinação. O código é reduzido
-   * à identidade do curso de quem lê, para que avaliação escrita sob o código de
-   * outra matriz conte aqui quando é a mesma exigência curricular.
-   */
-  const reviewsPorTurma = useMemo(() => {
-    const mapa = new Map<string, number>();
-    if (!reviewsLigadas || !props.matriz) return { contar: () => 0 };
-    const identidade = criarMapaIdentidade(props.matriz);
-    for (const r of (acervoReviews as AcervoReviews).reviews) {
-      if (!r.professorId) continue;
-      const chave = `${identidade.resolver(r.codigo)}|${r.professorId}`;
-      mapa.set(chave, (mapa.get(chave) ?? 0) + 1);
-    }
-    return {
-      contar: (codigo: string, idUnidade: string) =>
-        mapa.get(`${identidade.resolver(codigo)}|${idUnidade}`) ?? 0,
-    };
-  }, [reviewsLigadas, props.matriz]);
+  const reviews = useContagemPorTurma(props.matriz);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
   const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
@@ -1423,11 +1399,8 @@ export function TelaGrade(props: {
                       </div>
 
                       {reviewsLigadas && listaProfessores.length > 0 && (() => {
-                        const idUnidade = idDaUnidade(listaProfessores);
-                        const quantas = reviewsPorTurma.contar(
-                          item.disciplina.codigo,
-                          idUnidade,
-                        );
+                        const professoresRaw = item.turma.professores_raw ?? "";
+                        const quantas = reviews.contar(item.disciplina.codigo, professoresRaw);
                         return (
                           <button
                             type="button"
@@ -1438,7 +1411,7 @@ export function TelaGrade(props: {
                               setTurmaRevisada({
                                 codigo: item.disciplina.codigo,
                                 nome: item.disciplina.nome,
-                                professorId: idUnidade,
+                                professorId: reviews.idDaTurma(professoresRaw),
                                 nomeProfessor: nomesProfessores,
                               });
                             }}

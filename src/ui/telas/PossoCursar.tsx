@@ -31,6 +31,8 @@ import {
   IconWarning,
 } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { BotaoReviews, useContagemPorTurma } from "./reviewsComuns";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
 import {
   descricaoDoCurso,
   ehGrupoOpcao,
@@ -77,6 +79,8 @@ function CardDisciplinaPossoCursar({
 }) {
   const isMobile = useIsMobile();
   const temHistorico = Boolean(perfil && perfil.cursadas && perfil.cursadas.length > 0);
+  const reviews = useContagemPorTurma(matriz);
+  const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
   const [statusHoverTurma, setStatusHoverTurma] = useState<string | null>(null);
   const [progressoCarregadoTurma, setProgressoCarregadoTurma] = useState<string | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -212,6 +216,20 @@ function CardDisciplinaPossoCursar({
                               <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
                                 {t.professores_raw || "Professor a definir"}
                               </span>
+                              {reviews.habilitado && (
+                                <BotaoReviews
+                                  n={reviews.contar(e.disciplina.codigo, t.professores_raw ?? "")}
+                                  rotuloAlvo="desta turma"
+                                  onAbrir={() =>
+                                    setRevisando({
+                                      codigo: e.disciplina.codigo,
+                                      nome: e.disciplina.nome,
+                                      professorId: reviews.idDaTurma(t.professores_raw ?? ""),
+                                      nomeProfessor: t.professores_raw || "professor a definir",
+                                    })
+                                  }
+                                />
+                              )}
                               {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
                                 .filter(Boolean)
                                 .map((s) => (
@@ -332,6 +350,14 @@ function CardDisciplinaPossoCursar({
             </p>
           )}
         </div>
+      )}
+
+      {matriz && (
+        <PainelDisciplina
+          alvo={revisando}
+          matriz={matriz}
+          onFechar={() => setRevisando(null)}
+        />
       )}
     </Card>
   );

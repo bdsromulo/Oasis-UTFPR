@@ -29,12 +29,8 @@ import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
 import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
-import { BotaoReviews } from "./reviewsComuns";
+import { BotaoReviews, useContagemPorTurma } from "./reviewsComuns";
 import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
-import { idDaUnidade } from "../../domain/reviews/professores";
-import { reviewsHabilitadasPara } from "../../domain/reviews/config";
-import type { AcervoReviews } from "../../domain/reviews/tipos";
-import acervoReviews from "../../../data/reviews.json";
 
 export function normalizarTextoBusca(str: string): string {
   return str
@@ -58,6 +54,7 @@ function DisciplinaGNHItem({
   matriz,
   onVerReviews,
   contarReviews,
+  idDaTurma,
 }: {
   d: DisciplinaOfertada;
   est: { pendente: boolean; bloqueio: string | null; naMatriz: boolean };
@@ -69,6 +66,7 @@ function DisciplinaGNHItem({
   itensSelecao: ItemGrade[];
   onVerReviews?: (alvo: AlvoPainelDisciplina) => void;
   contarReviews?: (codigo: string, professoresRaw: string) => number;
+  idDaTurma?: (professoresRaw: string) => string;
   perfil?: PerfilAluno | null;
   matriz?: Matriz | null;
 }) {
@@ -178,7 +176,7 @@ function DisciplinaGNHItem({
                 <span className="truncate text-zinc-700 dark:text-zinc-300">
                   {t.professores_raw || "professor a definir"}
                 </span>
-                {onVerReviews && contarReviews && (
+                {onVerReviews && contarReviews && idDaTurma && (
                   <BotaoReviews
                     n={contarReviews(d.codigo, t.professores_raw ?? "")}
                     rotuloAlvo="desta turma"
@@ -186,9 +184,7 @@ function DisciplinaGNHItem({
                       onVerReviews({
                         codigo: d.codigo,
                         nome: d.nome,
-                        professorId: idDaUnidade(
-                          (t.professores_raw ?? "").split(/\s*,\s*/).filter(Boolean),
-                        ),
+                        professorId: idDaTurma(t.professores_raw ?? ""),
                         nomeProfessor: t.professores_raw || "professor a definir",
                       })
                     }
@@ -306,31 +302,8 @@ export function TelaLayoutGNH(props: {
   const [soLiberadas, setSoLiberadas] = useState(false);
   const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
   const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
-  const reviewsLigadas = reviewsHabilitadasPara(matriz.matriz);
 
-  /**
-   * Quantas avaliações existem para o par (disciplina, docentes daquela turma).
-   *
-   * A chave é o par, e não só a disciplina: quem escolhe turma quer saber daquela
-   * combinação. O código é reduzido à identidade do curso de quem lê, para que
-   * avaliação escrita sob o código de outra matriz conte aqui quando é a mesma
-   * exigência curricular.
-   */
-  const contarReviews = useMemo(() => {
-    const mapa = new Map<string, number>();
-    if (!reviewsLigadas) return () => 0;
-    const identidade = criarMapaIdentidade(matriz);
-    for (const r of (acervoReviews as AcervoReviews).reviews) {
-      if (!r.professorId) continue;
-      const chave = `${identidade.resolver(r.codigo)}|${r.professorId}`;
-      mapa.set(chave, (mapa.get(chave) ?? 0) + 1);
-    }
-    return (codigo: string, professoresRaw: string) => {
-      const id = idDaUnidade(professoresRaw.split(/\s*,\s*/).filter(Boolean));
-      if (!id) return 0;
-      return mapa.get(`${identidade.resolver(codigo)}|${id}`) ?? 0;
-    };
-  }, [reviewsLigadas, matriz]);
+  const reviews = useContagemPorTurma(matriz);
 
   const itensSelecao = useMemo(() => itensDaSelecao(oferta, selecao), [oferta, selecao]);
 
@@ -502,8 +475,9 @@ export function TelaLayoutGNH(props: {
               itensSelecao={itensSelecao}
               perfil={props.perfil}
               matriz={props.matriz}
-              onVerReviews={reviewsLigadas ? setRevisando : undefined}
-              contarReviews={reviewsLigadas ? contarReviews : undefined}
+              onVerReviews={reviews.habilitado ? setRevisando : undefined}
+              contarReviews={reviews.habilitado ? reviews.contar : undefined}
+              idDaTurma={reviews.habilitado ? reviews.idDaTurma : undefined}
             />
           );
         })}

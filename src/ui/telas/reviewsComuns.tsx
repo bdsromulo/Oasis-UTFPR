@@ -4,9 +4,14 @@
 // três caminhos — pelo professor e pela turma, no planejamento, e pela disciplina,
 // no catálogo. Duplicar a apresentação faria as leituras divergirem em silêncio, e
 // é exatamente a régua compartilhada que dá sentido ao número exibido.
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { LIMIAR_ESTATISTICA } from "../../domain/reviews/acervo";
-import type { AgregadoReviews, Review } from "../../domain/reviews/tipos";
+import { idDaUnidade } from "../../domain/reviews/professores";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import type { Matriz } from "../../domain/tipos";
+import type { AcervoReviews, AgregadoReviews, Review } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 
 /** As quatro verticais avaliadas, na ordem em que sempre aparecem. */
 export type Vertical = "personalidade" | "didatica" | "dificuldade" | "cargaTrabalho";
@@ -456,4 +461,46 @@ export function BotaoReviews(props: {
       {!vazio && <span>{n}</span>}
     </button>
   );
+}
+
+/**
+ * Contagem de avaliações por par (disciplina, docentes da turma).
+ *
+ * Hook porque três telas mostram turma — planejamento, posso cursar e a lista de
+ * selecionadas — e cada uma precisa da mesma resposta. Reimplementar em cada uma
+ * já havia produzido duas cópias que divergiriam na primeira mudança de regra.
+ *
+ * A chave é o par, e não só a disciplina: quem escolhe turma quer saber daquela
+ * combinação. O código é reduzido à identidade do curso de quem lê, para que
+ * avaliação escrita sob o código de outra matriz conte aqui quando é a mesma
+ * exigência curricular.
+ */
+export function useContagemPorTurma(matriz: Matriz | null | undefined) {
+  return useMemo(() => {
+    const vazio = { habilitado: false, contar: () => 0, idDaTurma: () => "" };
+    if (!matriz || !reviewsHabilitadasPara(matriz.matriz)) return vazio;
+
+    const identidade = criarMapaIdentidade(matriz);
+    const mapa = new Map<string, number>();
+    for (const r of (acervoReviews as AcervoReviews).reviews) {
+      if (!r.professorId) continue;
+      const chave = `${identidade.resolver(r.codigo)}|${r.professorId}`;
+      mapa.set(chave, (mapa.get(chave) ?? 0) + 1);
+    }
+
+    // a fonte grava a dupla ora com vírgula, ora sem — `idDaUnidade` já normaliza
+    // a ordem, e aqui só separamos o que a fonte separou
+    const idDaTurma = (professoresRaw: string) =>
+      idDaUnidade((professoresRaw ?? "").split(/\s*,\s*/).filter(Boolean));
+
+    return {
+      habilitado: true,
+      idDaTurma,
+      contar: (codigo: string, professoresRaw: string) => {
+        const id = idDaTurma(professoresRaw);
+        if (!id) return 0;
+        return mapa.get(`${identidade.resolver(codigo)}|${id}`) ?? 0;
+      },
+    };
+  }, [matriz]);
 }
