@@ -41,6 +41,12 @@ const APOIADORES: Pessoa[] = [
   { nome: "Felipe Sledz Ferreira", curso: "Engenharia de Computação" },
   { nome: "Deborah Feijo Pinto", curso: "Engenharia de Computação" },
   { nome: "Carlos Eduardo Correa Zanon", curso: "Engenharia Eletrônica" },
+  // A matriz 806 entrou na plataforma com estes dois históricos. Sem eles não
+  // haveria como calibrar o leitor: o PDF da 806 tem largura de coluna própria,
+  // e os totais do Quadro Resumo foram o que confirmou a leitura da matriz.
+  { nome: "Jezreel Gonzalez Rodriguez", curso: "Sistemas de Informação (matriz 806)" },
+  { nome: "Vitor dos Santos Maximo de Oliveira", curso: "Sistemas de Informação (matriz 806)" },
+  { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação", revisor: "Revisor" },
 ];
 
 interface Marco {
