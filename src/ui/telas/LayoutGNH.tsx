@@ -176,21 +176,26 @@ function DisciplinaGNHItem({
                 <span className="truncate text-zinc-700 dark:text-zinc-300">
                   {t.professores_raw || "professor a definir"}
                 </span>
-                {onVerReviews && contarReviews && idDaTurma && (
-                  <BotaoReviews
-                    n={contarReviews(d.codigo, t.professores_raw ?? "")}
-                    rotuloAlvo="desta turma"
-                    onAbrir={() =>
-                      onVerReviews({
-                        codigo: d.codigo,
-                        nome: d.nome,
-                        professorId: idDaTurma(t.professores_raw ?? ""),
-                        nomeProfessor: t.professores_raw || "professor a definir",
-                      })
-                    }
-                  />
-                )}
                 <div className="ml-auto flex flex-wrap items-center gap-1.5 justify-end">
+                  {/* Junto de "Status", e não colado ao nome do professor: ali a
+                      estrela sozinha se perdia entre os botões de ação, e quem
+                      escolhe turma consulta a opinião no mesmo gesto em que
+                      consulta o progresso. */}
+                  {onVerReviews && contarReviews && idDaTurma && (
+                    <BotaoReviews
+                      variante="acao"
+                      n={contarReviews(d.codigo, t.professores_raw ?? "")}
+                      rotuloAlvo="desta turma"
+                      onAbrir={() =>
+                        onVerReviews({
+                          codigo: d.codigo,
+                          nome: d.nome,
+                          professorId: idDaTurma(t.professores_raw ?? ""),
+                          nomeProfessor: t.professores_raw || "professor a definir",
+                        })
+                      }
+                    />
+                  )}
                   {isMobile && (
                     <button
                       type="button"

@@ -216,20 +216,6 @@ function CardDisciplinaPossoCursar({
                               <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
                                 {t.professores_raw || "Professor a definir"}
                               </span>
-                              {reviews.habilitado && (
-                                <BotaoReviews
-                                  n={reviews.contar(e.disciplina.codigo, t.professores_raw ?? "")}
-                                  rotuloAlvo="desta turma"
-                                  onAbrir={() =>
-                                    setRevisando({
-                                      codigo: e.disciplina.codigo,
-                                      nome: e.disciplina.nome,
-                                      professorId: reviews.idDaTurma(t.professores_raw ?? ""),
-                                      nomeProfessor: t.professores_raw || "professor a definir",
-                                    })
-                                  }
-                                />
-                              )}
                               {Array.from(new Set(horariosUnicos(t).map((h) => h.sede)))
                                 .filter(Boolean)
                                 .map((s) => (
@@ -263,6 +249,28 @@ function CardDisciplinaPossoCursar({
                         </div>
 
                         <div className="flex shrink-0 items-center gap-1.5">
+                          {/* Junto de "Status", e não colado ao nome do professor:
+                              ali a estrela se perdia entre os botões de ação, e
+                              quem escolhe turma consulta a opinião no mesmo gesto
+                              em que consulta o progresso. O ajuste de tamanho
+                              acompanha os vizinhos desta tela, que são maiores
+                              que os do Planejamento. */}
+                          {reviews.habilitado && (
+                            <BotaoReviews
+                              variante="acao"
+                              classe="!rounded-xl !px-2.5 !py-1 !text-xs"
+                              n={reviews.contar(e.disciplina.codigo, t.professores_raw ?? "")}
+                              rotuloAlvo="desta turma"
+                              onAbrir={() =>
+                                setRevisando({
+                                  codigo: e.disciplina.codigo,
+                                  nome: e.disciplina.nome,
+                                  professorId: reviews.idDaTurma(t.professores_raw ?? ""),
+                                  nomeProfessor: t.professores_raw || "professor a definir",
+                                })
+                              }
+                            />
+                          )}
                           {isMobile && (
                             <button
                               type="button"

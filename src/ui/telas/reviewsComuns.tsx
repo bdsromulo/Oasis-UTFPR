@@ -475,24 +475,43 @@ export function useFiltroNota() {
 }
 
 /**
- * Gatilho para abrir as avaliações. Estrela e contagem, nada mais.
+ * Gatilho para abrir as avaliações.
  *
- * Discreto de propósito: ele aparece em card de catálogo e em linha de turma, ao
- * lado de dado que a pessoa foi buscar ali (carga horária, horário, professor).
- * Uma faixa larga competiria com esse dado em centenas de itens — a estrela é
- * reconhecível no tamanho pequeno e some no fundo quando não interessa.
+ * Duas variantes, um componente só. A apresentação mora aqui justamente para que
+ * as três telas que leem avaliação não divirjam, e separar em dois componentes
+ * devolveria o problema que este arquivo existe para evitar.
  *
- * Sem avaliação o gatilho permanece visível, porém apagado e inerte: esconder
- * faria a ausência parecer defeito da interface, e a dica explica o que houve.
+ * `discreto` é estrela e contagem, para onde o gatilho divide espaço com dado que
+ * a pessoa foi buscar ali — card de catálogo, linha de disciplina. Uma faixa larga
+ * competiria com esse dado em centenas de itens.
+ *
+ * `acao` é um botão com rótulo, do mesmo tamanho e formato dos vizinhos "Status" e
+ * "Espiar" da lista de turmas. Ali o gatilho não divide espaço com dado, e sim com
+ * outras ações — na estrela sozinha ele desaparecia entre elas.
+ *
+ * Sem avaliação o gatilho permanece visível nas duas variantes, porém apagado e
+ * inerte: esconder faria a ausência parecer defeito da interface, e a dica explica
+ * o que houve.
  */
 export function BotaoReviews(props: {
   n: number;
   onAbrir: () => void;
   rotuloAlvo?: string;
+  variante?: "discreto" | "acao";
   classe?: string;
 }) {
-  const { n, onAbrir, rotuloAlvo = "desta disciplina" } = props;
+  const { n, onAbrir, rotuloAlvo = "desta disciplina", variante = "discreto" } = props;
   const vazio = n === 0;
+  const titulo = vazio
+    ? `Ainda não há avaliações ${rotuloAlvo}`
+    : `Ver ${n} avaliação${n > 1 ? "ões" : ""} ${rotuloAlvo}`;
+
+  // mesmo formato dos botões vizinhos da linha de turma; qualquer ajuste ali
+  // precisa vir para cá, senão o grupo perde o alinhamento
+  const estiloAcao = vazio
+    ? "cursor-not-allowed border-zinc-200/80 bg-zinc-50 text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-700"
+    : "border-utfpr-500/50 bg-utfpr-500/10 text-utfpr-700 hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/40 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950";
+
   return (
     <button
       type="button"
@@ -502,24 +521,28 @@ export function BotaoReviews(props: {
         e.preventDefault();
         onAbrir();
       }}
-      title={
-        vazio
-          ? `Ainda não há avaliações ${rotuloAlvo}`
-          : `Ver ${n} avaliação${n > 1 ? "ões" : ""} ${rotuloAlvo}`
+      title={titulo}
+      aria-label={vazio ? `Sem avaliações ${rotuloAlvo}` : `Ver ${n} avaliações ${rotuloAlvo}`}
+      className={
+        variante === "acao"
+          ? `inline-flex shrink-0 items-center gap-1 rounded-lg border px-2 py-0.5 text-[11px] font-bold shadow-2xs transition-all ${estiloAcao} ${props.classe ?? ""}`
+          : `inline-flex shrink-0 items-center gap-0.5 rounded-lg px-1.5 py-0.5 text-[11px] font-bold transition ${
+              vazio
+                ? "cursor-not-allowed text-zinc-300 dark:text-zinc-700"
+                : "text-utfpr-600 hover:bg-utfpr-500/15 dark:text-utfpr-400"
+            } ${props.classe ?? ""}`
       }
-      aria-label={
-        vazio ? `Sem avaliações ${rotuloAlvo}` : `Ver ${n} avaliações ${rotuloAlvo}`
-      }
-      className={`inline-flex shrink-0 items-center gap-0.5 rounded-lg px-1.5 py-0.5 text-[11px] font-bold transition ${
-        vazio
-          ? "cursor-not-allowed text-zinc-300 dark:text-zinc-700"
-          : "text-utfpr-600 hover:bg-utfpr-500/15 dark:text-utfpr-400"
-      } ${props.classe ?? ""}`}
     >
-      <span aria-hidden className="text-xs leading-none">
+      <span aria-hidden className={variante === "acao" ? "text-sm leading-none" : "text-xs leading-none"}>
         {vazio ? "☆" : "★"}
       </span>
-      {!vazio && <span>{n}</span>}
+      {variante === "acao" ? (
+        // o número sozinho não diz do que é; ao lado de "Status" e "adicionar" o
+        // rótulo precisa nomear a ação como os vizinhos nomeiam a delas
+        <span>{vazio ? "Avaliações" : `${n} avaliaç${n > 1 ? "ões" : "ão"}`}</span>
+      ) : (
+        !vazio && <span>{n}</span>
+      )}
     </button>
   );
 }
