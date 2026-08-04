@@ -101,6 +101,10 @@ function beta(): Plugin {
 export default defineConfig({
   base: BASE,
   plugins: [react(), tailwindcss(), csp(), beta()],
+  // A interface precisa saber que está no beta para exibir o aviso de ambiente.
+  // Constante trocada no build, e não variável de runtime: na produção o valor
+  // vira `false` literal e o bloco inteiro sai do bundle.
+  define: { __OASIS_BETA__: JSON.stringify(BETA) },
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],

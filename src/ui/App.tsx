@@ -47,6 +47,7 @@ import {
 } from "./icons";
 import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
 import { ModalNovidades } from "./telas/ModalNovidades";
+import { AvisoBeta } from "./telas/AvisoBeta";
 import { reviewsHabilitadasPara } from "../domain/reviews/config";
 import { coletaHabilitada } from "../domain/reviews/forms";
 
@@ -744,6 +745,11 @@ export function App() {
           </BotaoIconeComDica>
         </div>
       </header>
+
+      {/* Antes de qualquer outro aviso e em qualquer tela, inclusive as de
+          material do projeto: o beta é o mesmo código do site, e quem chega por
+          um link não teria como saber que está numa cópia de teste. */}
+      <AvisoBeta />
 
       {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória).
           Fica fora do "Sobre", que é material do projeto e não do semestre. */}
