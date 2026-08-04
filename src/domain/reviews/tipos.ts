@@ -39,7 +39,7 @@ export interface Review {
   situacao?: "aprovado" | "reprovado";
   /** Nome completo (ou nome social completo) de quem assina — público (RNF06). */
   autor: string;
-  geral: Estrelas;
+  personalidade: Estrelas;
   didatica: Estrelas;
   dificuldade: Estrelas;
   cargaTrabalho: Estrelas;
@@ -72,7 +72,7 @@ export interface AgregadoReviews {
    * as médias não. Com n baixo o agregado mente — 1 de 1 vira "100%" (§6.6).
    */
   estatisticaExibivel: boolean;
-  geral: number | null;
+  personalidade: number | null;
   didatica: number | null;
   dificuldade: number | null;
   cargaTrabalho: number | null;

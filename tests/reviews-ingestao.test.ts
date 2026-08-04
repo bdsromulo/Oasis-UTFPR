@@ -18,7 +18,7 @@ const CODIGO = DOCENTE.disciplinas[0];
 
 const CABECALHO = [
   "carimbo", "autor", "codigo", "semestre", "turma", "professor",
-  "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
+  "personalidade", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
 ];
 
 function linha(over: Record<string, string> = {}): string[] {
@@ -29,7 +29,7 @@ function linha(over: Record<string, string> = {}): string[] {
     semestre: "2025/2",
     turma: "S71",
     professor: DOCENTE.nome,
-    geral: "4",
+    personalidade: "4",
     didatica: "5",
     dificuldade: "3",
     cargaTrabalho: "2",
@@ -66,7 +66,7 @@ describe("ingestão: caminho feliz", () => {
       professorId: DOCENTE.id,
       codigo: CODIGO,
       semestre: "2025/2",
-      geral: 4,
+      personalidade: 4,
       avaliacao: "provas",
     });
   });
@@ -111,7 +111,7 @@ describe("ingestão: coerência com o dado oficial", () => {
 describe("ingestão: forma e vocabulário", () => {
   it.each([
     ["semestre", { semestre: "2025-2" }, /fora de AAAA\/S/],
-    ["nota", { geral: "9" }, /geral .* fora de 1–5/],
+    ["nota", { personalidade: "9" }, /personalidade .* fora de 1–5/],
     ["nota não inteira", { didatica: "4,5" }, /didatica .* fora de 1–5/],
     ["sistema avaliativo", { avaliacao: "Oral" }, /sistema avaliativo .* inválido/],
     ["autor vazio", { autor: "" }, /autor vazio/],

@@ -43,7 +43,7 @@ export function agregar(reviews: Review[], limiar = LIMIAR_ESTATISTICA): Agregad
   return {
     n,
     estatisticaExibivel: exibivel,
-    geral: exibivel ? media(reviews.map((r) => r.geral)) : null,
+    personalidade: exibivel ? media(reviews.map((r) => r.personalidade)) : null,
     didatica: exibivel ? media(reviews.map((r) => r.didatica)) : null,
     dificuldade: exibivel ? media(reviews.map((r) => r.dificuldade)) : null,
     cargaTrabalho: exibivel ? media(reviews.map((r) => r.cargaTrabalho)) : null,

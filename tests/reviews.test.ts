@@ -67,7 +67,7 @@ function review(parcial: Partial<Review>): Review {
     semestre: "2025/2",
     situacao: "aprovado",
     autor: "Alguem Ficticio",
-    geral: 4,
+    personalidade: 4,
     didatica: 4,
     dificuldade: 3,
     cargaTrabalho: 3,
@@ -256,18 +256,18 @@ describe("roster sobre as ofertas reais", () => {
 
 describe("agregação", () => {
   it("abaixo do limiar, comentários aparecem mas médias não", () => {
-    const ag = agregar([review({ geral: 5 })]);
+    const ag = agregar([review({ personalidade: 5 })]);
     expect(ag.n).toBe(1);
     expect(ag.estatisticaExibivel).toBe(false);
-    expect(ag.geral).toBeNull();
+    expect(ag.personalidade).toBeNull();
     expect(ag.reviews.length).toBe(1); // o comentário continua acessível
   });
 
   it("a partir do limiar, calcula as médias", () => {
-    const rs = Array.from({ length: LIMIAR_ESTATISTICA }, () => review({ geral: 4, didatica: 5 }));
+    const rs = Array.from({ length: LIMIAR_ESTATISTICA }, () => review({ personalidade: 4, didatica: 5 }));
     const ag = agregar(rs);
     expect(ag.estatisticaExibivel).toBe(true);
-    expect(ag.geral).toBe(4);
+    expect(ag.personalidade).toBe(4);
     expect(ag.didatica).toBe(5);
   });
 
@@ -283,7 +283,7 @@ describe("agregação", () => {
   it("conjunto vazio não quebra", () => {
     const ag = agregar([]);
     expect(ag.n).toBe(0);
-    expect(ag.geral).toBeNull();
+    expect(ag.personalidade).toBeNull();
   });
 });
 
@@ -359,7 +359,7 @@ describe("acervo publicado", () => {
       }
       if (!r.autor?.trim()) problemas.push(`${onde}: autor vazio`);
 
-      for (const campo of ["geral", "didatica", "dificuldade", "cargaTrabalho"] as const) {
+      for (const campo of ["personalidade", "didatica", "dificuldade", "cargaTrabalho"] as const) {
         const v = r[campo];
         if (!Number.isInteger(v) || v < 1 || v > 5) problemas.push(`${onde}: ${campo} fora de 1–5`);
       }

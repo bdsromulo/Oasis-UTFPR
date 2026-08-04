@@ -38,6 +38,11 @@ import {
 import { ModalGradeMagica } from "./ModalGradeMagica";
 import { PainelProfessor, type AlvoPainelProfessor } from "./PainelProfessor";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
+import { idDaUnidade } from "../../domain/reviews/professores";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
@@ -414,6 +419,30 @@ export function TelaGrade(props: {
   // painel lateral de avaliações do docente (RF17) — por enquanto só na BSI 981
   const [profPainel, setProfPainel] = useState<AlvoPainelProfessor | null>(null);
   const reviewsLigadas = reviewsHabilitadasPara(props.matriz?.matriz);
+  const [turmaRevisada, setTurmaRevisada] = useState<AlvoPainelDisciplina | null>(null);
+
+  /**
+   * Quantas avaliações existem por par (disciplina, unidade docente).
+   *
+   * É a chave que o card de turma pergunta: não basta a disciplina ter avaliação,
+   * porque quem escolhe turma quer saber daquela combinação. O código é reduzido
+   * à identidade do curso de quem lê, para que avaliação escrita sob o código de
+   * outra matriz conte aqui quando é a mesma exigência curricular.
+   */
+  const reviewsPorTurma = useMemo(() => {
+    const mapa = new Map<string, number>();
+    if (!reviewsLigadas || !props.matriz) return { contar: () => 0 };
+    const identidade = criarMapaIdentidade(props.matriz);
+    for (const r of (acervoReviews as AcervoReviews).reviews) {
+      if (!r.professorId) continue;
+      const chave = `${identidade.resolver(r.codigo)}|${r.professorId}`;
+      mapa.set(chave, (mapa.get(chave) ?? 0) + 1);
+    }
+    return {
+      contar: (codigo: string, idUnidade: string) =>
+        mapa.get(`${identidade.resolver(codigo)}|${idUnidade}`) ?? 0,
+    };
+  }, [reviewsLigadas, props.matriz]);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
   const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
@@ -661,11 +690,18 @@ export function TelaGrade(props: {
   const modaisJSX = (
     <>
       {props.matriz && reviewsLigadas && (
-        <PainelProfessor
-          alvo={profPainel}
-          matriz={props.matriz}
-          onFechar={() => setProfPainel(null)}
-        />
+        <>
+          <PainelDisciplina
+            alvo={turmaRevisada}
+            matriz={props.matriz}
+            onFechar={() => setTurmaRevisada(null)}
+          />
+          <PainelProfessor
+            alvo={profPainel}
+            matriz={props.matriz}
+            onFechar={() => setProfPainel(null)}
+          />
+        </>
       )}
 
       <ModalGradeMagica
@@ -1385,6 +1421,44 @@ export function TelaGrade(props: {
                           <span className="truncate">{nomesProfessores}</span>
                         )}
                       </div>
+
+                      {reviewsLigadas && listaProfessores.length > 0 && (() => {
+                        const idUnidade = idDaUnidade(listaProfessores);
+                        const quantas = reviewsPorTurma.contar(
+                          item.disciplina.codigo,
+                          idUnidade,
+                        );
+                        return (
+                          <button
+                            type="button"
+                            disabled={quantas === 0}
+                            onClick={(e) => {
+                              // o card inteiro alterna o balão de progresso
+                              e.stopPropagation();
+                              setTurmaRevisada({
+                                codigo: item.disciplina.codigo,
+                                nome: item.disciplina.nome,
+                                professorId: idUnidade,
+                                nomeProfessor: nomesProfessores,
+                              });
+                            }}
+                            title={
+                              quantas === 0
+                                ? "Ainda não há avaliações desta turma"
+                                : `Ver ${quantas} avaliação${quantas > 1 ? "ões" : ""} desta turma`
+                            }
+                            className={`mt-2 rounded-lg border px-2 py-1 text-[11px] font-bold transition ${
+                              quantas === 0
+                                ? "cursor-not-allowed border-zinc-200 text-zinc-300 dark:border-zinc-800 dark:text-zinc-600"
+                                : "border-utfpr-500/40 bg-utfpr-500/10 text-utfpr-700 hover:bg-utfpr-500/20 dark:text-utfpr-400"
+                            }`}
+                          >
+                            {quantas === 0
+                              ? "Sem avaliações"
+                              : `${quantas} avaliação${quantas > 1 ? "ões" : ""}`}
+                          </button>
+                        );
+                      })()}
                     </div>
                   </div>
                   <Botao

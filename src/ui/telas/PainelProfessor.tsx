@@ -4,7 +4,14 @@
 // comunidade registrou sobre ele — na disciplina em questão e no geral.
 import { useEffect, useMemo } from "react";
 import { criarConsulta, agregar } from "../../domain/reviews/acervo";
-import { ListaReviews, Resumo } from "./reviewsComuns";
+import {
+  FaixaFiltro,
+  ListaReviews,
+  PainelDistribuicoes,
+  Resumo,
+  aplicarFiltro,
+  useFiltroNota,
+} from "./reviewsComuns";
 import type { Review } from "../../domain/reviews/tipos";
 import { construirRoster, idDaUnidade, slugProfessor } from "../../domain/reviews/professores";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -29,6 +36,11 @@ export function PainelProfessor(props: {
   onFechar: () => void;
 }) {
   const { alvo, matriz, onFechar } = props;
+  const [filtro, setFiltro] = useFiltroNota();
+
+  // trocar de professor com filtro ativo mostraria a lista recortada por um
+  // critério que a pessoa escolheu para outro alvo
+  useEffect(() => setFiltro(null), [alvo?.nomes?.join("|"), alvo?.codigo, setFiltro]);
 
   useEffect(() => {
     if (!alvo) return;
@@ -64,7 +76,7 @@ export function PainelProfessor(props: {
       nomeCanonico: unidade?.nome ?? alvo.nomes.join(" / "),
       dupla: alvo.nomes.length > 1,
       naDisciplina: agregar(naDisciplina),
-      geral: agregar(daUnidade),
+      personalidade: agregar(daUnidade),
       outrasDaUnidade,
       emOutrasFormacoes,
       total: daUnidade.length,
@@ -125,7 +137,24 @@ export function PainelProfessor(props: {
             {alvo.codigo && dados.naDisciplina.n > 0 && (
               <>
                 <Resumo titulo="Nesta disciplina" ag={dados.naDisciplina} />
-                <ListaReviews reviews={dados.naDisciplina.reviews} />
+                <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
+                  <h4 className="mb-3 font-display text-sm font-bold text-zinc-800 dark:text-zinc-100">
+                    Como as notas se distribuem
+                  </h4>
+                  <PainelDistribuicoes
+                    reviews={dados.naDisciplina.reviews}
+                    filtro={filtro}
+                    onFiltrar={setFiltro}
+                  />
+                </div>
+                {filtro && (
+                  <FaixaFiltro
+                    filtro={filtro}
+                    n={aplicarFiltro(dados.naDisciplina.reviews, filtro).length}
+                    onLimpar={() => setFiltro(null)}
+                  />
+                )}
+                <ListaReviews reviews={aplicarFiltro(dados.naDisciplina.reviews, filtro)} />
               </>
             )}
 
@@ -140,7 +169,7 @@ export function PainelProfessor(props: {
               <div className="border-t border-zinc-200/70 pt-4 dark:border-zinc-800/70">
                 <Resumo
                   titulo={dados.dupla ? "Em todas as disciplinas da dupla" : "Em todas as disciplinas"}
-                  ag={dados.geral}
+                  ag={dados.personalidade}
                 />
                 <div className="mt-2">
                   <ListaReviews reviews={dados.outrasDaUnidade} />

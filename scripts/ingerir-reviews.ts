@@ -122,7 +122,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   const cabecalho = tabela[0].map((c) => c.trim());
   const obrigatorias = [
     "carimbo", "autor", "codigo", "semestre", "professor",
-    "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
+    "personalidade", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
   ];
   for (const col of obrigatorias) {
     if (!cabecalho.includes(col)) erros.push(`Coluna obrigatória ausente no CSV: "${col}".`);
@@ -173,7 +173,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     if (!avaliacao) problemas.push(`sistema avaliativo "${campos.avaliacao}" inválido`);
 
     const notas: Record<string, number> = {};
-    for (const campo of ["geral", "didatica", "dificuldade", "cargaTrabalho"]) {
+    for (const campo of ["personalidade", "didatica", "dificuldade", "cargaTrabalho"]) {
       const v = Number(campos[campo]);
       if (!Number.isInteger(v) || v < 1 || v > 5) problemas.push(`${campo} "${campos[campo]}" fora de 1–5`);
       else notas[campo] = v;
@@ -218,7 +218,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
       codigo: campos.codigo,
       semestre: campos.semestre,
       autor: campos.autor,
-      geral: notas.geral as Review["geral"],
+      personalidade: notas.personalidade as Review["personalidade"],
       didatica: notas.didatica as Review["didatica"],
       dificuldade: notas.dificuldade as Review["dificuldade"],
       cargaTrabalho: notas.cargaTrabalho as Review["cargaTrabalho"],

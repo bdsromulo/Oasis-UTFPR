@@ -71,7 +71,7 @@ alvos.forEach((unidade, i) => {
       codigo,
       semestre,
       autor,
-      geral: nota(),
+      personalidade: nota(),
       didatica: nota(),
       dificuldade: nota(),
       cargaTrabalho: nota(),
