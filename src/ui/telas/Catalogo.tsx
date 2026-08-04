@@ -5,6 +5,12 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
+import { criarConsulta } from "../../domain/reviews/acervo";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -39,6 +45,28 @@ export function TelaCatalogo(props: {
   >(props.categoriaInicial && props.categoriaInicial !== "todas" ? "pendentes" : "todas");
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
+  const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
+
+  /**
+   * Quantas avaliações cada disciplina tem, pela identidade do curso de quem lê.
+   *
+   * Calculado uma vez para a tela inteira: o catálogo renderiza centenas de
+   * cards, e consultar o acervo dentro de cada um seria refazer o mesmo índice
+   * a cada card.
+   */
+  const contagemReviews = useMemo(() => {
+    if (!reviewsHabilitadasPara(matriz.matriz)) return new Map<string, number>();
+    const consulta = criarConsulta(
+      (acervoReviews as AcervoReviews).reviews,
+      criarMapaIdentidade(matriz),
+    );
+    const mapa = new Map<string, number>();
+    for (const d of matriz.disciplinas) {
+      const n = consulta.daDisciplina(d.codigo).length;
+      if (n > 0) mapa.set(d.codigo, n);
+    }
+    return mapa;
+  }, [matriz]);
 
   const painel = useMemo(() => (perfil ? montarPainel(perfil, matriz) : null), [perfil, matriz]);
   const periodosDisponiveis = useMemo(() => {
@@ -659,6 +687,19 @@ export function TelaCatalogo(props: {
                   </div>
                 </div>
 
+                {/* Só aparece quando há o que ler: um "0 avaliações" em toda
+                    disciplina do catálogo seria ruído em centenas de cards. */}
+                {contagemReviews.has(d.codigo) && (
+                  <button
+                    type="button"
+                    onClick={() => setRevisando({ codigo: d.codigo, nome: d.nome })}
+                    className="mt-3 w-full rounded-xl border border-utfpr-500/40 bg-utfpr-500/10 px-3 py-1.5 text-xs font-semibold text-utfpr-700 transition hover:bg-utfpr-500/20 dark:text-utfpr-400"
+                  >
+                    Ver {contagemReviews.get(d.codigo)} avaliação
+                    {contagemReviews.get(d.codigo)! > 1 ? "ões" : ""} da comunidade
+                  </button>
+                )}
+
                 <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-2.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
                   <div className="flex items-center gap-3 font-mono text-[11px]">
                     <span>Total: <strong>{d.horas.total}h</strong></span>
@@ -688,6 +729,12 @@ export function TelaCatalogo(props: {
           })}
         </div>
       )}
+
+      <PainelDisciplina
+        alvo={revisando}
+        matriz={matriz}
+        onFechar={() => setRevisando(null)}
+      />
     </div>
   );
 }

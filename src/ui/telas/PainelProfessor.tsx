@@ -3,9 +3,10 @@
 // Abre a partir do nome do docente no planejamento de matrícula e mostra o que a
 // comunidade registrou sobre ele — na disciplina em questão e no geral.
 import { useEffect, useMemo } from "react";
-import { criarConsulta, agregar, LIMIAR_ESTATISTICA } from "../../domain/reviews/acervo";
+import { criarConsulta, agregar } from "../../domain/reviews/acervo";
+import { ListaReviews, Resumo } from "./reviewsComuns";
+import type { Review } from "../../domain/reviews/tipos";
 import { construirRoster, idDaUnidade, slugProfessor } from "../../domain/reviews/professores";
-import type { AgregadoReviews, Review } from "../../domain/reviews/tipos";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { CURSOS } from "../../domain/dadosCurso";
 import type { Matriz } from "../../domain/tipos";
@@ -20,87 +21,6 @@ export interface AlvoPainelProfessor {
   /** Quando informado, o painel abre focado nesta disciplina. */
   codigo?: string;
   nomeDisciplina?: string;
-}
-
-function Nota(props: { rotulo: string; valor: number | null; escala: string }) {
-  return (
-    <div className="rounded-xl border border-zinc-200/70 px-3 py-2 dark:border-zinc-800/70">
-      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-        {props.rotulo}
-      </div>
-      <div className="font-display text-lg font-black text-zinc-900 dark:text-zinc-100">
-        {props.valor === null ? "—" : props.valor.toFixed(1).replace(".", ",")}
-        <span className="ml-1 font-sans text-[10px] font-normal text-zinc-400">/ 5</span>
-      </div>
-      <div className="text-[10px] text-zinc-400">{props.escala}</div>
-    </div>
-  );
-}
-
-function ListaReviews(props: { reviews: Review[] }) {
-  if (!props.reviews.length) return null;
-  return (
-    <div className="space-y-2">
-      {props.reviews.map((r) => (
-        <div
-          key={r.id}
-          className="rounded-2xl border border-zinc-200/70 bg-white p-3 dark:border-zinc-800/70 dark:bg-zinc-900"
-        >
-          <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
-            <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100">{r.autor}</span>
-            <span className="font-mono text-[10px] text-zinc-400">
-              {r.codigo} · {r.semestre}
-              {r.situacao === "reprovado" && " · reprovou"}
-            </span>
-          </div>
-          <div className="mt-1 flex flex-wrap gap-1 text-[10px] text-zinc-500 dark:text-zinc-400">
-            <span>Geral {r.geral}/5</span>
-            <span>· Didática {r.didatica}/5</span>
-            <span>· Dificuldade {r.dificuldade}/5</span>
-            <span>· Carga {r.cargaTrabalho}/5</span>
-          </div>
-          {r.comentario && (
-            <p className="mt-2 text-xs leading-relaxed text-zinc-700 dark:text-zinc-200">
-              {r.comentario}
-            </p>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Resumo(props: { titulo: string; ag: AgregadoReviews }) {
-  const { ag } = props;
-  if (ag.n === 0) return null;
-  return (
-    <div>
-      <div className="mb-2 flex items-baseline justify-between">
-        <h4 className="font-display text-sm font-bold text-zinc-800 dark:text-zinc-100">
-          {props.titulo}
-        </h4>
-        <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
-          {ag.n} avaliação{ag.n > 1 ? "ões" : ""}
-        </span>
-      </div>
-
-      {ag.estatisticaExibivel ? (
-        <div className="grid grid-cols-2 gap-2">
-          <Nota rotulo="Geral" valor={ag.geral} escala="1 ruim · 5 excelente" />
-          <Nota rotulo="Didática" valor={ag.didatica} escala="1 ruim · 5 excelente" />
-          <Nota rotulo="Dificuldade" valor={ag.dificuldade} escala="1 fácil · 5 difícil" />
-          <Nota rotulo="Carga" valor={ag.cargaTrabalho} escala="1 pouca · 5 muita" />
-        </div>
-      ) : (
-        // com n baixo a média mente: 1 de 1 vira "5,0" e soa como consenso
-        <p className="rounded-xl border border-zinc-200/70 bg-zinc-50 p-2.5 text-[11px] leading-relaxed text-zinc-600 dark:border-zinc-800/70 dark:bg-zinc-950/50 dark:text-zinc-300">
-          Ainda são poucas avaliações para uma média confiável — são precisas ao menos{" "}
-          {LIMIAR_ESTATISTICA}. Os relatos abaixo continuam valendo como leitura individual.
-        </p>
-      )}
-
-    </div>
-  );
 }
 
 export function PainelProfessor(props: {
