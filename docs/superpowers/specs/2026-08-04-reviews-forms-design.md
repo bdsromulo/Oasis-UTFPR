@@ -71,7 +71,7 @@ validação da ingestão.
 
 | # | Pergunta | Tipo | Origem | Obrigatória |
 |---|---|---|---|---|
-| 1 | Seu nome (aparecerá publicamente na avaliação) | Resposta curta | prefill | sim |
+| 1 | Seu nome — confira, é ele que aparece publicamente | Resposta curta | prefill do histórico local | sim |
 | 2 | Código da disciplina | Resposta curta | prefill | sim |
 | 3 | Disciplina | Resposta curta | prefill | sim |
 | 4 | Semestre em que você cursou | Resposta curta | prefill | sim |
@@ -96,14 +96,32 @@ Detalhes que importam:
 - **Pergunta 12:** caixa única, obrigatória, com o texto abaixo. Caixa de seleção e
   não múltipla escolha porque o consentimento precisa ser ato positivo isolado.
 
-> Concordo que meu **nome, obtido da minha conta Google institucional e exibido acima**,
-> seja publicado junto desta avaliação no site do Oásis, de forma pública e permanente
-> enquanto a avaliação estiver publicada. Meu e-mail e meu RA **não** são publicados.
-> Posso pedir a remoção a qualquer momento editando esta resposta ou entrando em
-> contato — a remoção vale para as publicações seguintes, e o histórico do Git guarda
-> as versões já publicadas.
+> Confirmo que **o nome preenchido no primeiro campo é meu** e concordo que ele seja
+> publicado junto desta avaliação no site do Oásis, de forma pública, enquanto a
+> avaliação estiver publicada. O nome foi preenchido a partir do histórico escolar que
+> eu mesmo carreguei no site, e posso corrigi-lo acima antes de enviar. Meu e-mail
+> institucional é registrado para autenticar o envio, mas **não** é publicado; meu RA
+> e minhas notas também não. Posso pedir a remoção a qualquer momento editando esta
+> resposta ou entrando em contato — a remoção vale para as publicações seguintes, e o
+> histórico do Git guarda as versões já publicadas.
 
-A última frase não é detalhe jurídico decorativo: o repositório é público e versionado,
+Três coisas que o texto precisa acertar, e que a redação acima corrige em relação a um
+"obtido da minha conta Google":
+
+1. **Procedência real do nome.** O Google Workspace entrega ao formulário o **e-mail
+   verificado, não o nome do titular**. O nome chega por prefill, vindo do histórico
+   escolar que o próprio aluno carregou no Oásis — processamento local, o PDF nunca
+   sai do navegador. Descrever a origem errado invalidaria o consentimento justamente
+   no ponto que ele existe para cobrir.
+2. **O campo é editável.** Como o prefill não trava campo, o consentimento é sobre o
+   valor que estiver no campo 1 no momento do envio, não sobre o que o site sugeriu.
+   Daí "o nome preenchido no primeiro campo é meu" em vez de "meu nome": é confirmação
+   de titularidade, e é ela que sustenta o `alerta_nome` da moderação.
+3. **Papel do e-mail.** Ele é coletado e é PII; o texto declara para que serve
+   (autenticar) e o que não acontece com ele (publicação). Silenciar sobre um dado
+   coletado é pior que declará-lo.
+
+A frase final também não é decoração jurídica: o repositório é público e versionado,
 então prometer apagamento retroativo seria mentira.
 
 ### 3.3 Régua das escalas
@@ -230,8 +248,12 @@ próprio Forms.
    que deixa o campo vazio para digitação no Forms. Pela medição do `Estrategia.md`,
    essa rota atinge ~14% dos casos, e 31% para quem está adiantado — é caminho comum,
    não borda, e a UI deve tratá-la como escolha legítima, não como erro.
-2. **Mostrar o que será público.** Nome, disciplina, semestre, professor. É o momento
-   do consentimento informado; a caixa no Forms confirma o que já foi visto aqui.
+2. **Mostrar o que será público.** Nome (de `perfil.nome`, do histórico local),
+   disciplina, semestre, professor. É o momento do consentimento informado: o aluno vê
+   aqui o nome que vai assinar a avaliação, e a caixa do campo 12 confirma no Forms o
+   que já foi mostrado aqui. Os dois textos precisam descrever a mesma procedência —
+   se a UI disser "seu nome" e o Forms disser "obtido do Google", o consentimento
+   descreve um fluxo que não existe.
 3. **Abrir o Forms** com a URL montada, em nova aba.
 
 `src/domain/reviews/forms.ts` — módulo puro, testável, sem React: recebe alvo, autor e
