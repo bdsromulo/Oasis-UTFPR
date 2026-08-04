@@ -588,9 +588,15 @@ export function TelaSituacao(props: {
             Avaliar o semestre {doUltimoSemestre.semestre}
           </h2>
           <Card>
-            <p className="mb-3 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+            <p className="mb-1.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
               Sua experiência ajuda quem vai escolher turma. A avaliação é pública e
               assinada com o seu nome; seu RA não é publicado.
+            </p>
+            {/* Mesmo aviso dos outros dois pontos de entrada da avaliação: o campo
+                editado só cobra o preço dias depois, quando a resposta é recusada. */}
+            <p className="mb-3 text-xs font-semibold leading-relaxed text-amber-700 dark:text-amber-400">
+              O formulário abre com disciplina, semestre, professor e seu nome já
+              preenchidos. Não altere esses campos.
             </p>
             <div className="space-y-1.5">
               {doUltimoSemestre.itens.map((d) => (

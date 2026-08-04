@@ -8,6 +8,7 @@ import { construirRoster } from "../../domain/reviews/professores";
 import { CURSOS } from "../../domain/dadosCurso";
 import { montarUrlDeAvaliacao, type AlvoAvaliacao } from "../../domain/reviews/forms";
 import { Botao } from "../componentes";
+import { IconWarning } from "../icons";
 
 /** Marca a rota "não está na lista" sem se confundir com "ainda não escolhi". */
 const FORA_DO_ELENCO = "__fora__";
@@ -178,12 +179,30 @@ export function ModalEnvioForms(props: {
           </p>
         </div>
 
+        {/* O prefill não trava campo: o Forms deixa editar tudo antes de enviar.
+            Quem corrige "para melhorar" o código ou o semestre derruba a própria
+            resposta na validação da ingestão, e o erro só aparece dias depois,
+            quando a avaliação não sai. O aviso é o único ponto onde dá para
+            evitar isso, então ele vem antes do botão e em tom de alerta. */}
+        <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-amber-300/80 bg-amber-50/80 p-3 dark:border-amber-800/80 dark:bg-amber-950/40">
+          <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-amber-700 dark:text-amber-300" />
+          <div className="min-w-0 text-xs leading-relaxed text-amber-900 dark:text-amber-200">
+            <p className="font-bold">O formulário abre já preenchido. Não altere esses campos.</p>
+            <p className="mt-1">
+              Seu nome, o código, o nome da disciplina, o semestre e o professor chegam prontos
+              do Oásis. Editar qualquer um deles faz a resposta ser recusada na hora de publicar,
+              e você só descobre quando a avaliação não aparecer. Responda apenas as notas e o
+              comentário.
+            </p>
+          </div>
+        </div>
+
         <div className="mt-4 flex justify-end gap-2">
           <Botao variante="sutil" onClick={onFechar}>
             Cancelar
           </Botao>
           <Botao onClick={abrir} desabilitado={escolhido === null}>
-            Abrir formulário
+            Abrir formulário preenchido
           </Botao>
         </div>
       </div>

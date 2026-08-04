@@ -111,6 +111,12 @@ export function ModalMinhasAvaliacoes(props: {
               Sua experiência ajuda quem vai escolher turma. A avaliação é pública e
               assinada com o seu nome; seu RA não é publicado.
             </p>
+            {/* Dito aqui e repetido na hora de abrir o formulário: quem lê rápido
+                pula um dos dois, e o campo editado só cobra o preço dias depois. */}
+            <p className="mt-1.5 text-xs font-semibold leading-relaxed text-amber-700 dark:text-amber-400">
+              O formulário abre com disciplina, semestre, professor e seu nome já
+              preenchidos. Não altere esses campos.
+            </p>
             {!perfil ? null : (
               <input
                 type="text"
