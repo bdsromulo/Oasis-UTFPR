@@ -10,7 +10,12 @@ import { idDaUnidade } from "../../domain/reviews/professores";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import type { Matriz } from "../../domain/tipos";
-import type { AcervoReviews, AgregadoReviews, Review } from "../../domain/reviews/tipos";
+import type {
+  AcervoReviews,
+  AgregadoReviews,
+  Review,
+  SistemaAvaliativo,
+} from "../../domain/reviews/tipos";
 import acervoReviews from "../../../data/reviews.json";
 
 /** As quatro verticais avaliadas, na ordem em que sempre aparecem. */
@@ -206,9 +211,38 @@ export function Distribuicao(props: {
   );
 }
 
+/**
+ * Como a nota foi cobrada. "misto" vira texto, e não o rótulo do domínio.
+ *
+ * O valor `misto` é economia de tipo, não vocabulário de quem lê: ninguém diz que
+ * a matéria "é mista". O formulário pergunta "provas, trabalhos ou os dois", e é
+ * essa resposta que volta aqui.
+ */
+export const ROTULO_SISTEMA: Record<SistemaAvaliativo, string> = {
+  provas: "Provas",
+  trabalhos: "Trabalhos",
+  misto: "Provas e trabalhos",
+};
+
+/**
+ * Quantidades, quando informadas. Campo opcional: célula vazia é "não informado",
+ * e não zero — por isso a ausência some em vez de virar "0 provas".
+ */
+function detalheDeQuantidades(r: Review): string | null {
+  const partes: string[] = [];
+  if (r.qtdProvas !== undefined) {
+    partes.push(`${r.qtdProvas} prova${r.qtdProvas === 1 ? "" : "s"}`);
+  }
+  if (r.qtdTrabalhos !== undefined) {
+    partes.push(`${r.qtdTrabalhos} trabalho${r.qtdTrabalhos === 1 ? "" : "s"}`);
+  }
+  return partes.length ? partes.join(" · ") : null;
+}
+
 /** Uma avaliação. As notas vêm DEPOIS do comentário, em destaque. */
 export function CartaoReview(props: { review: Review; mostrarCodigo?: boolean }) {
   const { review: r } = props;
+  const quantidades = detalheDeQuantidades(r);
   return (
     <div className="rounded-2xl border border-zinc-200/70 bg-white p-3 dark:border-zinc-800/70 dark:bg-zinc-900">
       <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
@@ -225,6 +259,18 @@ export function CartaoReview(props: { review: Review; mostrarCodigo?: boolean })
           {r.comentario}
         </p>
       )}
+
+      {/* Como a matéria cobra a nota. Fica junto do relato, e não com as notas,
+          porque é fato do semestre — quem lê quer saber se cai prova antes de
+          comparar médias. */}
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <span className="rounded-md bg-utfpr-500/15 px-1.5 py-0.5 text-[10px] font-bold text-utfpr-700 dark:text-utfpr-400">
+          {ROTULO_SISTEMA[r.avaliacao]}
+        </span>
+        {quantidades && (
+          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">{quantidades}</span>
+        )}
+      </div>
 
       {/* Depois do texto e destacadas: o comentário é o que se lê, as notas são o
           que se compara. Antes elas viravam um cabeçalho miúdo que ninguém batia
@@ -287,6 +333,21 @@ export function Resumo(props: { titulo: string; ag: AgregadoReviews }) {
           Ainda são poucas avaliações para uma média confiável — são precisas ao menos{" "}
           {LIMIAR_ESTATISTICA}. Os relatos abaixo continuam valendo como leitura individual.
         </p>
+      )}
+
+      {/* Sem piso de amostra, pela mesma razão do histograma: isto é contagem, não
+          média. "1 relato diz provas" informa sem fingir consenso, e o formato de
+          avaliação costuma ser a primeira pergunta de quem escolhe turma. */}
+      {ag.avaliacao.length > 0 && (
+        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="font-semibold text-zinc-600 dark:text-zinc-300">Como cobra nota:</span>
+          {ag.avaliacao.map(({ sistema, n }) => (
+            <span key={sistema}>
+              {ROTULO_SISTEMA[sistema]}
+              <span className="ml-1 font-mono text-[10px] text-zinc-400">{n}</span>
+            </span>
+          ))}
+        </div>
       )}
     </div>
   );
