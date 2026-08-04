@@ -86,9 +86,8 @@ validação da ingestão.
 
 Detalhes que importam:
 
-- **Escalas (6–9):** rotular as pontas. Geral: *ruim* → *ótima*. Didática: *ruim* →
-  *ótima*. Carga: *leve* → *pesada*. Dificuldade: *fácil* → *difícil*. Sem rótulo, 5
-  em "dificuldade" é ambíguo e o dado nasce sujo.
+- **Escalas (6–9):** rotular as pontas e pôr a régua completa na descrição da pergunta
+  — a escala linear do Forms não aceita rótulo por ponto intermediário. Régua em §3.3.
 - **Pergunta 10:** opções exatamente `Provas`, `Trabalhos`, `Provas e trabalhos` →
   mapeadas na ingestão para `provas` / `trabalhos` / `misto`.
 - **Pergunta 11:** Validação de resposta › *Comprimento máximo do caractere* igual a
@@ -107,7 +106,58 @@ Detalhes que importam:
 A última frase não é detalhe jurídico decorativo: o repositório é público e versionado,
 então prometer apagamento retroativo seria mentira.
 
-### 3.3 URL de prefill
+### 3.3 Régua das escalas
+
+Fonte da verdade em `src/domain/reviews/tipos.ts`. O Forms copia dela; a UI de exibição
+mostra a mesma régua em tooltip. Régua não compartilhada entre quem responde e quem lê
+transforma a média em ruído com aparência de número.
+
+Nenhuma âncora descreve o professor como pessoa — todas descrevem o que aconteceu com
+o respondente. É o critério de comportamento observável que o desenho antigo aplicava às
+tags, e é ele que contém a superfície difamatória sem exigir moderação caso a caso.
+
+**Geral** — pontas *ruim* → *ótima*
+
+1. Não recomendo; teria evitado essa turma se pudesse
+2. Deixou a desejar; cursaria com outro professor se houvesse opção
+3. Cumpriu o esperado, sem se destacar
+4. Boa experiência; recomendo
+5. Das melhores que cursei; recomendo sem ressalva
+
+**Didática** — pontas *ruim* → *ótima*
+
+1. Não dava para acompanhar a aula; aprendi por fora
+2. Explicação confusa com frequência; o material ajudava pouco
+3. Dava para acompanhar, mas exigia estudo por fora para fechar
+4. Explicava com clareza e o material sustentava o estudo
+5. A aula bastava por si só; eu saía entendendo
+
+**Carga de trabalho** — pontas *leve* → *pesada* — mede **tempo fora da aula**
+
+1. Quase nada fora da aula (até ~1h por semana)
+2. Leve: ~2h por semana
+3. Moderada: ~4h por semana, com picos perto das entregas
+4. Pesada: ~6–8h por semana, entregas constantes
+5. Muito pesada: essa disciplina ditou minha rotina no semestre
+
+**Dificuldade** — pontas *fácil* → *difícil* — mede **exigência para ir bem**
+
+1. Passei sem precisar de esforço concentrado
+2. Passar foi tranquilo; nota alta exigia atenção
+3. Precisei estudar de verdade para ir bem
+4. Exigente: nota boa só com estudo constante
+5. Das mais exigentes do curso; reprovação era comum na turma
+
+Carga e dificuldade são ancoradas em dimensões diferentes de propósito: sem isso viram
+a mesma pergunta feita duas vezes. Uma disciplina pode ser pesada e fácil (volume
+braçal) ou leve e difícil (uma prova, conceitualmente dura).
+
+**Consequência para o front-end:** geral e didática têm polo bom; carga e dificuldade
+não — 5 ali é informação, não defeito. Essas duas nunca são pintadas com a semântica de
+alerta nem entram em média com as outras, sob pena de o painel afirmar que disciplina
+difícil é disciplina ruim.
+
+### 3.4 URL de prefill
 
 Em *Obter link pré-preenchido*, preencher os campos 1–5 com valores marcadores e copiar
 o link gerado. Ele traz os `entry.NNNNNNN` de cada campo. Esses IDs vão para um único
