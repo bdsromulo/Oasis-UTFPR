@@ -13,7 +13,7 @@ import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { construirRoster } from "../src/domain/reviews/professores";
 import { BSI } from "../src/domain/dadosCurso";
-import { TAGS, type Review, type Estrelas, type SistemaAvaliativo, type Tag } from "../src/domain/reviews/tipos";
+import type { Review, Estrelas, SistemaAvaliativo } from "../src/domain/reviews/tipos";
 
 const AUTORES = [
   "Ana Fictícia Pereira", "Bruno Fictício Almeida", "Carla Fictícia Nunes",
@@ -62,9 +62,6 @@ alvos.forEach((unidade, i) => {
 
   for (let n = 0; n < quantas; n++) {
     const nota = () => (1 + Math.floor(aleatorio() * 5)) as Estrelas;
-    const tags: Tag[] = [...TAGS]
-      .sort(() => aleatorio() - 0.5)
-      .slice(0, 1 + Math.floor(aleatorio() * 3));
     const autor = AUTORES[Math.floor(aleatorio() * AUTORES.length)];
     const semestre = SEMESTRES[Math.floor(aleatorio() * SEMESTRES.length)];
 
@@ -73,14 +70,12 @@ alvos.forEach((unidade, i) => {
       professorId: unidade.id,
       codigo,
       semestre,
-      situacao: aleatorio() > 0.85 ? "reprovado" : "aprovado",
       autor,
       geral: nota(),
       didatica: nota(),
       dificuldade: nota(),
       cargaTrabalho: nota(),
       avaliacao: SISTEMAS[Math.floor(aleatorio() * SISTEMAS.length)],
-      tags,
       comentario: COMENTARIOS[Math.floor(aleatorio() * COMENTARIOS.length)],
     });
   }

@@ -10,15 +10,7 @@ import {
   unidadeInclui,
 } from "../src/domain/reviews/professores";
 import { agregar, criarConsulta, publicaveis, LIMIAR_ESTATISTICA } from "../src/domain/reviews/acervo";
-import {
-  TAGS,
-  DESCRICAO_TAG,
-  CATEGORIAS_TAG,
-  TAGS_OPOSTAS,
-  opostaDe,
-  LIMITE_COMENTARIO,
-  type Review,
-} from "../src/domain/reviews/tipos";
+import { LIMITE_COMENTARIO, type Review } from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { BSI, ENG_COMP, CURSOS } from "../src/domain/dadosCurso";
 import type { DadosCurso } from "../src/domain/dadosCurso";
@@ -80,7 +72,6 @@ function review(parcial: Partial<Review>): Review {
     dificuldade: 3,
     cargaTrabalho: 3,
     avaliacao: "provas",
-    tags: [],
     comentario: "",
     ...parcial,
   };
@@ -280,15 +271,6 @@ describe("agregação", () => {
     expect(ag.didatica).toBe(5);
   });
 
-  it("conta tags por frequência, sem contar repetição dentro do mesmo registro", () => {
-    const ag = agregar([
-      review({ tags: ["corrige-rapido", "corrige-rapido", "acessivel"] }),
-      review({ tags: ["corrige-rapido"] }),
-    ]);
-    expect(ag.tags[0]).toEqual({ tag: "corrige-rapido", n: 2 });
-    expect(ag.tags.find((t) => t.tag === "acessivel")?.n).toBe(1);
-  });
-
   it("ordena as avaliações da mais recente para a mais antiga", () => {
     const ag = agregar([
       review({ semestre: "2024/1" }),
@@ -302,7 +284,6 @@ describe("agregação", () => {
     const ag = agregar([]);
     expect(ag.n).toBe(0);
     expect(ag.geral).toBeNull();
-    expect(ag.tags).toEqual([]);
   });
 });
 
@@ -341,44 +322,6 @@ describe("consulta e visibilidade", () => {
   });
 });
 
-describe("vocabulário de tags", () => {
-  it("toda tag tem rótulo e comportamento observável declarado", () => {
-    for (const t of TAGS) {
-      expect(DESCRICAO_TAG[t]?.rotulo, `tag sem rótulo: ${t}`).toBeTruthy();
-      expect(DESCRICAO_TAG[t]?.comportamento, `tag sem comportamento: ${t}`).toBeTruthy();
-    }
-    expect(Object.keys(DESCRICAO_TAG).sort()).toEqual([...TAGS].sort());
-  });
-
-  it("toda tag pertence a exatamente uma categoria", () => {
-    const categorizadas = CATEGORIAS_TAG.flatMap((c) => c.tags);
-    expect(categorizadas.sort()).toEqual([...TAGS].sort());
-    expect(new Set(categorizadas).size, "tag em mais de uma categoria").toBe(categorizadas.length);
-  });
-
-  it("os pares opostos existem no vocabulário e são recíprocos", () => {
-    for (const [a, b] of TAGS_OPOSTAS) {
-      expect(TAGS, `${a} fora do vocabulário`).toContain(a);
-      expect(TAGS, `${b} fora do vocabulário`).toContain(b);
-      expect(opostaDe(a), `oposta de ${a}`).toBe(b);
-      expect(opostaDe(b), `oposta de ${b}`).toBe(a);
-    }
-  });
-
-  it("uma tag não pode ser oposta de duas", () => {
-    const envolvidas = TAGS_OPOSTAS.flat();
-    expect(new Set(envolvidas).size).toBe(envolvidas.length);
-  });
-
-  it("tags opostas moram na mesma categoria, para ficarem lado a lado", () => {
-    for (const [a, b] of TAGS_OPOSTAS) {
-      const catA = CATEGORIAS_TAG.find((c) => c.tags.includes(a))?.id;
-      const catB = CATEGORIAS_TAG.find((c) => c.tags.includes(b))?.id;
-      expect(catA, `${a} e ${b} em categorias diferentes`).toBe(catB);
-    }
-  });
-});
-
 describe("acervo publicado", () => {
   it("data/reviews.json tem o formato esperado e nasce vazio", () => {
     expect(Array.isArray(acervoJson.reviews)).toBe(true);
@@ -411,15 +354,14 @@ describe("acervo publicado", () => {
 
       if (!codigos.has(r.codigo)) problemas.push(`${onde}: código "${r.codigo}" desconhecido`);
       if (!/^20\d{2}\/[12]$/.test(r.semestre)) problemas.push(`${onde}: semestre "${r.semestre}" malformado`);
-      if (!["aprovado", "reprovado"].includes(r.situacao)) problemas.push(`${onde}: situação inválida`);
+      if (r.situacao && !["aprovado", "reprovado"].includes(r.situacao)) {
+        problemas.push(`${onde}: situação inválida`);
+      }
       if (!r.autor?.trim()) problemas.push(`${onde}: autor vazio`);
 
       for (const campo of ["geral", "didatica", "dificuldade", "cargaTrabalho"] as const) {
         const v = r[campo];
         if (!Number.isInteger(v) || v < 1 || v > 5) problemas.push(`${onde}: ${campo} fora de 1–5`);
-      }
-      for (const t of r.tags ?? []) {
-        if (!TAGS.includes(t)) problemas.push(`${onde}: tag desconhecida "${t}"`);
       }
       if ((r.comentario ?? "").length > LIMITE_COMENTARIO) problemas.push(`${onde}: comentário longo demais`);
       // o RA nunca é publicado; se aparecer no texto livre, vazou

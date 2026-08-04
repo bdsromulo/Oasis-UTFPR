@@ -3,10 +3,9 @@
 // Abre a partir do nome do docente no planejamento de matrícula e mostra o que a
 // comunidade registrou sobre ele — na disciplina em questão e no geral.
 import { useEffect, useMemo } from "react";
-import { Badge } from "../componentes";
 import { criarConsulta, agregar, LIMIAR_ESTATISTICA } from "../../domain/reviews/acervo";
 import { construirRoster, idDaUnidade, slugProfessor } from "../../domain/reviews/professores";
-import { DESCRICAO_TAG, type AgregadoReviews, type Review } from "../../domain/reviews/tipos";
+import type { AgregadoReviews, Review } from "../../domain/reviews/tipos";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { CURSOS } from "../../domain/dadosCurso";
 import type { Matriz } from "../../domain/tipos";
@@ -60,19 +59,6 @@ function ListaReviews(props: { reviews: Review[] }) {
             <span>· Dificuldade {r.dificuldade}/5</span>
             <span>· Carga {r.cargaTrabalho}/5</span>
           </div>
-          {r.tags.length > 0 && (
-            <div className="mt-1.5 flex flex-wrap gap-1">
-              {r.tags.map((t) => (
-                <span
-                  key={t}
-                  title={DESCRICAO_TAG[t].comportamento}
-                  className="cursor-help rounded-md border border-zinc-200 px-1.5 py-0.5 text-[10px] font-semibold text-zinc-600 dark:border-zinc-700 dark:text-zinc-300"
-                >
-                  {DESCRICAO_TAG[t].rotulo}
-                </span>
-              ))}
-            </div>
-          )}
           {r.comentario && (
             <p className="mt-2 text-xs leading-relaxed text-zinc-700 dark:text-zinc-200">
               {r.comentario}
@@ -113,17 +99,6 @@ function Resumo(props: { titulo: string; ag: AgregadoReviews }) {
         </p>
       )}
 
-      {ag.estatisticaExibivel && ag.tags.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-1">
-          {ag.tags.slice(0, 6).map((t) => (
-            <Badge key={t.tag} tom="neutro">
-              <span title={DESCRICAO_TAG[t.tag].comportamento} className="cursor-help">
-                {DESCRICAO_TAG[t.tag].rotulo} · {t.n}
-              </span>
-            </Badge>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

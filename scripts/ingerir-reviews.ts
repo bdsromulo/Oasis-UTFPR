@@ -20,19 +20,21 @@
 import { createHash } from "node:crypto";
 import { writeFileSync, readFileSync } from "node:fs";
 import {
-  TAGS,
-  TAGS_OPOSTAS,
   LIMITE_COMENTARIO,
   MAX_AVALIACOES_NO_SEMESTRE,
   type Review,
-  type Tag,
+  type SistemaAvaliativo,
 } from "../src/domain/reviews/tipos";
-import { construirRoster } from "../src/domain/reviews/professores";
+import {
+  construirRoster,
+  idDaUnidade,
+  type Roster,
+} from "../src/domain/reviews/professores";
 import { CURSOS } from "../src/domain/dadosCurso";
 
 const CAMINHO_SAIDA = "data/reviews.json";
 
-/** Padrões que não podem chegar ao acervo público. Espelha a guarda do Apps Script. */
+/** Padrões que não podem chegar ao acervo público, mesmo aprovados na planilha. */
 const PII: { re: RegExp; rotulo: string }[] = [
   { re: /\b\d{7}\b/, rotulo: "RA" },
   { re: /[\w.+-]+@[\w-]+\.[\w.]+/, rotulo: "e-mail" },
@@ -74,9 +76,37 @@ export function parseCsv(texto: string): string[][] {
 /** Identidade estável da avaliação: mesma linha, mesmo id, em qualquer execução. */
 function idDaLinha(campos: Record<string, string>): string {
   const semente = [
-    campos.carimbo, campos.autor, campos.codigo, campos.semestre, campos.professorId,
+    campos.carimbo, campos.autor, campos.codigo, campos.semestre, campos.professor,
   ].join("|");
   return createHash("sha256").update(semente).digest("hex").slice(0, 12);
+}
+
+/** Rótulos da pergunta de sistema avaliativo → o valor do domínio. */
+const SISTEMAS: Record<string, SistemaAvaliativo> = {
+  "provas": "provas",
+  "trabalhos": "trabalhos",
+  "provas e trabalhos": "misto",
+};
+
+export function resolverSistemaAvaliativo(rotulo: string): SistemaAvaliativo | null {
+  return SISTEMAS[rotulo.trim().toLowerCase()] ?? null;
+}
+
+/**
+ * Nome digitado ou pré-preenchido → id da unidade docente.
+ *
+ * O formulário carrega NOME, não slug: o campo é lido por gente, e um id opaco no
+ * meio dele seria ruído para quem responde e convite a erro para quem edita. A
+ * tradução mora aqui, contra o mesmo roster que a validação usa.
+ *
+ * `null` não é erro — é a rota "Professor Não Ofertado", e a linha fica pendente
+ * até que o nome seja promovido ao roster.
+ */
+export function resolverProfessor(nome: string, roster: Roster): string | null {
+  const partes = nome.split("/").map((p) => p.trim()).filter(Boolean);
+  if (!partes.length) return null;
+  const id = idDaUnidade(partes);
+  return id && roster.porId(id) ? id : null;
 }
 
 export interface ResultadoIngestao {
@@ -91,8 +121,8 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
 
   const cabecalho = tabela[0].map((c) => c.trim());
   const obrigatorias = [
-    "carimbo", "autor", "codigo", "semestre", "situacao", "professorId",
-    "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "tags", "comentario",
+    "carimbo", "autor", "codigo", "semestre", "professor",
+    "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
   ];
   for (const col of obrigatorias) {
     if (!cabecalho.includes(col)) erros.push(`Coluna obrigatória ausente no CSV: "${col}".`);
@@ -129,36 +159,24 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     if (!codigosConhecidos.has(campos.codigo)) {
       problemas.push(`código "${campos.codigo}" não existe em nenhuma matriz ou oferta`);
     }
-    if (!campos.professorId) {
-      // ainda pendente de promoção ao roster: não é erro, é linha que não publica
+    const professorId = resolverProfessor(campos.professor ?? "", roster);
+    if (!professorId) {
+      // rota "Professor Não Ofertado": não é erro, é linha que ainda não publica
       ignoradas++;
       continue;
-    }
-    if (!roster.porId(campos.professorId)) {
-      problemas.push(`professorId "${campos.professorId}" não está no roster de docentes`);
     }
 
     // ---- forma
     if (!/^20\d{2}\/[12]$/.test(campos.semestre)) problemas.push(`semestre "${campos.semestre}" fora de AAAA/S`);
-    if (!["aprovado", "reprovado"].includes(campos.situacao)) problemas.push(`situação "${campos.situacao}" inválida`);
     if (!campos.autor) problemas.push("autor vazio");
-    if (!["provas", "trabalhos", "misto"].includes(campos.avaliacao)) {
-      problemas.push(`sistema avaliativo "${campos.avaliacao}" inválido`);
-    }
+    const avaliacao = resolverSistemaAvaliativo(campos.avaliacao ?? "");
+    if (!avaliacao) problemas.push(`sistema avaliativo "${campos.avaliacao}" inválido`);
 
     const notas: Record<string, number> = {};
     for (const campo of ["geral", "didatica", "dificuldade", "cargaTrabalho"]) {
       const v = Number(campos[campo]);
       if (!Number.isInteger(v) || v < 1 || v > 5) problemas.push(`${campo} "${campos[campo]}" fora de 1–5`);
       else notas[campo] = v;
-    }
-
-    const tags = campos.tags ? campos.tags.split("|").map((t) => t.trim()).filter(Boolean) : [];
-    for (const t of tags) {
-      if (!TAGS.includes(t as Tag)) problemas.push(`tag desconhecida "${t}"`);
-    }
-    for (const [a, b] of TAGS_OPOSTAS) {
-      if (tags.includes(a) && tags.includes(b)) problemas.push(`tags contraditórias "${a}" e "${b}"`);
     }
 
     // detalhamento opcional: célula vazia é "não informado", e não zero
@@ -196,19 +214,17 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
 
     reviews.push({
       id,
-      professorId: campos.professorId,
+      professorId,
       codigo: campos.codigo,
       semestre: campos.semestre,
-      situacao: campos.situacao as "aprovado" | "reprovado",
       autor: campos.autor,
       geral: notas.geral as Review["geral"],
       didatica: notas.didatica as Review["didatica"],
       dificuldade: notas.dificuldade as Review["dificuldade"],
       cargaTrabalho: notas.cargaTrabalho as Review["cargaTrabalho"],
-      avaliacao: campos.avaliacao as Review["avaliacao"],
+      avaliacao: avaliacao!,
       ...(quantidades.qtdProvas !== undefined ? { qtdProvas: quantidades.qtdProvas } : {}),
       ...(quantidades.qtdTrabalhos !== undefined ? { qtdTrabalhos: quantidades.qtdTrabalhos } : {}),
-      tags: tags as Tag[],
       comentario: campos.comentario,
     });
   }

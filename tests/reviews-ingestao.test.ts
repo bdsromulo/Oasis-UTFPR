@@ -1,7 +1,12 @@
 // Validador de ingestão das avaliações (Estrategia.md §6.6).
 // A regra é a mesma dos parsers de `tools/`: 0 erros ou nada é publicado.
 import { describe, it, expect } from "vitest";
-import { parseCsv, validarEConverter } from "../scripts/ingerir-reviews";
+import {
+  parseCsv,
+  validarEConverter,
+  resolverSistemaAvaliativo,
+  resolverProfessor,
+} from "../scripts/ingerir-reviews";
 import { construirRoster } from "../src/domain/reviews/professores";
 import { CURSOS } from "../src/domain/dadosCurso";
 import { LIMITE_COMENTARIO } from "../src/domain/reviews/tipos";
@@ -12,8 +17,8 @@ const DOCENTE = roster.unidades.find((u) => u.disciplinas.length > 0)!;
 const CODIGO = DOCENTE.disciplinas[0];
 
 const CABECALHO = [
-  "carimbo", "autor", "codigo", "semestre", "situacao", "turma", "professorId",
-  "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "tags", "comentario",
+  "carimbo", "autor", "codigo", "semestre", "turma", "professor",
+  "geral", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
 ];
 
 function linha(over: Record<string, string> = {}): string[] {
@@ -22,15 +27,13 @@ function linha(over: Record<string, string> = {}): string[] {
     autor: "Alguem Ficticio",
     codigo: CODIGO,
     semestre: "2025/2",
-    situacao: "aprovado",
     turma: "S71",
-    professorId: DOCENTE.id,
+    professor: DOCENTE.nome,
     geral: "4",
     didatica: "5",
     dificuldade: "3",
     cargaTrabalho: "2",
-    avaliacao: "provas",
-    tags: "corrige-rapido|acessivel",
+    avaliacao: "Provas",
     comentario: "Aula boa.",
     ...over,
   };
@@ -64,7 +67,7 @@ describe("ingestão: caminho feliz", () => {
       codigo: CODIGO,
       semestre: "2025/2",
       geral: 4,
-      tags: ["corrige-rapido", "acessivel"],
+      avaliacao: "provas",
     });
   });
 
@@ -90,13 +93,15 @@ describe("ingestão: coerência com o dado oficial", () => {
     expect(r.erros.join(" ")).toMatch(/não existe em nenhuma matriz ou oferta/);
   });
 
-  it("recusa professorId fora do roster", () => {
-    const r = validarEConverter(tabela(linha({ professorId: "fulano-inexistente" })));
-    expect(r.erros.join(" ")).toMatch(/não está no roster/);
+  it("professor fora do roster fica pendente: não publica e não é erro", () => {
+    const r = validarEConverter(tabela(linha({ professor: "Ninguem Dos Santos" })));
+    expect(r.erros).toEqual([]);
+    expect(r.reviews).toEqual([]);
+    expect(r.ignoradas).toBe(1);
   });
 
-  it("linha sem professorId é pendente de roster: não publica e não é erro", () => {
-    const r = validarEConverter(tabela(linha({ professorId: "" })));
+  it("linha sem professor é pendente de roster: não publica e não é erro", () => {
+    const r = validarEConverter(tabela(linha({ professor: "" })));
     expect(r.erros).toEqual([]);
     expect(r.reviews).toEqual([]);
     expect(r.ignoradas).toBe(1);
@@ -106,11 +111,9 @@ describe("ingestão: coerência com o dado oficial", () => {
 describe("ingestão: forma e vocabulário", () => {
   it.each([
     ["semestre", { semestre: "2025-2" }, /fora de AAAA\/S/],
-    ["situação", { situacao: "trancado" }, /situação .* inválida/],
     ["nota", { geral: "9" }, /geral .* fora de 1–5/],
     ["nota não inteira", { didatica: "4,5" }, /didatica .* fora de 1–5/],
-    ["sistema avaliativo", { avaliacao: "oral" }, /sistema avaliativo .* inválido/],
-    ["tag", { tags: "gente-boa" }, /tag desconhecida/],
+    ["sistema avaliativo", { avaliacao: "Oral" }, /sistema avaliativo .* inválido/],
     ["autor vazio", { autor: "" }, /autor vazio/],
   ])("recusa %s inválido", (_rotulo, over, padrao) => {
     const r = validarEConverter(tabela(linha(over as Record<string, string>)));
@@ -151,5 +154,36 @@ describe("ingestão: proteção da fronteira", () => {
 
   it("CSV vazio não quebra", () => {
     expect(validarEConverter([]).erros.length).toBeGreaterThan(0);
+  });
+});
+
+describe("tradução do formulário para o domínio", () => {
+  it("aceita os três rótulos do formulário", () => {
+    expect(resolverSistemaAvaliativo("Provas")).toBe("provas");
+    expect(resolverSistemaAvaliativo("Trabalhos")).toBe("trabalhos");
+    expect(resolverSistemaAvaliativo("Provas e trabalhos")).toBe("misto");
+  });
+
+  it("é indiferente a caixa e a espaço nas pontas", () => {
+    expect(resolverSistemaAvaliativo("  provas E TRABALHOS ")).toBe("misto");
+  });
+
+  it("recusa rótulo desconhecido", () => {
+    expect(resolverSistemaAvaliativo("Seminários")).toBe(null);
+  });
+
+  it("resolve um nome do elenco ao id da unidade", () => {
+    expect(resolverProfessor(DOCENTE.nome, roster)).toBe(DOCENTE.id);
+  });
+
+  it("resolve dupla escrita com barra, em qualquer ordem", () => {
+    const dupla = roster.unidades.find((u) => u.nomes.length === 2);
+    if (!dupla) return;
+    expect(resolverProfessor(dupla.nomes.join(" / "), roster)).toBe(dupla.id);
+    expect(resolverProfessor([...dupla.nomes].reverse().join(" / "), roster)).toBe(dupla.id);
+  });
+
+  it("devolve null para quem não está no roster", () => {
+    expect(resolverProfessor("Ninguem Dos Santos", roster)).toBe(null);
   });
 });

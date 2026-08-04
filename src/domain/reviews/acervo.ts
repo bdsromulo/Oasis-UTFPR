@@ -5,7 +5,7 @@
 // as avaliações continuam sendo um acervo só do ponto de vista do leitor.
 import type { MapaIdentidade } from "../motor/identidade";
 import { unidadeInclui } from "./professores";
-import type { AgregadoReviews, Review, SistemaAvaliativo, Tag } from "./tipos";
+import type { AgregadoReviews, Review, SistemaAvaliativo } from "./tipos";
 
 /**
  * Abaixo deste número de avaliações, os comentários aparecem mas as médias não.
@@ -36,11 +36,8 @@ export function agregar(reviews: Review[], limiar = LIMIAR_ESTATISTICA): Agregad
   const exibivel = n >= limiar;
 
   const porSistema = new Map<SistemaAvaliativo, number>();
-  const porTag = new Map<Tag, number>();
   for (const r of reviews) {
     porSistema.set(r.avaliacao, (porSistema.get(r.avaliacao) ?? 0) + 1);
-    // um mesmo registro não pode contar a mesma tag duas vezes
-    for (const t of new Set(r.tags)) porTag.set(t, (porTag.get(t) ?? 0) + 1);
   }
 
   return {
@@ -53,9 +50,6 @@ export function agregar(reviews: Review[], limiar = LIMIAR_ESTATISTICA): Agregad
     avaliacao: [...porSistema]
       .map(([sistema, qtd]) => ({ sistema, n: qtd }))
       .sort((a, b) => b.n - a.n || a.sistema.localeCompare(b.sistema)),
-    tags: [...porTag]
-      .map(([tag, qtd]) => ({ tag, n: qtd }))
-      .sort((a, b) => b.n - a.n || a.tag.localeCompare(b.tag)),
     reviews: [...reviews].sort(maisRecentePrimeiro),
   };
 }
