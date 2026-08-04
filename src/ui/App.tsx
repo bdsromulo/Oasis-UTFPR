@@ -679,6 +679,29 @@ export function App() {
               </Botao>
             </div>
 
+            {/* Imediatamente à esquerda da estrela, e não no fim da fileira: o
+                modal ensina a usar aquele botão, então os dois precisam ser lidos
+                juntos. Fica dentro deste bloco por consequência — antes do
+                check-in a fileira inteira não existe, e ali a pessoa ainda não
+                entrou na plataforma. */}
+            {reviewsHabilitadasPara(matriz.matriz) && (
+              <button
+                type="button"
+                onClick={abrirNovidades}
+                title="Conheça as avaliações da comunidade"
+                className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
+              >
+                <IconSparkles className="h-4 w-4 shrink-0" />
+                <span>Novidades</span>
+                {!novidadesLidas && (
+                  <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                  </span>
+                )}
+              </button>
+            )}
+
             {/* Avaliar não vive só na tela de progresso: quem quer opinar sobre
                 uma matéria antiga precisa de um caminho direto (RF15). */}
             {perfil && reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && (
@@ -691,27 +714,6 @@ export function App() {
               </BotaoIconeComDica>
             )}
             </>
-          )}
-
-          {/* Novidades fica fora do bloco acima de propósito: é anúncio, e vale
-              inclusive para quem ainda não importou histórico — essa pessoa é
-              justamente a que não sabe que o sistema de avaliações existe. */}
-          {reviewsHabilitadasPara(matriz.matriz) && (
-            <button
-              type="button"
-              onClick={abrirNovidades}
-              title="Conheça as avaliações da comunidade"
-              className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
-            >
-              <IconSparkles className="h-4 w-4 shrink-0" />
-              <span>Novidades</span>
-              {!novidadesLidas && (
-                <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
-                </span>
-              )}
-            </button>
           )}
 
           {/* Ajuda e "Sobre" acompanham a engrenagem, mas valem para qualquer

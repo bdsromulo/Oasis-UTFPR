@@ -77,6 +77,29 @@ export function ModalNovidades(props: {
             </div>
           </div>
 
+          {/* Só quando o botão existe de fato: ele depende de histórico
+              importado, e apontar para um canto vazio da tela é pior que não
+              apontar. */}
+          {onAvaliar && (
+            <div>
+              <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                Onde avaliar
+              </h3>
+              <p className="mt-1 text-[13px] text-zinc-600 dark:text-zinc-300">
+                No topo desta página, à direita, a estrela abre a lista das disciplinas que você
+                já concluiu. Dá para avaliar qualquer uma delas, não só as do último semestre.
+              </p>
+              <div className="mt-2 flex items-center gap-2">
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <IconStar className="h-4 w-4" />
+                </span>
+                <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                  fica ao lado direito do botão Novidades
+                </span>
+              </div>
+            </div>
+          )}
+
           <div>
             <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
               Como ler as notas
