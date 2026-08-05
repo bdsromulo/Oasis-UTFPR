@@ -169,6 +169,12 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Removidas da descrição as estimativas objetivas de horas semanais, que variavam demais conforme ritmo, experiência e organização de cada aluno.
   - Os cinco pontos agora usam somente qualificadores diretos de tempo, de **Muito leve** a **Muito pesada**, preservando a separação entre volume de trabalho e dificuldade conceitual.
   - Regressão automatizada impede a reintrodução de faixas de horas na régua exibida pelo site.
+- **TASK-36 — Endurecimento e validação da experiência móvel:**
+  - Controles principais de Planejamento, cenários de grade, filtros, modais e contato respeitam alvo mínimo de toque de 44px no celular; textos operacionais abaixo de 12px foram elevados sem inflar metadados auxiliares.
+  - Barra de grade, contato e gavetas respeitam `safe-area-inset-bottom` e altura dinâmica (`dvh`), evitando sobreposição com a barra do navegador e o recorte de iPhones. O contato só sobe quando a barra de grade realmente está visível.
+  - Grades e tabelas de Gestão da Informação mantêm a densidade necessária, mas passam a anunciar a rolagem horizontal, têm região acessível por teclado e mostram instrução explícita no celular.
+  - O pdf.js e seu worker saem do carregamento inicial e só são baixados quando um PDF é escolhido. O bundle inicial caiu de **508,2 KiB para cerca de 400 KiB gzip**; o build agora reprova regressão acima de 420 KiB.
+  - Contratos Vitest cobrem carregamento tardio, área segura, alvos de toque e rolagem. A validação visual nos viewports de 320, 360, 390 e 412px confirmou zero overflow global, controle cortado ou alvo visível abaixo de 44px antes da publicação exclusiva no sandbox.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

@@ -167,6 +167,10 @@ A interface visual adota as **10 Heurísticas de Nielsen** e princípios moderno
 7. **Estética e Design Minimalista:**
    - Eliminação de ruídos visuais e "Cara de IA" (remoção completa de emojis decorativos e fontes padrão).
    - Uso equilibrado de espaços em branco, cards com `backdrop-blur` e hierarquia tipográfica contrastando `Outfit` com `Plus Jakarta Sans`.
+8. **Uso móvel e acessibilidade por toque:**
+   - Ações principais mantêm alvo mínimo de 44px; informações operacionais usam ao menos 12px, sem confundir metadados auxiliares com comandos.
+   - Barras e gavetas fixas respeitam a área segura e a altura dinâmica do navegador. Conteúdo tabular largo permanece rolável, com instrução visível e região nomeada para tecnologias assistivas.
+   - O custo inicial de rede é tratado como parte da usabilidade: o motor de PDF só carrega depois da escolha do arquivo e o build impõe orçamento de 420 KiB gzip para a entrada JavaScript.
 
 ---
 

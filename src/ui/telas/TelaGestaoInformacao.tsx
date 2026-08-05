@@ -20,43 +20,53 @@ interface Coluna {
 
 function Tabela(props: { colunas: Coluna[]; linhas: Record<string, ReactNode>[] }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-zinc-200/90 dark:border-zinc-800">
-      <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-        <thead>
-          <tr className="bg-zinc-50 dark:bg-zinc-900/80">
-            {props.colunas.map((c) => (
-              <th
-                key={c.chave}
-                scope="col"
-                className="border-b border-zinc-200/90 px-4 py-3 font-display text-[11px] font-black uppercase tracking-wider text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
-              >
-                {c.rotulo}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {props.linhas.map((linha, i) => (
-            <tr
-              key={i}
-              className="border-b border-zinc-100 last:border-0 transition-colors hover:bg-utfpr-50/60 dark:border-zinc-800/80 dark:hover:bg-zinc-800/40"
-            >
+    <div>
+      <p className="mb-2 text-xs font-medium text-zinc-500 sm:hidden dark:text-zinc-400">
+        Deslize horizontalmente para consultar todas as colunas.
+      </p>
+      <div
+        className="overflow-x-auto rounded-2xl border border-zinc-200/90 dark:border-zinc-800"
+        role="region"
+        aria-label="Tabela com rolagem horizontal"
+        tabIndex={0}
+      >
+        <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+          <thead>
+            <tr className="bg-zinc-50 dark:bg-zinc-900/80">
               {props.colunas.map((c) => (
-                <td
+                <th
                   key={c.chave}
-                  className={`px-4 py-3.5 align-top leading-relaxed ${
-                    c.principal
-                      ? "font-display font-bold text-zinc-900 dark:text-zinc-100"
-                      : "text-zinc-600 dark:text-zinc-300"
-                  }`}
+                  scope="col"
+                  className="border-b border-zinc-200/90 px-4 py-3 font-display text-[11px] font-black uppercase tracking-wider text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
                 >
-                  {linha[c.chave]}
-                </td>
+                  {c.rotulo}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {props.linhas.map((linha, i) => (
+              <tr
+                key={i}
+                className="border-b border-zinc-100 last:border-0 transition-colors hover:bg-utfpr-50/60 dark:border-zinc-800/80 dark:hover:bg-zinc-800/40"
+              >
+                {props.colunas.map((c) => (
+                  <td
+                    key={c.chave}
+                    className={`px-4 py-3.5 align-top leading-relaxed ${
+                      c.principal
+                        ? "font-display font-bold text-zinc-900 dark:text-zinc-100"
+                        : "text-zinc-600 dark:text-zinc-300"
+                    }`}
+                  >
+                    {linha[c.chave]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

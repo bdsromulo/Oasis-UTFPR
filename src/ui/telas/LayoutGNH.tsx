@@ -421,7 +421,7 @@ export function TelaLayoutGNH(props: {
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar matéria, código ou professor…"
-          className="flex-1 min-w-[240px] sm:min-w-[320px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
+          className="min-h-11 flex-1 min-w-[240px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none sm:min-w-[320px] dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
         />
         <label className="flex cursor-pointer items-center gap-2 font-medium text-zinc-700 select-none dark:text-zinc-300">
           <input

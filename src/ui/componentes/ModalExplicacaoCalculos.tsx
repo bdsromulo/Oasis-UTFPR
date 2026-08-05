@@ -15,7 +15,7 @@ export function ModalExplicacaoCalculos(props: { aberto: boolean; onFechar: () =
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl dark:bg-zinc-900 sm:p-8 animate-in zoom-in-95 duration-200">
         <button
           onClick={props.onFechar}
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white transition-colors"
+          className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 sm:h-8 sm:w-8 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
           title="Fechar"
         >
           <IconX className="h-5 w-5" />

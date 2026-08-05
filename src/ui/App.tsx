@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useCamadaHistorico } from "./hooks/useCamadaHistorico";
 import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
-import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
 import {
   dadosDoCurso,
@@ -433,6 +432,10 @@ export function App() {
   }
 
   async function analisarPDFParaPreview(arq: File): Promise<PerfilAluno> {
+    // O pdf.js é o maior módulo da aplicação e só é necessário quando o aluno
+    // realmente escolhe um PDF. Mantê-lo fora do carregamento inicial reduz o
+    // custo de abrir o Oásis, sobretudo em redes móveis.
+    const { extrairLinhas } = await import("../domain/historico/extrair-pdf-browser");
     const linhas = await extrairLinhas(await arq.arrayBuffer());
     const p = parseHistorico(linhas.map((l) => l.texto));
     if (!p.nome || p.cursadas.length === 0) {
@@ -654,8 +657,15 @@ export function App() {
     localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
+  const barraGradeMobileVisivel =
+    aba === "planejamento" &&
+    abaPlanejamento === "cursar" &&
+    !sobreAberta &&
+    !giAberta &&
+    !comoUsarAberta;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-20 pt-6">
+    <div className="mx-auto max-w-6xl px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-6">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/80 pb-6 dark:border-zinc-800/80">
         <div className="flex items-center gap-3.5">
           <LogoUTFPR className="h-9 w-9 shrink-0" />
@@ -1049,7 +1059,7 @@ export function App() {
                       </label>
                     </div>
                   </div>
-                  <p className="max-w-xs text-[11px] font-medium leading-snug text-zinc-500 dark:text-zinc-400">
+                  <p className="max-w-xs text-xs font-medium leading-snug text-zinc-500 dark:text-zinc-400">
                     Vale para as turmas e para a grade desta aba. Seu histórico, progresso e
                     coeficiente continuam no período atual.
                   </p>
@@ -1313,9 +1323,9 @@ export function App() {
       {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta).
           Sobre e Gestão da Informação substituem o conteúdo principal: a barra
           de grade não pode ficar flutuando por cima delas. */}
-      {aba === "planejamento" && abaPlanejamento === "cursar" && !sobreAberta && !giAberta && !comoUsarAberta && (
+      {barraGradeMobileVisivel && (
         <>
-          <div className="fixed bottom-4 left-4 right-4 z-40 lg:hidden">
+          <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 right-4 z-40 lg:hidden">
             <div className="flex items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-900/90 p-3.5 px-5 shadow-2xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-950/90 text-white">
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-2">
@@ -1353,7 +1363,7 @@ export function App() {
                   if (preview) setPreview(null);
                 }}
               />
-              <div className="relative z-10 max-h-[85vh] overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 flex flex-col">
+              <div className="relative z-10 flex max-h-[85dvh] flex-col overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-white p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
                 <div className="flex items-center justify-between border-b border-zinc-200/80 pb-4 mb-4 dark:border-zinc-800">
                   <div className="flex items-center gap-2">
                     <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white">
@@ -1367,11 +1377,12 @@ export function App() {
                   </div>
                   <button
                     type="button"
+                    aria-label="Fechar mini-grade"
                     onClick={() => {
                       setMobileGradeDrawerAberto(false);
                       if (preview) setPreview(null);
                     }}
-                    className="rounded-full bg-zinc-100 p-2 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white cursor-pointer"
+                    className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
                   >
                     ✕
                   </button>
@@ -1418,7 +1429,7 @@ export function App() {
       </footer>
 
       {/* contato sempre à mão, em qualquer tela da plataforma */}
-      <PilulaFaleConosco />
+      <PilulaFaleConosco barraGradeMobileAtiva={barraGradeMobileVisivel} />
 
       <PainelMenuMobile
         aberto={menuMobileAberto}

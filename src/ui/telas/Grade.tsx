@@ -597,7 +597,7 @@ export function TelaGrade(props: {
             <div key={g} className="group relative flex items-center">
               <button
                 onClick={() => props.onMudarGradeAtiva!(g)}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 font-mono text-xs font-black transition-all ${
+                className={`flex min-h-11 items-center gap-1.5 rounded-xl px-3 py-1.5 font-mono text-xs font-black transition-all sm:min-h-8 ${
                   ativa
                     ? "bg-zinc-900 text-utfpr-500 shadow-xs dark:bg-zinc-800 dark:text-utfpr-400 border border-utfpr-500/40"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800/60 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -615,7 +615,8 @@ export function TelaGrade(props: {
                     e.stopPropagation();
                     props.onRemoverGrade!(g);
                   }}
-                  className="absolute -right-1.5 -top-1.5 hidden h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-2xs group-hover:flex hover:bg-red-600"
+                  aria-label={`Excluir Grade ${g}`}
+                  className="ml-1 flex h-11 w-11 items-center justify-center rounded-xl bg-red-500 text-sm font-bold text-white shadow-2xs hover:bg-red-600 sm:absolute sm:-right-1.5 sm:-top-1.5 sm:ml-0 sm:hidden sm:h-4 sm:w-4 sm:rounded-full sm:text-[10px] sm:group-hover:flex"
                   title={`Excluir Grade ${g}`}
                 >
                   ×
@@ -627,7 +628,7 @@ export function TelaGrade(props: {
         {props.onNovaGrade && chavesGrades.length < 3 && (
           <button
             onClick={props.onNovaGrade}
-            className="flex h-8 items-center gap-1 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-2.5 font-mono text-xs font-bold text-zinc-500 transition-colors hover:border-utfpr-500 hover:bg-utfpr-500/10 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-400 dark:hover:text-white"
+            className="flex h-11 items-center gap-1 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-2.5 font-mono text-xs font-bold text-zinc-500 transition-colors hover:border-utfpr-500 hover:bg-utfpr-500/10 hover:text-zinc-900 sm:h-8 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-400 dark:hover:text-white"
             title="Criar nova Grade alternativa B ou C (+)"
           >
             <span>+ Nova Grade</span>
@@ -647,7 +648,7 @@ export function TelaGrade(props: {
               setConfirmacaoSobreescreverImportacao(false);
               setModalImportarAberto(true);
             }}
-            className="flex h-8 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 font-mono text-xs font-bold shadow-2xs transition-colors hover:border-utfpr-500 hover:bg-utfpr-50 hover:text-utfpr-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
+            className="flex h-11 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 font-mono text-xs font-bold shadow-2xs transition-colors hover:border-utfpr-500 hover:bg-utfpr-50 hover:text-utfpr-700 sm:h-8 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
             title="Importar matérias cadastradas em outros semestres"
           >
             <span>{<IconDownload className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Importar Matérias</span>
@@ -714,7 +715,7 @@ export function TelaGrade(props: {
                   setModalImportarAberto(false);
                   setConfirmacaoSobreescreverImportacao(false);
                 }}
-                className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white transition-colors"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 sm:h-8 sm:w-8 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
                 title="Fechar (ESC)"
               >
                 ×
@@ -1108,15 +1109,15 @@ export function TelaGrade(props: {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Filtrar Turno:</span>
-          <div className="flex gap-1.5">
+          <div className="flex flex-wrap gap-1.5">
             {(["TODOS", "M", "T", "N"] as const).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setTurnoFiltro(t)}
-                className={`rounded-lg px-3 py-1 font-display text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-11 rounded-lg px-3 py-1 font-display text-xs font-bold transition-all cursor-pointer sm:min-h-0 ${
                   turnoFiltro === t
                     ? "bg-utfpr-500 text-zinc-950 shadow-xs"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
@@ -1129,7 +1130,16 @@ export function TelaGrade(props: {
         </div>
       </div>
 
-      <div ref={gradeTableRef} className="overflow-x-auto rounded-2xl border border-zinc-200/80 shadow-xs dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-2 sm:p-4">
+      <p className="px-1 text-xs font-medium text-zinc-500 sm:hidden dark:text-zinc-400">
+        Deslize horizontalmente para ver todos os dias da grade.
+      </p>
+      <div
+        ref={gradeTableRef}
+        className="overflow-x-auto rounded-2xl border border-zinc-200/80 bg-white p-2 shadow-xs sm:p-4 dark:border-zinc-800/80 dark:bg-zinc-900"
+        role="region"
+        aria-label="Grade horária com rolagem horizontal"
+        tabIndex={0}
+      >
         <table className="w-full min-w-[680px] border-collapse bg-white text-xs dark:bg-zinc-900">
           <thead>
             <tr className="bg-zinc-50/80 dark:bg-zinc-800/50">

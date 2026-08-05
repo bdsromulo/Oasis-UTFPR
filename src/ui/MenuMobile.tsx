@@ -99,7 +99,7 @@ export function PainelMenuMobile(props: {
       onClick={onFechar}
     >
       <div
-        className="w-full animate-in rounded-t-3xl border-t border-zinc-200/80 bg-zinc-50 p-4 pb-8 shadow-2xl slide-in-from-bottom duration-200 dark:border-zinc-800 dark:bg-zinc-950"
+        className="max-h-[calc(100dvh-1rem)] w-full animate-in overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-zinc-50 p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl slide-in-from-bottom duration-200 dark:border-zinc-800 dark:bg-zinc-950"
         onClick={(e) => e.stopPropagation()}
       >
         {/* alça, para o painel se ler como gaveta */}
