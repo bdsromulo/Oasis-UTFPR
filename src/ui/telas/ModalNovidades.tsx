@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Botao } from "../componentes";
+import { Badge, Botao } from "../componentes";
 import { IconCheck, IconDownload, IconFileText, IconStar } from "../icons";
 
 /** Destaques da versão atual. A leitura é lembrada apenas depois de fechar o modal. */
@@ -83,28 +83,49 @@ export function ModalNovidades(props: {
             <div className="flex items-center gap-2">
               <IconFileText className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
               <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
-                Matriz 806 de Sistemas de Informação
+                Adição de novos cursos e matrizes
               </h3>
             </div>
             <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
-              O Oásis agora reconhece também a matriz 806. O histórico identifica a matriz certa e
-              aplica as regras curriculares correspondentes, sem confundir seu progresso com a matriz 981.
+              O sandbox ganhou suporte completo a novos cursos e matrizes, da leitura do histórico
+              ao catálogo, planejamento, grades e simulador.
             </p>
-          </section>
-
-          <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
-            <div className="flex items-center gap-2">
-              <IconFileText className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
-              <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
-                Engenharia de Controle e Automação — matriz 978
-              </h3>
-            </div>
-            <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
-              O curso passa a funcionar de ponta a ponta: leitura do histórico, situação curricular,
-              catálogo, planejamento, grades e simulador. As cinco trilhas de formação são conferidas
-              separadamente, inclusive as quatro subáreas da trilha de Formação Complementar, e o
-              Planejamento usa as ofertas próprias de 2025/2, 2026/1 e 2026/2.
-            </p>
+            <ul className="mt-3 divide-y divide-zinc-200/80 overflow-hidden rounded-xl border border-zinc-200/80 bg-white/70 dark:divide-zinc-700/80 dark:border-zinc-700/80 dark:bg-zinc-900/50">
+              <li className="p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
+                    Sistemas de Informação
+                  </strong>
+                  <Badge tom="ok">matriz 806</Badge>
+                </div>
+                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
+                  Regras curriculares, equivalências e progresso próprios, sem confundir a grade antiga com a matriz 981.
+                </p>
+              </li>
+              <li className="p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
+                    Engenharia de Controle e Automação
+                  </strong>
+                  <Badge tom="ok">matriz 978</Badge>
+                </div>
+                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
+                  Cinco trilhas de formação, extensão, estágio e ofertas próprias de 2025.2 a 2026.2.
+                </p>
+              </li>
+              <li className="p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
+                    Engenharia Mecatrônica
+                  </strong>
+                  <Badge tom="ok">matriz 823</Badge>
+                  <Badge tom="ok">matriz 973</Badge>
+                </div>
+                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
+                  Grades antiga e vigente, com Humanidades, trilhas, eletivas e ofertas atuais resolvidas pelas equivalências oficiais.
+                </p>
+              </li>
+            </ul>
           </section>
 
           <section className="rounded-2xl border border-utfpr-500/40 bg-utfpr-500/10 p-4 dark:bg-utfpr-500/5">

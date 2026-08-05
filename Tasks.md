@@ -204,6 +204,10 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - O check-in passa a listar, logo após os controles de PDF e savefile, os cinco cursos e as oito matrizes cobertas pela plataforma.
   - A relação inclui matrizes detectadas automaticamente pelo histórico mesmo quando não estão selecionadas no Modo Livre, como BSI 806.
   - Posicionamento, cursos e matrizes são cobertos por regressão automatizada e o card foi validado visualmente no check-in.
+- **TASK-43 — Novos cursos e matrizes consolidados em Novidades:**
+  - Os cards isolados de BSI 806 e Controle 978 foram reunidos em um único bloco de expansão do sandbox.
+  - O bloco lista BSI 806, Controle e Automação 978 e Mecatrônica 823/973, com um resumo do suporte curricular entregue para cada curso.
+  - Estrutura, conteúdo e posição antes do savefile são cobertos por regressão; o resultado foi validado visualmente no modal.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
