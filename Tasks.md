@@ -165,6 +165,10 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - O tutorial “Não sei gerar meu histórico” recomenda a opção nativa **Salvar como PDF** do navegador, preferencialmente no Chrome, e desaconselha explicitamente **Microsoft Print to PDF**, que pode rasterizar o documento e impedir a extração de texto.
   - A comparação visual destaca a opção correta e a incorreta, preserva a orientação de papel A3 e ensina a confirmar que uma palavra pode ser selecionada no arquivo antes do envio.
   - Validado no modal renderizado, em modo escuro, além da suíte completa com 384 testes aprovados e do build de produção.
+- **TASK-35 — Régua qualitativa de Carga de Trabalho nas avaliações:**
+  - Removidas da descrição as estimativas objetivas de horas semanais, que variavam demais conforme ritmo, experiência e organização de cada aluno.
+  - Os cinco pontos agora usam somente qualificadores diretos de tempo, de **Muito leve** a **Muito pesada**, preservando a separação entre volume de trabalho e dificuldade conceitual.
+  - Regressão automatizada impede a reintrodução de faixas de horas na régua exibida pelo site.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
