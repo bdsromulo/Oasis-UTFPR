@@ -179,11 +179,12 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Os cards do Catálogo passam a exibir a categoria curricular da disciplina e, quando aplicável, a trilha específica para a qual suas horas contam, sem repetir a carga horária.
   - O Simulador de Formatura permite escolher diretamente uma grade A/B/C já montada no Planejamento de Matrícula e usá-la como primeiro semestre da projeção, reaproveitando a mesma ponte já oferecida na tela da grade.
 - **TASK-38 — Engenharia Mecatrônica (matriz 973):**
-  - Convertida para o contrato do Oásis a grade 973 mantida no projeto K-Matrizes: 206 disciplinas, 3435h obrigatórias, Ciclo de Humanidades e as trilhas formativas de Eletrônica e Mecânica.
-  - A procedência de apoio permanece explícita no JSON e em um importador reproduzível. O validador específico encerra com 0 erros e a regeneração local produz o mesmo SHA-256 do arquivo versionado.
-  - Check-in, Catálogo, Situação e Fluxograma reconhecem o curso, inclusive no Modo Livre. O Catálogo diferencia categoria, trilha e extensão; o Fluxograma exibe a matriz completa enquanto não existe oferta.
-  - Turmas Abertas continuam como etapa separada. O Planejamento informa a indisponibilidade, não reutiliza ofertas de outro curso e não simula horários inexistentes.
-  - Validado com 401 testes aprovados, 15 testes opt-in ignorados e build de produção em 398,2 KiB gzip, dentro do limite de 420 KiB.
+  - Importada do PDF oficial do Portal a matriz 973: 208 componentes, 3435h obrigatórias, 300h optativas, 420h de extensão, Ciclo de Humanidades de 60h e duas trilhas formativas de 120h.
+  - O projeto K-Matrizes serviu como apoio inicial, mas a consulta oficial local prevalece nas divergências. O parser ganhou perfil posicional próprio para a 973 e o validador específico encerra com 0 erros.
+  - Check-in, Catálogo, Situação e Fluxograma reconhecem o curso, inclusive no Modo Livre. O Catálogo diferencia categoria, trilha e extensão; o Fluxograma cruza a matriz com as ofertas próprias.
+  - A oferta oficial 2026.2 contém 176 disciplinas, 440 turmas e 1523 horários; os backups do Grade na Hora cobrem 2026.1 e 2025.2. A anomalia publicada de `ME79B S01` sem horário é preservada e documentada como R9.
+  - Planejamento, Grade Mágica, Simulador e avaliações da comunidade usam as ofertas próprias de Mecatrônica, sem reutilizar dados de outro curso.
+  - Os dois semestres históricos carregam depois da primeira renderização, mantendo 2026.2 no caminho crítico. Validado com 403 testes aprovados, 16 testes opt-in ignorados e bundle inicial de 417,5 KiB gzip, abaixo do limite de 420 KiB.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

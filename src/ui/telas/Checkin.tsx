@@ -72,7 +72,7 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
     {
       numero: "973",
       rotulo: "973 (Vigente)",
-      nota: "Implementada: matriz nova com Ciclo de Humanidades e trilhas formativas de Eletrônica e Mecânica. A oferta de turmas será importada separadamente.",
+      nota: "Implementada: matriz nova com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica e ofertas próprias de 2025.2 a 2026.2.",
       disponivel: true,
     },
   ],

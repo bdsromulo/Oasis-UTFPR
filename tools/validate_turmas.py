@@ -17,6 +17,9 @@ Regras aprendidas na auditoria de 2026/1 (cada uma verificada no texto cru do PD
       compensar uma carga assíncrona maior (ex.: -1 presencial + 2 assíncronas).
       Os valores são preservados como publicados; a soma continua sendo a quantidade
       semanal esperada de horários.
+  R9. A oferta 2026/2 de Mecatrônica publica ME79B S01 como Presencial, com quatro
+      aulas semanais, mas deixa a coluna Horário vazia. Preservar a turma sem inventar
+      slots e registrar a anomalia como aviso.
 
 Uso: python tools/validate_turmas.py <turmas.pdf> <turmas.json>
 """
@@ -73,7 +76,10 @@ for d in ds:
         fracionaria = (d["aulas_semanais_presenciais"] != int(d["aulas_semanais_presenciais"])
                        or d["aulas_semanais_assincronas"] != int(d["aulas_semanais_assincronas"]))
         eh_tcc = "Trabalho De Conclusão" in d["nome"] or "Tcc" in d["nome"] or d["codigo"].startswith("ICSXG")
-        if t["enquadramento"] == "Presencial" and n_unicos == 0 and not t["codigo"].startswith("E") \
+        sem_horario_na_fonte = d["codigo"] == "ME79B" and t["codigo"] == "S01"
+        if t["enquadramento"] == "Presencial" and n_unicos == 0 and sem_horario_na_fonte:
+            avisos.append(f"{tag}: presencial sem horários na fonte (R9)")
+        elif t["enquadramento"] == "Presencial" and n_unicos == 0 and not t["codigo"].startswith("E") \
            and esperado and not fracionaria and not eh_tcc:
             erros.append(f"{tag}: presencial sem horários (esperado {esperado})")
         elif t["enquadramento"] == "Presencial" and n_unicos == 0 and eh_tcc:

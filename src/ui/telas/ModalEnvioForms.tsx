@@ -13,7 +13,6 @@ import { IconWarning } from "../icons";
 /** Marca a rota "não está na lista" sem se confundir com "ainda não escolhi". */
 const FORA_DO_ELENCO = "__fora__";
 const PROFESSOR_DO_HISTORICO = "__historico__";
-const ROSTER = construirRoster(CURSOS);
 
 /**
  * Uma opção da lista de professores.
@@ -78,11 +77,17 @@ export function ModalEnvioForms(props: {
   const [escolhido, setEscolhido] = useState<string | null>(null);
   const [busca, setBusca] = useState("");
   const [professorManual, setProfessorManual] = useState("");
+  // O roster é calculado ao abrir/renderizar o modal para incluir ofertas
+  // históricas carregadas depois do primeiro paint da aplicação.
+  const roster = useMemo(
+    () => construirRoster(CURSOS),
+    [alvo?.codigo, alvo?.semestre],
+  );
 
   const elenco = useMemo(() => {
     if (!alvo) return [];
-    return ROSTER.elencoDaDisciplina(alvo.codigo);
-  }, [alvo]);
+    return roster.elencoDaDisciplina(alvo.codigo);
+  }, [alvo, roster]);
   const idDoHistorico = alvo?.professoresHistorico?.length
     ? idDaUnidade(alvo.professoresHistorico)
     : null;

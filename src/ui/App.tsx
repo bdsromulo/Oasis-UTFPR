@@ -5,6 +5,7 @@ import { parseHistorico } from "../domain/historico/parser";
 import {
   dadosDoCurso,
   dadosDoCursoPorMatriz,
+  carregarOfertasHistoricasMecatronica,
   semestresDoCurso,
 } from "../domain/dadosCurso";
 import { TelaSituacao } from "./telas/Situacao";
@@ -166,10 +167,28 @@ export function App() {
   // padrão apesar de conterem um histórico da matriz 844.
   const cursoDoPerfil = dadosDoCursoPorMatriz(perfil?.matriz);
   const cursoAtivo = cursoDoPerfil?.id ?? preferencias.curso ?? "bsi-981";
+  const [versaoOfertasMecatronica, setVersaoOfertasMecatronica] = useState(0);
+  useEffect(() => {
+    let ativo = true;
+    void carregarOfertasHistoricasMecatronica()
+      .then(() => {
+        if (ativo) setVersaoOfertasMecatronica((versao) => versao + 1);
+      })
+      .catch(() => {
+        // Uma falha de rede no chunk histórico não derruba a oferta vigente.
+        // O navegador pode tentar novamente no próximo carregamento da página.
+      });
+    return () => {
+      ativo = false;
+    };
+  }, []);
   const dadosCurso = useMemo(() => dadosDoCurso(cursoAtivo), [cursoAtivo]);
   const matriz = dadosCurso.matriz;
   const todasOfertas = dadosCurso.ofertas;
-  const semestresDisponiveis = useMemo(() => semestresDoCurso(dadosCurso), [dadosCurso]);
+  const semestresDisponiveis = useMemo(
+    () => semestresDoCurso(dadosCurso),
+    [dadosCurso, versaoOfertasMecatronica],
+  );
 
   // o semestre guardado pode ser de outro curso: cai no padrão se não existir
   const semestreAtivo =
@@ -181,8 +200,6 @@ export function App() {
     () => todasOfertas[semestreAtivo] ?? todasOfertas[dadosCurso.semestrePadrao],
     [semestreAtivo, todasOfertas, dadosCurso],
   );
-  const ofertaDisponivel = oferta.disciplinas.some((disciplina) => disciplina.turmas.length > 0);
-
   const ehPreMatricula = dadosCurso.semestresPreMatricula.includes(semestreAtivo);
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
@@ -1013,14 +1030,6 @@ export function App() {
 
             {aba === "planejamento" && (
               <div className="space-y-6">
-                {!ofertaDisponivel && (
-                  <div className="rounded-2xl border-2 border-amber-500/50 bg-amber-500/10 p-4 text-sm text-amber-950 dark:text-amber-100">
-                    <div className="font-display font-black">Turmas de Mecatrônica ainda não importadas</div>
-                    <p className="mt-1 text-xs leading-relaxed text-amber-900/80 dark:text-amber-100/80">
-                      A matriz 973 já está disponível no Catálogo, na Situação e no Fluxograma. O Planejamento ficará sem horários até a oferta própria de Turmas Abertas ser adicionada; nenhuma turma de outro curso é reutilizada automaticamente.
-                    </p>
-                  </div>
-                )}
                 {/* Contexto de matrícula: o período escolhido vale para as turmas
                     listadas e para a grade em montagem — e só para isso. */}
                 <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 rounded-3xl border-2 border-zinc-200/90 bg-white/95 px-4 py-3 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
@@ -1062,7 +1071,7 @@ export function App() {
                                     : "text-orange-600 dark:text-orange-400"
                                 }`}
                               >
-                                {sem.replace("-", ".")} ({!ofertaDisponivel ? "Sem oferta" : preMatricula ? "Pré-Matrícula" : "Passado"})
+                                {sem.replace("-", ".")} ({preMatricula ? "Pré-Matrícula" : "Passado"})
                               </option>
                             );
                           })}

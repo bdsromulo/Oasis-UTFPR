@@ -92,6 +92,31 @@ COLS_978 = [
     ("eq_grupo", 784, 842),
 ]
 
+# A matriz 973 usa um gabarito A3 mais largo na coluna Disciplina e desloca
+# Código/Turmas para x≈89. As colunas numéricas também terminam em x≈653, fora
+# da faixa padrão: sem este perfil o parser descartava a primeira e a última
+# carga, produzia 0h e interpretava fragmentos de nomes como códigos.
+COLS_973 = [
+    ("periodo",   30,  64),
+    ("opt",       64,  88),
+    ("codigo",    88, 122),
+    ("nome",     122, 253),
+    ("modelo",   253, 310),
+    ("teoricas", 310, 352),
+    ("praticas", 352, 400),
+    ("total",    400, 447),
+    ("aps",      447, 482),
+    ("apcc",     482, 518),
+    ("ad",       518, 553),
+    ("chext",    553, 600),
+    ("chead",    600, 642),
+    ("ch",       642, 680),
+    ("prereq",   680, 730),
+    ("eq_disc",  730, 765),
+    ("eq_cht",   765, 790),
+    ("eq_grupo", 790, 842),
+]
+
 # Perfil de layout por matriz: âncora de calibração, colunas e a faixa onde vivem
 # os números. A calibração fina por deslocamento continua valendo DENTRO do
 # perfil: ela resolve o mesmo layout impresso com folga diferente, que é o caso
@@ -107,6 +132,7 @@ COLS_978 = [
 PERFIS = {
     "padrao": (102.9, COLS_PADRAO, (310, 645)),
     "806": (95.0, COLS_806, (288, 666)),
+    "973": (88.9, COLS_973, (320, 670)),
     # A primeira célula numérica da 978 fica em x≈305. A faixa padrão começava
     # em 310, descartava esse valor e escorregava os nove números uma casa; a
     # carga horária total de todas as 173 disciplinas virava zero.
@@ -238,6 +264,15 @@ def parse():
                 eq_lines.append(eq_line)
 
         raw_cod_toks = [t for t in cells.get("codigo", []) if t != "Turmas"]
+        # No PDF da 973 não há espaço gráfico entre [OPT] e Código: pdfplumber
+        # devolve um único token como "[1224]ARQ7DH", ancorado na coluna opt.
+        # Separar aqui preserva simultaneamente o conjunto e o código; sem isso
+        # todas as 143 optativas/extensionistas desapareciam da matriz.
+        for token in cells.get("opt", []):
+            combinado = re.fullmatch(r"\[(\d{3,4})\]([A-Z0-9]{4,7})", token)
+            if combinado:
+                raw_cod_toks.insert(0, combinado.group(2))
+                break
         cod_toks = []
         nome_extra = []
         for t in raw_cod_toks:

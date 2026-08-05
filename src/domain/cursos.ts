@@ -274,7 +274,7 @@ export const ENG_CONTROLE_978: DescricaoCurso = {
 /**
  * Engenharia Mecatrônica, matriz 973.
  *
- * A grade separa 120h de Humanidades e duas trilhas formativas obrigatórias,
+ * A grade separa 60h de Humanidades e duas trilhas formativas obrigatórias,
  * de 120h cada. Como as duas precisam ser cumpridas, elas têm o mesmo contrato
  * dos grupos obrigatórios da 978: são `gruposOpcao`, não trilhas entre as quais
  * o aluno escolhe uma. As unidades extensionistas formam uma pool sem exigência
@@ -290,7 +290,7 @@ export const ENG_MECATRONICA_973: DescricaoCurso = {
   estagios: [{ codigo: "ELN70B", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
   rotuloBlocoTrilhas: "Trilhas Formativas",
   sufixoTrilha: "",
-  // A pool 1224 cumpre extensão, não as 360h optativas do curso.
+  // A pool 1224 cumpre extensão, não as 300h optativas do curso.
   naoValidaveis: [],
   trilhas: [],
   gruposOpcao: [1120, 1121],

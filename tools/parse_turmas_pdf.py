@@ -94,6 +94,7 @@ def parse():
         first_page_text = " ".join(w["text"] for w in pdf.pages[0].extract_words())
         CURSO_NOME = "SIST DE INFORMAÇÃO"
         for marca, nome in (
+            ("ENG MECATR", "ENG MECATRÔNICA"),
             ("ENG CONTR/AUTOMA", "ENG CONTR/AUTOMAÇÃO"),
             ("ENG DE COMPUTA", "ENG DE COMPUTAÇÃO"),
             ("ENG ELETR", "ENG ELETRÔNICA"),
@@ -199,7 +200,8 @@ def parse():
                         or "na ordem de" in line or "disciplina na" in line
                         or "Horários marcados" in line or line == "SIST DE INFORMAÇÃO"
                         or line == "ENG DE COMPUTAÇÃO"
-                        or line == "ENG CONTR/AUTOMAÇÃO"):
+                        or line == "ENG CONTR/AUTOMAÇÃO"
+                        or line == "ENG MECATRÔNICA"):
                     continue
                 first = ws[0]
                 # header de disciplina? começa na coluna 1 com CODIGO - ... ou continuação do header

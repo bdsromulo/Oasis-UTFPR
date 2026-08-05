@@ -138,7 +138,7 @@ const ROADMAP: Marco[] = [
     data: "05 ago 2026",
     titulo: "Oásis de Engenharia Mecatrônica (matriz 973)",
     descricao:
-      "A grade 973 entra com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica, pré-requisitos e equivalências. A oferta própria de turmas permanece como etapa separada.",
+      "A matriz oficial 973 entra com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica, pré-requisitos, equivalências e ofertas próprias de 2025.2 a 2026.2.",
     estado: "concluido",
   },
   {

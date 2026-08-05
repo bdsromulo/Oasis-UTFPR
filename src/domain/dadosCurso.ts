@@ -18,7 +18,7 @@ import turmasControle20262 from "../../data/eng-controle/turmas/2026-2.json";
 import turmasControle20261 from "../../data/eng-controle/turmas/2026-1.json";
 import turmasControle20252 from "../../data/eng-controle/turmas/2025-2.json";
 import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
-import turmasMecatronicaPendentes from "../../data/eng-mecatronica/turmas-pendentes.json";
+import turmasMecatronica20262 from "../../data/eng-mecatronica/turmas/2026-2.json";
 
 /**
  * Reúne, por curso, a matriz e as ofertas de turma que a interface consome.
@@ -150,21 +150,26 @@ export const ENG_CONTROLE: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
-// A matriz 973 já está disponível para progresso, Catálogo e Fluxograma. A
-// oferta vazia é deliberada: enquanto o arquivo próprio de Turmas Abertas não
-// for importado, o Planejamento informa a pendência e nunca reaproveita turmas
-// de outro curso por semelhança de código ou departamento.
+// Mecatrônica tem oferta própria por semestre. 2026-2 vem do PDF oficial de
+// Turmas Abertas; 2026-1 e 2025-2 vêm dos backups HTML do Grade na Hora e
+// preservam as duas paridades usadas pelo Simulador de Formatura.
 export const ENG_MECATRONICA: DadosCurso = {
   id: "eng-mecatronica-973",
   rotulo: "Engenharia Mecatrônica (973)",
   rotuloCurto: "Eng. Mecatrônica",
   matriz: matriz973Json as unknown as Matriz,
   ofertas: {
-    "2026-2": turmasMecatronicaPendentes as unknown as OfertaSemestre,
+    "2026-2": turmasMecatronica20262 as unknown as OfertaSemestre,
   },
   semestrePadrao: "2026-2",
-  semestresPreMatricula: [],
+  semestresPreMatricula: ["2026-2"],
 };
+
+/** Carrega as ofertas passadas de Mecatrônica sem bloquear o bundle inicial. */
+export async function carregarOfertasHistoricasMecatronica(): Promise<void> {
+  const { OFERTAS_MECATRONICA_HISTORICAS } = await import("./ofertasMecatronicaHistoricas");
+  Object.assign(ENG_MECATRONICA.ofertas, OFERTAS_MECATRONICA_HISTORICAS);
+}
 
 /**
  * Todos os cursos cobertos. Exportado porque o roster de docentes das avaliações
