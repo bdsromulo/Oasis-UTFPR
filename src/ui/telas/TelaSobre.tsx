@@ -49,6 +49,34 @@ const APOIADORES: Pessoa[] = [
   { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação", revisor: "Revisor" },
 ];
 
+const compararPorNome = (a: Pessoa, b: Pessoa) => a.nome.localeCompare(b.nome, "pt-BR");
+const REVISORES = APOIADORES.filter((pessoa) => pessoa.revisor).sort(compararPorNome);
+const OUTROS_APOIADORES = APOIADORES.filter((pessoa) => !pessoa.revisor).sort(compararPorNome);
+
+function ListaApoiadores({ pessoas }: { pessoas: Pessoa[] }) {
+  return (
+    <ul className="grid gap-2.5 sm:grid-cols-2">
+      {pessoas.map((p) => (
+        <li
+          key={p.nome}
+          className="flex items-start gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-800/40"
+        >
+          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-utfpr-500/20 text-utfpr-700 dark:text-utfpr-400">
+            <IconUser className="h-4 w-4" />
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="font-display text-sm font-bold text-zinc-900 dark:text-white">{p.nome}</span>
+              {p.revisor && <Badge tom="ok">{p.revisor}</Badge>}
+            </div>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">{p.curso}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 interface Marco {
   data: string;
   titulo: string;
@@ -374,27 +402,18 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <strong className="text-zinc-800 dark:text-zinc-200">revisor</strong>{" "}
               também conferiu o resultado e apontou os erros.
             </p>
-            <ul className="grid gap-2.5 sm:grid-cols-2">
-              {APOIADORES.map((p) => (
-                <li
-                  key={p.nome}
-                  className="flex items-start gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-800/40"
-                >
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-utfpr-500/20 text-utfpr-700 dark:text-utfpr-400">
-                    <IconUser className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="font-display text-sm font-bold text-zinc-900 dark:text-white">
-                        {p.nome}
-                      </span>
-                      {p.revisor && <Badge tom="ok">{p.revisor}</Badge>}
-                    </div>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">{p.curso}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <section>
+              <h5 className="mb-2 font-display text-xs font-black uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Revisores em ordem alfabética
+              </h5>
+              <ListaApoiadores pessoas={REVISORES} />
+            </section>
+            <section className="mt-5">
+              <h5 className="mb-2 font-display text-xs font-black uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Outros apoiadores em ordem alfabética
+              </h5>
+              <ListaApoiadores pessoas={OUTROS_APOIADORES} />
+            </section>
           </Card>
 
           {/* Método de desenvolvimento */}

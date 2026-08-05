@@ -50,6 +50,12 @@ import { ModalNovidades } from "./telas/ModalNovidades";
 import { AvisoBeta } from "./telas/AvisoBeta";
 import { reviewsHabilitadasPara } from "../domain/reviews/config";
 import { coletaHabilitada } from "../domain/reviews/forms";
+import {
+  criarSavefile,
+  desserializarPerfil,
+  lerSavefile,
+  type SavefileOasis,
+} from "../domain/savefile";
 
 export interface SelecaoTurma {
   codDisciplina: string;
@@ -77,7 +83,7 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
 // novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
 // precisar de lógica de comparação de datas.
-const CHAVE_NOVIDADES = "oasis.novidades_lidas.reviews_v1";
+const CHAVE_NOVIDADES = "oasis.novidades_lidas.806_savefile_v1";
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -137,8 +143,9 @@ export function App() {
     () => localStorage.getItem(CHAVE_NOVIDADES) === "true",
   );
 
-  const abrirNovidades = () => {
-    setModalNovidadesAberto(true);
+  const abrirNovidades = () => setModalNovidadesAberto(true);
+  const fecharNovidades = () => {
+    setModalNovidadesAberto(false);
     if (!novidadesLidas) {
       localStorage.setItem(CHAVE_NOVIDADES, "true");
       setNovidadesLidas(true);
@@ -388,6 +395,13 @@ export function App() {
     localStorage.setItem(CHAVE_LAYOUT, preferencias.layout);
   }, [preferencias]);
 
+  // A cada lançamento a chave é versionada. Assim, o aviso abre uma vez para
+  // quem já usa o site e também logo após concluir o primeiro cadastro; fechar
+  // é o gesto que confirma a leitura neste navegador.
+  useEffect(() => {
+    if (checkinConcluido && !novidadesLidas) setModalNovidadesAberto(true);
+  }, [checkinConcluido, novidadesLidas]);
+
   async function processarArquivo(arq: File, dados?: DadosCheckin) {
     setCarregando(true);
     setErro(null);
@@ -441,6 +455,78 @@ export function App() {
     localStorage.setItem(CHAVE_CHECKIN, "true");
     setAba("situacao");
     setAbaSituacao("painel");
+  }
+
+  function exportarSavefile() {
+    const savefile = criarSavefile({
+      perfil,
+      preferencias: {
+        campus: preferencias.campus,
+        curso: preferencias.curso,
+        matriz: preferencias.matriz,
+        semestreAtivo: preferencias.semestreAtivo,
+      },
+      cestasPorSemestre: todasCestasPorSemestre,
+      exclusoesPorSemestre: todasExclusoesPorSemestre,
+      gradeAtiva,
+      gradeParaSimulador,
+      ritmoSimulador,
+      exclusoesSimulador,
+    });
+    const blob = new Blob([JSON.stringify(savefile, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `oasis-utfpr-${new Date().toISOString().slice(0, 10)}.oasis.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function analisarSavefile(arquivo: File): Promise<SavefileOasis> {
+    return lerSavefile(await arquivo.text());
+  }
+
+  function confirmarSavefile(savefile: SavefileOasis) {
+    const dados = savefile.dados;
+    const perfilImportado = desserializarPerfil(dados.perfil);
+    const semestreImportado = dados.preferencias.semestreAtivo ?? "2026-2";
+    const cestasImportadas = dados.cestasPorSemestre;
+    const cestasDoSemestre = cestasImportadas[semestreImportado] ?? { A: [] };
+    const gradeImportada = cestasDoSemestre[dados.gradeAtiva]
+      ? dados.gradeAtiva
+      : Object.keys(cestasDoSemestre)[0] ?? "A";
+
+    setPreferencias((atuais) => ({
+      ...atuais,
+      ...dados.preferencias,
+      semestreAtivo: semestreImportado,
+    }));
+    setPerfil(perfilImportado);
+    if (perfilImportado) salvarPerfil(perfilImportado, preferencias.privado);
+    else {
+      localStorage.removeItem(CHAVE_PERFIL);
+      sessionStorage.removeItem(CHAVE_PERFIL);
+    }
+    setCheckinConcluido(true);
+    localStorage.setItem(CHAVE_CHECKIN, "true");
+    setTodasCestasPorSemestre(cestasImportadas);
+    localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(cestasImportadas));
+    setTodasExclusoesPorSemestre(dados.exclusoesPorSemestre);
+    localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(dados.exclusoesPorSemestre));
+    setGradeAtiva(gradeImportada);
+    localStorage.setItem(CHAVE_GRADE_ATIVA, gradeImportada);
+    setSelecao(cestasDoSemestre[gradeImportada] ?? []);
+    setGradeParaSimulador(dados.gradeParaSimulador);
+    if (dados.gradeParaSimulador) {
+      localStorage.setItem(CHAVE_GRADE_SIMULADOR, JSON.stringify(dados.gradeParaSimulador));
+    } else {
+      localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
+    }
+    setRitmoSimulador(dados.ritmoSimulador);
+    setExclusoesSimulador(dados.exclusoesSimulador as ValorExclusoes);
+    setAba(perfilImportado ? "situacao" : "planejamento");
+    setAbaSituacao("painel");
+    setAbaPlanejamento("cursar");
   }
 
   // O semestre é um contexto de PLANEJAMENTO, não um modo global do site: ele troca
@@ -1180,7 +1266,7 @@ export function App() {
           existe com histórico, que é o que prova ter cursado a matéria. */}
       <ModalNovidades
         aberto={modalNovidadesAberto}
-        onFechar={() => setModalNovidadesAberto(false)}
+        onFechar={fecharNovidades}
         onVerAvaliacoes={() => {
           setAba("planejamento");
           setAbaPlanejamento("cursar");
@@ -1188,6 +1274,7 @@ export function App() {
         onAvaliar={
           perfil && coletaHabilitada() ? () => setModalAvaliacoesAberto(true) : undefined
         }
+        onAbrirConfiguracoes={() => setModalConfigAberto(true)}
       />
 
       {/* Modal de Configurações Centralizadas (TASK-01) */}
@@ -1200,6 +1287,9 @@ export function App() {
         onAtualizarPDF={processarArquivo}
         onAnalisarPDF={analisarPDFParaPreview}
         onConfirmarPDF={confirmarNovoPerfil}
+        onExportarSavefile={exportarSavefile}
+        onAnalisarSavefile={analisarSavefile}
+        onConfirmarSavefile={confirmarSavefile}
         onTrocarUsuario={handleTrocarUsuario}
         onLimparDados={handleLimparDados}
         carregandoPDF={carregando}

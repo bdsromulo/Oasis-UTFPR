@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { PerfilAluno } from "../../domain/tipos";
+import type { SavefileOasis } from "../../domain/savefile";
 import { Botao, Badge } from "../componentes";
 import {
   IconFileText,
+  IconDownload,
   IconHourglass,
   IconMonitor,
   IconMoon,
@@ -36,6 +38,9 @@ export function TelaConfiguracoes(props: {
   onAtualizarPDF: (file: File) => void;
   onAnalisarPDF?: (file: File) => Promise<PerfilAluno>;
   onConfirmarPDF?: (perfil: PerfilAluno) => void;
+  onExportarSavefile: () => void;
+  onAnalisarSavefile: (arquivo: File) => Promise<SavefileOasis>;
+  onConfirmarSavefile: (savefile: SavefileOasis) => void;
   onTrocarUsuario: () => void;
   onLimparDados: () => void;
   carregandoPDF: boolean;
@@ -44,6 +49,9 @@ export function TelaConfiguracoes(props: {
   const [perfilPreview, setPerfilPreview] = useState<PerfilAluno | null>(null);
   const [erroPreview, setErroPreview] = useState<string | null>(null);
   const [processandoPreview, setProcessandoPreview] = useState(false);
+  const [savefilePreview, setSavefilePreview] = useState<SavefileOasis | null>(null);
+  const [erroSavefile, setErroSavefile] = useState<string | null>(null);
+  const [processandoSavefile, setProcessandoSavefile] = useState(false);
 
   if (!props.aberto) return null;
 
@@ -321,6 +329,79 @@ export function TelaConfiguracoes(props: {
                   >
                     <IconUpload className="w-4 h-4 mr-1.5 inline" />
                     Clique em Concluir e Fechar para firmar suas alterações
+                  </Botao>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Savefile: o PDF nunca é copiado; só o perfil já lido e o planejamento. */}
+          <div className="space-y-3 rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <div>
+              <span className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                Backup e transferência de dados
+              </span>
+              <p className="mt-0.5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                Baixe um savefile para levar o perfil já lido do histórico e todas as grades
+                montadas para outro navegador. O PDF original não é incluído.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Botao variante="sutil" onClick={props.onExportarSavefile}>
+                <IconDownload className="h-4 w-4 shrink-0" />
+                Baixar savefile
+              </Botao>
+              <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-utfpr-500 px-3.5 py-2 text-xs font-bold text-zinc-950 shadow-xs transition-all hover:bg-utfpr-400 active:scale-[0.98]">
+                <IconUpload className="h-4 w-4" />
+                <span>{processandoSavefile ? "Verificando arquivo..." : "Importar savefile"}</span>
+                <input
+                  type="file"
+                  accept="application/json,.json,.oasis"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const arquivo = e.target.files?.[0];
+                    e.currentTarget.value = "";
+                    if (!arquivo) return;
+                    setErroSavefile(null);
+                    setProcessandoSavefile(true);
+                    try {
+                      setSavefilePreview(await props.onAnalisarSavefile(arquivo));
+                    } catch (erro) {
+                      setErroSavefile(erro instanceof Error ? erro.message : "Não foi possível ler o savefile.");
+                    } finally {
+                      setProcessandoSavefile(false);
+                    }
+                  }}
+                />
+              </label>
+            </div>
+            {erroSavefile && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-600 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400">
+                <IconWarning className="mr-1 inline h-4 w-4 align-[-0.2em]" /> {erroSavefile}
+              </div>
+            )}
+            {savefilePreview && (
+              <div className="rounded-xl border-2 border-utfpr-500 bg-utfpr-500/10 p-3 text-xs text-zinc-700 dark:text-zinc-200">
+                <p className="font-display font-bold text-zinc-900 dark:text-white">Confirmar importação</p>
+                <p className="mt-1 leading-relaxed">
+                  {savefilePreview.dados.perfil
+                    ? `Perfil de ${savefilePreview.dados.perfil.nome} e `
+                    : "Sem perfil de histórico e "}
+                  {Object.values(savefilePreview.dados.cestasPorSemestre).reduce(
+                    (total, cestas) => total + Object.keys(cestas).length,
+                    0,
+                  )} grade(s) serão carregados. Isso substitui os dados locais de perfil e planejamento.
+                </p>
+                <div className="mt-3 flex flex-wrap justify-end gap-2">
+                  <Botao variante="sutil" onClick={() => setSavefilePreview(null)}>Cancelar</Botao>
+                  <Botao
+                    variante="primario"
+                    onClick={() => {
+                      props.onConfirmarSavefile(savefilePreview);
+                      setSavefilePreview(null);
+                    }}
+                  >
+                    Importar e substituir dados
                   </Botao>
                 </div>
               </div>

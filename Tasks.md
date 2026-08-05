@@ -134,6 +134,11 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Turma sem horário é aviso (legítimo em TCC e EaD); domínio inválido ou locais diferentes no mesmo slot são erros.
 
 ### Em Revisão
+- **TASK-29 — Savefile local, Novidades de lançamento e créditos organizados:**
+  - O modal de **Novidades** abre automaticamente uma única vez por navegador após este lançamento, inclusive ao terminar o cadastro com PDF. A leitura só é marcada ao fechar; a chave versionada permite que o próximo lançamento volte a aparecer.
+  - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile, com acesso direto às Configurações.
+  - Em Configurações, o aluno pode baixar e importar um JSON versionado com o perfil já derivado do parser e as grades/planejamentos montados. O PDF original nunca entra no arquivo nem sai do navegador; a importação valida o formato e pede confirmação antes de substituir os dados locais.
+  - Na página Sobre, revisores e outros apoiadores agora aparecem em grupos distintos, ambos em ordem alfabética.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
