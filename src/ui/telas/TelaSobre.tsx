@@ -284,7 +284,7 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               </p>
               <ul className="space-y-2">
                 {[
-                  ["Nada é transmitido", "nenhum upload, nenhuma API, nenhum rastreamento."],
+                  ["Nada acadêmico é transmitido", "nenhum upload do histórico e nenhuma API recebe perfil, notas ou grades."],
                   ["Fica na sua máquina", "o navegador guarda o perfil e a sua grade no armazenamento local."],
                   ["Você pode transportar", "o savefile leva o perfil já interpretado e as grades para outro navegador, sem incluir o PDF."],
                   ["Você apaga quando quiser", "as Configurações limpam todos os dados salvos de uma vez."],
@@ -302,6 +302,12 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Nada é sincronizado automaticamente. Antes de limpar os dados ou trocar de
                 aparelho, baixe o savefile nas Configurações e importe-o no outro navegador.
+              </p>
+              <p className="text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500">
+                Os registros de uso do site são contabilizados pelo GoatCounter, provedor
+                open source de estatísticas e única integração do Oásis que envia telemetria
+                a um serviço externo. O histórico, o perfil e as grades não fazem parte dessa
+                contagem.
               </p>
             </div>
           </div>
