@@ -196,6 +196,10 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - As fontes de Turmas Abertas da pasta 823 são idênticas às da 973, portanto as duas matrizes compartilham exatamente as ofertas de 2026.2, 2026.1 e 2025.2 sem duplicação de dados.
   - Check-in, Situação, Catálogo, Planejamento, Grade Mágica, Simulador e avaliações reconhecem a matriz antiga e resolvem as turmas atuais pelas equivalências oficiais.
   - Validada no navegador, com busca por código antigo e atual, além da suíte completa de 412 testes aprovados e bundle inicial de 402,1 KiB gzip.
+- **TASK-41 — Créditos por curso e matriz na página Sobre:**
+  - Incluídos os quatro históricos de apoio usados para Controle e Automação 978 e Mecatrônica 973/823, com os nomes completos conferidos localmente e sem versionar os PDFs pessoais.
+  - Todos os apoiadores e revisores passam a exibir curso e matriz; a revisora da matriz 978 foi identificada e os dois grupos permanecem em ordem alfabética.
+  - A ordenação e os 15 créditos são cobertos por regressão automatizada. A página foi validada visualmente com nomes, selos e matrizes legíveis.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

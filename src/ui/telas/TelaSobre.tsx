@@ -33,20 +33,24 @@ interface Pessoa {
 
 /** Quem cedeu o histórico que serviu de base para calibrar cada curso. */
 const APOIADORES: Pessoa[] = [
-  { nome: "Yago Augusto Constantino Ribeiro", curso: "Sistemas de Informação", revisor: "Revisor" },
-  { nome: "Namie Miquitera Yamada", curso: "Sistemas de Informação", revisor: "Revisora" },
-  { nome: "Victor Damasceno Oliveira", curso: "Engenharia de Computação", revisor: "Revisor" },
-  { nome: "Maria Luiza Cenci Stedile", curso: "Engenharia de Computação" },
-  { nome: "Victor Hugo Garrett", curso: "Engenharia de Computação" },
-  { nome: "Felipe Sledz Ferreira", curso: "Engenharia de Computação" },
-  { nome: "Deborah Feijo Pinto", curso: "Engenharia de Computação" },
-  { nome: "Carlos Eduardo Correa Zanon", curso: "Engenharia Eletrônica" },
+  { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisor" },
+  { nome: "Namie Miquitera Yamada", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisora" },
+  { nome: "Thayssa Gaia Alves de Oliveira", curso: "Engenharia de Controle e Automação (matriz 978)", revisor: "Revisora" },
+  { nome: "Victor Damasceno Oliveira", curso: "Engenharia de Computação (matriz 844)", revisor: "Revisor" },
+  { nome: "Yago Augusto Constantino Ribeiro", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisor" },
+  { nome: "Beatriz Freire Kobayashi", curso: "Engenharia Mecatrônica (matriz 973)" },
+  { nome: "Carlos Eduardo Correa Zanon", curso: "Engenharia Eletrônica (matriz 968)" },
+  { nome: "Deborah Feijo Pinto", curso: "Engenharia de Computação (matriz 962)" },
+  { nome: "Felipe Sledz Ferreira", curso: "Engenharia de Computação (matriz 962)" },
   // A matriz 806 entrou na plataforma com estes dois históricos. Sem eles não
   // haveria como calibrar o leitor: o PDF da 806 tem largura de coluna própria,
   // e os totais do Quadro Resumo foram o que confirmou a leitura da matriz.
   { nome: "Jezreel Gonzalez Rodriguez", curso: "Sistemas de Informação (matriz 806)" },
+  { nome: "Maria Heloisa Barbosa Benthiem", curso: "Engenharia de Controle e Automação (matriz 978)" },
+  { nome: "Maria Luiza Cenci Stedile", curso: "Engenharia de Computação (matriz 844)" },
+  { nome: "Rafael Furuyama", curso: "Engenharia Mecatrônica (matriz 823)" },
+  { nome: "Victor Hugo Garrett", curso: "Engenharia de Computação (matriz 844)" },
   { nome: "Vitor dos Santos Maximo de Oliveira", curso: "Sistemas de Informação (matriz 806)" },
-  { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação", revisor: "Revisor" },
 ];
 
 const compararPorNome = (a: Pessoa, b: Pessoa) => a.nome.localeCompare(b.nome, "pt-BR");
