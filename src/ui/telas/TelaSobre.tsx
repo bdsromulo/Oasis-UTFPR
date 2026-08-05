@@ -132,7 +132,7 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
-    data: "Objetivo",
+    data: "04 ago 2026",
     titulo: "Engenharia de Controle e Automação (matriz 708)",
     descricao:
       "Cobrir também a matriz antiga do curso, preservando suas equivalências e regras sem reaproveitar automaticamente as da 978.",

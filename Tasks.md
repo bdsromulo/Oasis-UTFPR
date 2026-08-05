@@ -215,6 +215,7 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 - **TASK-44 — Nova versão do aviso de cursos e matrizes:**
   - A chave versionada do aviso passou para `cursos_matrizes_2026_08_v1`, para exibir esta expansão uma vez também a quem já tinha fechado a edição anterior.
+  - O Roadmap passa a situar a matriz 708 de Controle e Automação em 04 ago 2026, preservando o estado planejado enquanto sua implementação não é iniciada.
 
 ### Em Andamento
 *(nenhuma no momento)*
