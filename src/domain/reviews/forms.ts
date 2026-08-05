@@ -116,9 +116,10 @@ export function podeSerAvaliada(
 /**
  * URL do formulário com os cinco primeiros campos preenchidos.
  *
- * `professor` nulo é a rota "Professor Não Ofertado": o campo vai ausente e a
- * pessoa digita. Pela medição do Estrategia.md isso alcança ~14% dos casos, e 31%
- * para quem está adiantado — é caminho comum, não borda.
+ * A função aceita `professor` nulo para degradação e testes isolados. Na interface,
+ * a rota "Professor Não Ofertado" exige o nome antes de chegar aqui e também o
+ * envia preenchido. Pela medição do Estrategia.md isso alcança ~14% dos casos, e
+ * 31% para quem está adiantado — é caminho comum, não borda.
  */
 export function montarUrlDeAvaliacao(
   alvo: AlvoAvaliacao,

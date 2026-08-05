@@ -7,8 +7,11 @@ import {
   URL_BASE_FORMS,
 } from "../src/domain/reviews/forms";
 import type { DisciplinaCursada } from "../src/domain/tipos";
-import { criarAlvoAvaliacao } from "../src/domain/reviews/alvos";
-import { CURSOS, ENG_COMP } from "../src/domain/dadosCurso";
+import {
+  criarAlvoAvaliacao,
+  nomeDaDisciplinaParaAvaliacao,
+} from "../src/domain/reviews/alvos";
+import { BSI, CURSOS, ENG_COMP } from "../src/domain/dadosCurso";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 
 const alvo = {
@@ -119,6 +122,34 @@ describe("alvo de avaliação", () => {
       CURSOS,
     );
     expect(alvoEletiva?.nome).toBe("Gestão Da Produção");
+  });
+
+  it("registra na pool os nomes das eletivas observadas nos históricos 981", () => {
+    for (const [codigo, nome] of [
+      ["ELN8CB", "Virtualização"],
+      ["ELN82D", "Frameworks De Gestão De Serviços"],
+    ]) {
+      expect(nomeDaDisciplinaParaAvaliacao(codigo, BSI.matriz, CURSOS)).toBe(nome);
+    }
+  });
+
+  it("exclui da coleta as eletivas da pool sem oferta e professor versionados", () => {
+    for (const codigo of ["ELN8CB", "ELN82D"]) {
+      expect(criarAlvoAvaliacao(
+        cursada({ codigo, nome: "", origem: "eletiva", ano: 2026, semestre: 1 }),
+        BSI.matriz,
+        CURSOS,
+      )).toBeNull();
+    }
+  });
+
+  it("exclui eletiva desconhecida em vez de exibir o código como nome", () => {
+    const desconhecida = criarAlvoAvaliacao(
+      cursada({ codigo: "ZZZ99", nome: "", origem: "eletiva" }),
+      ENG_COMP.matriz,
+      CURSOS,
+    );
+    expect(desconhecida).toBeNull();
   });
 
   it("exclui atividades complementares depois de resolver o nome pela matriz", () => {

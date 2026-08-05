@@ -151,6 +151,11 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Controle e Automação, Mecatrônica e Design aparecem no seletor de cursos como objetivos “Em breve”, sem habilitar matrizes ainda não validadas.
   - O compartilhamento recebe cartão Open Graph próprio em 1200×630, e a página passa a declarar canonical, identidade `WebSite`, favicon raster estável, sitemap e metadados sociais. No beta, as URLs sociais apontam para o próprio ambiente e o `noindex` permanece ativo.
   - A política de dados no Sobre explicita discretamente que o GoatCounter, open source, contabiliza o uso e é a única integração de telemetria externa; histórico, perfil e grades permanecem fora dessa contagem.
+- **TASK-32 — Eletivas completas na coleta de avaliações:**
+  - Eletivas reconhecidas passam a resolver o nome pela pool versionada; `ELN8CB` e `ELN82D`, observadas nos históricos BSI 981, ficam cobertas no catálogo futuro com seus nomes e cargas oficiais do documento.
+  - Um alvo cujo nome não seja confirmado por matriz, oferta, pool ou histórico deixa de exibir o botão Avaliar, impedindo reviews identificadas apenas por código.
+  - A tabela de eletivas do Histórico Escolar não contém professor e o pipeline não publica docentes fora do roster. Por isso, uma eletiva só aparece nas avaliações quando existe oferta versionada com docente; `ELN8CB` e `ELN82D` ficam ocultas da coleta até essa fonte existir, em vez de oferecer um botão que produziria resposta eternamente pendente.
+  - Na rota geral “professor não está na lista”, a interface passa a exigir o nome completo antes de abrir o formulário e o envia preenchido, sem atribuir ao aluno um docente inventado.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

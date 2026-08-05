@@ -77,6 +77,7 @@ export function ModalEnvioForms(props: {
   const { alvo, autor, onFechar } = props;
   const [escolhido, setEscolhido] = useState<string | null>(null);
   const [busca, setBusca] = useState("");
+  const [professorManual, setProfessorManual] = useState("");
 
   const elenco = useMemo(() => {
     if (!alvo) return [];
@@ -99,6 +100,7 @@ export function ModalEnvioForms(props: {
           : null,
     );
     setBusca("");
+    setProfessorManual("");
   }, [alvo?.codigo, alvo?.semestre, idDoHistorico, professorDoHistoricoForaDoElenco]);
 
   useEffect(() => {
@@ -118,12 +120,14 @@ export function ModalEnvioForms(props: {
 
   if (!alvo) return null;
 
-  const professor =
-    escolhido === null || escolhido === FORA_DO_ELENCO
-      ? null
-      : escolhido === PROFESSOR_DO_HISTORICO
-        ? (alvo.professoresHistorico?.join(" / ") ?? null)
-        : (elenco.find((u) => u.id === escolhido)?.nome ?? null);
+  let professor: string | null = null;
+  if (escolhido === FORA_DO_ELENCO) {
+    professor = professorManual.trim() || null;
+  } else if (escolhido === PROFESSOR_DO_HISTORICO) {
+    professor = alvo.professoresHistorico?.join(" / ") ?? null;
+  } else if (escolhido !== null) {
+    professor = elenco.find((u) => u.id === escolhido)?.nome ?? null;
+  }
 
   function abrir() {
     window.open(montarUrlDeAvaliacao(alvo!, autor, professor), "_blank", "noopener");
@@ -184,11 +188,25 @@ export function ModalEnvioForms(props: {
               comum, e a interface a trata como escolha legítima, não como erro. */}
           <OpcaoProfessor
             rotulo="Meu professor não está na lista"
-            auxiliar="Você digita o nome no formulário"
+            auxiliar="Informe o nome abaixo para levá-lo preenchido ao formulário"
             marcada={escolhido === FORA_DO_ELENCO}
             onEscolher={() => setEscolhido(FORA_DO_ELENCO)}
           />
         </div>
+
+        {escolhido === FORA_DO_ELENCO && (
+          <label className="mt-3 block text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+            Nome completo do professor
+            <input
+              type="text"
+              value={professorManual}
+              onChange={(e) => setProfessorManual(e.target.value)}
+              placeholder="Digite como o nome aparece institucionalmente"
+              autoFocus
+              className="mt-1.5 w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-utfpr-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+            />
+          </label>
+        )}
 
         <div className="mt-4 rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
           <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
@@ -224,7 +242,13 @@ export function ModalEnvioForms(props: {
           <Botao variante="sutil" onClick={onFechar}>
             Cancelar
           </Botao>
-          <Botao onClick={abrir} desabilitado={escolhido === null}>
+          <Botao
+            onClick={abrir}
+            desabilitado={
+              escolhido === null ||
+              (escolhido === FORA_DO_ELENCO && professorManual.trim().length === 0)
+            }
+          >
             Abrir formulário preenchido
           </Botao>
         </div>
