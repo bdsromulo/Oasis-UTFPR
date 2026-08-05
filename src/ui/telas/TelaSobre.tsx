@@ -135,11 +135,11 @@ const ROADMAP: Marco[] = [
     estado: "aberto",
   },
   {
-    data: "Objetivo",
-    titulo: "Engenharia Mecatrônica (matriz 973)",
+    data: "05 ago 2026",
+    titulo: "Oásis de Engenharia Mecatrônica (matriz 973)",
     descricao:
-      "Criar o Oásis da matriz nova de Engenharia Mecatrônica com pipeline, descritor de curso e validações próprias.",
-    estado: "aberto",
+      "A grade 973 entra com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica, pré-requisitos e equivalências. A oferta própria de turmas permanece como etapa separada.",
+    estado: "concluido",
   },
   {
     data: "Objetivo",

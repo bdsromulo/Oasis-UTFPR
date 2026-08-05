@@ -181,6 +181,7 @@ export function App() {
     () => todasOfertas[semestreAtivo] ?? todasOfertas[dadosCurso.semestrePadrao],
     [semestreAtivo, todasOfertas, dadosCurso],
   );
+  const ofertaDisponivel = oferta.disciplinas.some((disciplina) => disciplina.turmas.length > 0);
 
   const ehPreMatricula = dadosCurso.semestresPreMatricula.includes(semestreAtivo);
 
@@ -927,7 +928,10 @@ export function App() {
           {/* Menu Lateral (Sidebar Desktop / Mobile Drawer) */}
           <SidebarNavegacao
             abaAtiva={aba}
-            onSelecionarAba={setAba}
+            onSelecionarAba={(novaAba) => {
+              if (novaAba === "situacao" && !perfil) setAbaSituacao("catalogo");
+              setAba(novaAba);
+            }}
             temPerfil={!!perfil}
             qtdTurmasSelecao={selecao.length}
 
@@ -945,7 +949,7 @@ export function App() {
               </div>
             )}
 
-            {aba === "situacao" && perfil && (
+            {aba === "situacao" && (
               <div className="space-y-6">
                 {/* Sub-navegação em Minha Situação: Resumo, Catálogo e Trilhas */}
                 <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
@@ -1009,6 +1013,14 @@ export function App() {
 
             {aba === "planejamento" && (
               <div className="space-y-6">
+                {!ofertaDisponivel && (
+                  <div className="rounded-2xl border-2 border-amber-500/50 bg-amber-500/10 p-4 text-sm text-amber-950 dark:text-amber-100">
+                    <div className="font-display font-black">Turmas de Mecatrônica ainda não importadas</div>
+                    <p className="mt-1 text-xs leading-relaxed text-amber-900/80 dark:text-amber-100/80">
+                      A matriz 973 já está disponível no Catálogo, na Situação e no Fluxograma. O Planejamento ficará sem horários até a oferta própria de Turmas Abertas ser adicionada; nenhuma turma de outro curso é reutilizada automaticamente.
+                    </p>
+                  </div>
+                )}
                 {/* Contexto de matrícula: o período escolhido vale para as turmas
                     listadas e para a grade em montagem — e só para isso. */}
                 <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 rounded-3xl border-2 border-zinc-200/90 bg-white/95 px-4 py-3 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95">
@@ -1050,7 +1062,7 @@ export function App() {
                                     : "text-orange-600 dark:text-orange-400"
                                 }`}
                               >
-                                {sem.replace("-", ".")} ({preMatricula ? "Pré-Matrícula" : "Passado"})
+                                {sem.replace("-", ".")} ({!ofertaDisponivel ? "Sem oferta" : preMatricula ? "Pré-Matrícula" : "Passado"})
                               </option>
                             );
                           })}

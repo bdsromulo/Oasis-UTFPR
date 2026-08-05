@@ -17,6 +17,8 @@ import matriz978Json from "../../data/eng-controle/matriz-978.json";
 import turmasControle20262 from "../../data/eng-controle/turmas/2026-2.json";
 import turmasControle20261 from "../../data/eng-controle/turmas/2026-1.json";
 import turmasControle20252 from "../../data/eng-controle/turmas/2025-2.json";
+import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
+import turmasMecatronicaPendentes from "../../data/eng-mecatronica/turmas-pendentes.json";
 
 /**
  * Reúne, por curso, a matriz e as ofertas de turma que a interface consome.
@@ -148,12 +150,36 @@ export const ENG_CONTROLE: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
+// A matriz 973 já está disponível para progresso, Catálogo e Fluxograma. A
+// oferta vazia é deliberada: enquanto o arquivo próprio de Turmas Abertas não
+// for importado, o Planejamento informa a pendência e nunca reaproveita turmas
+// de outro curso por semelhança de código ou departamento.
+export const ENG_MECATRONICA: DadosCurso = {
+  id: "eng-mecatronica-973",
+  rotulo: "Engenharia Mecatrônica (973)",
+  rotuloCurto: "Eng. Mecatrônica",
+  matriz: matriz973Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": turmasMecatronicaPendentes as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: [],
+};
+
 /**
  * Todos os cursos cobertos. Exportado porque o roster de docentes das avaliações
  * é global — ele varre as ofertas de todos os cursos, não só o do aluno (§6.10),
  * e manter uma segunda lista lá dentro daria drift assim que um curso novo entrar.
  */
-export const CURSOS = [BSI, BSI_806, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA, ENG_CONTROLE];
+export const CURSOS = [
+  BSI,
+  BSI_806,
+  ENG_COMP,
+  ENG_COMP_962,
+  ENG_ELETRONICA,
+  ENG_CONTROLE,
+  ENG_MECATRONICA,
+];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {

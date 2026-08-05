@@ -178,6 +178,12 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 - **TASK-37 — Classificação curricular no Catálogo e importação direta no Simulador:**
   - Os cards do Catálogo passam a exibir a categoria curricular da disciplina e, quando aplicável, a trilha específica para a qual suas horas contam, sem repetir a carga horária.
   - O Simulador de Formatura permite escolher diretamente uma grade A/B/C já montada no Planejamento de Matrícula e usá-la como primeiro semestre da projeção, reaproveitando a mesma ponte já oferecida na tela da grade.
+- **TASK-38 — Engenharia Mecatrônica (matriz 973):**
+  - Convertida para o contrato do Oásis a grade 973 mantida no projeto K-Matrizes: 206 disciplinas, 3435h obrigatórias, Ciclo de Humanidades e as trilhas formativas de Eletrônica e Mecânica.
+  - A procedência de apoio permanece explícita no JSON e em um importador reproduzível. O validador específico encerra com 0 erros e a regeneração local produz o mesmo SHA-256 do arquivo versionado.
+  - Check-in, Catálogo, Situação e Fluxograma reconhecem o curso, inclusive no Modo Livre. O Catálogo diferencia categoria, trilha e extensão; o Fluxograma exibe a matriz completa enquanto não existe oferta.
+  - Turmas Abertas continuam como etapa separada. O Planejamento informa a indisponibilidade, não reutiliza ofertas de outro curso e não simula horários inexistentes.
+  - Validado com 401 testes aprovados, 15 testes opt-in ignorados e build de produção em 398,2 KiB gzip, dentro do limite de 420 KiB.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

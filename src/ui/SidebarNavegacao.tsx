@@ -43,9 +43,10 @@ export function SidebarNavegacao({
       id: "situacao",
       rotulo: "Minha Situação",
       subrotulo: "Resumo, Catálogo e Trilhas",
-      bloqueado: !temPerfil,
-      motivoBloqueio: EXIGE_HISTORICO,
-      icone: !temPerfil ? <IconLock className="h-4 w-4 shrink-0" /> : <IconUser className="h-5 w-5 shrink-0" />,
+      // O painel de progresso exige histórico, mas Catálogo e Fluxograma são
+      // úteis no Modo Livre. A App abre diretamente o Catálogo nesse caso.
+      bloqueado: false,
+      icone: <IconUser className="h-5 w-5 shrink-0" />,
     },
     {
       id: "planejamento",

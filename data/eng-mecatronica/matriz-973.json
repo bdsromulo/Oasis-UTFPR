@@ -1,0 +1,5322 @@
+{
+ "matriz": 973,
+ "curso": "ENGENHARIA MECATRÔNICA (341)",
+ "campus": "Curitiba",
+ "fonte": "K-Matrizes — grade 973 indicada pelo mantenedor como fonte de apoio",
+ "fonte_url": "https://github.com/Kcaiooooo/MatrizEngEletronicaUTFPR",
+ "cargas": {
+  "obrigatorias": 3435,
+  "optativas": 360,
+  "extensao": 420,
+  "eletiva": 0,
+  "soma": 4215,
+  "soma_sem_ext": 3795,
+  "chext_disc_obrigatorias": 0,
+  "chext_disc_optativas": 0,
+  "ch_total_ppc": 3795
+ },
+ "conjuntos": {
+  "1120": {
+   "nome": "Trilha Formativa em Eletrônica",
+   "pai": null,
+   "periodo_inicial": 6,
+   "periodo_final": 10,
+   "ch": 120,
+   "ch_semanal": 8
+  },
+  "1121": {
+   "nome": "Trilha Formativa em Mecânica",
+   "pai": null,
+   "periodo_inicial": 6,
+   "periodo_final": 10,
+   "ch": 120,
+   "ch_semanal": 8
+  },
+  "1122": {
+   "nome": "Ciclo de Humanidades",
+   "pai": null,
+   "periodo_inicial": 4,
+   "periodo_final": 10,
+   "ch": 120,
+   "ch_semanal": 8
+  },
+  "1135": {
+   "nome": "Ciências Humanas",
+   "pai": "1122",
+   "periodo_inicial": 4,
+   "periodo_final": 10,
+   "ch": 30,
+   "ch_semanal": 2
+  },
+  "1222": {
+   "nome": "Ciclo de Humanidades — opções adicionais",
+   "pai": "1122",
+   "periodo_inicial": 4,
+   "periodo_final": 10,
+   "ch": 30,
+   "ch_semanal": 2
+  },
+  "1224": {
+   "nome": "Unidades Curriculares Extensionistas",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 10,
+   "ch": 0,
+   "ch_semanal": null
+  }
+ },
+ "eletiva": null,
+ "disciplinas": [
+  {
+   "codigo": "COE70A",
+   "nome": "COMUNICAÇÃO ORAL E ESCRITA",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN71A",
+   "nome": "INTRODUÇÃO À ENGENHARIA MECATRÔNICA",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN71B",
+   "nome": "PRINCÍPIOS DE MECATRÔNICA",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FB",
+   "nome": "FUNDAMENTOS DA ÉTICA",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7GA",
+   "nome": "GEOMETRIA ANALÍTICA",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP71A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7PC",
+   "nome": "PRÉ-CÁLCULO",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC71A",
+   "nome": "DESENHO TÉCNICO",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN70C",
+   "nome": "ATIVIDADES COMPLEMENTARES",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Atividades Complementares",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 15,
+    "chext": 0,
+    "chead": 0,
+    "total": 15
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN72A",
+   "nome": "ELETRICIDADE BÁSICA",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7PC"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT72C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7F1",
+   "nome": "FÍSICA TEÓRICA 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP72C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "ÁLGEBRA LINEAR",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7GA"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C1",
+   "nome": "CÁLCULO DIFERENCIAL E INTEGRAL 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7PC"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP71B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC72A",
+   "nome": "DESENHO AUXILIADO POR COMPUTADOR 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC71A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72D",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC72B",
+   "nome": "FUNDAMENTOS DE CIÊNCIAS DOS MATERIAIS",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP72E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN73A",
+   "nome": "CIRCUITOS ELÉTRICOS A",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN72A",
+    "MAT7C1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELN73D",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP31T",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP31TP",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP42P",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT73B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN73B",
+   "nome": "ALGORITMOS DE PROGRAMAÇÃO",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB11",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EST70A",
+   "nome": "INTRODUÇÃO À ESTATÍSTICA",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "EST70C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7E1",
+   "nome": "FÍSICA EXPERIMENTAL FO 1",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP73B",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7ED",
+   "nome": "EQUAÇÕES DIFERENCIAIS ORDINÁRIAS",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7C1",
+    "MAT7GA"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC73A",
+   "nome": "DESENHO AUXILIADO POR COMPUTADOR 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "MEC72A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC73B",
+   "nome": "TRATAMENTOS E PROPRIEDADES DOS MATERIAIS",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC72B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MEC73D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC74F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC73C",
+   "nome": "ESTÁTICA",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FIS7F1",
+    "MAT7AL"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN74A",
+   "nome": "ELETRÔNICA A",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEE30",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT74E",
+     "cht": 120,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN74B",
+   "nome": "PROGRAMAÇÃO DE COMPUTADOR",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN73B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELB21",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7F2",
+   "nome": "FÍSICA TEÓRICA 2",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP73A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C2",
+   "nome": "CÁLCULO DIFERENCIAL E INTEGRAL 2",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7C1",
+    "MAT7GA"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC74A",
+   "nome": "DINÂMICA",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7ED",
+    "MEC73C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC74B",
+   "nome": "METROLOGIA MECÂNICA",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EST70A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN75A",
+   "nome": "CIRCUITOS ELÉTRICOS B",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN73A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT74B",
+     "cht": 120,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN75B",
+   "nome": "CIRCUITOS DIGITAIS",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 75,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELN74A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEB30",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF41",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT72B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT82F",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW41",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN75C",
+   "nome": "INSTRUMENTAÇÃO INDUSTRIAL",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN74A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELP63",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT75H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT85E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7FZ",
+   "nome": "ANÁLISE DE FOURIER E TRANSFORMADA Z",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7ED"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC75A",
+   "nome": "FENÔMENOS DE TRANSPORTE",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "FIS7F2",
+    "MAT7C2"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEY42",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT74A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC74E",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC75G",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC75B",
+   "nome": "METODOLOGIA DE PROJETOS",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC78G",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC75C",
+   "nome": "ENGENHARIA DE SEGURANÇA DO TRABALHO",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC77C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN70B",
+   "nome": "ESTÁGIO CURRICULAR OBRIGATÓRIO",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 360,
+    "chext": 0,
+    "chead": 0,
+    "total": 360
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN76A",
+   "nome": "ELETRÔNICA B",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN74A",
+    "MAT7ED"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEE31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP61",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN76B",
+   "nome": "SISTEMAS MICROCONTROLADOS",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN75B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEW31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF52",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT73A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT83B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW52",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC76A",
+   "nome": "MECÂNICA DOS SÓLIDOS 1",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MEC73C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC76B",
+   "nome": "USINAGEM",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC72B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MEC75E",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "MECP75A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC76C",
+   "nome": "PNEUMÁTICA E HIDRÁULICA",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN75B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC76D",
+   "nome": "GESTÃO DA PRODUÇÃO",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN77A",
+   "nome": "SISTEMAS DE CONTROLE A",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN76A",
+    "MAT7ED"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEC20",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF62",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT76A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW62",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN77B",
+   "nome": "CONTROLE A EVENTOS DISCRETOS",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN75B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF81",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT77D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT84B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW81",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN77C",
+   "nome": "ELETRÔNICA DE POTÊNCIA A",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN74A",
+    "ELN75A",
+    "MAT7FZ"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF84",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT75E",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW84",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E3",
+   "nome": "FUNDAMENTOS DE ECONOMIA",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC77A",
+   "nome": "ELEMENTOS DE MÁQUINAS 2",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC76A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC77B",
+   "nome": "USINAGEM CNC",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC76B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN78A",
+   "nome": "SISTEMAS DE CONTROLE B",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN77A",
+    "MAT7FZ"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF72",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW72",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN78B",
+   "nome": "PROJETO INTEGRADOR 1",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN76B",
+    "ELN77B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN78C",
+   "nome": "ACIONAMENTOS ELÉTRICOS",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 75,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELN75A",
+    "ELN77C"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT84D",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT85D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN78D",
+   "nome": "METODOLOGIA APLICADA AO TCC",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN78E",
+   "nome": "EMPREENDEDORISMO",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN8DD",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELO92",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7E1",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MECP78A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC78A",
+   "nome": "MANUFATURA INTEGRADA",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN77B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN79A",
+   "nome": "TCC 1",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "TCC",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN78D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC79A",
+   "nome": "PROJETO INTEGRADOR 2",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "MEC78A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC79B",
+   "nome": "ROBÓTICA",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN78A",
+    "MEC74A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT7AH",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC79C",
+   "nome": "MANUTENÇÃO INDUSTRIAL",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT77H",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78E",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MECP77B",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC79D",
+   "nome": "GESTÃO AMBIENTAL",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC79E",
+   "nome": "SISTEMAS DE GESTÃO DA QUALIDADE",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN70A",
+   "nome": "TCC 2",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "TCC",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 15,
+    "chext": 0,
+    "chead": 0,
+    "total": 15
+   },
+   "prerequisitos": [
+    "ELN79A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70I",
+   "nome": "EDUCAÇÃO ESPECIAL E PROCESSOS INCLUSIVOS",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70K",
+   "nome": "TECNOLOGIAS DIGITAIS NA EDUCAÇÃO",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELO91",
+   "nome": "ÉTICA, PROFISSÃO E CIDADANIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FA",
+   "nome": "FILOSOFIA DA CIÊNCIA E DA TECNOLOGIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "TEORIA DAS CIÊNCIAS HUMANAS",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "METROPOLIZAÇÃO CONTEMPORÂNEA: TECNOLOGIA E TERRITÓRIO",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HA",
+   "nome": "HISTÓRIA DA TÉCNICA E DA TECNOLOGIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "HISTÓRIA GERAL DA ECONOMIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "CAPITALISMO CONTEMPORÂNEO E ECONOMIA POLÍTICA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PA",
+   "nome": "PSICOLOGIA DO TRABALHO",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PB",
+   "nome": "RELAÇÕES INTERPESSOAIS, GRUPO E PODER",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SA",
+   "nome": "SOCIOLOGIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SB",
+   "nome": "TECNOLOGIA E SOCIEDADE",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "TECNOLOGIA, TRABALHO E SAÚDE",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SD",
+   "nome": "SOCIEDADE E POLÍTICA NO BRASIL",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SE",
+   "nome": "SOCIEDADE E POLÍTICA NO PARANÁ",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XA",
+   "nome": "TECNOLOGIA SOCIAL E ECONOMIA SOLIDÁRIA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XC",
+   "nome": "PRESENÇA AFRICANA NO BRASIL",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XD",
+   "nome": "DIREITOS HUMANOS, SEGURANÇA E DIVERSIDADE",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XE",
+   "nome": "POLÍTICAS PÚBLICAS",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "DIMENSÃO AMBIENTAL NA GESTÃO URBANA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "TECNOPOLÍTICAS DA SOCIEDADE CONTEMPORÂNEA",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AV",
+   "nome": "Tópicos em Ciências Humanas 1",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AX",
+   "nome": "Tópicos em Ciências Humanas 2",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AZ",
+   "nome": "Tópicos em Ciências Humanas 3",
+   "periodo": 4,
+   "conjunto": 1135,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ARQ7EA",
+   "nome": "TOWARDS SUSTAINABILITY",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ARQ7EB",
+   "nome": "RUMO A SUSTENTABILIDADE",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU70J",
+   "nome": "LIBRAS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AG",
+   "nome": "ESPANHOL PARA ENGENHARIAS 1",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AH",
+   "nome": "ESPANHOL PARA ENGENHARIAS 2",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "EDU7AG"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EDU7AI",
+   "nome": "PRÁTICA DE ESCRITA PARA ENGENHARIAS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH01",
+   "nome": "FUNDAMENTOS DE PRIMEIROS SOCORROS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH02",
+   "nome": "PRÁTICA DE GRUPO E INTERAÇÕES HUMANAS COM A MÚSICA",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH04",
+   "nome": "INOVAÇÃO TECNOLÓGICA E FINANCIAMENTO",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELH05",
+   "nome": "NOÇÕES JURÍDICAS PARA EMPREENDEDORES",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTC1",
+   "nome": "METODOLOGIA DA PESQUISA CIENTÍFICA E TECNOLÓGICA",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7AA",
+   "nome": "DANÇA E TECNOLOGIA",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE75D",
+   "nome": "GESTÃO ESTRATÉGICA",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7A1",
+   "nome": "FUNDAMENTOS DE ADMINISTRAÇÃO",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7AA",
+   "nome": "GESTÃO DO CONHECIMENTO",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7E5",
+   "nome": "FUNDAMENTOS DE ENGENHARIA ECONÔMICA E ANÁLISE DE VIABILIDADE",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7F1",
+   "nome": "FUNDAMENTOS DE FINANÇAS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GEE7F2",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7G1",
+   "nome": "FUNDAMENTOS DE GESTÃO DE PESSOAS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G5",
+   "nome": "FUNDAMENTOS DE GESTÃO DE PROJETO",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7M1",
+   "nome": "FUNDAMENTOS DE MARKETING",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LEM7SM",
+   "nome": "SUSTENTABILIDADE E MEIO AMBIENTE: ESTUDO DE NARRATIVAS AMBIENTAIS",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AS",
+   "nome": "Tópicos em Humanidades 1",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AT",
+   "nome": "Tópicos em Humanidades 2",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AU",
+   "nome": "Tópicos em Humanidades 3",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QBI7CA",
+   "nome": "CIÊNCIAS DO AMBIENTE",
+   "periodo": 4,
+   "conjunto": 1222,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELE13",
+   "nome": "REDES",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELE21",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELF74",
+   "nome": "SISTEMAS EMBARCADOS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN76B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSW41",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW32",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELF75",
+   "nome": "MODELAGEM E SIMULAÇÃO",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN77A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT7EF",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AA",
+   "nome": "DESENHO ELETRÔNICO",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN72A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELB23",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF20",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AB",
+   "nome": "ENGENHARIA DE SISTEMAS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELN74B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEW40",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTE1",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AC",
+   "nome": "REDES INDUSTRIAIS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELN75B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT85C",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AD",
+   "nome": "SISTEMAS DE SUPERVISÃO",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELN77B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT77J",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT86C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AE",
+   "nome": "CONTROLE DE PROCESSOS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELN77A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AF",
+   "nome": "ELETRÔNICA DE POTÊNCIA B",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN77C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AG",
+   "nome": "Tópicos em Eletrônica",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AH",
+   "nome": "Tópicos em Eletrônica",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AI",
+   "nome": "Tópicos em Eletrônica",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AJ",
+   "nome": "Tópicos em Eletrônica",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AK",
+   "nome": "Eletrônica de Potência",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN77C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AL",
+   "nome": "Internet das Coisas",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELN75B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AM",
+   "nome": "Desenvolvimento de Projetos Eletrônicos",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN72A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AN",
+   "nome": "Robótica Aplicada",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 75,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELN78A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELEW41",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AO",
+   "nome": "Linux Básico",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN8CA",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTA2",
+   "nome": "BIOENGENHARIA",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN76A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD1",
+   "nome": "INTRODUÇÃO À MODELAGEM E APRENDIZADO",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD2",
+   "nome": "PROCESSAMENTO DE IMAGENS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "CSV30",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTD4",
+   "nome": "RECONHECIMENTO DE PADRÕES E APRENDIZADO DE MÁQUINA",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELTD1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD6",
+   "nome": "FUNDAMENTOS MATEMÁTICOS PARA SINAIS, IMAGENS E PADRÕES",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70A",
+    "MAT7AL"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTD7",
+   "nome": "INTRODUÇÃO AO APRENDIZADO DE MÁQUINA",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELTD6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE10",
+   "nome": "IDENTIFICAÇÃO DE SISTEMAS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN78A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE13",
+   "nome": "VEÍCULOS ELÉTRICOS",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN77C",
+    "ELN78C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE2",
+   "nome": "PROGRAMAÇÃO MATEMÁTICA",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "CSD41",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELTE6",
+   "nome": "ENERGIA FOTOVOLTAICA",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE8",
+   "nome": "SISTEMAS NÃO LINEARES",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN78A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELTE9",
+   "nome": "CONTROLE AUTOMÁTICO",
+   "periodo": 6,
+   "conjunto": 1120,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELN78A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC78B",
+   "nome": "ENGENHARIA ECONÔMICA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AA",
+   "nome": "PRINCÍPIOS DE MECÂNICA RACIONAL",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC74A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "FIS76B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC7AC",
+   "nome": "MANUFATURA ADITIVA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC72A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AD",
+   "nome": "SOLDAGEM",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC72B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MEC75D",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC7AE",
+   "nome": "MECANISMOS",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC74A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MEC76F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC7AF",
+   "nome": "PROGRAMAÇÃO DE ROBÔS",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN77B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AG",
+   "nome": "CONTROLE ESTATÍSTICO DE PROCESSO",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "EST70A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AH",
+   "nome": "SIMULAÇÃO",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC76D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AI",
+   "nome": "TECNOLOGIA ASSISTIVA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC75B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AJ",
+   "nome": "MANUFATURA AVANÇADA E INDÚSTRIA 4.0",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC76D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AK",
+   "nome": "FUNDIÇÃO E CONFORMAÇÃO PLÁSTICA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC72B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MEC74C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC74D",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MEC7AL",
+   "nome": "Tópicos em Mecânica 1",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AM",
+   "nome": "Tópicos em Mecânica 2",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AN",
+   "nome": "Tópicos em Mecânica 3",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AO",
+   "nome": "Tópicos em Mecânica 4",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AP",
+   "nome": "Programação de Robôs",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELN77B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AQ",
+   "nome": "Manufatura Avançada e Indústria 4.0",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC76D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7AR",
+   "nome": "Simulação",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MEC76D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7CO",
+   "nome": "PRODUÇÃO ENXUTA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC76D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7EE",
+   "nome": "GESTÃO DE CARREIRA",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MEC7GF",
+   "nome": "SIMULAÇÃO DE PROJETOS MECÂNICOS",
+   "periodo": 6,
+   "conjunto": 1121,
+   "modelo": "Optativa",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MEC76A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ARQ7DH",
+   "nome": "DESIGN THINKING PARA INOVAÇÃO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ARQ7EC",
+   "nome": "PRÁTICAS DE EXTENSÃO UNIVERSITÁRIA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART01",
+   "nome": "TÓPICOS EM MÚSICA E TECNOLOGIA: HISTÓRIA DO JAZZ",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 30,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART02",
+   "nome": "PRÁTICA MUSICAL E INTERAÇÕES HUMANAS: APRENDIZADO COLETIVO DE VIOLINO, VIOLA ERUDITA, VIOLONCELO E CONTRABAIXO ACÚSTICO 1",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART03",
+   "nome": "PRÁTICA MUSICAL E INTERAÇÕES HUMANAS: APRENDIZADO COLETIVO DE VIOLINO, VIOLA ERUDITA, VIOLONCELO E CONTRABAIXO ACÚSTICO 2",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART04",
+   "nome": "PRÁTICA ARTÍSTICA MUSICAL: GRUPOS INSTRUMENTAIS 1",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART05",
+   "nome": "PRÁTICA ARTÍSTICA MUSIAL: GRUPOS INSTRUMENTAIS 2",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART06",
+   "nome": "PRÁTICA ARTÍSTICA MUSICAL: GRUPOS INSTRUMENTAIS 3",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART07",
+   "nome": "PRÁTICA ARTÍSTICA MUSICAL: GRUPOS INSTRUMENTAIS 4",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART08",
+   "nome": "INTRODUÇÃO NA PRÁTICA DE CANTO, TEORIA E SOLFEJO MUSICAL 1",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART09",
+   "nome": "INTROCUÇÃO NA PRÁTICA DE CANTO, TEORIA E SOLFEJO MUSICAL 2",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART10",
+   "nome": "PRÁTICAS DE VIOLÃO POPULAR E MPB 1",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART11",
+   "nome": "PRÁTICA DE VIOLÃO POPULAR E MPB 2",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART12",
+   "nome": "CANTO CORAL 1",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART13",
+   "nome": "CANTO CORAL 2",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART14",
+   "nome": "CANTO CORAL 3",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART15",
+   "nome": "CANTO CORAL 4",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART16",
+   "nome": "TÉCNICA VOCAL E AFINAÇÃO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART17",
+   "nome": "CANTO, FONÉTICA E FONOLOGIA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART21",
+   "nome": "TÓPICOS EM PENSAMENTO COMPUTACIONAL E MÚSICA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART22",
+   "nome": "COMPUTAÇÃO MUSICAL",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART23",
+   "nome": "CRIATIVIDADE E PROCESSOS CRIATIVOS",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART24",
+   "nome": "TECNOLOGIA DA INFORMAÇÃO E COMUNICAÇÃO NA EDUCAÇÃO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "CAART25",
+   "nome": "PROJETOS STEAM (SCIENCE, TECHNOLOGY, ENGINEERING, ARTS, MATHEMATICS)",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "DIN7HU",
+   "nome": "PROJETOS PARA PESSOAS: LABORATÓRIO DE DESIGN E INOVAÇÃO SOCIAL",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN7AP",
+   "nome": "Práticas de Desenvolvimento para Linux Avançado",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELN7AO"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELN8CC",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AQ",
+   "nome": "Segurança da Informação na Prática",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN8DH",
+     "cht": 120,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AR",
+   "nome": "Gestão de Produtos Digitais",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN8EB",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AS",
+   "nome": "Cabeamento Estruturado na Prática",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 7,
+    "praticas": 0,
+    "total": 7,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 105,
+    "chext": 105,
+    "chead": 0,
+    "total": 105
+   },
+   "prerequisitos": [
+    "ELE13"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELN8DG",
+     "cht": 105,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELN8BD",
+   "nome": "ENGENHARIA DE PROMPT",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 5,
+    "praticas": 0,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 75,
+    "chext": 75,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELN74B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN8CD",
+   "nome": "DESENVOLVIMENTO PARA SISTEMAS GNU/ LINUX",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELN7AO"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN8DI",
+   "nome": "TECHNOLOGICAL CRAFTSMANSHIP WORKS",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 7,
+    "praticas": 0,
+    "total": 7,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 105,
+    "chext": 105,
+    "chead": 0,
+    "total": 105
+   },
+   "prerequisitos": [
+    "Período:4"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN8DJ",
+   "nome": "VISÃO PRÁTICA DA GESTÃO DA SEGURANÇA DA INFORMAÇÃO E SUAS APLICAÇÕES",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 8,
+    "praticas": 0,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 120,
+    "chext": 120,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [
+    "ELE13"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN8DK",
+   "nome": "ESTUDOS DE CASOS E PROJETOS DE CABEAMENTO ESTRUTURADO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 7,
+    "praticas": 0,
+    "total": 7,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 105,
+    "chext": 105,
+    "chead": 0,
+    "total": 105
+   },
+   "prerequisitos": [
+    "ELE13"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELN8EC",
+   "nome": "INTRODUÇÃO À SUSTENTABILIDADE AMBIENTAL",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7AB",
+   "nome": "QUESTÕES CONTEMPORÂNEAS DO CORPO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PC",
+   "nome": "PLANEJAMENTO DE CARREIRA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SF",
+   "nome": "POLÍTICA, INSTITUIÇÕES E CIDADANIA NO PARANÁ",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 60,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XB",
+   "nome": "PRESENÇA AFRICANA NO BRASIL: TECNOLOGIA, TRABALHO E CULTURA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE72H",
+   "nome": "A PRÁTICA DA EXTENSÃO UNIVERSITÁRIA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 30,
+    "chext": 30,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE73C",
+   "nome": "MATEMÁTICA FINANCEIRA",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE76A",
+   "nome": "ELABORAÇÃO E GESTÃO DE PROJETOS",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 45,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LICOM7AA",
+   "nome": "UNICAÇÃO E EDUCAÇÃO",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 90,
+    "chext": 90,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "LICOM7AB",
+   "nome": "UNICAÇÃO, SOCIEDADE E EVENTOS SMART CHALLENGES SMART PROJECTS",
+   "periodo": 2,
+   "conjunto": 1224,
+   "modelo": "Extensão",
+   "aulas_semanais": {
+    "teoricas": 7,
+    "praticas": 0,
+    "total": 7,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 105,
+    "chext": 105,
+    "chead": 0,
+    "total": 105
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ]
+}

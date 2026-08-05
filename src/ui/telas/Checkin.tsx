@@ -68,6 +68,14 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
       disponivel: true,
     },
   ],
+  "eng-mecatronica": [
+    {
+      numero: "973",
+      rotulo: "973 (Vigente)",
+      nota: "Implementada: matriz nova com Ciclo de Humanidades e trilhas formativas de Eletrônica e Mecânica. A oferta de turmas será importada separadamente.",
+      disponivel: true,
+    },
+  ],
 };
 
 interface Props {
@@ -113,7 +121,7 @@ export function TelaCheckin(props: Props) {
     { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
     { id: "eng-eletronica-968", nome: "Engenharia Eletrônica", nomeCurto: "Eng. Eletrônica", disponivel: true },
     { id: "eng-controle", nome: "Engenharia de Controle e Automação", nomeCurto: "Eng. Controle", disponivel: true },
-    { id: "eng-mecatronica", nome: "Engenharia Mecatrônica", nomeCurto: "Eng. Mecatrônica", disponivel: false },
+    { id: "eng-mecatronica", nome: "Engenharia Mecatrônica", nomeCurto: "Eng. Mecatrônica", disponivel: true },
     { id: "design", nome: "Design", nomeCurto: "Design", disponivel: false },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));

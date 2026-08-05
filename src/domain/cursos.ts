@@ -1,6 +1,7 @@
 import type { Matriz, PerfilAluno } from "./tipos";
 import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
 import matriz978Json from "../../data/eng-controle/matriz-978.json";
+import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -270,6 +271,33 @@ export const ENG_CONTROLE_978: DescricaoCurso = {
   hierarquia: hierarquiaDe(matriz978Json.conjuntos),
 };
 
+/**
+ * Engenharia Mecatrônica, matriz 973.
+ *
+ * A grade separa 120h de Humanidades e duas trilhas formativas obrigatórias,
+ * de 120h cada. Como as duas precisam ser cumpridas, elas têm o mesmo contrato
+ * dos grupos obrigatórios da 978: são `gruposOpcao`, não trilhas entre as quais
+ * o aluno escolhe uma. As unidades extensionistas formam uma pool sem exigência
+ * própria; suas horas alimentam a exigência geral de extensão do curso.
+ */
+export const ENG_MECATRONICA_973: DescricaoCurso = {
+  matriz: 973,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [
+    { id: "humanidades", conjunto: 1122, rotulo: "humanidades", rotuloLongo: "Ciclo de Humanidades" },
+  ],
+  estagios: [{ codigo: "ELN70B", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
+  rotuloBlocoTrilhas: "Trilhas Formativas",
+  sufixoTrilha: "",
+  // A pool 1224 cumpre extensão, não as 360h optativas do curso.
+  naoValidaveis: [],
+  trilhas: [],
+  gruposOpcao: [1120, 1121],
+  rotuloOpcoes: "Trilhas Formativas",
+  hierarquia: hierarquiaDe(matriz973Json.conjuntos),
+};
+
 const CURSOS: DescricaoCurso[] = [
   BSI_981,
   BSI_806,
@@ -277,6 +305,7 @@ const CURSOS: DescricaoCurso[] = [
   ENG_COMP_962,
   ENG_ELETRONICA_968,
   ENG_CONTROLE_978,
+  ENG_MECATRONICA_973,
 ];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
