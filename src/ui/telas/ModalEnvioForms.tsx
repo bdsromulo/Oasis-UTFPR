@@ -4,7 +4,7 @@
 // público e abrir o formulário já preenchido. O que a pessoa responde acontece
 // lá — aqui não há envio, nem rascunho, nem estado a guardar.
 import { useEffect, useMemo, useState } from "react";
-import { construirRoster } from "../../domain/reviews/professores";
+import { construirRoster, idDaUnidade } from "../../domain/reviews/professores";
 import { CURSOS } from "../../domain/dadosCurso";
 import { montarUrlDeAvaliacao, type AlvoAvaliacao } from "../../domain/reviews/forms";
 import { Botao } from "../componentes";
@@ -12,6 +12,8 @@ import { IconWarning } from "../icons";
 
 /** Marca a rota "não está na lista" sem se confundir com "ainda não escolhi". */
 const FORA_DO_ELENCO = "__fora__";
+const PROFESSOR_DO_HISTORICO = "__historico__";
+const ROSTER = construirRoster(CURSOS);
 
 /**
  * Uma opção da lista de professores.
@@ -76,12 +78,28 @@ export function ModalEnvioForms(props: {
   const [escolhido, setEscolhido] = useState<string | null>(null);
   const [busca, setBusca] = useState("");
 
+  const elenco = useMemo(() => {
+    if (!alvo) return [];
+    return ROSTER.elencoDaDisciplina(alvo.codigo);
+  }, [alvo]);
+  const idDoHistorico = alvo?.professoresHistorico?.length
+    ? idDaUnidade(alvo.professoresHistorico)
+    : null;
+  const professorDoHistoricoForaDoElenco =
+    !!idDoHistorico && !elenco.some((unidade) => unidade.id === idDoHistorico);
+
   // cada abertura recomeça: manter a escolha anterior faria a disciplina nova
   // herdar um professor que talvez nem esteja no elenco dela
   useEffect(() => {
-    setEscolhido(null);
+    setEscolhido(
+      idDoHistorico && !professorDoHistoricoForaDoElenco
+        ? idDoHistorico
+        : idDoHistorico
+          ? PROFESSOR_DO_HISTORICO
+          : null,
+    );
     setBusca("");
-  }, [alvo?.codigo, alvo?.semestre]);
+  }, [alvo?.codigo, alvo?.semestre, idDoHistorico, professorDoHistoricoForaDoElenco]);
 
   useEffect(() => {
     if (!alvo) return;
@@ -91,11 +109,6 @@ export function ModalEnvioForms(props: {
     window.addEventListener("keydown", aoTeclar);
     return () => window.removeEventListener("keydown", aoTeclar);
   }, [alvo, onFechar]);
-
-  const elenco = useMemo(() => {
-    if (!alvo) return [];
-    return construirRoster(CURSOS).elencoDaDisciplina(alvo.codigo);
-  }, [alvo]);
 
   const filtrado = useMemo(() => {
     const q = busca.trim().toLowerCase();
@@ -108,7 +121,9 @@ export function ModalEnvioForms(props: {
   const professor =
     escolhido === null || escolhido === FORA_DO_ELENCO
       ? null
-      : (elenco.find((u) => u.id === escolhido)?.nome ?? null);
+      : escolhido === PROFESSOR_DO_HISTORICO
+        ? (alvo.professoresHistorico?.join(" / ") ?? null)
+        : (elenco.find((u) => u.id === escolhido)?.nome ?? null);
 
   function abrir() {
     window.open(montarUrlDeAvaliacao(alvo!, autor, professor), "_blank", "noopener");
@@ -147,6 +162,14 @@ export function ModalEnvioForms(props: {
         />
 
         <div className="mt-2 max-h-56 space-y-1.5 overflow-y-auto p-0.5" role="radiogroup">
+          {alvo.professoresHistorico?.length && professorDoHistoricoForaDoElenco && (
+            <OpcaoProfessor
+              rotulo={alvo.professoresHistorico.join(" / ")}
+              auxiliar="Professor identificado no seu histórico"
+              marcada={escolhido === PROFESSOR_DO_HISTORICO}
+              onEscolher={() => setEscolhido(PROFESSOR_DO_HISTORICO)}
+            />
+          )}
           {filtrado.map((u) => (
             <OpcaoProfessor
               key={u.id}

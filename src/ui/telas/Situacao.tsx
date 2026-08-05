@@ -6,10 +6,12 @@ import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
 import { ModalEnvioForms } from "./ModalEnvioForms";
-import { coletaHabilitada, podeSerAvaliada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { coletaHabilitada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { criarAlvoAvaliacao } from "../../domain/reviews/alvos";
 import { reviewsHabilitadasPara } from "../../domain/reviews/config";
 import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { CURSOS } from "../../domain/dadosCurso";
 import type { AcervoReviews } from "../../domain/reviews/tipos";
 import acervoReviews from "../../../data/reviews.json";
 import {
@@ -117,25 +119,19 @@ export function TelaSituacao(props: {
    * Disciplinas do último semestre do histórico — o conjunto que a RF16 convida a
    * avaliar. O semestre vem pronto de `DisciplinaCursada`, sem inferência.
    *
-   * O que entra é decidido por `podeSerAvaliada`, no domínio. Reprovadas já
-   * entraram, sob o argumento de que a opinião de quem reprovou é contexto
-   * legítimo; hoje o escopo exige aprovação.
+   * O que entra é decidido por `criarAlvoAvaliacao`, no domínio: aprovações e
+   * consignações representam conclusão; reprovações continuam fora.
    */
   const doUltimoSemestre = useMemo(() => {
     if (!perfil) return { semestre: null as string | null, itens: [] as AlvoAvaliacao[] };
     const codigosDeEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
-    const avaliaveis = perfil.cursadas.filter((c) => podeSerAvaliada(c, codigosDeEstagio));
+    const avaliaveis = perfil.cursadas
+      .map((c) => criarAlvoAvaliacao(c, matriz, CURSOS, codigosDeEstagio))
+      .filter((alvo): alvo is AlvoAvaliacao => alvo !== null);
     if (!avaliaveis.length) return { semestre: null, itens: [] };
-    const periodo = (c: { ano: number | null; semestre: number | null }) => `${c.ano}/${c.semestre}`;
-    const ultimo = avaliaveis.map(periodo).sort().at(-1)!;
+    const ultimo = avaliaveis.map((alvo) => alvo.semestre).sort().at(-1)!;
     const itens = avaliaveis
-      .filter((c) => periodo(c) === ultimo)
-      .map((c) => ({
-        codigo: c.codigo,
-        nome: matriz.disciplinas.find((d) => d.codigo === c.codigo)?.nome ?? nomeDeEletiva(c.codigo) ?? c.codigo,
-        semestre: ultimo,
-        situacao: "aprovado" as const,
-      }))
+      .filter((alvo) => alvo.semestre === ultimo)
       .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
     return { semestre: ultimo, itens };
   }, [perfil, matriz]);
@@ -618,7 +614,7 @@ export function TelaSituacao(props: {
                       {d.nome}
                     </span>
                   </span>
-                  {jaAvaliadas.has(d.codigo) ? (
+                  {jaAvaliadas.has(d.codigoCanonico) ? (
                     <span
                       title="Você já avaliou esta disciplina. Para mudar, edite sua resposta no formulário."
                       className="shrink-0 cursor-help rounded-lg bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400"

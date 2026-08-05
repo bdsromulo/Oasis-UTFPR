@@ -57,6 +57,8 @@ import {
   type SavefileOasis,
 } from "../domain/savefile";
 
+declare const __OASIS_BETA__: boolean;
+
 export interface SelecaoTurma {
   codDisciplina: string;
   codTurma: string;
@@ -83,7 +85,12 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
 // novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
 // precisar de lógica de comparação de datas.
-const CHAVE_NOVIDADES = "oasis.novidades_lidas.806_savefile_v1";
+// Beta e release vivem no mesmo domínio do GitHub Pages durante a homologação,
+// portanto compartilham localStorage. O sufixo impede que fechar o aviso no
+// sandbox silencie o lançamento oficial depois.
+const CHAVE_NOVIDADES = `oasis.novidades_lidas.806_savefile_reviews_v2.${
+  __OASIS_BETA__ ? "beta" : "release"
+}`;
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -1274,7 +1281,6 @@ export function App() {
         onAvaliar={
           perfil && coletaHabilitada() ? () => setModalAvaliacoesAberto(true) : undefined
         }
-        onAbrirConfiguracoes={() => setModalConfigAberto(true)}
       />
 
       {/* Modal de Configurações Centralizadas (TASK-01) */}

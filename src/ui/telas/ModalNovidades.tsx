@@ -8,9 +8,8 @@ export function ModalNovidades(props: {
   onFechar: () => void;
   onVerAvaliacoes: () => void;
   onAvaliar?: () => void;
-  onAbrirConfiguracoes: () => void;
 }) {
-  const { aberto, onFechar, onVerAvaliacoes, onAvaliar, onAbrirConfiguracoes } = props;
+  const { aberto, onFechar, onVerAvaliacoes, onAvaliar } = props;
 
   useEffect(() => {
     if (!aberto) return;
@@ -53,14 +52,30 @@ export function ModalNovidades(props: {
               </h3>
             </div>
             <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
-              Veja relatos de quem já cursou cada matéria antes de escolher a turma. Nas listas do
-              Planejamento e do Posso Cursar, o botão ao lado de Status abre as avaliações daquele
-              professor e daquela turma.
+              Veja relatos de quem já cursou a matéria antes de escolher a turma. Nas listas do
+              Planejamento, o nome do professor e o botão de avaliações abrem a experiência da
+              comunidade naquela disciplina.
             </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-utfpr-500/50 bg-utfpr-500/10 px-2.5 py-1 text-xs font-bold text-utfpr-700 shadow-2xs dark:border-utfpr-500/40 dark:text-utfpr-300">
+                <span aria-hidden className="text-sm leading-none">★</span>
+                <span>3 avaliações</span>
+              </span>
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                procure por um botão como este ao lado da turma
+              </span>
+            </div>
+            {onAvaliar && (
+              <p className="mt-3 text-[13px] text-zinc-600 dark:text-zinc-300">
+                Para contribuir, use <strong>Avaliar uma disciplina</strong> no topo da página
+                ou no Menu do celular. A lista traz as matérias aprovadas e as concluídas por
+                consignação; reprovações não entram.
+              </p>
+            )}
             <ul className="mt-3 space-y-1.5 text-[13px] text-zinc-600 dark:text-zinc-300">
-              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Quatro notas independentes: personalidade, didática, dificuldade e carga.</li>
+              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Quatro notas independentes: personalidade, didática, dificuldade e carga. Dificuldade alta não significa aula ruim.</li>
               <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Uma avaliação por pessoa em cada disciplina; reenviar atualiza a anterior.</li>
-              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Só quem concluiu a disciplina pode avaliar.</li>
+              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Com poucas respostas, os relatos aparecem sem transformar uma opinião isolada em média.</li>
             </ul>
           </section>
 
@@ -94,10 +109,6 @@ export function ModalNovidades(props: {
 
         <div className="flex flex-wrap justify-end gap-2 border-t border-zinc-200 p-4 dark:border-zinc-800">
           <Botao variante="sutil" onClick={onFechar}>Fechar</Botao>
-          <Botao variante="sutil" onClick={() => { onFechar(); onAbrirConfiguracoes(); }}>
-            <IconDownload className="h-4 w-4 shrink-0" />
-            Savefile
-          </Botao>
           {onAvaliar && (
             <Botao variante="neutro" onClick={() => { onFechar(); onAvaliar(); }}>
               <IconStar className="h-4 w-4 shrink-0" />

@@ -136,9 +136,16 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 ### Em Revisão
 - **TASK-29 — Savefile local, Novidades de lançamento e créditos organizados:**
   - O modal de **Novidades** abre automaticamente uma única vez por navegador após este lançamento, inclusive ao terminar o cadastro com PDF. A leitura só é marcada ao fechar; a chave versionada permite que o próximo lançamento volte a aparecer.
-  - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile, com acesso direto às Configurações.
+  - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile. A seção de avaliações mostra visualmente qual botão procurar no Planejamento; o savefile é explicado sem duplicar o botão das Configurações dentro do modal.
   - Em Configurações, o aluno pode baixar e importar um JSON versionado com o perfil já derivado do parser e as grades/planejamentos montados. O PDF original nunca entra no arquivo nem sai do navegador; a importação valida o formato e pede confirmação antes de substituir os dados locais.
   - Na página Sobre, revisores e outros apoiadores agora aparecem em grupos distintos, ambos em ordem alfabética.
+  - O Como Usar passou a documentar as avaliações, o savefile, as cinco matrizes cobertas e o tratamento de consignações. O Roadmap registra a 968 em 26/07/2026, a 806 em 05/08/2026 e explicita como objetivos as matrizes 978/708 de Controle e Automação e 973/823 de Mecatrônica.
+  - As quatro matrizes ainda não implementadas foram retiradas da raiz do acervo privado e organizadas fora do repositório em uma pasta por curso e matriz, no mesmo padrão dos materiais de referência existentes.
+- **TASK-30 — Avaliações de disciplinas consignadas e identidade entre matrizes:**
+  - A coleta aceita disciplinas `aprovado` e `consignado`; `reprovado`, `dispensado`, `cancelado` e `cursando` continuam fora. ENADE, estágio e atividades complementares permanecem não avaliáveis.
+  - Nas consignações, o parser guarda o código canônico da matriz para progresso/Planejamento e, separadamente, o código original efetivamente cursado para nome, elenco e envio da avaliação.
+  - Quando o histórico imprime docentes, eles são preservados e a tela tenta pré-selecionar a unidade correspondente no roster global. Se a unidade não existir nas ofertas versionadas, o nome lido continua disponível como sugestão explícita, sem inventar correspondência.
+  - Nomes ausentes da matriz do aluno, como a eletiva externa `GE70L`, são resolvidos pelas matrizes e ofertas de todos os cursos. Testes sintéticos e regressão opt-in com a matriz 844 cobrem código original, professor, nome e round-trip para o código canônico do Planejamento.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

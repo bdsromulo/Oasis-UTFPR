@@ -107,17 +107,45 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
-    data: "Em aberto",
-    titulo: "Oásis da grade antiga de BSI e da grade nova de Eletrônica",
+    data: "26 jul 2026",
+    titulo: "Oásis de Engenharia Eletrônica (matriz 968)",
     descricao:
-      "Estender a cobertura para a matriz antiga de Sistemas de Informação (806) e para a matriz nova de Engenharia Eletrônica (968).",
+      "A matriz 968 entra com sua árvore própria de conjuntos, grupos de opção, trilhas de aprofundamento, oferta de turmas e validação contra um histórico real.",
+    estado: "concluido",
+  },
+  {
+    data: "05 ago 2026",
+    titulo: "Oásis da grade antiga de BSI (matriz 806)",
+    descricao:
+      "A matriz 806 passa a ser identificada pelo histórico e usa suas próprias disciplinas, equivalências, categorias e regras de progresso, sem ser confundida com a 981.",
+    estado: "concluido",
+  },
+  {
+    data: "Objetivo",
+    titulo: "Engenharia de Controle e Automação (matriz 978)",
+    descricao:
+      "Criar o Oásis da matriz nova de Engenharia de Controle e Automação a partir da matriz curricular oficial já separada no acervo privado de referência.",
     estado: "aberto",
   },
   {
-    data: "Em aberto",
-    titulo: "Oásis de mais cursos da UTFPR e Sistema de Comunidade",
+    data: "Objetivo",
+    titulo: "Engenharia de Controle e Automação (matriz 708)",
     descricao:
-      "Levar a plataforma aos demais cursos do câmpus e abrir um sistema de comunidade, para que planejar o curso deixe de ser tarefa solitária.",
+      "Cobrir também a matriz antiga do curso, preservando suas equivalências e regras sem reaproveitar automaticamente as da 978.",
+    estado: "aberto",
+  },
+  {
+    data: "Objetivo",
+    titulo: "Engenharia Mecatrônica (matriz 973)",
+    descricao:
+      "Criar o Oásis da matriz nova de Engenharia Mecatrônica com pipeline, descritor de curso e validações próprias.",
+    estado: "aberto",
+  },
+  {
+    data: "Objetivo",
+    titulo: "Engenharia Mecatrônica (matriz 823)",
+    descricao:
+      "Cobrir a matriz antiga de Mecatrônica e cruzar suas equivalências com a 973 sem alterar o dado oficial de nenhuma das duas.",
     estado: "aberto",
   },
 ];
@@ -257,7 +285,8 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <ul className="space-y-2">
                 {[
                   ["Nada é transmitido", "nenhum upload, nenhuma API, nenhum rastreamento."],
-                  ["Fica na sua máquina", "o navegador guarda a sua grade no armazenamento local."],
+                  ["Fica na sua máquina", "o navegador guarda o perfil e a sua grade no armazenamento local."],
+                  ["Você pode transportar", "o savefile leva o perfil já interpretado e as grades para outro navegador, sem incluir o PDF."],
                   ["Você apaga quando quiser", "as Configurações limpam todos os dados salvos de uma vez."],
                   ["Nada pessoal no repositório", "o código é público e guarda apenas matrizes e turmas."],
                 ].map(([titulo, texto]) => (
@@ -271,8 +300,8 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
                 ))}
               </ul>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Nada é sincronizado. Limpar os dados do navegador ou trocar de aparelho
-                também apaga a grade que você montou.
+                Nada é sincronizado automaticamente. Antes de limpar os dados ou trocar de
+                aparelho, baixe o savefile nas Configurações e importe-o no outro navegador.
               </p>
             </div>
           </div>

@@ -7,8 +7,16 @@ import {
   URL_BASE_FORMS,
 } from "../src/domain/reviews/forms";
 import type { DisciplinaCursada } from "../src/domain/tipos";
+import { criarAlvoAvaliacao } from "../src/domain/reviews/alvos";
+import { CURSOS, ENG_COMP } from "../src/domain/dadosCurso";
+import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 
-const alvo = { codigo: "DAINF31", nome: "Estruturas de Dados 1", semestre: "2025/2" };
+const alvo = {
+  codigo: "DAINF31",
+  codigoCanonico: "DAINF31",
+  nome: "Estruturas de Dados 1",
+  semestre: "2025/2",
+};
 
 function cursada(over: Partial<DisciplinaCursada>): DisciplinaCursada {
   return {
@@ -31,8 +39,12 @@ describe("podeSerAvaliada", () => {
     expect(podeSerAvaliada(cursada({ situacao: "reprovado" }))).toBe(false);
   });
 
-  it("recusa quem não chegou a cursar", () => {
-    for (const situacao of ["dispensado", "consignado", "cancelado", "cursando"] as const) {
+  it("aceita consignação, que representa disciplina equivalente cursada", () => {
+    expect(podeSerAvaliada(cursada({ situacao: "consignado" }))).toBe(true);
+  });
+
+  it("recusa quem não concluiu uma disciplina com professor", () => {
+    for (const situacao of ["dispensado", "cancelado", "cursando"] as const) {
       expect(podeSerAvaliada(cursada({ situacao })), situacao).toBe(false);
     }
   });
@@ -73,6 +85,49 @@ describe("podeSerAvaliada", () => {
 
   it("continua aceitando disciplina comum", () => {
     expect(podeSerAvaliada(cursada({ codigo: "CSF13", nome: "Fundamentos De Programação 1" }))).toBe(true);
+  });
+});
+
+describe("alvo de avaliação", () => {
+  it("usa o código original da consignação sem perder o cruzamento com a matriz", () => {
+    const alvoConsignado = criarAlvoAvaliacao(
+      cursada({
+        codigo: "CSA30",
+        codigoOriginal: "ICSA30",
+        situacao: "consignado",
+        professores: ["Docente Fictício"],
+      }),
+      ENG_COMP.matriz,
+      CURSOS,
+    );
+
+    expect(alvoConsignado).toMatchObject({
+      codigo: "ICSA30",
+      codigoCanonico: "CSA30",
+      professoresHistorico: ["Docente Fictício"],
+    });
+    expect(alvoConsignado?.nome).not.toBe("ICSA30");
+    expect(criarMapaIdentidade(ENG_COMP.matriz).resolver(alvoConsignado!.codigo)).toBe(
+      alvoConsignado!.codigoCanonico,
+    );
+  });
+
+  it("recupera de uma oferta o nome de eletiva que não pertence à matriz", () => {
+    const alvoEletiva = criarAlvoAvaliacao(
+      cursada({ codigo: "GE70L", origem: "eletiva" }),
+      ENG_COMP.matriz,
+      CURSOS,
+    );
+    expect(alvoEletiva?.nome).toBe("Gestão Da Produção");
+  });
+
+  it("exclui atividades complementares depois de resolver o nome pela matriz", () => {
+    const atividades = criarAlvoAvaliacao(
+      cursada({ codigo: "CSX53", nome: "" }),
+      ENG_COMP.matriz,
+      CURSOS,
+    );
+    expect(atividades).toBeNull();
   });
 });
 

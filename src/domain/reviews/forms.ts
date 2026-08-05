@@ -12,15 +12,19 @@ import type { DisciplinaCursada } from "../tipos";
 
 /** Alvo da avaliação: uma disciplina cursada num semestre específico. */
 export interface AlvoAvaliacao {
+  /** Código da disciplina realmente cursada e enviado ao formulário. */
   codigo: string;
+  /** Código da exigência na matriz do aluno, usado para cruzar Planejamento. */
+  codigoCanonico: string;
   nome: string;
   semestre: string;
+  /** Quando o PDF traz o docente, a tela tenta deixar a unidade pré-selecionada. */
+  professoresHistorico?: string[];
   /**
-   * Contexto de tela, não de envio: a lista marca as reprovadas para a pessoa se
-   * localizar. O formulário não pergunta isso — quem reprovou não tem por que
-   * declarar em público, e perguntar convidaria à omissão.
+   * Contexto de tela, não de envio. Permite explicar quando a conclusão veio de
+   * consignação; o formulário recebe a disciplina realmente cursada.
    */
-  situacao?: "aprovado" | "reprovado";
+  situacao?: "aprovado" | "consignado";
 }
 
 /**
@@ -76,16 +80,19 @@ const NAO_AVALIAVEIS = [
 ];
 
 /**
- * Quem pode ser avaliada: aprovação no histórico, com o período conhecido, e
+ * Quem pode ser avaliada: aprovação ou consignação no histórico, com o período
+ * conhecido, e
  * desde que seja de fato uma disciplina com aula.
  *
  * A reprovação já esteve dentro do escopo, sob o argumento de que a opinião de
  * quem reprovou é contexto legítimo. Ficou de fora por decisão do projeto: a
  * avaliação passa a exigir ter concluído a disciplina.
  *
- * Dispensa, consignação e cancelamento nunca entraram, por outro motivo — nesses
- * casos a pessoa não assistiu à disciplina com aquele professor, então não tem o
- * que relatar.
+ * A consignação entra porque, nas matrizes antigas, ela é justamente o registro
+ * de que a pessoa cursou uma disciplina equivalente sob outro código. O parser
+ * preserva esse código original e, quando presente, o professor impresso no PDF.
+ * Dispensa e cancelamento continuam fora porque não comprovam uma disciplina
+ * concluída com aquele professor.
  *
  * `ano` e `semestre` são exigidos porque o formulário grava o período, e a
  * ingestão recusa semestre fora do formato AAAA/S.
@@ -100,7 +107,7 @@ export function podeSerAvaliada(
   c: DisciplinaCursada,
   codigosDeEstagio: readonly string[] = [],
 ): boolean {
-  if (c.situacao !== "aprovado" || !c.ano || !c.semestre) return false;
+  if ((c.situacao !== "aprovado" && c.situacao !== "consignado") || !c.ano || !c.semestre) return false;
   if (codigosDeEstagio.includes(c.codigo)) return false;
   if (/^ENADE/i.test(c.codigo)) return false;
   return !NAO_AVALIAVEIS.some((re) => re.test(c.nome ?? ""));

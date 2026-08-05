@@ -6,11 +6,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Botao } from "../componentes";
 import { ModalEnvioForms } from "./ModalEnvioForms";
-import { podeSerAvaliada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import type { AlvoAvaliacao } from "../../domain/reviews/forms";
+import { criarAlvoAvaliacao } from "../../domain/reviews/alvos";
 import { descricaoDoCurso } from "../../domain/cursos";
-import { nomeDeEletiva } from "../../domain/eletivas";
 import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { CURSOS } from "../../domain/dadosCurso";
 import type { AcervoReviews } from "../../domain/reviews/tipos";
 import acervoReviews from "../../../data/reviews.json";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
@@ -51,20 +52,17 @@ export function ModalMinhasAvaliacoes(props: {
     return () => window.removeEventListener("keydown", aoTeclar);
   }, [aberto, avaliando, onFechar]);
 
-  /** Concluídas agrupadas por semestre, do mais recente para o mais antigo. */
+  /** Aprovadas e consignadas, agrupadas por semestre do mais recente ao mais antigo. */
   const porSemestre = useMemo(() => {
     if (!perfil) return [];
     const codigosDeEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
-    const avaliaveis = perfil.cursadas.filter((c) => podeSerAvaliada(c, codigosDeEstagio));
+    const avaliaveis = perfil.cursadas
+      .map((c) => criarAlvoAvaliacao(c, matriz, CURSOS, codigosDeEstagio))
+      .filter((alvo): alvo is AlvoAvaliacao => alvo !== null);
     const mapa = new Map<string, AlvoAvaliacao[]>();
-    for (const c of avaliaveis) {
-      const sem = `${c.ano}/${c.semestre}`;
-      const nome =
-        matriz.disciplinas.find((d) => d.codigo === c.codigo)?.nome ??
-        nomeDeEletiva(c.codigo) ??
-        c.codigo;
-      if (!mapa.has(sem)) mapa.set(sem, []);
-      mapa.get(sem)!.push({ codigo: c.codigo, nome, semestre: sem, situacao: "aprovado" });
+    for (const alvo of avaliaveis) {
+      if (!mapa.has(alvo.semestre)) mapa.set(alvo.semestre, []);
+      mapa.get(alvo.semestre)!.push(alvo);
     }
     const termo = busca.trim().toLowerCase();
     return [...mapa]
@@ -163,7 +161,7 @@ export function ModalMinhasAvaliacoes(props: {
                               {d.nome}
                             </span>
                           </span>
-                          {jaAvaliadas.has(d.codigo) ? (
+                          {jaAvaliadas.has(d.codigoCanonico) ? (
                             <span
                               title="Você já avaliou esta disciplina. Para mudar, edite sua resposta no formulário."
                               className="shrink-0 cursor-help rounded-lg bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400"
