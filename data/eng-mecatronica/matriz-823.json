@@ -1,0 +1,3389 @@
+{
+ "matriz": 823,
+ "curso": "ENG MECATRÔNICA (341)",
+ "campus": "Curitiba",
+ "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
+ "cargas": {
+  "obrigatorias": 4066,
+  "optativas": 90,
+  "extensao": 0,
+  "eletiva": 240,
+  "soma": 4396,
+  "soma_sem_ext": 4396,
+  "chext_disc_obrigatorias": null,
+  "chext_disc_optativas": 0,
+  "ch_total_ppc": 4396
+ },
+ "conjuntos": {
+  "932": {
+   "nome": "Ciências Humanas, Sociais E Cidadania",
+   "pai": null,
+   "periodo_inicial": 2,
+   "periodo_final": 3,
+   "ch": 90,
+   "ch_semanal": 3
+  }
+ },
+ "eletiva": {
+  "ch": 240,
+  "periodo_inicial": 8,
+  "periodo_final": 10,
+  "prereq_periodo": 6
+ },
+ "disciplinas": [
+  {
+   "codigo": "CE70B",
+   "nome": "Comunicação Oral E Escrita",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "CE62A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "CE70A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "CE70H",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "COE70A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "LIC70A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL71D",
+   "nome": "Introdução À Engenharia Mecatrônica",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN71A",
+     "cht": 30,
+     "grupo": "66"
+    },
+    {
+     "codigo": "ELN71B",
+     "cht": 45,
+     "grupo": "66"
+    }
+   ]
+  },
+  {
+   "codigo": "EL71E",
+   "nome": "Algoritmos",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB11",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN73B",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ENADEI",
+   "nome": "Ingressante",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Enade Ingressante",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MA71A",
+   "nome": "Cálculo Diferencial E Integral 1",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MAT7C1",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA61A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA71Z",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA71B",
+   "nome": "Geometria Analítica E Álgebra Linear",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MAT7AL",
+     "cht": 60,
+     "grupo": "99"
+    },
+    {
+     "codigo": "MAT7GA",
+     "cht": 60,
+     "grupo": "99"
+    },
+    {
+     "codigo": "MA61B",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA71I",
+     "cht": 45,
+     "grupo": "10"
+    },
+    {
+     "codigo": "MA71Y",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "MA72I",
+     "cht": 60,
+     "grupo": "10"
+    }
+   ]
+  },
+  {
+   "codigo": "ME71G",
+   "nome": "Desenho Técnico",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC71A",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME61J",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME71A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "QB70D",
+   "nome": "Química",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QBI7QE",
+     "cht": 30,
+     "grupo": "30"
+    },
+    {
+     "codigo": "QBI7QT",
+     "cht": 60,
+     "grupo": "30"
+    },
+    {
+     "codigo": "QB62A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70C",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "QB70I",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL70A",
+   "nome": "Atividades Complementares",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Atividades Complementares",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 180
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL72E",
+   "nome": "Fundamentos De Programação",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 3,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB21",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN74B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL72F",
+   "nome": "Eletricidade",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN72A",
+     "cht": 60,
+     "grupo": "77"
+    },
+    {
+     "codigo": "ELN73A",
+     "cht": 60,
+     "grupo": "77"
+    },
+    {
+     "codigo": "ELP21",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "EL63A",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI71M",
+   "nome": "Física Teórica 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FIS7F1",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI61A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71Z",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA70J",
+   "nome": "Fundamentos De Estatística",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB31",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "EST70A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA70H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA75A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA72A",
+   "nome": "Cálculo Diferencial E Integral 2",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MA62A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA72H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA75D",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME72C",
+   "nome": "Fundamentos De Ciência Dos Materiais",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC72B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME72I",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME72G",
+   "nome": "Desenho De Máquinas 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC73A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME62J",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME73A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "CL70B",
+   "nome": "Francês Para Fins Acadêmicos",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 2,
+    "total": 8,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 120
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ED70G",
+   "nome": "Libras 1",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EDU70J",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ED60F",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ED70T",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ED70H",
+   "nome": "Libras 2",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 4
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ED60G",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ED70U",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70B",
+   "nome": "Psicologia Aplicada Ao Trabalho",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES65A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES72C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7PA",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70C",
+   "nome": "Relações Humanas E Liderança",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES60D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7PB",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70D",
+   "nome": "Meio Ambiente E Sociedade",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "QB70E",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70H",
+   "nome": "Fundamentos Da Ética",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60B",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7FB",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70L",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES72F",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7FA",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70M",
+   "nome": "Tecnologia E Fatores Humanos - Representações",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ED60E",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70N",
+   "nome": "História Da Técnica E Da Tecnologia",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60F",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES70S",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ES81A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7HA",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70Q",
+   "nome": "Sociedade E Política No Brasil",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES60G",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7SD",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70R",
+   "nome": "Tecnologia E Sociedade",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ES61A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ES72B",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FCH7SB",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70T",
+   "nome": "História E Cultura Afro- Brasileira",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FCH7XC",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ES70U",
+   "nome": "Qualidade De Vida",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "Teoria Das Ciências Humanas",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "Metropolização Contemporânea: Tecnologia E Território",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "História Geral Da Economia",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "Tecnologia, Trabalho E Saúde",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "Tecnopolíticas Da Sociedade Contemporânea",
+   "periodo": 2,
+   "conjunto": 932,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL73F",
+   "nome": "Circuitos Elétricos",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN75A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL64F",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI72M",
+   "nome": "Física Teórica 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FIS7F2",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI62A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI64D",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72Z",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA73B",
+   "nome": "Cálculo Diferencial E Integral 3A",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MA73A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA73H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME73C",
+   "nome": "Tratamento E Propriedades Dos Materiais",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC73B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC73D",
+     "cht": 60,
+     "grupo": "30"
+    },
+    {
+     "codigo": "MEC74F",
+     "cht": 60,
+     "grupo": "30"
+    },
+    {
+     "codigo": "ME73I",
+     "cht": 60,
+     "grupo": "11"
+    },
+    {
+     "codigo": "ME74I",
+     "cht": 60,
+     "grupo": "11"
+    }
+   ]
+  },
+  {
+   "codigo": "ME73D",
+   "nome": "Metrologia Mecânica A",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC74B",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME62I",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME72D",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME73E",
+   "nome": "Estática",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC73C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME73H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME73G",
+   "nome": "Desenho De Máquinas 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC72A",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME63J",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME72A",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL74G",
+   "nome": "Eletrônica Aplicada",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 3,
+    "total": 6,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELEE30",
+     "cht": 60,
+     "grupo": "44"
+    },
+    {
+     "codigo": "ELEE31",
+     "cht": 60,
+     "grupo": "44"
+    },
+    {
+     "codigo": "ELN74A",
+     "cht": 60,
+     "grupo": "55"
+    },
+    {
+     "codigo": "ELN76A",
+     "cht": 60,
+     "grupo": "55"
+    },
+    {
+     "codigo": "ET74C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL74H",
+   "nome": "Desenho Eletrônico",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEF21",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELB23",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEF20",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN7AA",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FI72N",
+   "nome": "Física Experimental 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FIS7E1",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI61A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI62A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI71Y",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72A",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "FI72B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MA74C",
+   "nome": "Cálculo 4 B",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MAT7FZ",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MA64A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME74C",
+   "nome": "Conformação E Fundição",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC7AK",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC74C",
+     "cht": 30,
+     "grupo": "31"
+    },
+    {
+     "codigo": "MEC74D",
+     "cht": 30,
+     "grupo": "31"
+    },
+    {
+     "codigo": "ME75F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME74D",
+   "nome": "Fenômenos De Transporte A",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELB53",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEY42",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT74A",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC74E",
+     "cht": 60,
+     "grupo": "32"
+    },
+    {
+     "codigo": "MEC75A",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC75G",
+     "cht": 60,
+     "grupo": "32"
+    },
+    {
+     "codigo": "ME74G",
+     "cht": 60,
+     "grupo": "12"
+    },
+    {
+     "codigo": "ME74J",
+     "cht": 60,
+     "grupo": "12"
+    }
+   ]
+  },
+  {
+   "codigo": "ME74E",
+   "nome": "Dinâmica",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC74A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME74H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME74F",
+   "nome": "Mecânica Dos Sólidos 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC76A",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ME64D",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ME75H",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL75F",
+   "nome": "Circuitos Digitais",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 6,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEB31",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEB30",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF41",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN75B",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT72B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT82F",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW41",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "EL65A",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL75G",
+   "nome": "Instrumentação Industrial",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN75C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP63",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT75H",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT85E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL75H",
+   "nome": "Engenharia De Sistemas",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELEW40",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN7AB",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTE1",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME75A",
+   "nome": "Metodologia De Projetos",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC75B",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78G",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME67J",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME77I",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME75B",
+   "nome": "Processos De Soldagem",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC7AD",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC75D",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME76I",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME75C",
+   "nome": "Usinagem",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC75E",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC76B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME76F",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME75D",
+   "nome": "Pneumática E Hidráulica",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC76C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME77E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME75E",
+   "nome": "Mecanismos",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC7AE",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC76F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME66C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME76A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL76A",
+   "nome": "Controle 1",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "EEC21",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEC20",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF62",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT76A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW62",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL66F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET76H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL76B",
+   "nome": "Controle E Eventos Discretos",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELF81",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN77B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT77D",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT84B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW81",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL6AF",
+     "cht": 72,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL76F",
+   "nome": "Sistemas Microcontrolados A",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "CSW40",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELEW31",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELF52",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN76B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT73A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT83B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW52",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL76G",
+   "nome": "Eletrônica De Potência",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 2,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELF84",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN77C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT75E",
+     "cht": 90,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW84",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ET76C",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL76H",
+   "nome": "Máquinas Elétricas",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN78C",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ELP62",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT84D",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "ET75G",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GE70U",
+   "nome": "Gestão De Recursos Financeiros",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GEE7F1",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "GE70H",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78B",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME78J",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME76D",
+   "nome": "Elementos De Máquinas",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME78H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME76E",
+   "nome": "Princípios De Mecânica Racional",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "FIS76B",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "FI76L",
+     "cht": 75,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC7AA",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL70B",
+   "nome": "Estágio Curricular Obrigatório",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 400
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "EL77A",
+   "nome": "Controle 2",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELF72",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN78A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT77A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELW72",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL67F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET77H",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL77D",
+   "nome": "Redes Industriais",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN7AC",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT85C",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ET77A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL77E",
+   "nome": "Sistemas De Supervisão",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN7AD",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT77J",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT86C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ET78F",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL77F",
+   "nome": "Projeto Integrador 1",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN78B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL77G",
+   "nome": "Acionamentos Industriais",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT85D",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME77B",
+   "nome": "Programação De Robôs",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC7AF",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME7BW",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME77C",
+   "nome": "Usinagem Cnc",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC77B",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME65J",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME77F",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME77D",
+   "nome": "Gestão Da Produção",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 36
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "GE70L",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GE70X",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC76D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME79J",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL78D",
+   "nome": "Controle De Processos",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 3,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN7AE",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL78G",
+   "nome": "Metodologia Da Pesquisa",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN78D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELTC1",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "EL84H",
+     "cht": 35,
+     "grupo": null
+    },
+    {
+     "codigo": "ME66J",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GE70T",
+   "nome": "Empreendedorismo",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN78E",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELN8DD",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ELO92",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "EL8AA",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7E1",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME78I",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME78B",
+   "nome": "Manufatura Integrada",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 3,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC78A",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME7BC",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME78C",
+   "nome": "Robótica",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 5,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT7AH",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ET79F",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC79B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME78E",
+   "nome": "Manutenção Industrial A",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT77H",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ELT84F",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC78E",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC79C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME60D",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "ME79H",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME78F",
+   "nome": "Projeto Integrador 2",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC79A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL79D",
+   "nome": "Trabalho De Conclusão De Curso 1",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 38,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN79A",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME79B",
+   "nome": "Qualidade E Meio Ambiente",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 4,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MEC79D",
+     "cht": 30,
+     "grupo": "33"
+    },
+    {
+     "codigo": "MEC79E",
+     "cht": 30,
+     "grupo": "33"
+    },
+    {
+     "codigo": "ME68C",
+     "cht": 60,
+     "grupo": null
+    },
+    {
+     "codigo": "ME75K",
+     "cht": 30,
+     "grupo": "13"
+    },
+    {
+     "codigo": "ME76K",
+     "cht": 30,
+     "grupo": "13"
+    },
+    {
+     "codigo": "QBI76K",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ME79C",
+   "nome": "Engenharia De Segurança Do Trabalho A",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 2,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ET79H",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC75C",
+     "cht": 30,
+     "grupo": null
+    },
+    {
+     "codigo": "MEC77C",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "ME72B",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EL70D",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Trabalho De Conclusão",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 38,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELN70A",
+     "cht": 15,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ]
+}

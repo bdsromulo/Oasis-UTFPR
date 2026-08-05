@@ -142,11 +142,11 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
-    data: "Objetivo",
+    data: "05 ago 2026",
     titulo: "Engenharia Mecatrônica (matriz 823)",
     descricao:
-      "Cobrir a matriz antiga de Mecatrônica e cruzar suas equivalências com a 973 sem alterar o dado oficial de nenhuma das duas.",
-    estado: "aberto",
+      "A matriz antiga de Mecatrônica entra com Humanidades, eletivas, estágio de 400h e 264 equivalências para cruzar as ofertas atuais sem alterar o dado oficial da 823 ou da 973.",
+    estado: "concluido",
   },
 ];
 

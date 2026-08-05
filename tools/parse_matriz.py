@@ -117,6 +117,32 @@ COLS_973 = [
     ("eq_grupo", 790, 842),
 ]
 
+# A matriz antiga 823 usa o mesmo papel A3, mas com a tabela deslocada ainda
+# mais para a esquerda e uma coluna Disciplina bem mais estreita. A primeira
+# carga semanal fica em x≈287 e a carga total em x≈650. Com o perfil padrão, o
+# primeiro número era descartado, todos os demais escorregavam uma posição e as
+# 87 disciplinas com carga saíam com 0h; partes do nome também caíam em Código.
+COLS_823 = [
+    ("periodo",   30,  64),
+    ("opt",       64,  88),
+    ("codigo",    88, 115),
+    ("nome",     115, 208),
+    ("modelo",   208, 265),
+    ("teoricas", 265, 317),
+    ("praticas", 317, 369),
+    ("total",    369, 425),
+    ("aps",      425, 466),
+    ("apcc",     466, 506),
+    ("ad",       506, 549),
+    ("chext",    549, 590),
+    ("chead",    590, 645),
+    ("ch",       645, 685),
+    ("prereq",   685, 733),
+    ("eq_disc",  733, 767),
+    ("eq_cht",   767, 788),
+    ("eq_grupo", 788, 842),
+]
+
 # Perfil de layout por matriz: âncora de calibração, colunas e a faixa onde vivem
 # os números. A calibração fina por deslocamento continua valendo DENTRO do
 # perfil: ela resolve o mesmo layout impresso com folga diferente, que é o caso
@@ -132,6 +158,7 @@ COLS_973 = [
 PERFIS = {
     "padrao": (102.9, COLS_PADRAO, (310, 645)),
     "806": (95.0, COLS_806, (288, 666)),
+    "823": (88.8, COLS_823, (280, 670)),
     "973": (88.9, COLS_973, (320, 670)),
     # A primeira célula numérica da 978 fica em x≈305. A faixa padrão começava
     # em 310, descartava esse valor e escorregava os nove números uma casa; a
@@ -286,6 +313,12 @@ def parse():
             # fragmentos como "EM", "DE", "DA"), daí a letra única e maiúscula.
             elif cod_toks == ["ENADE"] and re.fullmatch(r"[A-Z]", t):
                 cod_toks.append(t)
+            # Na primeira página da 823 não há espaço entre o sufixo I e o nome
+            # ENADE da coluna seguinte: pdfplumber entrega "IENADE" ainda
+            # ancorado em Código. O I é o sufixo de ingressante; o restante já
+            # pertence ao nome e não pode contaminar o código nem a descrição.
+            elif cod_toks == ["ENADE"] and re.fullmatch(r"[IC]ENADE", t):
+                cod_toks.append(t[0])
             else:
                 nome_extra.append(t)
         if not cod_toks:

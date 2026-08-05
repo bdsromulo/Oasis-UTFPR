@@ -14,6 +14,9 @@ turma de outra disciplina pelo primeiro equivalente com oferta.
 Checagens independentes do parser posicional:
   E1. A fonte lista os equivalentes em ordem alfabética dentro de cada
       disciplina. Sequência fora de ordem = linhas de outra disciplina no bloco.
+      Exceção documentada: a matriz antiga 823 preserva no próprio PDF ordens
+      não alfabéticas (por exemplo MAT7C1, MA61A, MA71Z em MA71A). Nela, E1 não
+      se aplica e o cruzamento exato E2 é obrigatório para validar os blocos.
   E2. Cruzamento com o texto cru do PDF (opcional, exige o PDF oficial): o
       conjunto (código, CHT) declarado no JSON tem que bater exatamente com o
       que aparece entre a linha da disciplina e a da próxima no PDF.
@@ -32,12 +35,16 @@ M = json.load(open(MATRIZ, encoding="utf-8"))
 ds = M["disciplinas"]
 erros, avisos = [], []
 
-# E1: ordem alfabética dos equivalentes dentro da disciplina
-for d in ds:
-    codigos = [e["codigo"] for e in d["equivalentes"]]
-    if codigos != sorted(codigos):
-        erros.append(f"E1 {d['codigo']} ({d['nome']}): equivalentes fora de ordem "
-                     f"{codigos} — provável sobra de outra disciplina no bloco")
+# E1: ordem alfabética dos equivalentes dentro da disciplina. A fonte 823 é a
+# exceção conhecida e só pode ser validada com E2 contra o PDF recebido.
+if M.get("matriz") == 823 and not PDF:
+    erros.append("E1 matriz 823 exige o PDF oficial para validar equivalências via E2")
+elif M.get("matriz") != 823:
+    for d in ds:
+        codigos = [e["codigo"] for e in d["equivalentes"]]
+        if codigos != sorted(codigos):
+            erros.append(f"E1 {d['codigo']} ({d['nome']}): equivalentes fora de ordem "
+                         f"{codigos} — provável sobra de outra disciplina no bloco")
 
 # E3: sem repetição interna
 for d in ds:

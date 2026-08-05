@@ -16,7 +16,7 @@
  * aluno de Eng. Eletrônica passa a ler o que alunos de BSI escreveram sobre o
  * docente que os dois têm, sem que ninguém precise escrever nada de novo.
  */
-export const MATRIZES_COM_REVIEWS: number[] = [981, 806, 844, 962, 968, 973, 978];
+export const MATRIZES_COM_REVIEWS: number[] = [981, 806, 823, 844, 962, 968, 973, 978];
 
 /** A interface de avaliações aparece para esta matriz? */
 export function reviewsHabilitadasPara(matriz: number | null | undefined): boolean {

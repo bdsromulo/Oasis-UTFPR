@@ -75,6 +75,12 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
       nota: "Implementada: matriz nova com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica e ofertas próprias de 2025.2 a 2026.2.",
       disponivel: true,
     },
+    {
+      numero: "823",
+      rotulo: "823 (Antiga)",
+      nota: "Implementada: 4.066h obrigatórias, 90h em Ciências Humanas, 240h eletivas e estágio curricular de 400h.",
+      disponivel: true,
+    },
   ],
 };
 

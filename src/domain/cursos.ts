@@ -2,6 +2,7 @@ import type { Matriz, PerfilAluno } from "./tipos";
 import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
 import matriz978Json from "../../data/eng-controle/matriz-978.json";
 import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
+import matriz823Json from "../../data/eng-mecatronica/matriz-823.json";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -272,6 +273,30 @@ export const ENG_CONTROLE_978: DescricaoCurso = {
 };
 
 /**
+ * Engenharia Mecatrônica, matriz 823.
+ *
+ * A grade antiga não tem trilhas: suas 90h optativas vêm de um único conjunto
+ * de Ciências Humanas, Sociais e Cidadania. As 240h eletivas ficam fora dos
+ * conjuntos, e o estágio obrigatório tem 400h. Declarar `trilhas: []` impede
+ * que o único conjunto seja promovido a trilha pela regra de compatibilidade
+ * usada nas matrizes de BSI e Engenharia de Computação.
+ */
+export const ENG_MECATRONICA_823: DescricaoCurso = {
+  matriz: 823,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [
+    { id: "humanidades", conjunto: 932, rotulo: "humanidades", rotuloLongo: "Ciências Humanas, Sociais e Cidadania" },
+  ],
+  estagios: [{ codigo: "EL70B", rotulo: "Estágio Curricular Obrigatório", ch: 400 }],
+  rotuloBlocoTrilhas: "Optativas",
+  sufixoTrilha: "",
+  naoValidaveis: [],
+  trilhas: [],
+  hierarquia: hierarquiaDe(matriz823Json.conjuntos),
+};
+
+/**
  * Engenharia Mecatrônica, matriz 973.
  *
  * A grade separa 60h de Humanidades e duas trilhas formativas obrigatórias,
@@ -305,6 +330,7 @@ const CURSOS: DescricaoCurso[] = [
   ENG_COMP_962,
   ENG_ELETRONICA_968,
   ENG_CONTROLE_978,
+  ENG_MECATRONICA_823,
   ENG_MECATRONICA_973,
 ];
 

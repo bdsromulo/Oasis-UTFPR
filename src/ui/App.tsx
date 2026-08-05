@@ -175,7 +175,7 @@ export function App() {
         if (ativo) setVersaoOfertasMecatronica((versao) => versao + 1);
       })
       .catch(() => {
-        // Uma falha de rede no chunk histórico não derruba a oferta vigente.
+        // Uma falha de rede mantém o placeholder vazio sem derrubar a aplicação.
         // O navegador pode tentar novamente no próximo carregamento da página.
       });
     return () => {

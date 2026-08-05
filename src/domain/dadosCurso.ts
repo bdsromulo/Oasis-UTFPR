@@ -18,7 +18,7 @@ import turmasControle20262 from "../../data/eng-controle/turmas/2026-2.json";
 import turmasControle20261 from "../../data/eng-controle/turmas/2026-1.json";
 import turmasControle20252 from "../../data/eng-controle/turmas/2025-2.json";
 import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
-import turmasMecatronica20262 from "../../data/eng-mecatronica/turmas/2026-2.json";
+import matriz823Json from "../../data/eng-mecatronica/matriz-823.json";
 
 /**
  * Reúne, por curso, a matriz e as ofertas de turma que a interface consome.
@@ -150,25 +150,48 @@ export const ENG_CONTROLE: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
-// Mecatrônica tem oferta própria por semestre. 2026-2 vem do PDF oficial de
-// Turmas Abertas; 2026-1 e 2025-2 vêm dos backups HTML do Grade na Hora e
-// preservam as duas paridades usadas pelo Simulador de Formatura.
+// Mecatrônica tem uma das maiores ofertas do Portal. As três versões entram em
+// um chunk sob demanda logo depois da primeira renderização; este placeholder
+// mantém o contrato síncrono das telas durante os poucos instantes do download.
+const OFERTA_MECATRONICA_CARREGANDO: OfertaSemestre = {
+  curso: "ENG MECATRÔNICA",
+  semestre: "2026-2",
+  fonte: "Turmas de Engenharia Mecatrônica em carregamento",
+  disciplinas: [],
+};
+
 export const ENG_MECATRONICA: DadosCurso = {
   id: "eng-mecatronica-973",
   rotulo: "Engenharia Mecatrônica (973)",
   rotuloCurto: "Eng. Mecatrônica",
   matriz: matriz973Json as unknown as Matriz,
   ofertas: {
-    "2026-2": turmasMecatronica20262 as unknown as OfertaSemestre,
+    "2026-2": OFERTA_MECATRONICA_CARREGANDO,
   },
   semestrePadrao: "2026-2",
   semestresPreMatricula: ["2026-2"],
 };
 
-/** Carrega as ofertas passadas de Mecatrônica sem bloquear o bundle inicial. */
+// As matrizes 823 e 973 pertencem ao mesmo curso e consultam a mesma lista de
+// Turmas Abertas. O casamento dos códigos atuais com a grade antiga acontece
+// pelas 264 equivalências publicadas na própria matriz 823.
+export const ENG_MECATRONICA_823: DadosCurso = {
+  id: "eng-mecatronica-823",
+  rotulo: "Engenharia Mecatrônica (823)",
+  rotuloCurto: "Eng. Mecatrônica (823)",
+  matriz: matriz823Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": OFERTA_MECATRONICA_CARREGANDO,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+/** Carrega as três ofertas de Mecatrônica sem bloquear o bundle inicial. */
 export async function carregarOfertasHistoricasMecatronica(): Promise<void> {
   const { OFERTAS_MECATRONICA_HISTORICAS } = await import("./ofertasMecatronicaHistoricas");
   Object.assign(ENG_MECATRONICA.ofertas, OFERTAS_MECATRONICA_HISTORICAS);
+  Object.assign(ENG_MECATRONICA_823.ofertas, OFERTAS_MECATRONICA_HISTORICAS);
 }
 
 /**
@@ -184,6 +207,7 @@ export const CURSOS = [
   ENG_ELETRONICA,
   ENG_CONTROLE,
   ENG_MECATRONICA,
+  ENG_MECATRONICA_823,
 ];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */

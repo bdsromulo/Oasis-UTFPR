@@ -190,6 +190,12 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - A oferta oficial 2026.2 contém 176 disciplinas, 440 turmas e 1523 horários; os backups do Grade na Hora cobrem 2026.1 e 2025.2. A anomalia publicada de `ME79B S01` sem horário é preservada e documentada como R9.
   - Planejamento, Grade Mágica, Simulador e avaliações da comunidade usam as ofertas próprias de Mecatrônica, sem reutilizar dados de outro curso.
   - Os dois semestres históricos carregam depois da primeira renderização, mantendo 2026.2 no caminho crítico. Validado com 403 testes aprovados, 16 testes opt-in ignorados e bundle inicial de 417,5 KiB gzip, abaixo do limite de 420 KiB.
+- **TASK-40 — Engenharia Mecatrônica (matriz 823 antiga):**
+  - Importada e validada a matriz oficial com 89 componentes, 4066h obrigatórias, 90h de Humanidades, 240h eletivas, estágio obrigatório de 400h e 264 equivalências para códigos posteriores.
+  - O histórico local de referência fecha sem divergências e permanece fora do repositório público; nenhum dado pessoal foi incorporado aos artefatos versionados.
+  - As fontes de Turmas Abertas da pasta 823 são idênticas às da 973, portanto as duas matrizes compartilham exatamente as ofertas de 2026.2, 2026.1 e 2025.2 sem duplicação de dados.
+  - Check-in, Situação, Catálogo, Planejamento, Grade Mágica, Simulador e avaliações reconhecem a matriz antiga e resolvem as turmas atuais pelas equivalências oficiais.
+  - Validada no navegador, com busca por código antigo e atual, além da suíte completa de 412 testes aprovados e bundle inicial de 402,1 KiB gzip.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

@@ -347,7 +347,7 @@ export function TelaComoUsar() {
               O motor compara o que foi extraído com a matriz curricular e as regras do
               PPC do seu curso. Hoje o histórico identifica BSI 981 e 806, Engenharia de
               Computação 844 e 962, Engenharia Eletrônica 968, Engenharia de Controle e
-              Automação 978 e Engenharia Mecatrônica 973, aplicando a regra da matriz correta.
+              Automação 978 e Engenharia Mecatrônica 823 e 973, aplicando a regra da matriz correta.
               Na 978, as 675h optativas
               são cinco trilhas de formação de 135h que precisam ser cumpridas separadamente.
               Desse cruzamento sai tudo o que as telas mostram.
