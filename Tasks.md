@@ -175,6 +175,9 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Grades e tabelas de Gestão da Informação mantêm a densidade necessária, mas passam a anunciar a rolagem horizontal, têm região acessível por teclado e mostram instrução explícita no celular.
   - O pdf.js e seu worker saem do carregamento inicial e só são baixados quando um PDF é escolhido. O bundle inicial caiu de **508,2 KiB para cerca de 400 KiB gzip**; o build agora reprova regressão acima de 420 KiB.
   - Contratos Vitest cobrem carregamento tardio, área segura, alvos de toque e rolagem. A validação visual nos viewports de 320, 360, 390 e 412px confirmou zero overflow global, controle cortado ou alvo visível abaixo de 44px antes da publicação exclusiva no sandbox.
+- **TASK-37 — Classificação curricular no Catálogo e importação direta no Simulador:**
+  - Os cards do Catálogo passam a exibir a categoria curricular da disciplina e, quando aplicável, a trilha específica para a qual suas horas contam, sem repetir a carga horária.
+  - O Simulador de Formatura permite escolher diretamente uma grade A/B/C já montada no Planejamento de Matrícula e usá-la como primeiro semestre da projeção, reaproveitando a mesma ponte já oferecida na tela da grade.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

@@ -16,8 +16,10 @@ import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
   categoriaSimples,
+  ehTrilha,
   ehGrupoOpcao,
   exigeExtensao,
+  grupoOpcaoDe,
 } from "../../domain/cursos";
 
 function normNome(nome: string): string {
@@ -29,6 +31,49 @@ function normNome(nome: string): string {
 }
 
 export type CategoriaCatalogo = "todas" | "obrigatorias" | "segundoEstrato" | "humanidades" | "opcoes" | "trilhas" | "eletivas" | "extensao";
+
+const ROTULOS_CLASSIFICACAO: Record<Exclude<CategoriaCatalogo, "todas">, string> = {
+  obrigatorias: "Obrigatória",
+  segundoEstrato: "2º estrato",
+  humanidades: "Humanidades",
+  opcoes: "Opção curricular",
+  trilhas: "Trilha",
+  eletivas: "Eletiva",
+  extensao: "Extensão",
+};
+
+/**
+ * Classifica a disciplina sem misturar o tipo curricular com o destino das
+ * horas. Em Controle 978, por exemplo, "Opção curricular" é o tipo e
+ * "Trilha de Ciências Humanas..." é a exigência específica que ela cumpre.
+ */
+export function rotulosClassificacaoCatalogo(
+  matriz: Matriz,
+  disciplina: DisciplinaMatriz,
+  categoria: Exclude<CategoriaCatalogo, "todas">,
+): { categoria: string; trilha: string | null } {
+  const curso = descricaoDoCurso(matriz);
+  let conjunto = disciplina.conjunto;
+
+  const grupoOpcao = grupoOpcaoDe(curso, conjunto);
+  if (grupoOpcao !== null) conjunto = grupoOpcao;
+
+  while (conjunto !== null && !ehTrilha(curso, conjunto)) {
+    const pai = matriz.conjuntos[String(conjunto)]?.pai;
+    if (pai === null || pai === undefined) break;
+    conjunto = Number(pai);
+  }
+
+  const nomeConjunto = conjunto === null ? null : matriz.conjuntos[String(conjunto)]?.nome ?? null;
+  const ehTrilhaNomeada =
+    nomeConjunto !== null &&
+    (categoria === "trilhas" || /^trilha\b/i.test(nomeConjunto));
+
+  return {
+    categoria: ROTULOS_CLASSIFICACAO[categoria],
+    trilha: ehTrilhaNomeada ? nomeConjunto : null,
+  };
+}
 
 export function TelaCatalogo(props: {
   perfil: PerfilAluno | null;
@@ -198,7 +243,7 @@ export function TelaCatalogo(props: {
         dm.equivalentes.some((eq) => codigosOfertados.has(eq.codigo)) ||
         oferta.disciplinas.some((o) => normNome(o.nome) === nomeNorm);
 
-      let cat: CategoriaCatalogo = "eletivas";
+      let cat: Exclude<CategoriaCatalogo, "todas"> = "eletivas";
       if (dm.conjunto === null) {
         cat = "obrigatorias";
       } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
@@ -256,7 +301,7 @@ export function TelaCatalogo(props: {
             origem: c.origem,
           },
           temOferta: false,
-          categoria: "eletivas" as CategoriaCatalogo,
+          categoria: "eletivas" as Exclude<CategoriaCatalogo, "todas">,
         };
       });
 
@@ -624,6 +669,7 @@ export function TelaCatalogo(props: {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {itensOrdenados.map((item) => {
             const { disciplina: d, concluida, cursada, temOferta } = item;
+            const classificacao = rotulosClassificacaoCatalogo(matriz, d, item.categoria);
 
             return (
               <div
@@ -667,6 +713,13 @@ export function TelaCatalogo(props: {
                   <h3 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
                     {d.nome}
                   </h3>
+
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <Badge tom="neutro">{classificacao.categoria}</Badge>
+                    {classificacao.trilha && (
+                      <Badge tom="acento">{classificacao.trilha}</Badge>
+                    )}
+                  </div>
 
                   {/* Detalhes do cumprimento ou pré-requisitos */}
                   <div className="mt-2.5 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">

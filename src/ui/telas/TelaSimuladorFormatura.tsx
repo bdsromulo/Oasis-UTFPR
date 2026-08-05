@@ -98,6 +98,17 @@ function converterParaSelecao(
   return selecao;
 }
 
+export function listarGradesDoPlanejamento(
+  todasCestas: Record<string, Record<string, SelecaoTurma[]>> | undefined,
+  semestre = "2026-2",
+): { semestre: string; grade: string; quantidade: number }[] {
+  const grades = todasCestas?.[semestre] ?? {};
+  return Object.entries(grades)
+    .filter(([, selecao]) => selecao.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([grade, selecao]) => ({ semestre, grade, quantidade: selecao.length }));
+}
+
 const CORES_CATEGORIA: Record<IdCategoria, { chip: string; ponto: string }> = {
   obrigatorias: {
     chip: "bg-utfpr-500/15 text-amber-900 border-utfpr-500/40 dark:text-utfpr-300",
@@ -189,6 +200,7 @@ export function TelaSimuladorFormatura(props: {
   onImportarGrade?: (semestreDestino: string, gradeDestino: string, selecao: SelecaoTurma[]) => void;
   /** grade montada no Planejamento que o motor deve tomar como fato */
   gradeDoPlanejamento?: { semestre: string; grade: string; selecao: SelecaoTurma[] } | null;
+  onUsarGradeDoPlanejamento?: (semestre: string, grade: string) => void;
   onDescartarGradeDoPlanejamento?: () => void;
   /**
    * Ritmo e exclusões vêm controlados pelo pai. A tela troca de aba assim que
@@ -207,6 +219,7 @@ export function TelaSimuladorFormatura(props: {
   const setExclusoes = props.onMudarExclusoes;
   const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
   const [menuImportacaoSemestre, setMenuImportacaoSemestre] = useState<string | null>(null);
+  const [seletorGradePlanejamentoAberto, setSeletorGradePlanejamentoAberto] = useState(false);
   const [explicacaoAberta, setExplicacaoAberta] = useState(false);
   const curso = descricaoDoCurso(matriz);
   const semestresIniciais = useMemo(() => {
@@ -230,6 +243,10 @@ export function TelaSimuladorFormatura(props: {
   }, [props.gradeDoPlanejamento, ofertas, matriz]);
 
   const semestreDePartida = gradeFixada?.semestre ?? semestreInicial;
+
+  const gradesPlanejamentoDisponiveis = useMemo(() => {
+    return listarGradesDoPlanejamento(props.todasCestasPorSemestre);
+  }, [props.todasCestasPorSemestre]);
 
   const [painelExclusoesAberto, setPainelExclusoesAberto] = useState(false);
 
@@ -353,6 +370,60 @@ export function TelaSimuladorFormatura(props: {
             >
               Descartar e projetar do zero
             </button>
+          )}
+        </div>
+      )}
+
+      {!gradeFixada && props.onUsarGradeDoPlanejamento && (
+        <div className="rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="font-display text-sm font-black text-zinc-900 dark:text-zinc-100">
+                Já montou a grade deste semestre?
+              </h3>
+              <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                Importe uma grade pronta do Planejamento para usá-la como ponto de partida da projeção.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSeletorGradePlanejamentoAberto((aberto) => !aberto)}
+              disabled={gradesPlanejamentoDisponiveis.length === 0}
+              className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-utfpr-500/50 bg-utfpr-500/15 px-3.5 py-2 font-display text-xs font-black text-zinc-900 transition-colors hover:bg-utfpr-500/25 disabled:cursor-not-allowed disabled:border-zinc-200 disabled:bg-zinc-100 disabled:text-zinc-400 dark:text-utfpr-300 dark:disabled:border-zinc-700 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-500"
+              title={gradesPlanejamentoDisponiveis.length === 0 ? "Monte uma grade no Planejamento de Matrícula primeiro" : undefined}
+            >
+              <IconDownload className="h-4 w-4 shrink-0" />
+              Importar grade pronta do Planejamento
+            </button>
+          </div>
+
+          {gradesPlanejamentoDisponiveis.length === 0 && (
+            <p className="mt-2 text-[11px] font-semibold text-zinc-400">
+              Nenhuma grade de 2026/2 foi montada ainda.
+            </p>
+          )}
+
+          {seletorGradePlanejamentoAberto && gradesPlanejamentoDisponiveis.length > 0 && (
+            <div className="mt-3 grid gap-2 border-t border-zinc-200/70 pt-3 sm:grid-cols-3 dark:border-zinc-800">
+              {gradesPlanejamentoDisponiveis.map((item) => (
+                <button
+                  key={`${item.semestre}-${item.grade}`}
+                  type="button"
+                  onClick={() => {
+                    props.onUsarGradeDoPlanejamento?.(item.semestre, item.grade);
+                    setSeletorGradePlanejamentoAberto(false);
+                  }}
+                  className="min-h-11 cursor-pointer rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-left transition-colors hover:border-utfpr-500/60 hover:bg-utfpr-500/10 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-utfpr-500/50"
+                >
+                  <span className="block font-display text-sm font-black text-zinc-900 dark:text-white">
+                    Grade {item.grade}
+                  </span>
+                  <span className="mt-1 block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                    {item.quantidade} {item.quantidade === 1 ? "turma selecionada" : "turmas selecionadas"}
+                  </span>
+                </button>
+              ))}
+            </div>
           )}
         </div>
       )}

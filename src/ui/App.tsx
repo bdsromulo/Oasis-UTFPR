@@ -1198,6 +1198,7 @@ export function App() {
                 todasCestasPorSemestre={todasCestasPorSemestre}
                 onImportarGrade={handleImportarGradeDoSimulador}
                 gradeDoPlanejamento={gradeDoPlanejamentoParaSimulador}
+                onUsarGradeDoPlanejamento={handleEnviarGradeParaSimulador}
                 onDescartarGradeDoPlanejamento={handleDescartarGradeDoSimulador}
                 ritmo={ritmoSimulador}
                 onMudarRitmo={setRitmoSimulador}
