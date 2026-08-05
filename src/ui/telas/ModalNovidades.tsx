@@ -39,7 +39,7 @@ export function ModalNovidades(props: {
             Novidades
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-            Avaliações da comunidade, a matriz 806 e um jeito seguro de levar seus dados com você.
+            Avaliações da comunidade, savefile portátil e novos cursos atendidos pelo Oásis.
           </p>
         </div>
 
@@ -89,6 +89,21 @@ export function ModalNovidades(props: {
             <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
               O Oásis agora reconhece também a matriz 806. O histórico identifica a matriz certa e
               aplica as regras curriculares correspondentes, sem confundir seu progresso com a matriz 981.
+            </p>
+          </section>
+
+          <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
+            <div className="flex items-center gap-2">
+              <IconFileText className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
+              <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
+                Engenharia de Controle e Automação — matriz 978
+              </h3>
+            </div>
+            <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
+              O curso passa a funcionar de ponta a ponta: leitura do histórico, situação curricular,
+              catálogo, planejamento, grades e simulador. As cinco trilhas de formação são conferidas
+              separadamente, inclusive as quatro subáreas da trilha de Formação Complementar, e o
+              Planejamento usa as ofertas próprias de 2025/2, 2026/1 e 2026/2.
             </p>
           </section>
 

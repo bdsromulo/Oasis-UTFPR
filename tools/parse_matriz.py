@@ -66,6 +66,32 @@ COLS_806 = [
     ("eq_grupo", 778, 842),
 ]
 
+# A matriz 978 desloca só as colunas textuais da esquerda: código em x≈95,
+# nome em x≈126 e modelo em x≈234. O miolo numérico e as equivalências mantêm
+# as posições do layout padrão. Corrigir tudo com um deslocamento global faria
+# as continuações do nome (também em x≈126) caírem dentro da coluna de código e
+# seriam remontadas fora de ordem, como acontecia em ELT71A.
+COLS_978 = [
+    ("periodo",   30,  69),
+    ("opt",       69,  94),
+    ("codigo",    94, 125),
+    ("nome",     125, 225),
+    ("modelo",   225, 300),
+    ("teoricas", 300, 350),
+    ("praticas", 350, 397),
+    ("total",    397, 440),
+    ("aps",      440, 470),
+    ("apcc",     470, 500),
+    ("ad",       500, 530),
+    ("chext",    530, 565),
+    ("chead",    565, 605),
+    ("ch",       605, 645),
+    ("prereq",   645, 711),
+    ("eq_disc",  711, 761),
+    ("eq_cht",   761, 784),
+    ("eq_grupo", 784, 842),
+]
+
 # Perfil de layout por matriz: âncora de calibração, colunas e a faixa onde vivem
 # os números. A calibração fina por deslocamento continua valendo DENTRO do
 # perfil: ela resolve o mesmo layout impresso com folga diferente, que é o caso
@@ -81,6 +107,10 @@ COLS_806 = [
 PERFIS = {
     "padrao": (102.9, COLS_PADRAO, (310, 645)),
     "806": (95.0, COLS_806, (288, 666)),
+    # A primeira célula numérica da 978 fica em x≈305. A faixa padrão começava
+    # em 310, descartava esse valor e escorregava os nove números uma casa; a
+    # carga horária total de todas as 173 disciplinas virava zero.
+    "978": (95.1, COLS_978, (300, 645)),
 }
 
 COLS = COLS_PADRAO

@@ -114,18 +114,18 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
+    data: "04 ago 2026",
+    titulo: "Oásis de Engenharia de Controle e Automação (matriz 978)",
+    descricao:
+      "A matriz 978 entra com suas cinco trilhas de formação, subáreas, estágio, extensão, ofertas próprias de três semestres e validação contra um histórico real.",
+    estado: "concluido",
+  },
+  {
     data: "05 ago 2026",
     titulo: "Oásis da grade antiga de BSI (matriz 806)",
     descricao:
       "A matriz 806 passa a ser identificada pelo histórico e usa suas próprias disciplinas, equivalências, categorias e regras de progresso, sem ser confundida com a 981.",
     estado: "concluido",
-  },
-  {
-    data: "Objetivo",
-    titulo: "Engenharia de Controle e Automação (matriz 978)",
-    descricao:
-      "Criar o Oásis da matriz nova de Engenharia de Controle e Automação a partir da matriz curricular oficial já separada no acervo privado de referência.",
-    estado: "aberto",
   },
   {
     data: "Objetivo",
@@ -478,10 +478,12 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <strong className="text-zinc-800 dark:text-zinc-200">
                 MatrizEngEletronicaUTFPR
               </strong>
-              , repositório de apoio de Engenharia Eletrônica mantido por{" "}
+              , repositório de apoio às matrizes de Engenharia Eletrônica e de
+              Controle e Automação mantido por{" "}
               <strong className="text-zinc-800 dark:text-zinc-200">Kcaiooooo</strong>,
-              inspirou o Oásis de Eletrônica. Ele serviu de base tanto para organizar o
-              material de apoio quanto para entender as exigências do curso.
+              inspirou os módulos desses dois cursos. Ele serviu de base para organizar o
+              material de apoio e como referência visual independente das estruturas curriculares;
+              os dados servidos pelo Oásis continuam vindo dos documentos oficiais da UTFPR.
             </p>
             <div className="mt-3">
               <LinkSocial

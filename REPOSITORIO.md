@@ -23,7 +23,7 @@ Este documento é o **contrato de trabalho e manual canônico de arquitetura** p
 
 ## 1. O que é o projeto e Metodologia de Desenvolvimento
 
-O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matriz 981)**, à **Engenharia de Computação (matrizes 844 e 962)** e à **Engenharia Eletrônica (matriz 968)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de BSI se aplica a outro curso — na 968, por exemplo, o bloco optativo (2385h) é maior que o obrigatório (1710h), e quase todo o currículo são grupos de escolha, e não trilhas.
+O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matrizes 981 e 806)**, à **Engenharia de Computação (844 e 962)**, à **Engenharia Eletrônica (968)** e à **Engenharia de Controle e Automação (978)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de um curso se aplica a outro — na 968 quase todo o currículo são grupos de escolha, enquanto a 978 exige separadamente 135h em cada uma de cinco trilhas de formação.
 
 ### Metodologia e Escalação de Trabalho
 Atualmente, o projeto adota uma metodologia de **Desenvolvimento Ágil Individual com Vibe Coding / IA Assistida (Antigravity & Claude Code)**. Para garantir escalabilidade e transição suave para **trabalho grupal de mantenedores no futuro**, a documentação é dividida em **três documentos canônicos especializados**:
@@ -55,13 +55,15 @@ oasis-utfpr/
 │       ├── 2026-1.json       # Oferta primária gerada via PDF do Portal do Aluno
 │       └── 2025-2.json       # Oferta secundária (Grade na Hora)
 │   ├── eng-comp/             # Matrizes 844 e 962 e ofertas de Engenharia de Computação
-│   └── eng-eletronica/       # Matriz 968, oferta e o complemento de conjuntos
+│   ├── eng-eletronica/       # Matriz 968, oferta e o complemento de conjuntos
+│   └── eng-controle/          # Matriz 978 e ofertas próprias de Controle e Automação
 ├── tools/                    # Pipeline de extração e validação de dados em Python 3
 │   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-<n>.json
 │   ├── aplicar_anotacoes.py  # Soma a curadoria (anotacoes-981.json) ao parse do PDF
 │   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
 │   ├── validate_matriz_equivalencias.py # Invariantes E1 a E3 das equivalências (qualquer matriz)
 │   ├── validate_matriz_968.py # Invariantes da 968, inclusive a árvore de conjuntos
+│   ├── validate_matriz_978.py # Invariantes da 978 e suas cinco trilhas obrigatórias
 │   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
 │   ├── validate_turmas_estrutura.py # Invariantes independentes da fonte
@@ -151,6 +153,11 @@ python tools/aplicar_anotacoes.py /tmp/base-981.json data/anotacoes-981.json dat
 # que a legenda da matriz não declara — ver o cabeçalho do complemento)
 python tools/parse_matriz.py "materiais-referencia/Eng-Eletronica-968/Matriz Curricular Eng. Eletrônica 968.pdf" data/eng-eletronica/matriz-968.json data/eng-eletronica/conjuntos-968-complemento.json
 python tools/validate_matriz_968.py
+
+# Reimportar e validar a matriz 978 de Controle e Automação. O perfil de colunas
+# é detectado pelo número da matriz; as fontes pessoais permanecem fora do Git.
+python tools/parse_matriz.py "Matriz Curricular Eng. Controle e Automação 978.pdf" data/eng-controle/matriz-978.json
+python tools/validate_matriz_978.py
 ```
 
 ### Hierarquia de conjuntos na matriz
@@ -162,7 +169,9 @@ a única marca de aninhamento na fonte, e o `parse_matriz.py` a converte no camp
 dele. Em Eng. Eletrônica a árvore chega a quatro níveis
 (`1180 → 1226 → 1228 → 1230`). Ao ler um conjunto no domínio, suba a hierarquia
 (`categoriaSimples`, `grupoOpcaoDe`) em vez de comparar o número direto: a
-disciplina aponta para a folha, e quem tem carga a cumprir é o topo.
+disciplina aponta para a folha, e quem tem carga a cumprir é o topo. Na 978 isso
+ocorre em `1146..1149 → 1140`: as subáreas oferecem as disciplinas, mas a carga
+é creditada uma única vez à Trilha de Formação Complementar.
 
 ---
 

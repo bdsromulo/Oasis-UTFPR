@@ -346,8 +346,10 @@ export function TelaComoUsar() {
             <Passo n={4} titulo="O motor cruza com a sua matriz">
               O motor compara o que foi extraído com a matriz curricular e as regras do
               PPC do seu curso. Hoje o histórico identifica BSI 981 e 806, Engenharia de
-              Computação 844 e 962 e Engenharia Eletrônica 968, aplicando a regra da
-              matriz correta. Desse cruzamento sai tudo o que as telas mostram.
+              Computação 844 e 962, Engenharia Eletrônica 968 e Engenharia de Controle e
+              Automação 978, aplicando a regra da matriz correta. Na 978, as 675h optativas
+              são cinco trilhas de formação de 135h que precisam ser cumpridas separadamente.
+              Desse cruzamento sai tudo o que as telas mostram.
             </Passo>
           </ol>
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5">

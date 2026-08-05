@@ -13,6 +13,7 @@ repete quando a turma tem mais de um professor.
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -57,6 +58,15 @@ def main() -> int:
             erro(erros, f"{referencia}: código de disciplina duplicado")
         else:
             codigos_disciplina.add(codigo_disciplina)
+
+        nome_disciplina = str(disciplina.get("nome", "")).strip()
+        if not nome_disciplina:
+            erro(erros, f"{referencia}: nome de disciplina vazio")
+        # Resíduo inequívoco de bloco HTML engolido pelo nome. O backup do GNH
+        # omitia "(N aulas/sem)" em algumas disciplinas e o leitor antigo só
+        # parava no próximo sufixo, anexando botões, turmas e o código seguinte.
+        if "+info" in nome_disciplina or re.search(r"\[[A-Z0-9]{4,7}\]", nome_disciplina):
+            erro(erros, f"{referencia}: nome contém resíduo de outra disciplina")
 
         turmas = disciplina.get("turmas")
         if not isinstance(turmas, list):

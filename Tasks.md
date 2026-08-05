@@ -139,8 +139,8 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile. A seção de avaliações mostra visualmente qual botão procurar no Planejamento; o savefile é explicado sem duplicar o botão das Configurações dentro do modal.
   - Em Configurações, o aluno pode baixar e importar um JSON versionado com o perfil já derivado do parser e as grades/planejamentos montados. O PDF original nunca entra no arquivo nem sai do navegador; a importação valida o formato e pede confirmação antes de substituir os dados locais.
   - Na página Sobre, revisores e outros apoiadores agora aparecem em grupos distintos, ambos em ordem alfabética.
-  - O Como Usar passou a documentar as avaliações, o savefile, as cinco matrizes cobertas e o tratamento de consignações. O Roadmap registra a 968 em 26/07/2026, a 806 em 05/08/2026 e explicita como objetivos as matrizes 978/708 de Controle e Automação e 973/823 de Mecatrônica.
-  - As quatro matrizes ainda não implementadas foram retiradas da raiz do acervo privado e organizadas fora do repositório em uma pasta por curso e matriz, no mesmo padrão dos materiais de referência existentes.
+  - O Como Usar passou a documentar as avaliações, o savefile, as matrizes cobertas e o tratamento de consignações. O Roadmap registra as datas de entrada de cada curso e mantém como objetivos as matrizes 708 de Controle e Automação e 973/823 de Mecatrônica.
+  - As matrizes de expansão foram retiradas da raiz do acervo privado e organizadas fora do repositório em uma pasta por curso e matriz, no mesmo padrão dos materiais de referência existentes.
 - **TASK-30 — Avaliações de disciplinas consignadas e identidade entre matrizes:**
   - A coleta aceita disciplinas `aprovado` e `consignado`; `reprovado`, `dispensado`, `cancelado` e `cursando` continuam fora. ENADE, estágio e atividades complementares permanecem não avaliáveis.
   - Nas consignações, o parser guarda o código canônico da matriz para progresso/Planejamento e, separadamente, o código original efetivamente cursado para nome, elenco e envio da avaliação.
@@ -148,7 +148,7 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Nomes ausentes da matriz do aluno, como a eletiva externa `GE70L`, são resolvidos pelas matrizes e ofertas de todos os cursos. Testes sintéticos e regressão opt-in com a matriz 844 cobrem código original, professor, nome e round-trip para o código canônico do Planejamento.
 - **TASK-31 — Entrada portátil, próximos cursos e identidade pública do site:**
   - O check-in inicial passa a aceitar diretamente um savefile exportado em outro navegador, usando a mesma validação versionada e a mesma confirmação já adotadas nas Configurações.
-  - Controle e Automação, Mecatrônica e Design aparecem no seletor de cursos como objetivos “Em breve”, sem habilitar matrizes ainda não validadas.
+  - Mecatrônica e Design aparecem no seletor como objetivos “Em breve”. Controle e Automação permaneceu bloqueado até a validação da matriz 978 e foi habilitado pela TASK-33.
   - O compartilhamento recebe cartão Open Graph próprio em 1200×630, e a página passa a declarar canonical, identidade `WebSite`, favicon raster estável, sitemap e metadados sociais. No beta, as URLs sociais apontam para o próprio ambiente e o `noindex` permanece ativo.
   - A política de dados no Sobre explicita discretamente que o GoatCounter, open source, contabiliza o uso e é a única integração de telemetria externa; histórico, perfil e grades permanecem fora dessa contagem.
 - **TASK-32 — Eletivas completas na coleta de avaliações:**
@@ -156,6 +156,11 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Um alvo cujo nome não seja confirmado por matriz, oferta, pool ou histórico deixa de exibir o botão Avaliar, impedindo reviews identificadas apenas por código.
   - A tabela de eletivas do Histórico Escolar não contém professor e o pipeline não publica docentes fora do roster. Por isso, uma eletiva só aparece nas avaliações quando existe oferta versionada com docente; `ELN8CB` e `ELN82D` ficam ocultas da coleta até essa fonte existir, em vez de oferecer um botão que produziria resposta eternamente pendente.
   - Na rota geral “professor não está na lista”, a interface passa a exigir o nome completo antes de abrir o formulário e o envia preenchido, sem atribuir ao aluno um docente inventado.
+- **TASK-33 — Engenharia de Controle e Automação (matriz 978):**
+  - Implementada exclusivamente no sandbox com matriz oficial de 173 disciplinas, 3525h obrigatórias, 675h optativas, 420h de extensão, estágio `ELT78C` de 360h e as cinco trilhas de formação de 135h.
+  - A quinta trilha agrega as subáreas 1146–1149: disciplinas de qualquer uma delas creditam o conjunto-pai 1140 sem duplicar a exigência. Situação, Catálogo, Planejamento, Grade Mágica e Simulador usam esse descritor próprio.
+  - Importadas as ofertas de 2025/2, 2026/1 e 2026/2; a vigente tem 147 disciplinas, 410 turmas e 1371 horários. O parser de Turmas Abertas passou a reconhecer o cabeçalho e as colunas próprias do curso. O leitor de backup também passou a aceitar disciplinas sem o sufixo de aulas semanais, evitando anexar turmas e nomes ao bloco anterior.
+  - Check-in, avaliações da comunidade, Como Usar, Novidades e roadmap foram atualizados. Há validador Python específico e regressão Vitest, inclusive auditoria opt-in contra histórico real mantido fora do repositório.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

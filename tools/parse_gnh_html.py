@@ -32,10 +32,16 @@ import sys
 
 SEDES = {0: "Centro", 1: "Ecoville", 2: "Neoville"}
 
+# Alguns backups de Controle e Automação omitem por completo o sufixo
+# "(N aulas/sem)" em disciplinas isoladas. Exigir o sufixo fazia a expressão
+# saltar essa disciplina e consumir seu nome, turmas e horários como continuação
+# da anterior. Primeiro delimitamos cada <span class="disc">; a carga semanal é
+# separada depois e fica 0 somente quando a própria fonte a omitiu.
 RE_DISCIPLINA = re.compile(
-    r'<span class="disc"><code>\[([A-Z0-9]+)\]</code>\s*(.*?)\s*\((\d+)\s*aulas?/sem\)</span>',
+    r'<span class="disc"><code>\[([A-Z0-9]+)\]</code>\s*(.*?)</span>',
     re.S,
 )
+RE_AULAS_SEMANAIS = re.compile(r"\s*\((\d+)\s*aulas?/sem\)\s*$", re.I)
 # Turma e professor: "S73 - Fulano de Tal". O separador e normalizado antes,
 # em corrigir_mojibake(), entao aqui basta aceitar travessao, meia-risca e hifen.
 RE_LABEL = re.compile(r"<label[^>]*>(.*?)</label>", re.S)
@@ -126,7 +132,11 @@ def parse(caminho: str, semestre: str) -> dict:
     marcas = list(RE_DISCIPLINA.finditer(pagina))
     disciplinas = []
     for i, marca in enumerate(marcas):
-        codigo, nome, aulas = marca.group(1), limpar_tags(marca.group(2)), int(marca.group(3))
+        codigo, nome = marca.group(1), limpar_tags(marca.group(2))
+        carga = RE_AULAS_SEMANAIS.search(nome)
+        aulas = int(carga.group(1)) if carga else 0
+        if carga:
+            nome = nome[: carga.start()].strip()
         fim = marcas[i + 1].start() if i + 1 < len(marcas) else len(pagina)
         bloco = pagina[marca.end() : fim]
 

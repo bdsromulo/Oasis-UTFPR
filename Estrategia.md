@@ -10,8 +10,8 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 
 ### Requisitos Funcionais (RF)
 - `[x]` **RF01 — Ingestão de Histórico Escolar em PDF:** Permitir o upload e processamento local de arquivos PDF do Histórico Escolar emitidos pelo Portal do Aluno da UTFPR sem envio para servidores externos.
-- `[x]` **RF02 — Cálculo e Apresentação de Progresso Curricular:** Calcular e exibir as categorias da matriz ativa: estratos, humanidades e extensão na BSI 981; obrigatórias, 270h optativas (duas trilhas completas mais optativas isoladas), eletivas e estágio na Engenharia de Computação 844.
-- `[ ]` **RF02.1 — Engenharia de Computação 962:** A matriz 962 é a próxima expansão planejada. Sua opção pode ser anunciada no seletor, mas permanece indisponível até que dados oficiais, oferta e regras próprias estejam implementados e validados.
+- `[x]` **RF02 — Cálculo e Apresentação de Progresso Curricular:** Calcular e exibir as categorias da matriz ativa para BSI 981/806, Engenharia de Computação 844/962, Engenharia Eletrônica 968 e Engenharia de Controle e Automação 978. Cada descritor preserva estratos, grupos de opção, trilhas, estágio e extensão próprios; na 978, as cinco trilhas de formação são exigências separadas de 135h.
+- `[x]` **RF02.1 — Expansão multicurso validada:** As matrizes 962, 968, 806 e 978 possuem dados oficiais, ofertas, regras próprias e regressões automatizadas, sem reutilizar silenciosamente as categorias da matriz 981.
 - `[x]` **RF03 — Identificação de Disciplinas Elegíveis ("Posso Cursar"):** Cruzar disciplinas aprovadas com os pré-requisitos da matriz e turmas abertas do semestre para listar o que o aluno está liberado a cursar.
 - `[x]` **RF04 — Montagem de Grade Horária e Detecção de Conflitos:** Permitir selecionar turmas e identificar em tempo real choques de horários e conflitos de deslocamento entre sedes (Centro, Ecoville, Neoville) em um mesmo turno.
 - `[x]` **RF05 — Gerador de Relatório de Matrícola:** Copiar lista de códigos de turmas selecionadas formatadas para facilidade de digitação/busca durante a abertura da matrícula no Portal.
@@ -48,7 +48,7 @@ A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônico
 
 ### 2.1 PEN — Planejamento Estratégico de Negócios
 - **1.1 Análise do Cenário Atendido:** O Portal do Aluno da UTFPR apresenta interfaces fragmentadas, relatórios densos em texto (PDFs multicolecionados) e ausência de simulação preditiva de grade que alerte sobre choques de horários e deslocamento inter-sedes em tempo hábil durante o curto período de matrícula.
-- **1.2 Definição de Objetivos:** Reduzir a carga cognitiva e o tempo gasto por estudantes de BSI e Engenharia de Computação na tomada de decisão curricular, respeitando as diferenças entre as matrizes 981 e 844.
+- **1.2 Definição de Objetivos:** Reduzir a carga cognitiva e o tempo gasto pelos estudantes dos cursos atendidos na tomada de decisão curricular, respeitando as diferenças entre as matrizes 981, 806, 844, 962, 968 e 978.
 - **1.3 Definição da Estratégia:** Atuar como camada de inteligência e consolidação visual local sobre os documentos brutos da instituição, democratizando o acesso às regras de progressão sem competir com os sistemas oficiais de registro de notas.
 
 ### 2.2 PETI — Planejamento Estratégico de TI
@@ -63,7 +63,7 @@ A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônico
 
 ### 2.3 Processo de GI — Ciclo de Vida da Informação
 
-O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de BSI ou Engenharia de Computação** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo, futuro) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
+O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de um curso atendido** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
 
 #### 3.1 Determinação das Exigências — *quem precisa de qual informação, e quando*
 
@@ -80,7 +80,7 @@ O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canôn
 
 | Informação exigida | Dado a ser obtido | Fonte do dado |
 | :--- | :--- | :--- |
-| **Matrizes curriculares atendidas (981 e 844)** | Disciplinas, período, conjunto/categoria, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → `data/matriz-981.json` e `data/eng-comp/matriz-844.json` |
+| **Matrizes curriculares atendidas (981, 806, 844, 962, 968 e 978)** | Disciplinas, período, conjunto/categoria, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → JSON canônico em `data/` por curso |
 | **Oferta de turmas do semestre** | Códigos de turma, horários (turno M/T/N + slot), sede/sala, professores e prioridades de curso | PDF oficial de Turmas Abertas — Portal do Aluno → `data/turmas/<sem>.json` e `data/eng-comp/turmas/<sem>.json` |
 | **Progresso individual do aluno** | RA, disciplinas cursadas, notas, frequência, status (aprovado/equivalência/aproveitamento/dependência) e créditos | Histórico Escolar em PDF — **processado 100% no navegador, sem trânsito em rede** |
 | **Avaliação de disciplina pela comunidade** | Nível de dificuldade (1–3), comentário textual, código da disciplina e token de prova de vínculo | Submissão autenticada do Aluno Contribuidor (e-mail institucional + histórico validado localmente) — *futuro, ver §5* |
@@ -89,7 +89,7 @@ O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canôn
 
 | Quem? | Como? |
 | :--- | :--- |
-| **Aluno de BSI** | Abas **Minha Situação** (visão estratégica/longo prazo), **Planejamento de Matrícula** (posso cursar + grade + conflitos) e **Catálogo de Matérias**; tooltips de códigos; relatório copiável para o Portal; simulação gamificada de impulso da grade no progresso |
+| **Aluno de um curso atendido** | Abas **Minha Situação** (visão estratégica/longo prazo), **Planejamento de Matrícula** (posso cursar + grade + conflitos) e **Catálogo de Matérias**; tooltips de códigos; relatório copiável para o Portal; simulação gamificada de impulso da grade no progresso |
 | **Aluno Contribuidor** | Botão **Avaliar** habilitado por disciplina concluída (validada no próprio histórico); painel de dificuldade média e comentários agregados por disciplina — *futuro* |
 | **Mantenedores** | Pipeline de dados versionado (`data/` + validadores Python com erro alto); futuro portal de administração/moderação para homologar ofertas e avaliações sem editar JSON manualmente |
 

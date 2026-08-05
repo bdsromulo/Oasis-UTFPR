@@ -240,6 +240,7 @@ export function TelaSituacao(props: {
     painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
   const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
+  const exibeBlocoTrilhas = painel.blocoOptativo !== null || painel.trilhas.length > 0;
 
   return (
     <div className="space-y-8">
@@ -482,8 +483,10 @@ export function TelaSituacao(props: {
         </Card>
       </section>
 
-      {/* BLOCO ÚNICO DE TRILHAS NO MENU PRINCIPAL (ITEM 4) */}
-      <section>
+      {/* BLOCO ÚNICO DE TRILHAS NO MENU PRINCIPAL (ITEM 4). A 978 distribui
+          suas optativas em cinco grupos obrigatórios, sem agregador nem piso de
+          trilhas validáveis; nesse curso o card correto é o de Opções acima. */}
+      {exibeBlocoTrilhas && <section>
         <Card
           classe="p-6 transition-all hover:border-utfpr-500/40 hover:shadow-md cursor-pointer group bg-gradient-to-r from-white via-white to-utfpr-500/5 dark:from-zinc-900 dark:via-zinc-900 dark:to-utfpr-500/10"
         >
@@ -577,7 +580,7 @@ export function TelaSituacao(props: {
             </div>
           </div>
         </Card>
-      </section>
+      </section>}
 
       {/* por enquanto só a BSI 981 expõe a camada de avaliações (§6.10) */}
       {reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && doUltimoSemestre.itens.length > 0 && (

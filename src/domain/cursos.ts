@@ -1,5 +1,6 @@
 import type { Matriz, PerfilAluno } from "./tipos";
 import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
+import matriz978Json from "../../data/eng-controle/matriz-978.json";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -244,7 +245,39 @@ export const ENG_ELETRONICA_968: DescricaoCurso = {
   hierarquia: hierarquiaDe(matriz968Json.conjuntos),
 };
 
-const CURSOS: DescricaoCurso[] = [BSI_981, BSI_806, ENG_COMP_844, ENG_COMP_962, ENG_ELETRONICA_968];
+/**
+ * Engenharia de Controle e Automação, matriz 978.
+ *
+ * As 675h optativas não formam um bloco de livre distribuição: a matriz exige
+ * 135h em cada uma das cinco trilhas de formação (1136..1140). A 1140 é um
+ * grupo composto por quatro subáreas; a disciplina aponta para a subárea, mas
+ * o crédito precisa subir até a trilha-pai. Esse desenho é o mesmo problema
+ * estrutural dos grupos de escolha da 968, portanto usa `gruposOpcao` em vez de
+ * inventar um agregador inexistente ou dizer que basta escolher N trilhas.
+ */
+export const ENG_CONTROLE_978: DescricaoCurso = {
+  matriz: 978,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [],
+  estagios: [{ codigo: "ELT78C", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
+  rotuloBlocoTrilhas: "Trilhas de Formação",
+  sufixoTrilha: "",
+  naoValidaveis: [],
+  trilhas: [],
+  gruposOpcao: [1136, 1137, 1138, 1139, 1140],
+  rotuloOpcoes: "Trilhas de Formação",
+  hierarquia: hierarquiaDe(matriz978Json.conjuntos),
+};
+
+const CURSOS: DescricaoCurso[] = [
+  BSI_981,
+  BSI_806,
+  ENG_COMP_844,
+  ENG_COMP_962,
+  ENG_ELETRONICA_968,
+  ENG_CONTROLE_978,
+];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
 export function descricaoDoCurso(matriz: Matriz | number): DescricaoCurso {

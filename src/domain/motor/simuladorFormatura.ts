@@ -579,7 +579,10 @@ export function simularFormatura(
       (total, g) => total + (matriz.conjuntos[String(g)]?.ch ?? 0),
       0,
     ),
-    trilhas: matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 345,
+    trilhas:
+      cursoDesc.agregadorTrilhas === null
+        ? 0
+        : matriz.conjuntos[String(cursoDesc.agregadorTrilhas)]?.ch ?? 0,
     eletivas: matriz.cargas.eletiva,
     // 844 declara 0 e some da lista; BSI pede 330h e a 962, 420h
     extensao: matriz.cargas.extensao ?? 0,

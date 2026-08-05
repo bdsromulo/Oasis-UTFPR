@@ -212,7 +212,7 @@ export function calcularResumoProgressoGrade(
   const chExigidaTrilhas =
     (curso.agregadorTrilhas
       ? matriz?.conjuntos?.[String(curso.agregadorTrilhas)]?.ch
-      : undefined) ?? 345;
+      : undefined) ?? (curso.trilhas?.length ? matriz?.cargas?.optativas ?? 0 : 0);
 
   const categoriasMapa: Record<
     string,
@@ -262,6 +262,10 @@ export function calcularResumoProgressoGrade(
       disciplinas: [],
     },
   };
+
+  // A 978 tem cinco grupos obrigatórios que já aparecem individualmente em
+  // `opcoes`; não existe um agregador de trilhas. Evita fabricar um card 0/345h.
+  if (chExigidaTrilhas <= 0) delete categoriasMapa.trilhas_geral;
 
   // Nem todo curso exige eletivas: a 962 declara `cargas.eletiva: 0`, e um
   // padrão fixo faria a tela cobrar horas que o PPC não pede. A matriz é a

@@ -60,6 +60,14 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
       disponivel: true,
     },
   ],
+  "eng-controle": [
+    {
+      numero: "978",
+      rotulo: "978 (Vigente)",
+      nota: "Implementada: 3.525h obrigatórias, 675h em cinco trilhas de formação, 420h de extensão e estágio curricular de 360h.",
+      disponivel: true,
+    },
+  ],
 };
 
 interface Props {
@@ -104,7 +112,7 @@ export function TelaCheckin(props: Props) {
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
     { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
     { id: "eng-eletronica-968", nome: "Engenharia Eletrônica", nomeCurto: "Eng. Eletrônica", disponivel: true },
-    { id: "eng-controle", nome: "Engenharia de Controle e Automação", nomeCurto: "Eng. Controle", disponivel: false },
+    { id: "eng-controle", nome: "Engenharia de Controle e Automação", nomeCurto: "Eng. Controle", disponivel: true },
     { id: "eng-mecatronica", nome: "Engenharia Mecatrônica", nomeCurto: "Eng. Mecatrônica", disponivel: false },
     { id: "design", nome: "Design", nomeCurto: "Design", disponivel: false },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },

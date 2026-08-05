@@ -23,6 +23,8 @@ export interface Matriz {
 
 export interface Conjunto {
   nome: string;
+  /** conjunto-pai quando a legenda oficial declara uma subárea */
+  pai?: string | number | null;
   periodo_inicial: number;
   periodo_final: number;
   ch: number;

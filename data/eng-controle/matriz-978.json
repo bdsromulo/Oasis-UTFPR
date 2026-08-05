@@ -1,0 +1,4320 @@
+{
+ "matriz": 978,
+ "curso": "ENG CONTR/AUTOMAÇÃO (252)",
+ "campus": "Curitiba",
+ "fonte": "Consulta Curso e Matriz Curricular - Portal do Aluno UTFPR",
+ "cargas": {
+  "obrigatorias": 3525,
+  "optativas": 675,
+  "extensao": 420,
+  "eletiva": 0,
+  "soma": 4620,
+  "soma_sem_ext": 4200,
+  "chext_disc_obrigatorias": 420,
+  "chext_disc_optativas": 345,
+  "ch_total_ppc": 4200
+ },
+ "conjuntos": {
+  "1136": {
+   "nome": "Trilha De Ciências Hum Ling Letras Artes",
+   "pai": null,
+   "periodo_inicial": 5,
+   "periodo_final": 7,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1137": {
+   "nome": "Trilha Empregabilidade E Empreendedor",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1138": {
+   "nome": "Trilha De Modelagem E Controle",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1139": {
+   "nome": "Trilha De Automação E Sistemas",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1140": {
+   "nome": "Trilha De Formação Complementar",
+   "pai": null,
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": 9
+  },
+  "1146": {
+   "nome": "Instalações E Eficiência Energética",
+   "pai": "1140",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 134,
+   "ch_semanal": null
+  },
+  "1147": {
+   "nome": "Energia E Sustentabilidade",
+   "pai": "1140",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": null
+  },
+  "1148": {
+   "nome": "Manutenção Industrial",
+   "pai": "1140",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": null
+  },
+  "1149": {
+   "nome": "Projetos Eletrônicos E De Máquinas",
+   "pai": "1140",
+   "periodo_inicial": 8,
+   "periodo_final": 10,
+   "ch": 135,
+   "ch_semanal": null
+  }
+ },
+ "eletiva": null,
+ "disciplinas": [
+  {
+   "codigo": "ELT71A",
+   "nome": "Introdução A Engenharia Elétrica E Controle E Automação",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 3,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 75,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT71B",
+   "nome": "Desenho Elétrico",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT81D",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT71C",
+   "nome": "Laboratórios De Instalações Elétricas",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ENADEI",
+   "nome": "Enade Ingressante",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Enade Ingressante",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "INF71A",
+   "nome": "Computação 1",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7GA",
+   "nome": "Geometria Analítica",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP71A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7PC",
+   "nome": "Pré-Cálculo",
+   "periodo": 1,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT72A",
+   "nome": "Fundamentos De Gestão De Projetos",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "ELT82A",
+     "cht": 45,
+     "grupo": null
+    },
+    {
+     "codigo": "GEE7G5",
+     "cht": 45,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT72B",
+   "nome": "Sistemas Digitais",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT72C",
+   "nome": "Fenômenos Eletromagnéticos",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FIS7F1",
+   "nome": "Física Teórica 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP72C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "INF72A",
+   "nome": "Computação 2",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "INF71A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "Álgebra Linear",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7GA"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7C1",
+   "nome": "Cálculo Diferencial E Integral 1",
+   "periodo": 2,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7PC"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP71B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "COE70A",
+   "nome": "Comunicação Oral E Escrita",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:2"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT73A",
+   "nome": "Sistemas Microcontrolados",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT72B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT73B",
+   "nome": "Análise De Circuitos A",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELT72C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FIS7E1",
+   "nome": "Física Experimental 1",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FIS7F1"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP73B",
+     "cht": 30,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "FIS7F2",
+   "nome": "Física Teórica 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [],
+   "equivalentes": [
+    {
+     "codigo": "MECP73A",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E3",
+   "nome": "Fundamentos De Economia",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:2"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "MAT7C2",
+   "nome": "Cálculo Diferencial E Integral 2",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 6,
+    "praticas": 0,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 90
+   },
+   "prerequisitos": [
+    "MAT7C1",
+    "MAT7GA"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "MECP72B",
+     "cht": 90,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7ED",
+   "nome": "Equações Diferenciais Ordinárias",
+   "periodo": 3,
+   "conjunto": null,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "MAT7AL",
+    "MAT7C1"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74A",
+   "nome": "Fundamentos De Fenômenos De Transporte",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "FIS7F2"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74B",
+   "nome": "Análise De Circuitos B",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 4,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 120
+   },
+   "prerequisitos": [
+    "ELT73B",
+    "MAT7ED"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74C",
+   "nome": "Sinais E Sistemas",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT73B",
+    "MAT7ED"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74D",
+   "nome": "Materiais E Equipamentos Elétricos 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT71B",
+    "ELT71C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74E",
+   "nome": "Amplificadores Operacionais E Semicondutores",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 2,
+    "total": 6,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 120
+   },
+   "prerequisitos": [
+    "ELT73B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT74F",
+   "nome": "Oficina De Integração, Pesquisa E Extensão 1",
+   "periodo": 4,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 120,
+    "chead": 90,
+    "total": 120
+   },
+   "prerequisitos": [
+    "Período:4"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT75A",
+   "nome": "Análise De Sistemas Lineares",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "ELT74C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT75B",
+   "nome": "Elementos De Mecânica",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "FIS7F1",
+    "MAT7GA"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT75C",
+   "nome": "Sistemas Eletromagnéticos",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELT71C"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT83C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT75D",
+   "nome": "Probabilidade E Estatística Aplicada A Engenharia",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "MAT7PC"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT75E",
+   "nome": "Eletrônica De Potência",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELT74B"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELF84",
+     "cht": 75,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT75F",
+   "nome": "Medidas Elétricas",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT74B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT75H",
+   "nome": "Instrumentação Industrial",
+   "periodo": 5,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT74E"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT85E",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "EDU70J",
+   "nome": "Libras",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7AA",
+   "nome": "Dança E Tecnologia",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7AB",
+   "nome": "Questões Contemporâneas Do Corpo",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FA",
+   "nome": "Filosofia Da Ciência E Da Tecnologia",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FB",
+   "nome": "Fundamentos Da Ética",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7FC",
+   "nome": "Teoria Das Ciências Humanas",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7GA",
+   "nome": "Metropolização Contemporânea: Tecnologia E Território",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HA",
+   "nome": "História Da Técnica E Da Tecnologia",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HB",
+   "nome": "História Geral Da Economia",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PA",
+   "nome": "Psicologia Do Trabalho",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PB",
+   "nome": "Relações Interpessoais, Grupo E Poder",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7PC",
+   "nome": "Planejamento De Carreira",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SA",
+   "nome": "Sociologia",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SB",
+   "nome": "Tecnologia E Sociedade",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SC",
+   "nome": "Tecnologia, Trabalho E Saúde",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SD",
+   "nome": "Sociedade E Política No Brasil",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SE",
+   "nome": "Sociedade E Política No Paraná",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7SF",
+   "nome": "Política, Instituições E Cidadania No Paraná",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XA",
+   "nome": "Tecnologia Social E Economia Solidária",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 60,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XB",
+   "nome": "Presença Africana No Brasil: Tecnologia, Trabalho E Cultura",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 45,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XC",
+   "nome": "Presença Africana No Brasil",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XD",
+   "nome": "Direitos Humanos, Segurança E Diversidade",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XE",
+   "nome": "Políticas Públicas",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XF",
+   "nome": "Dimensão Ambiental Na Gestão Urbana",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "FCH7XG",
+   "nome": "Tecnopolíticas Da Sociedade Contemporânea",
+   "periodo": 5,
+   "conjunto": 1136,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:3"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76A",
+   "nome": "Sistemas De Controle Contínuo",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT75A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76C",
+   "nome": "Conversão Eletromecânica De Energia 1",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [
+    "ELT74B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76F",
+   "nome": "Oficina De Integração Pesquisa E Extensão Ii",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 105,
+    "chead": 75,
+    "total": 105
+   },
+   "prerequisitos": [
+    "Período:6"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76G",
+   "nome": "Sistemas Pneumáticos, Eletropneumáticos E Hidráulico",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELT75C"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT84C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT76H",
+   "nome": "Instrumentação Virtual",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "INF72A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77D",
+   "nome": "Controladores Lógicos Programáveis",
+   "periodo": 6,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT75C"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT84B",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT77A",
+   "nome": "Sistemas De Controle Discreto",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT76A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77C",
+   "nome": "Conversão Eletromecânica De Energia 2",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT76C"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77F",
+   "nome": "Segurança E Legislação Profissional",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 1,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 45,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77H",
+   "nome": "Gerência De Manutenção",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELT75D"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77I",
+   "nome": "Iot Industrial",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT76H",
+    "INF72A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77J",
+   "nome": "Controle E Supervisão",
+   "periodo": 7,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT76A"
+   ],
+   "equivalentes": [
+    {
+     "codigo": "ELT86C",
+     "cht": 60,
+     "grupo": null
+    }
+   ]
+  },
+  {
+   "codigo": "ELT78A",
+   "nome": "Metodologia Aplicada Ao Tcc",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT78B",
+   "nome": "Oficina De Integração, Pesquisa E Extensão Iii",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 120,
+    "chead": 90,
+    "total": 120
+   },
+   "prerequisitos": [
+    "Período:8"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT78C",
+   "nome": "Estágio Curricular Obrigatório",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Estágio",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 360
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT78E",
+   "nome": "Atividades Complementares",
+   "periodo": 8,
+   "conjunto": null,
+   "modelo": "Atividades Complementares",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 15
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7GA",
+   "nome": "Decisão Multicritério",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7GB",
+   "nome": "Produção Sustentável",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7GC",
+   "nome": "Analytics Para Operações, Energia E Manutenção",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7A2",
+   "nome": "Fundamentos De Administração",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7E2",
+   "nome": "Fundamentos De Empreendedorismo",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7E6",
+   "nome": "Fundamentos De Engenharia Econômica E Análise De Viabilidade",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7F2",
+   "nome": "Fundamentos De Finanças",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G2",
+   "nome": "Fundamentos De Gestão De Pessoas",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7G4",
+   "nome": "Fundamentos De Gestão Da Produção",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "GEE7M2",
+   "nome": "Fundamentos De Marketing",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Humanistica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "QBI7CA",
+   "nome": "Ciências Do Ambiente",
+   "periodo": 8,
+   "conjunto": 1137,
+   "modelo": "Formação Básica E Científica",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 30
+   },
+   "prerequisitos": [
+    "Período:5"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EA",
+   "nome": "Processamento Digital De Sinais",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EB",
+   "nome": "Redes De Sensores Sem Fio De Longo Alcance",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EC",
+   "nome": "Redes De Sensores Sem Fio Ipv6",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7ED",
+   "nome": "Filtros Estocásticos Aplicados Na Engenharia",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EE",
+   "nome": "Controle Multivariável",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EF",
+   "nome": "Introdução A Identificação De Sistemas",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EG",
+   "nome": "Introdução À Dinâmica E Ao Controle De Atitude",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EH",
+   "nome": "Processos Aleatórios",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EI",
+   "nome": "Tópicos Especiais Em Controle 1",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EJ",
+   "nome": "Tópicos Especiais Em Controle 2",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EK",
+   "nome": "Tópicos Especiais Em Controle 3",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EL",
+   "nome": "Controle Clássico E Preditivo",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EM",
+   "nome": "Controle Ótimo",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 1,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EN",
+   "nome": "Introdução À Lógica Paraconsistente Anotada Aplicada - Lpa2V",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EO",
+   "nome": "Introdução À Otimização Para Engenharia",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7EP",
+   "nome": "Controle De Robôs",
+   "periodo": 8,
+   "conjunto": 1138,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AA",
+   "nome": "Introdução À Inteligência Artificial",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AB",
+   "nome": "Instrumentação Para Medidas Elétricas",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AC",
+   "nome": "Projetos De Quadros Elétricos De Automação",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AD",
+   "nome": "Sensores A Fibra Ótica Para Aplicações Industriais",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AE",
+   "nome": "Métodos De Avaliação E Tomada De Decisão Em Automação Industrial (Indústria 4.0)",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AF",
+   "nome": "Simulação De Sistemas Elétricos Industriais",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AG",
+   "nome": "Sistemas Robóticos 1",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AH",
+   "nome": "Sistemas Robóticos 2",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AI",
+   "nome": "Introdução À Mecatrônica",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AJ",
+   "nome": "Tópicos Avançados Em Automação I",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7AK",
+   "nome": "Sensores Inteligentes",
+   "periodo": 8,
+   "conjunto": 1139,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76B",
+   "nome": "Instalações Elétricas Prediais 1",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 75
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77B",
+   "nome": "Instalações Elétricas Industriais 1",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELT76B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CA",
+   "nome": "Eficiência Energética Em Edificações",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CB",
+   "nome": "Energia Solar Fotovoltaica I",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CC",
+   "nome": "Energia Solar Fotovoltaica Ii",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CD",
+   "nome": "Gerenciamento De Obras Elétricas",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CE",
+   "nome": "Instalações Elétricas Industriais 2",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELT77B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CF",
+   "nome": "Instalações Elétricas Prediais 2",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "ELT76B"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CG",
+   "nome": "Iluminação Elétrica",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7CH",
+   "nome": "Gestão De Energia",
+   "periodo": 8,
+   "conjunto": 1146,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT76E",
+   "nome": "Sistemas Elétricos De Potência 1",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77E",
+   "nome": "Sistemas Elétricos De Potência 2",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 4,
+    "praticas": 0,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "ELT76E"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BA",
+   "nome": "Planejamento Da Operação De Sistemas De Potência",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BB",
+   "nome": "Transitórios Eletromagnéticos Em Sistemas Elétricos De Potência",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BC",
+   "nome": "Análise De Sistemas Elétricos De Potência Assistida Por Computador",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:8"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BD",
+   "nome": "Geração De Energia Elétrica",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BE",
+   "nome": "Proteção De Sistemas De Distribuição De Energia Elétrica",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BF",
+   "nome": "Estudo De Proteção Para Sistemas Elétricos De Potência E Validação Prática",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 4,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 90
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BG",
+   "nome": "Comunicação Em Subestações De Energia",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BH",
+   "nome": "Linhas De Transmissão De Energia Elétrica",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BI",
+   "nome": "Análise De Redes De Distribuição",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BJ",
+   "nome": "Estabilidade Transitória Em Sistemas Elétricos De Potência",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BK",
+   "nome": "Controle De Tensão E Frequência Em Sistemas Elétricos De Potência",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BL",
+   "nome": "Comercialização De Energia Elétrica",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BM",
+   "nome": "Planejamento Energético E Sustentabilidade",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BN",
+   "nome": "Controle De Carga Em Sistemas Elétricos",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 1,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BO",
+   "nome": "Subestações",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 0,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BP",
+   "nome": "Smart Grids - Redes De Distribuição De Energia Inteligentes",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BQ",
+   "nome": "Fundamentos De Energia Eólica. Medições E Teses",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BR",
+   "nome": "Energia Eólica Onshore E Offshore, Projetos E Implantação",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BS",
+   "nome": "Proteção De Sistemas Elétricos De Potência",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7BT",
+   "nome": "Energias Renováveis No Agronegócio",
+   "periodo": 8,
+   "conjunto": 1147,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DA",
+   "nome": "Técnicas Preditivas",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DB",
+   "nome": "Planejamento E Controle Da Manutenção",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DC",
+   "nome": "Otimização Da Confiabilidade De Sistemas",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DD",
+   "nome": "Custo Do Ciclo De Vida De Equipamentos",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DE",
+   "nome": "Engenharia De Manutenção",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DF",
+   "nome": "Confiabilidade, Mantenabilidade E Disponibilidade De Sistemas",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DG",
+   "nome": "Análise E Gerenciamento De Riscos",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DH",
+   "nome": "Manutenção De Sistemas Automatizados",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 2,
+    "praticas": 2,
+    "total": 4,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 75
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DI",
+   "nome": "Técnicas Para Análise De Falhas",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 0,
+    "total": 1,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7DJ",
+   "nome": "Supervisão De Processos",
+   "periodo": 8,
+   "conjunto": 1148,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT77G",
+   "nome": "Noções De Telecomunicações",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FA",
+   "nome": "Inversores E Retificadores Pwm Trifásicos",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FB",
+   "nome": "Elementos De Processamento De Áudio",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FC",
+   "nome": "Tópicos Especiais Em Processamento Eletrônico De Energia Em Fontes Renováveis",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FD",
+   "nome": "Projeto De Retificadores Com Correção De Fator De Potência",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FE",
+   "nome": "Lógica Reconfigurável",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FF",
+   "nome": "Conversores Cc-Ca Pwm",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 3,
+    "praticas": 0,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FG",
+   "nome": "Projeto De Conversores Estáticos Isolados Em Alta Frequência E Fontes Chaveadas",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FH",
+   "nome": "Compatibilidade Eletromagnética",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 1,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FI",
+   "nome": "Tópicos Especiais Em Eletrônica De Potência",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 3,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 15,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FJ",
+   "nome": "Simulação De Dispositivos Eletromagnáticos Por Elementos Finitos",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FK",
+   "nome": "Projeto De Geradores Síncronos",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 1,
+    "praticas": 2,
+    "total": 3,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 45
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FL",
+   "nome": "Estudo De Máquinas Elétricas 1",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT7FM",
+   "nome": "Estudo De Máquinas Elétricas 2",
+   "periodo": 8,
+   "conjunto": 1149,
+   "modelo": "Formação Profissional",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 2,
+    "total": 2,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 30,
+    "total": 60
+   },
+   "prerequisitos": [
+    "Período:7"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ELT79A",
+   "nome": "Trabalho De Conclusão De Curso",
+   "periodo": 9,
+   "conjunto": null,
+   "modelo": "Trabalho De Conclusão",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 5,
+    "total": 5,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 75
+   },
+   "prerequisitos": [
+    "ELT78A"
+   ],
+   "equivalentes": []
+  },
+  {
+   "codigo": "ENADEC",
+   "nome": "Enade Concluinte",
+   "periodo": 10,
+   "conjunto": null,
+   "modelo": "Enade Concluinte",
+   "aulas_semanais": {
+    "teoricas": 0,
+    "praticas": 0,
+    "total": 0,
+    "aps": 0,
+    "apcc": 0
+   },
+   "horas": {
+    "ad": 0,
+    "chext": 0,
+    "chead": 0,
+    "total": 0
+   },
+   "prerequisitos": [],
+   "equivalentes": []
+  }
+ ]
+}

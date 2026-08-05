@@ -39,6 +39,7 @@ export function TelaCatalogo(props: {
 }) {
   const { perfil, matriz, oferta } = props;
   const curso = descricaoDoCurso(matriz);
+  const temBlocoTrilhas = curso.agregadorTrilhas !== null || (curso.trilhas?.length ?? 0) > 0;
   const [categoria, setCategoria] = useState<CategoriaCatalogo>(props.categoriaInicial ?? "todas");
   const [filtroPeriodo, setFiltroPeriodo] = useState<string>("todos");
   const [filtroStatus, setFiltroStatus] = useState<
@@ -357,7 +358,9 @@ export function TelaCatalogo(props: {
     ...(curso.gruposOpcao?.length
       ? [["opcoes", curso.rotuloOpcoes ?? "Opções do Curso"] as [CategoriaCatalogo, string]]
       : []),
-    ["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"],
+    ...(temBlocoTrilhas
+      ? [["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"] as [CategoriaCatalogo, string]]
+      : []),
     ["eletivas", "Eletivas"],
     ...(exigeExtensao(matriz) ? [["extensao", "Extensão"] as [CategoriaCatalogo, string]] : []),
   ];
