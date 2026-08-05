@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oasisutfpr.com.br/sitemap.xml

@@ -70,6 +70,20 @@ const BETA = process.env.OASIS_BETA === "1";
  * resultando numa página em branco sem erro visível.
  */
 const BASE = process.env.OASIS_BASE ?? "/";
+const URL_PUBLICA = BETA
+  ? `https://bdsromulo.github.io${BASE}`
+  : "https://oasisutfpr.com.br/";
+
+/** Resolve URLs absolutas usadas por leitores de Open Graph fora do navegador. */
+function metadadosPublicos(): Plugin {
+  return {
+    name: "oasis-metadados-publicos",
+    apply: "build",
+    transformIndexHtml(html) {
+      return html.replaceAll("__OASIS_URL_PUBLICA__", URL_PUBLICA);
+    },
+  };
+}
 
 /**
  * No beta, pede para os buscadores não indexarem.
@@ -100,7 +114,7 @@ function beta(): Plugin {
 
 export default defineConfig({
   base: BASE,
-  plugins: [react(), tailwindcss(), csp(), beta()],
+  plugins: [react(), tailwindcss(), metadadosPublicos(), csp(), beta()],
   // A interface precisa saber que está no beta para exibir o aviso de ambiente.
   // Constante trocada no build, e não variável de runtime: na produção o valor
   // vira `false` literal e o bloco inteiro sai do bundle.

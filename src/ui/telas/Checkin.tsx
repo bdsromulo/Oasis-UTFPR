@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { SavefileOasis } from "../../domain/savefile";
 import { Card, Botao, Badge } from "../componentes";
 import { ModalComoGerarHistorico } from "./ModalComoGerarHistorico";
 import {
@@ -65,6 +66,8 @@ interface Props {
   carregando: boolean;
   erro: string | null;
   onProcessarArquivo: (arquivo: File, dados?: DadosCheckin) => void;
+  onAnalisarSavefile: (arquivo: File) => Promise<SavefileOasis>;
+  onConfirmarSavefile: (savefile: SavefileOasis) => void;
   onContinuarSemRegistro: (dados: DadosCheckin) => void;
   onAbrirGestaoInformacao: () => void;
 }
@@ -85,6 +88,9 @@ export function TelaCheckin(props: Props) {
   const [openCurso, setOpenCurso] = useState(false);
   const [openMatriz, setOpenMatriz] = useState(false);
   const [comoGerarAberto, setComoGerarAberto] = useState(false);
+  const [savefilePreview, setSavefilePreview] = useState<SavefileOasis | null>(null);
+  const [erroSavefile, setErroSavefile] = useState<string | null>(null);
+  const [processandoSavefile, setProcessandoSavefile] = useState(false);
 
   const listaCampus = [
     { id: "curitiba", nome: "Câmpus Curitiba", disponivel: true },
@@ -98,6 +104,9 @@ export function TelaCheckin(props: Props) {
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
     { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
     { id: "eng-eletronica-968", nome: "Engenharia Eletrônica", nomeCurto: "Eng. Eletrônica", disponivel: true },
+    { id: "eng-controle", nome: "Engenharia de Controle e Automação", nomeCurto: "Eng. Controle", disponivel: false },
+    { id: "eng-mecatronica", nome: "Engenharia Mecatrônica", nomeCurto: "Eng. Mecatrônica", disponivel: false },
+    { id: "design", nome: "Design", nomeCurto: "Design", disponivel: false },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
 
@@ -168,6 +177,85 @@ export function TelaCheckin(props: Props) {
           >
             Não sei gerar meu histórico
           </button>
+
+          <div className="my-4 flex items-center gap-3" aria-hidden="true">
+            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">ou</span>
+            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+          </div>
+
+          <div className="rounded-xl border border-zinc-200/90 bg-white/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+            <p className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              Já tenho um savefile
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              Restaure aqui o perfil, as grades montadas e as preferências levadas de outro navegador.
+            </p>
+            <label className="mt-3 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-utfpr-500/70 px-3.5 py-2 text-xs font-bold text-utfpr-700 transition-colors hover:bg-utfpr-500/10 dark:text-utfpr-400">
+              <IconUpload className="h-4 w-4 shrink-0" />
+              <span>{processandoSavefile ? "Verificando arquivo..." : "Importar savefile"}</span>
+              <input
+                type="file"
+                accept="application/json,.json,.oasis"
+                className="hidden"
+                onChange={async (e) => {
+                  const arquivo = e.target.files?.[0];
+                  e.currentTarget.value = "";
+                  if (!arquivo) return;
+                  setErroSavefile(null);
+                  setProcessandoSavefile(true);
+                  try {
+                    setSavefilePreview(await props.onAnalisarSavefile(arquivo));
+                  } catch (erro) {
+                    setErroSavefile(
+                      erro instanceof Error
+                        ? erro.message
+                        : "Não foi possível ler o savefile.",
+                    );
+                  } finally {
+                    setProcessandoSavefile(false);
+                  }
+                }}
+              />
+            </label>
+
+            {erroSavefile && (
+              <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-600 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400">
+                <IconWarning className="mr-1 inline h-4 w-4 align-[-0.2em]" /> {erroSavefile}
+              </div>
+            )}
+
+            {savefilePreview && (
+              <div className="mt-3 rounded-xl border-2 border-utfpr-500 bg-utfpr-500/10 p-3 text-xs text-zinc-700 dark:text-zinc-200">
+                <p className="font-display font-bold text-zinc-900 dark:text-white">
+                  Confirmar importação
+                </p>
+                <p className="mt-1 leading-relaxed">
+                  {savefilePreview.dados.perfil
+                    ? `Perfil de ${savefilePreview.dados.perfil.nome} e `
+                    : "Sem perfil de histórico e "}
+                  {Object.values(savefilePreview.dados.cestasPorSemestre).reduce(
+                    (total, cestas) => total + Object.keys(cestas).length,
+                    0,
+                  )} grade(s) serão carregados neste navegador.
+                </p>
+                <div className="mt-3 flex flex-wrap justify-end gap-2">
+                  <Botao variante="sutil" onClick={() => setSavefilePreview(null)}>
+                    Cancelar
+                  </Botao>
+                  <Botao
+                    variante="primario"
+                    onClick={() => {
+                      props.onConfirmarSavefile(savefilePreview);
+                      setSavefilePreview(null);
+                    }}
+                  >
+                    Importar dados
+                  </Botao>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </Card>
 

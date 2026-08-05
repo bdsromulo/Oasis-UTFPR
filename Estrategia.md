@@ -27,7 +27,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[/]` **RF15 — Avaliações da Comunidade por Professor e Disciplina:** Permitir que o aluno avalie qualquer disciplina que já **concluiu**, por aprovação ou consignação (fato validado no próprio histórico local), tendo como chave o par **professor + disciplina + semestre cursado**. Reprovações, dispensas, cancelamentos, ENADE, estágio e atividades complementares não entram. Na consignação, o código original cursado identifica a experiência e o código canônico da matriz preserva o cruzamento com o Planejamento. Cada avaliação separa **Personalidade**, **Didática**, **Dificuldade** e **Carga de Trabalho** (1–5) para não tratar dificuldade alta como avaliação negativa. A submissão parte da tela de progresso ou do acionador no menu que lista todas as disciplinas elegíveis. O conjunto moderado é redistribuído publicamente. Ver §6.
 - `[ ]` **RF16 — Convite de Avaliação Pós-Semestre:** Ao acessar a plataforma, o aluno que tiver histórico carregado recebe um convite único por semestre para avaliar as disciplinas cursadas no **último semestre do documento** (derivado de `periodoDocumento`). O convite é dispensável e não bloqueia o uso; o estado de "já respondido" é registrado por semestre, de modo que um novo semestre volta a convidar uma vez.
 - `[ ]` **RF17 — Consulta de Avaliações no Planejamento de Matrícula:** No planejamento de matrícula, o nome do professor associado a uma turma é acionável e abre um painel lateral com as avaliações daquele professor — agregados por classificação, tags mais frequentes e comentários — permitindo decidir a turma com base na experiência da comunidade.
-- `[x]` **RF18 — Savefile Portátil de Perfil e Planejamento:** Permitir baixar e importar, exclusivamente no navegador, um JSON versionado com o perfil já derivado do Histórico Escolar e as grades montadas. O arquivo não contém o PDF original nem realiza transmissão em rede; antes da importação, o formato é validado e o aluno confirma a substituição dos dados locais.
+- `[x]` **RF18 — Savefile Portátil de Perfil e Planejamento:** Permitir baixar e importar, exclusivamente no navegador, um JSON versionado com o perfil já derivado do Histórico Escolar e as grades montadas. A importação fica disponível tanto no check-in inicial quanto nas Configurações, para que o arquivo possa realmente transportar a sessão a um navegador novo. O arquivo não contém o PDF original nem realiza transmissão em rede; antes da importação, o formato é validado e o aluno confirma a substituição dos dados locais.
 
 ### Requisitos Não Funcionais (RNF)
 - `[x]` **RNF01 — Privacidade e Local-First:** Todo parseamento de documentos pessoais ocorre no browser via `pdfjs-dist`. Nenhum histórico escolar transita por rede.
@@ -38,6 +38,7 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 - `[/]` **RNF06 — Minimização de Dados na Camada de Comunidade:** Qualquer funcionalidade que exija troca com a rede (avaliações da comunidade) envia o **mínimo indispensável**. Permanecem **proibidos de trafegar ou ser publicados**: o PDF do histórico, notas, frequências, CR e a lista de disciplinas reprovadas. O **RA** pode ser coletado para deduplicação e rastreio de abuso, mas fica **restrito ao estágio privado** do pipeline e **nunca** é publicado.
   - **Exceção homologada pelo dono (2026-08-02) — nome do autor:** o **nome completo** do aluno (ou o **nome social completo**, quando houver) **é publicado** junto da avaliação, revogando neste ponto específico a redação anterior deste requisito e da §5.3. Fundamento: avaliação assinada aumenta a responsabilidade de quem escreve e reduz o risco difamatório na camada de professor (§6.7). O ônus correspondente — consentimento explícito e canal de retratação — está no RNF07.
 - `[ ]` **RNF07 — Consentimento, Retratação e Permanência do Versionamento:** Como a avaliação publicada é assinada e versionada em repositório público, o formulário deve apresentar **consentimento explícito e finalidade declarada** antes do envio, deixando claro que o nome ficará público. Deve existir **canal de retratação** que remova a avaliação das publicações seguintes. Limite honesto a comunicar ao usuário: a remoção **não apaga o histórico do Git** — commits anteriores permanecem; o que se garante é a saída das versões futuras. Ver §6.7.
+- `[x]` **RNF08 — Identidade Pública e Compartilhamento:** Declarar metadados consistentes para o domínio canônico, nome do site, favicon e cartões sociais. A produção aponta para `oasisutfpr.com.br`; ambientes beta continuam com `noindex` e usam seus próprios endereços apenas nas prévias de compartilhamento.
 
 ---
 
@@ -120,9 +121,11 @@ graph TD
     A[Acesso Inicial / index.html] --> B{Possui Histórico Salvo no LocalStorage?}
     B -- Não --> C[Tela de Onboarding / Check-in]
     C --> D[Opção 1: Submeter Histórico em PDF]
-    C --> E[Opção 2: Continuar Sem Registros - Grade na Hora]
+    C --> S[Opção 2: Importar savefile de outro navegador]
+    C --> E[Opção 3: Continuar Sem Registros - Grade na Hora]
     B -- Sim --> F[Plataforma Principal Orquestrada por App.tsx]
     D --> F
+    S --> F
     E --> F
     
     F --> G[Aba 1: Minha Situação]

@@ -900,6 +900,8 @@ export function App() {
         /* Se não tem perfil nem fez checkin (ou trocou de usuário), mostra Checkin */
         <TelaCheckin
           onProcessarArquivo={processarArquivo}
+          onAnalisarSavefile={analisarSavefile}
+          onConfirmarSavefile={confirmarSavefile}
           onContinuarSemRegistro={handleContinuarSemRegistro}
           onAbrirGestaoInformacao={() => setGiAberta(true)}
           carregando={carregando}
