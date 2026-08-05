@@ -161,6 +161,10 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - A quinta trilha agrega as subáreas 1146–1149: disciplinas de qualquer uma delas creditam o conjunto-pai 1140 sem duplicar a exigência. Situação, Catálogo, Planejamento, Grade Mágica e Simulador usam esse descritor próprio.
   - Importadas as ofertas de 2025/2, 2026/1 e 2026/2; a vigente tem 147 disciplinas, 410 turmas e 1371 horários. O parser de Turmas Abertas passou a reconhecer o cabeçalho e as colunas próprias do curso. O leitor de backup também passou a aceitar disciplinas sem o sufixo de aulas semanais, evitando anexar turmas e nomes ao bloco anterior.
   - Check-in, avaliações da comunidade, Como Usar, Novidades e roadmap foram atualizados. Há validador Python específico e regressão Vitest, inclusive auditoria opt-in contra histórico real mantido fora do repositório.
+- **TASK-34 — Orientar a geração de PDF textual no check-in:**
+  - O tutorial “Não sei gerar meu histórico” recomenda a opção nativa **Salvar como PDF** do navegador, preferencialmente no Chrome, e desaconselha explicitamente **Microsoft Print to PDF**, que pode rasterizar o documento e impedir a extração de texto.
+  - A comparação visual destaca a opção correta e a incorreta, preserva a orientação de papel A3 e ensina a confirmar que uma palavra pode ser selecionada no arquivo antes do envio.
+  - Validado no modal renderizado, em modo escuro, além da suíte completa com 384 testes aprovados e do build de produção.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.

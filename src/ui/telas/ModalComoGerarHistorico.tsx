@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { IconX } from "../icons";
+import { IconCheckCircle, IconX } from "../icons";
 
 /**
  * Passo a passo com print do Portal do Aluno, para quem nunca gerou o PDF do
@@ -13,6 +13,7 @@ interface Passo {
   imagem: string;
   titulo: string;
   descricao: string;
+  compararDestino?: boolean;
 }
 
 // import.meta.env.BASE_URL, e não um caminho relativo: o caminho relativo
@@ -33,9 +34,10 @@ const PASSOS: Passo[] = [
   },
   {
     imagem: `${BASE}ajuda/como-gerar-historico-3.png`,
-    titulo: "Salve como PDF em papel A3",
+    titulo: "No Chrome, use Salvar como PDF e papel A3",
     descricao:
-      "Na janela de impressão, escolha \"Salvar como PDF\" e, em \"Mais definições\", troque o tamanho do papel para A3 — sem isso o histórico pode cortar informação nas bordas. Esse arquivo salvo é o que você envia aqui na plataforma.",
+      "No campo \"Destino\", escolha a opção nativa \"Salvar como PDF\" do navegador, preferencialmente no Google Chrome. Em \"Mais definições\", troque o tamanho do papel para A3 para não cortar informações nas bordas.",
+    compararDestino: true,
   },
 ];
 
@@ -102,6 +104,37 @@ export function ModalComoGerarHistorico(props: { aberto: boolean; onFechar: () =
                     <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                       {passo.descricao}
                     </p>
+                    {passo.compararDestino && (
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-emerald-950 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-100">
+                          <IconCheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+                              Use esta opção
+                            </p>
+                            <p className="mt-0.5 text-sm font-bold">Salvar como PDF</p>
+                            <p className="mt-0.5 text-xs leading-relaxed text-emerald-800/80 dark:text-emerald-200/75">
+                              É a opção do próprio navegador, preferencialmente o Chrome.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 p-3 text-red-950 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-100">
+                          <IconX className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+                          <div>
+                            <p className="text-xs font-black uppercase tracking-wide text-red-700 dark:text-red-400">
+                              Não use esta impressora
+                            </p>
+                            <p className="mt-0.5 text-sm font-bold">Microsoft Print to PDF</p>
+                            <p className="mt-0.5 text-xs leading-relaxed text-red-800/80 dark:text-red-200/75">
+                              Ela pode transformar as páginas em imagens, sem texto que o Oásis consiga ler.
+                            </p>
+                          </div>
+                        </div>
+                        <p className="rounded-xl border border-utfpr-500/30 bg-utfpr-500/10 px-3 py-2.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                          <strong>Teste rápido:</strong> abra o arquivo salvo e tente selecionar uma palavra. Se não conseguir, gere o PDF novamente pela opção do navegador.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <img
