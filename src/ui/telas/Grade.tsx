@@ -13,7 +13,7 @@ import {
 import type { Matriz, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { faixaDoSlot } from "../../domain/horarios";
 import { categoriaDe } from "../../domain/motor/elegiveis";
-import { normNome } from "../../domain/motor/identidade";
+import { disciplinaCanonicaDaOferta } from "../../domain/motor/identidade";
 import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGrade } from "../../domain/motor/progressoGrade";
 import { Badge, BalaoProgressoHover, BarraProgressoComPreview, Botao, Card, IconeStatusProgresso } from "../componentes";
 import {
@@ -1195,6 +1195,13 @@ export function TelaGrade(props: {
                         <div className="flex flex-col gap-1">
                           {ocupantes.map((o, i) => {
                             const codIdentificador = o.item.selecaoOriginal?.codDisciplina ?? o.item.disciplina.codigo;
+                            const codigoCurricular = props.matriz
+                              ? disciplinaCanonicaDaOferta(
+                                  props.matriz,
+                                  o.item.disciplina.codigo,
+                                  o.item.disciplina.nome,
+                                )?.codigo ?? o.item.disciplina.codigo
+                              : o.item.disciplina.codigo;
                             const isHovered =
                               disciplinaHoverId === o.item.disciplina.codigo ||
                               disciplinaHoverId === codIdentificador;
@@ -1212,7 +1219,7 @@ export function TelaGrade(props: {
                                 title={`${o.item.disciplina.nome} — ${o.item.turma.codigo}${o.sala ? ` (${o.sala})` : ""}`}
                               >
                                 <div className="truncate min-w-0">
-                                  <span className="font-mono font-bold">{o.item.disciplina.codigo}</span>
+                                  <span className="font-mono font-bold">{codigoCurricular}</span>
                                   {o.sala ? ` · ${o.sala}` : ""}
                                 </div>
                                 <button
@@ -1296,9 +1303,14 @@ export function TelaGrade(props: {
             um nome longo de disciplina estoura a largura da tela no celular */}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {itens.map((item, i) => {
-            const discMatriz = props.matriz?.disciplinas.find(
-              (x) => x.codigo === item.disciplina.codigo || (x.equivalentes || []).some((eq) => eq.codigo === item.disciplina.codigo) || normNome(x.nome) === normNome(item.disciplina.nome)
-            );
+            const discMatriz = props.matriz
+              ? disciplinaCanonicaDaOferta(
+                  props.matriz,
+                  item.disciplina.codigo,
+                  item.disciplina.nome,
+                )
+              : undefined;
+            const codigoCurricular = discMatriz?.codigo ?? item.disciplina.codigo;
             const catRaw = discMatriz && props.matriz ? categoriaDe(discMatriz, props.matriz) : "eletiva";
             const catNome =
               catRaw === "obrigatória"
@@ -1351,7 +1363,7 @@ export function TelaGrade(props: {
               >
                 {isEsteElemento && (
                   <BalaoProgressoHover
-                    codigoDisciplina={item.disciplina.codigo}
+                    codigoDisciplina={codigoCurricular}
                     nomeDisciplina={item.disciplina.nome}
                     cargaHoraria={obterCargaHoraria(item.disciplina, props.matriz)}
                     perfil={props.perfil}
@@ -1369,8 +1381,16 @@ export function TelaGrade(props: {
                       </div>
                       <div className="mt-1 flex flex-wrap items-center gap-1.5 font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                         <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                          {item.disciplina.codigo}
+                          {codigoCurricular}
                         </span>
+                        {codigoCurricular !== item.disciplina.codigo && (
+                          <span
+                            className="rounded bg-zinc-100 px-1.5 py-0.5 font-sans text-[10px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                            title="Código usado pela oferta do semestre e pelo relatório de matrícula"
+                          >
+                            oferta {item.disciplina.codigo}
+                          </span>
+                        )}
                         <span>·</span>
                         <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                           Turma {item.turma.codigo}
@@ -1390,8 +1410,8 @@ export function TelaGrade(props: {
                               e.stopPropagation();
                               setProfPainel({
                                 nomes: listaProfessores,
-                                codigo: item.disciplina.codigo,
-                                nomeDisciplina: item.disciplina.nome,
+                                codigo: codigoCurricular,
+                                nomeDisciplina: discMatriz?.nome ?? item.disciplina.nome,
                               });
                             }}
                             className="cursor-pointer truncate underline decoration-dotted decoration-utfpr-500 underline-offset-2 transition-colors hover:text-utfpr-600 dark:hover:text-utfpr-400"
@@ -1410,7 +1430,7 @@ export function TelaGrade(props: {
 
                       {reviewsLigadas && listaProfessores.length > 0 && (() => {
                         const professoresRaw = item.turma.professores_raw ?? "";
-                        const quantas = reviews.contar(item.disciplina.codigo, professoresRaw);
+                        const quantas = reviews.contar(codigoCurricular, professoresRaw);
                         return (
                           <button
                             type="button"
@@ -1419,8 +1439,8 @@ export function TelaGrade(props: {
                               // o card inteiro alterna o balão de progresso
                               e.stopPropagation();
                               setTurmaRevisada({
-                                codigo: item.disciplina.codigo,
-                                nome: item.disciplina.nome,
+                                codigo: codigoCurricular,
+                                nome: discMatriz?.nome ?? item.disciplina.nome,
                                 professorId: reviews.idDaTurma(professoresRaw),
                                 nomeProfessor: nomesProfessores,
                               });

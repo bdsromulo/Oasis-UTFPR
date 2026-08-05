@@ -6,9 +6,12 @@ import ofertaBsi20262 from "../data/turmas/2026-2.json";
 import { ENG_COMP_844, contaNoBlocoOptativo, ehTrilha } from "../src/domain/cursos";
 import { dadosDoCursoPorMatriz } from "../src/domain/dadosCurso";
 import { listarElegiveis } from "../src/domain/motor/elegiveis";
-import { calcularResumoProgressoGrade } from "../src/domain/motor/progressoGrade";
+import { itensDaSelecao } from "../src/domain/motor/grade";
+import { disciplinaCanonicaDaOferta } from "../src/domain/motor/identidade";
+import { calcularProgressoMateria, calcularResumoProgressoGrade } from "../src/domain/motor/progressoGrade";
 import { simularFormatura } from "../src/domain/motor/simuladorFormatura";
 import { montarPainel } from "../src/domain/motor/situacao";
+import { elegivelCorrespondeBusca } from "../src/ui/telas/PossoCursar";
 import type {
   Matriz,
   OfertaSemestre,
@@ -149,6 +152,53 @@ describe("regressão Eng. Comp. — oferta e progressão optativa", () => {
       "Optativas Isoladas",
     );
     expect(resumos.find((r) => r.categoriaId === "eletivas")?.impulsoGrade).toBe(0);
+  });
+
+  it("busca a matéria pelo código curricular, da oferta ou equivalente", () => {
+    const eng = ofertaEng20262 as unknown as OfertaSemestre;
+    const elegiveis = listarElegiveis(null, matriz, eng);
+    const controle = elegiveis.find((item) => item.disciplina.codigo === "EEC21")!;
+
+    expect(controle.oferta?.codigo).toBe("ELEC20");
+    expect(elegivelCorrespondeBusca(controle, "EEC21")).toBe(true);
+    expect(elegivelCorrespondeBusca(controle, "ELEC20")).toBe(true);
+    expect(elegivelCorrespondeBusca(controle, "EL66F")).toBe(true);
+  });
+
+  it("resolve o impacto da grade pela identidade canônica da matriz 844", () => {
+    const eng = ofertaEng20262 as unknown as OfertaSemestre;
+    const itens = itensDaSelecao(eng, [
+      { codDisciplina: "ELEC20", codTurma: "S71" },
+      { codDisciplina: "CAART03", codTurma: "S11" },
+      { codDisciplina: "ELEF30", codTurma: "S71" },
+      { codDisciplina: "ICSI31", codTurma: "S71" },
+    ]);
+
+    expect(itens).toHaveLength(4);
+    expect(disciplinaCanonicaDaOferta(matriz, "ELEC20", "Controle 1")?.codigo).toBe("EEC21");
+    expect(disciplinaCanonicaDaOferta(matriz, "ELEF30", "Ética, Profissão E Cidadania")?.codigo).toBe("EEF31");
+    expect(disciplinaCanonicaDaOferta(matriz, "ICSI31", "Ciência Das Redes")?.codigo).toBe("CSI31");
+    expect(disciplinaCanonicaDaOferta(matriz, "CAART03", itens[1].disciplina.nome)).toBeUndefined();
+
+    expect(calcularProgressoMateria("ICSI31", "Ciência Das Redes", 60, perfilEngComp(), matriz).categoriaId).toBe("962");
+    expect(calcularProgressoMateria("CAART03", itens[1].disciplina.nome, 60, perfilEngComp(), matriz).categoriaId).toBe("eletivas");
+
+    const resumos = calcularResumoProgressoGrade(itens, perfilEngComp(), matriz);
+    expect(resumos.find((item) => item.categoriaId === "obrigatorias")).toMatchObject({
+      impulsoGrade: 90,
+      disciplinasEnvolvidas: expect.arrayContaining([
+        expect.objectContaining({ codigo: "EEC21" }),
+        expect.objectContaining({ codigo: "EEF31" }),
+      ]),
+    });
+    expect(resumos.find((item) => item.categoriaId === "trilhas_geral")).toMatchObject({
+      impulsoGrade: 60,
+      disciplinasEnvolvidas: [expect.objectContaining({ codigo: "CSI31" })],
+    });
+    expect(resumos.find((item) => item.categoriaId === "eletivas")).toMatchObject({
+      impulsoGrade: 60,
+      disciplinasEnvolvidas: [expect.objectContaining({ codigo: "CAART03" })],
+    });
   });
 
   it("parametriza o simulador para duas trilhas e remove estratos inexistentes", () => {

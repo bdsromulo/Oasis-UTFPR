@@ -68,6 +68,11 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Decisão do dono: **motor específico por curso por enquanto** — não generalizar as regras agora.
 
 #### Interface Visual e Experiência do Usuário (UI/UX)
+- **TASK-39 — Identidade curricular no Planejamento de Engenharia de Computação:**
+  - A visão expandida das matrizes 844 e 962 ganhou um card próprio para `Optativas Isoladas`, deixando explícito que suas horas entram no bloco optativo sem validar uma trilha.
+  - A busca aceita o código canônico da matriz, o código equivalente usado pela oferta, nome e professor.
+  - O impacto da grade passa a resolver a identidade canônica antes da categoria: equivalentes mantêm sua categoria curricular e disciplinas externas à matriz entram como Eletivas.
+  - A grade conserva o código canônico visível e identifica separadamente o código real da oferta usado no relatório de matrícula.
 - **Repaginada Visual Completa (Remoção da "Cara de IA"):** Subscrição integral de todos os emojis decorativos e fontes padrão de sistema por uma identidade de produto digital de alta fidelidade.
 - **Tipografia Personalizada:** Integração com Google Fonts utilizando **`Outfit`** (`--font-display`) para cabeçalhos e **`Plus Jakarta Sans`** (`--font-sans`) para o corpo e números.
 - **Biblioteca Vetorial de Ícones (`src/ui/icons.tsx`):** Criação de ícones minimalistas (estilo Lucide, `stroke-width: 1.75`) e da representação vetorial geométrica oficial da **Logo da UTFPR** (`LogoUTFPR`) para o cabeçalho.

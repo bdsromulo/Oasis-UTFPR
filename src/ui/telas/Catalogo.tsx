@@ -395,6 +395,25 @@ export function TelaCatalogo(props: {
     return { total, pendentes, concluidas, abertas, semoferta };
   }, [itensDisciplinas, categoria]);
 
+  // Eng. Comp. declara uma pool que soma para o bloco optativo, mas nunca
+  // substitui a validação de uma trilha. Ela precisa aparecer junto das
+  // trilhas para o aluno enxergar onde essas horas estão sendo acumuladas.
+  const conjuntosIsolados = Object.entries(matriz.conjuntos)
+    .filter(
+      ([codigo, conjunto]) =>
+        curso.naoValidaveis.includes(Number(codigo)) &&
+        normNome(conjunto.nome).includes("optativas isoladas"),
+    )
+    .map(([codigo, conjunto]) => {
+      const resumo = perfil?.resumoConjuntos.find((item) => item.conjunto === codigo);
+      return {
+        codigo,
+        nome: conjunto.nome,
+        exigido: resumo?.chObrigatoria ?? conjunto.ch,
+        cumprido: Math.min(resumo?.chCursadaAprovada ?? 0, resumo?.chObrigatoria ?? conjunto.ch),
+      };
+    });
+
   const categoriasOpcoes: [CategoriaCatalogo, string][] = [
     ["todas", "Todas as Disciplinas"],
     ["obrigatorias", curso.matriz === 981 ? "1º Estrato (Obrigatórias)" : "Obrigatórias"],
@@ -490,10 +509,11 @@ export function TelaCatalogo(props: {
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-200/60 pb-4 dark:border-zinc-800/60">
             <div>
               <h3 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                Visão Geral das Trilhas de Aprofundamento
+                Visão Geral: {curso.rotuloBlocoTrilhas}
               </h3>
               <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} {descricaoDoCurso(matriz).trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong> (cada uma somando a carga horária exigida do conjunto).
+                O estudante precisa validar pelo menos <strong>{curso.trilhasExigidas} {curso.trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong> (cada uma somando a carga horária exigida do conjunto).
+                {conjuntosIsolados.length > 0 && " As optativas isoladas somam para a carga total do bloco, mas não validam uma trilha."}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -570,6 +590,75 @@ export function TelaCatalogo(props: {
                               <Badge tom="neutro" classe="!text-[10px] !px-1.5 !py-0.5">
                                 Sem Oferta
                               </Badge>
+                            )}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                </Card>
+              );
+            })}
+            {conjuntosIsolados.map((isoladas) => {
+              const disciplinasIsoladas = itensDisciplinas.filter(
+                (item) => item.disciplina.conjunto === Number(isoladas.codigo),
+              );
+
+              return (
+                <Card
+                  key={isoladas.codigo}
+                  classe="flex flex-col justify-between border-dashed border-zinc-300 p-4.5 bg-white dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  <div>
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h4 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+                        {isoladas.nome}
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span className="shrink-0 font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                          {isoladas.cumprido}/{isoladas.exigido}h
+                        </span>
+                        <Badge tom="neutro" classe="shrink-0">
+                          não valida trilha
+                        </Badge>
+                      </div>
+                    </div>
+                    <Barra valor={isoladas.cumprido} max={isoladas.exigido} destaque={isoladas.cumprido > 0} />
+                  </div>
+
+                  <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800 space-y-2">
+                    <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                      Disciplinas isoladas ({disciplinasIsoladas.length}):
+                    </span>
+                    <ul className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                      {[...disciplinasIsoladas]
+                        .sort((a, b) => {
+                          const pesoA = a.concluida ? 1 : a.temOferta ? 2 : 3;
+                          const pesoB = b.concluida ? 1 : b.temOferta ? 2 : 3;
+                          if (pesoA !== pesoB) return pesoA - pesoB;
+                          return a.disciplina.codigo.localeCompare(b.disciplina.codigo);
+                        })
+                        .map((disciplina) => (
+                          <li
+                            key={disciplina.disciplina.codigo}
+                            className="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-2 py-1.5 text-xs dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50"
+                          >
+                            <div className="min-w-0 flex items-center gap-1.5">
+                              <span
+                                title={`${disciplina.disciplina.codigo} — ${disciplina.disciplina.nome}`}
+                                className="shrink-0 cursor-help font-mono text-[11px] font-bold text-zinc-900 underline decoration-dotted decoration-zinc-400 dark:text-zinc-100"
+                              >
+                                {disciplina.disciplina.codigo}
+                              </span>
+                              <span className="truncate text-[11px] text-zinc-700 dark:text-zinc-300" title={disciplina.disciplina.nome}>
+                                {disciplina.disciplina.nome}
+                              </span>
+                            </div>
+                            {disciplina.concluida ? (
+                              <Badge tom="ok" classe="!text-[10px] !px-1.5 !py-0.5">OK</Badge>
+                            ) : disciplina.temOferta ? (
+                              <Badge tom="acento" classe="!text-[10px] !px-1.5 !py-0.5">Aberta</Badge>
+                            ) : (
+                              <Badge tom="neutro" classe="!text-[10px] !px-1.5 !py-0.5">Sem Oferta</Badge>
                             )}
                           </li>
                         ))}
