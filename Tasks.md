@@ -213,6 +213,9 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
   - Só habilitar a opção `962 (Nova)` no check-in depois de dados, motores e regressões estarem completos.
 
+- **TASK-44 — Nova versão do aviso de cursos e matrizes:**
+  - A chave versionada do aviso passou para `cursos_matrizes_2026_08_v1`, para exibir esta expansão uma vez também a quem já tinha fechado a edição anterior.
+
 ### Em Andamento
 *(nenhuma no momento)*
 

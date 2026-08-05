@@ -88,7 +88,7 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // Beta e release vivem no mesmo domínio do GitHub Pages durante a homologação,
 // portanto compartilham localStorage. O sufixo impede que fechar o aviso no
 // sandbox silencie o lançamento oficial depois.
-const CHAVE_NOVIDADES = `oasis.novidades_lidas.controle_978_v1.${
+const CHAVE_NOVIDADES = `oasis.novidades_lidas.cursos_matrizes_2026_08_v1.${
   __OASIS_BETA__ ? "beta" : "release"
 }`;
 
