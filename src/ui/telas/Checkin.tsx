@@ -84,6 +84,15 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
   ],
 };
 
+/** Relação pública exibida junto da importação, inclusive matrizes detectadas só pelo PDF. */
+const CURSOS_DISPONIVEIS = [
+  { nome: "Sistemas de Informação", matrizes: ["806", "981"] },
+  { nome: "Engenharia de Computação", matrizes: ["844", "962"] },
+  { nome: "Engenharia Eletrônica", matrizes: ["968"] },
+  { nome: "Engenharia de Controle e Automação", matrizes: ["978"] },
+  { nome: "Engenharia Mecatrônica", matrizes: ["823", "973"] },
+];
+
 interface Props {
   carregando: boolean;
   erro: string | null;
@@ -278,6 +287,37 @@ export function TelaCheckin(props: Props) {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-zinc-200/90 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+          <div className="flex items-start gap-2.5">
+            <IconGraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-400" />
+            <div>
+              <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                Cursos e matrizes disponíveis
+              </h3>
+              <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                Ao importar o histórico, o Oásis identifica automaticamente uma destas matrizes.
+              </p>
+            </div>
+          </div>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {CURSOS_DISPONIVEIS.map((item) => (
+              <li
+                key={item.nome}
+                className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-zinc-200/80 bg-white/80 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-950/60"
+              >
+                <span className="min-w-0 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                  {item.nome}
+                </span>
+                <span className="flex shrink-0 flex-wrap justify-end gap-1">
+                  {item.matrizes.map((numero) => (
+                    <Badge key={numero} tom="ok">{numero}</Badge>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </Card>
 

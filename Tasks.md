@@ -200,6 +200,10 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Incluídos os quatro históricos de apoio usados para Controle e Automação 978 e Mecatrônica 973/823, com os nomes completos conferidos localmente e sem versionar os PDFs pessoais.
   - Todos os apoiadores e revisores passam a exibir curso e matriz; a revisora da matriz 978 foi identificada e os dois grupos permanecem em ordem alfabética.
   - A ordenação e os 15 créditos são cobertos por regressão automatizada. A página foi validada visualmente com nomes, selos e matrizes legíveis.
+- **TASK-42 — Cursos disponíveis abaixo da importação:**
+  - O check-in passa a listar, logo após os controles de PDF e savefile, os cinco cursos e as oito matrizes cobertas pela plataforma.
+  - A relação inclui matrizes detectadas automaticamente pelo histórico mesmo quando não estão selecionadas no Modo Livre, como BSI 806.
+  - Posicionamento, cursos e matrizes são cobertos por regressão automatizada e o card foi validado visualmente no check-in.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
