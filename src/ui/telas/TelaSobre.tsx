@@ -132,13 +132,6 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
-    data: "04 ago 2026",
-    titulo: "Engenharia de Controle e Automação (matriz 708)",
-    descricao:
-      "Cobrir também a matriz antiga do curso, preservando suas equivalências e regras sem reaproveitar automaticamente as da 978.",
-    estado: "aberto",
-  },
-  {
     data: "05 ago 2026",
     titulo: "Oásis de Engenharia Mecatrônica (matriz 973)",
     descricao:
@@ -151,6 +144,13 @@ const ROADMAP: Marco[] = [
     descricao:
       "A matriz antiga de Mecatrônica entra com Humanidades, eletivas, estágio de 400h e 264 equivalências para cruzar as ofertas atuais sem alterar o dado oficial da 823 ou da 973.",
     estado: "concluido",
+  },
+  {
+    data: "Objetivo",
+    titulo: "Engenharia de Controle e Automação (matriz 708)",
+    descricao:
+      "Cobrir também a matriz antiga do curso, preservando suas equivalências e regras sem reaproveitar automaticamente as da 978.",
+    estado: "aberto",
   },
 ];
 
