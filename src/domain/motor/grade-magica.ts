@@ -6,6 +6,7 @@ import {
   cargaAprovadaBlocoOptativo,
   categoriaSimples,
   contaNoBlocoOptativo,
+  creditaExtensao,
   descricaoDoCurso,
   ehTrilha,
   grupoOpcaoDe,
@@ -412,7 +413,7 @@ export function gerarSugestaoGrade(
     }
     pts += Math.min(e.disciplina.horas.total, 90) / 5; // Carga horária
 
-    if (opcoes.priorizarExtensionistas && e.disciplina.horas.chext > 0) {
+    if (opcoes.priorizarExtensionistas && creditaExtensao(matriz, e.disciplina)) {
       pts += 45; // Aumentar significativamente o peso de matérias extensionistas quando priorizado
     }
 

@@ -16,6 +16,7 @@ import type { AcervoReviews } from "../../domain/reviews/tipos";
 import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
+  creditaExtensao,
   descricaoDoCurso,
   categoriaSimples,
   ehGrupoOpcao,
@@ -154,7 +155,7 @@ export function TelaSituacao(props: {
       const nome = dm ? dm.nome : nomeDeEletiva(c.codigo) ?? c.nome;
       const item = { codigo: c.codigo, nome, cht: c.cht || (dm ? dm.horas.total : null) };
 
-      if (dm && dm.horas.chext > 0) {
+      if (creditaExtensao(matriz, dm)) {
         mapa.extensao.push(item);
       }
 

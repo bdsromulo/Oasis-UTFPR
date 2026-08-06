@@ -5,9 +5,12 @@ import matriz978Json from "../data/eng-controle/matriz-978.json";
 import oferta20262Json from "../data/eng-controle/turmas/2026-2.json";
 import oferta20261Json from "../data/eng-controle/turmas/2026-1.json";
 import oferta20252Json from "../data/eng-controle/turmas/2025-2.json";
+import matriz981Json from "../data/matriz-981.json";
 import {
   ENG_CONTROLE_978,
+  chextCreditavel,
   contaNoBlocoOptativo,
+  creditaExtensao,
   ehGrupoOpcao,
   ehTrilha,
   grupoOpcaoDe,
@@ -205,6 +208,86 @@ describe("descrição e motores da matriz 978", () => {
     expect(por("trilhas")).toBeUndefined();
     expect(por("eletivas")).toBeUndefined();
     expect(por("extensao")).toMatchObject({ exigido: 420, cumprido: 195 });
+  });
+});
+
+/**
+ * Extensão da 978: só as quatro obrigatórias com CHEXT cumprem exigência.
+ *
+ * A matriz também imprime CHEXT nas seis FCH7* do conjunto 1136, mas o Quadro
+ * Resumo do histórico real desmente que aquilo seja exigência: "CHEXT
+ * Disciplinas Optativas 345 / cursada 0 / faltante 0 / OK", enquanto o "CHEXT
+ * geral do curso" repete as 420h da linha das obrigatórias. Creditar as
+ * optativas adiantava a formatura projetada e marcava de extensionista uma
+ * matéria que não cumpre nada.
+ */
+describe("extensão da matriz 978", () => {
+  const OFICINAS = ["ELT74F", "ELT76F", "ELT78B"];
+  const INTRODUCAO = "ELT71A";
+  const disciplina = (codigo: string) => matriz.disciplinas.find((d) => d.codigo === codigo)!;
+
+  it("credita só as Oficinas e a Introdução, somando exatamente as 420h exigidas", () => {
+    const creditam = matriz.disciplinas.filter((d) => creditaExtensao(matriz, d));
+    expect(creditam.map((d) => d.codigo).sort()).toEqual([INTRODUCAO, ...OFICINAS].sort());
+    expect(creditam.reduce((total, d) => total + chextCreditavel(matriz, d), 0)).toBe(
+      matriz.cargas.extensao,
+    );
+    expect(matriz.cargas.extensao).toBe(420);
+  });
+
+  it("zera o CHEXT das optativas do conjunto 1136 sem alterar a fonte", () => {
+    const optativasComChext = matriz.disciplinas.filter(
+      (d) => d.conjunto !== null && d.horas.chext > 0,
+    );
+    // a fonte segue declarando as 345h — o dado cru não é adulterado
+    expect(optativasComChext).toHaveLength(6);
+    expect(optativasComChext.reduce((total, d) => total + d.horas.chext, 0)).toBe(345);
+    for (const d of optativasComChext) {
+      expect(String(d.conjunto), d.codigo).toBe("1136");
+      expect(chextCreditavel(matriz, d), d.codigo).toBe(0);
+      expect(creditaExtensao(matriz, d), d.codigo).toBe(false);
+    }
+  });
+
+  it("preserva o CHEXT integral das quatro obrigatórias", () => {
+    expect(chextCreditavel(matriz, disciplina(INTRODUCAO))).toBe(75);
+    expect(chextCreditavel(matriz, disciplina("ELT74F"))).toBe(120);
+    expect(chextCreditavel(matriz, disciplina("ELT76F"))).toBe(105);
+    expect(chextCreditavel(matriz, disciplina("ELT78B"))).toBe(120);
+  });
+
+  it("não contamina cursos cuja extensão vem justamente das optativas", () => {
+    // na 981 as 330h exigidas dependem das optativas: restringir a obrigatórias
+    // ali tornaria a exigência impossível
+    const matriz981 = matriz981Json as unknown as Matriz;
+    const creditam981 = matriz981.disciplinas.filter((d) => creditaExtensao(matriz981, d));
+    expect(creditam981.some((d) => d.conjunto !== null)).toBe(true);
+    expect(creditam981.reduce((total, d) => total + chextCreditavel(matriz981, d), 0)).toBe(360);
+  });
+
+  it("não credita extensão de optativa na projeção de formatura", () => {
+    // uma FCH7* aprovada não pode mover o cumprido de extensão
+    const perfil = perfil978();
+    const fch = disciplina("FCH7AA");
+    perfil.cursadas.push({
+      codigo: fch.codigo,
+      nome: fch.nome,
+      situacao: "aprovado",
+      media: 9,
+      frequencia: 100,
+      cht: fch.horas.total,
+      origem: "optativa",
+    } as never);
+    perfil.aprovadas.add(fch.codigo);
+    const sim = simularFormatura(perfil, matriz, ofertas, {
+      ritmo: 6,
+      semestreInicial: "2026-2",
+      horizonte: 20,
+    });
+    expect(sim.requisitos.find((r) => r.id === "extensao")).toMatchObject({
+      exigido: 420,
+      cumprido: 195,
+    });
   });
 });
 

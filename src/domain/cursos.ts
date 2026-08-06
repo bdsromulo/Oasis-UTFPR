@@ -90,6 +90,21 @@ export interface DescricaoCurso {
   /** título do bloco que agrega os grupos de escolha */
   rotuloOpcoes?: string;
   /**
+   * Só a CHEXT das disciplinas obrigatórias credita extensão neste curso.
+   *
+   * A matriz imprime CHEXT em disciplinas optativas que, na prática, não têm
+   * exigência extensionista alguma. O Quadro Resumo do histórico é quem separa
+   * os dois casos: ele lista "CHEXT Disciplinas obrigatórias" e "CHEXT
+   * Disciplinas Optativas" em linhas distintas, e só a primeira entra no
+   * "CHEXT geral do curso". Quando a linha das optativas aparece com faltante 0
+   * e situação OK mesmo com 0 cursada, aquelas horas são pool decorativa —
+   * somá-las adiantaria a formatura projetada e marcaria como extensionista uma
+   * matéria que não cumpre nada.
+   *
+   * Marcar apenas onde a fonte comprova. Ver ENG_CONTROLE_978.
+   */
+  extensaoSoObrigatorias?: boolean;
+  /**
    * Aninhamento dos conjuntos, filho -> pai, lido da própria matriz.
    *
    * A disciplina aponta para a folha da árvore ("1215 Linguística, Letras E
@@ -256,6 +271,19 @@ export const ENG_ELETRONICA_968: DescricaoCurso = {
  * o crédito precisa subir até a trilha-pai. Esse desenho é o mesmo problema
  * estrutural dos grupos de escolha da 968, portanto usa `gruposOpcao` em vez de
  * inventar um agregador inexistente ou dizer que basta escolher N trilhas.
+ *
+ * Extensão: as 420h exigidas saem inteiras das quatro obrigatórias que a matriz
+ * marca com CHEXT — ELT71A (75h) e as três Oficinas de Integração, Pesquisa e
+ * Extensão, ELT74F (120h), ELT76F (105h) e ELT78B (120h). É a única matriz em
+ * que `chext_disc_obrigatorias` já iguala `cargas.extensao`.
+ *
+ * As seis FCH7* do conjunto 1136 também trazem CHEXT (345h somadas), mas não
+ * cumprem exigência nenhuma. O Quadro Resumo de um histórico real da 978 é
+ * explícito: "CHEXT Disciplinas obrigatórias 420 / cursada 195 / faltante 225 /
+ * Falta cumprir" contra "CHEXT Disciplinas Optativas 345 / cursada 0 /
+ * faltante 0 / OK", e o "CHEXT geral do curso" repete 420 — o total das
+ * obrigatórias, não a soma das duas linhas. As 195h cursadas eram exatamente
+ * ELT71A + ELT74F, e as 225h faltantes exatamente ELT76F + ELT78B.
  */
 export const ENG_CONTROLE_978: DescricaoCurso = {
   matriz: 978,
@@ -269,6 +297,7 @@ export const ENG_CONTROLE_978: DescricaoCurso = {
   trilhas: [],
   gruposOpcao: [1136, 1137, 1138, 1139, 1140],
   rotuloOpcoes: "Trilhas de Formação",
+  extensaoSoObrigatorias: true,
   hierarquia: hierarquiaDe(matriz978Json.conjuntos),
 };
 
@@ -484,4 +513,43 @@ export function rotuloDoConjunto(
 /** A extensão curricular só é uma exigência quando a própria matriz a declara. */
 export function exigeExtensao(matriz: Matriz | null | undefined): boolean {
   return (matriz?.cargas.extensao ?? 0) > 0;
+}
+
+/**
+ * Quantas horas de extensão a disciplina credita de fato no curso.
+ *
+ * Ponto único de verdade para "isto conta como extensão?". O campo `chext` da
+ * matriz sozinho não responde: em cursos com `extensaoSoObrigatorias` a fonte
+ * imprime CHEXT em optativas que não cumprem exigência alguma (ver o campo na
+ * DescricaoCurso). Ler `horas.chext` direto faz o catálogo rotular a matéria de
+ * extensionista, a Grade Mágica priorizá-la e o simulador de formatura creditar
+ * horas que o histórico nunca vai reconhecer.
+ */
+export function chextCreditavel(
+  matriz: Matriz | null | undefined,
+  disciplina: { conjunto: number | null; horas: { chext: number } } | null | undefined,
+): number {
+  const chext = disciplina?.horas?.chext ?? 0;
+  if (chext <= 0 || !exigeExtensao(matriz)) return 0;
+  const curso = descricaoDoCurso(matriz ?? 981);
+  // Obrigatória é a disciplina fora de qualquer conjunto da matriz. O teste vale
+  // também para a disciplina simulada de `listarElegiveis`, que herda o conjunto
+  // da matéria da matriz a que a oferta corresponde — a Oficina abre turma sob
+  // outro código e continua creditando.
+  //
+  // Fica de fora só a eletiva de outro curso que traga CHEXT e não case com nada
+  // da matriz: ela chega com `conjunto: null` e seria lida como obrigatória. O
+  // histórico da 978 zera essa linha ("CHEXT Disciplinas Eletivas 0 0 0 Ok") e
+  // nenhuma oferta conhecida do curso cai nesse caso; se passar a cair, o
+  // discriminador tem de ser a categoria do elegível, não o conjunto.
+  if (curso.extensaoSoObrigatorias && disciplina?.conjunto !== null) return 0;
+  return chext;
+}
+
+/** Atalho booleano de `chextCreditavel`, para rótulos e filtros. */
+export function creditaExtensao(
+  matriz: Matriz | null | undefined,
+  disciplina: { conjunto: number | null; horas: { chext: number } } | null | undefined,
+): boolean {
+  return chextCreditavel(matriz, disciplina) > 0;
 }

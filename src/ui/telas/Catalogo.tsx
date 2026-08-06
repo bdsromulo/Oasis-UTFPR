@@ -14,6 +14,7 @@ import type { AcervoReviews } from "../../domain/reviews/tipos";
 import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
+  creditaExtensao,
   descricaoDoCurso,
   categoriaSimples,
   ehTrilha,
@@ -254,7 +255,7 @@ export function TelaCatalogo(props: {
         cat = "opcoes";
       } else if (contaNoBlocoOptativo(descricaoDoCurso(matriz), dm.conjunto)) {
         cat = "trilhas";
-      } else if (dm.horas.chext > 0) {
+      } else if (creditaExtensao(matriz, dm)) {
         cat = "extensao";
       }
 
@@ -319,7 +320,7 @@ export function TelaCatalogo(props: {
     return itensDisciplinas.filter((item) => {
       if (categoria !== "todas") {
         if (categoria === "extensao") {
-          if (item.disciplina.horas.chext === 0 && item.categoria !== "extensao") return false;
+          if (!creditaExtensao(matriz, item.disciplina) && item.categoria !== "extensao") return false;
         } else if (item.categoria !== categoria) {
           return false;
         }
@@ -380,7 +381,7 @@ export function TelaCatalogo(props: {
     for (const item of itensDisciplinas) {
       if (categoria !== "todas") {
         if (categoria === "extensao") {
-          if (item.disciplina.horas.chext === 0 && item.categoria !== "extensao") continue;
+          if (!creditaExtensao(matriz, item.disciplina) && item.categoria !== "extensao") continue;
         } else if (item.categoria !== categoria) continue;
       }
       total++;
@@ -842,7 +843,7 @@ export function TelaCatalogo(props: {
                 <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-2.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
                   <div className="flex items-center gap-3 font-mono text-[11px]">
                     <span>Total: <strong>{d.horas.total}h</strong></span>
-                    {d.horas.chext > 0 && (
+                    {creditaExtensao(matriz, d) && (
                       <span className="text-amber-600 dark:text-amber-400">
                         Extensão: <strong>{d.horas.chext}h</strong>
                       </span>

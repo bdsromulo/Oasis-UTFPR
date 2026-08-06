@@ -4,6 +4,7 @@ import type { ItemGrade } from "./grade";
 import {
   cargaAprovadaBlocoOptativo,
   contaNoBlocoOptativo,
+  creditaExtensao,
   descricaoDoCurso,
   ehGrupoOpcao,
   ehTrilha,
@@ -75,7 +76,6 @@ export function calcularProgressoMateria(
   const codigoCanonico = d?.codigo ?? codigoDisciplina;
 
   const conjunto = d?.conjunto ?? null;
-  const chext = d?.horas?.chext ?? 0;
   const carga = cargaHoraria || (d?.horas?.total ?? 60);
 
   // Checar histórico se já foi concluída ou em curso
@@ -134,7 +134,7 @@ export function calcularProgressoMateria(
       );
     }
     cumpridoBase = (est1 ? 200 : 0) + (est2 ? 200 : 0);
-  } else if (exigeExtensao(matriz) && chext > 0 && conjunto === cjEletivas) {
+  } else if (creditaExtensao(matriz, d) && conjunto === cjEletivas) {
     categoriaId = "extensao";
     categoriaNome = "Extensão Universitária";
     exigido = perfil?.extensao?.chTotal ?? 320;

@@ -9,6 +9,7 @@ import type {
 } from "../tipos";
 import {
   cargaAprovadaBlocoOptativo,
+  chextCreditavel,
   contaNoBlocoOptativo,
   descricaoDoCurso,
   ehGrupoOpcao,
@@ -1032,7 +1033,7 @@ export function simularFormatura(
         });
 
         planejado[cat] += horas;
-        planejado.extensao += dMatriz?.horas.chext ?? 0;
+        planejado.extensao += chextCreditavel(matriz, dMatriz);
         if (cat === "eletivas") eletivasPendentes = Math.max(0, eletivasPendentes - horas);
         if (cat === "trilhas" && dMatriz?.conjunto != null && ehTrilha(cursoDesc, dMatriz.conjunto)) {
           horasPorTrilha.set(
@@ -1207,8 +1208,9 @@ export function simularFormatura(
       planejado[cat] += contribui;
       // A extensão não é uma categoria à parte na matriz: ela vem embutida como
       // CHEXT de disciplinas que já contam noutro bloco. Creditamos aqui para não
-      // exigir do aluno horas que a própria grade planejada já entrega.
-      planejado.extensao += d.horas.chext ?? 0;
+      // exigir do aluno horas que a própria grade planejada já entrega — só o
+      // CHEXT que o curso de fato reconhece (ver `chextCreditavel`).
+      planejado.extensao += chextCreditavel(matriz, d);
       // Simulamos a aprovação para que dependentes sejam liberados nos próximos passos
       if (perfil) {
         perfil.aprovadas.add(d.codigo);

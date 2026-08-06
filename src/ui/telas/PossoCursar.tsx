@@ -34,11 +34,11 @@ import { renderizarTextoComCodigos } from "./Situacao";
 import { BotaoReviews, useContagemPorTurma } from "./reviewsComuns";
 import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
 import {
+  creditaExtensao,
   descricaoDoCurso,
   ehGrupoOpcao,
   ehTrilha,
   categoriaSimples,
-  exigeExtensao,
 } from "../../domain/cursos";
 
 type Grupo = "todas" | "obrigatorias" | "estrato2" | "opcoes" | "trilhas" | "humanidades";
@@ -185,7 +185,7 @@ function CardDisciplinaPossoCursar({
           </Badge>
           <Badge>{e.disciplina.periodo}º período</Badge>
           <Badge>{e.disciplina.horas.total}h</Badge>
-          {exigeExtensao(matriz) && e.disciplina.horas.chext > 0 && (
+          {creditaExtensao(matriz, e.disciplina) && (
             <Badge>extensionista</Badge>
           )}
           {e.jaMatriculada && (
