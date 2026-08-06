@@ -56,8 +56,12 @@ aparece.
    - *Coletar endereços de e-mail* → **Verificado**.
    - *Restringir a usuários em utfpr.edu.br e organizações confiáveis* → **ligado**.
    - *Limitar a 1 resposta* → **desligado**. O aluno avalia várias disciplinas do
-     mesmo semestre; o teto por pessoa é aplicado na ingestão (`MAX_AVALIACOES_NO_SEMESTRE`),
-     não no Forms.
+     mesmo semestre, então uma resposta por conta seria incorreto. **Não existe teto
+     automático de quantas avaliações uma pessoa pode enviar** — `MAX_AVALIACOES_NO_SEMESTRE`
+     em `tipos.ts` é um teto de sanidade só para o detalhamento opcional
+     (`qtdProvas`/`qtdTrabalhos`), não uma contagem de envios por autor. Volume anômalo do
+     mesmo nome é pego na moderação semanal (§4.1), não bloqueado na ingestão — um teto por
+     `autor` seria contornável, já que o campo é texto livre digitado.
    - *Permitir edição após o envio* → **ligado**. É o mecanismo de retratação barato
      que a RNF07 pede.
 3. Engrenagem › **Apresentação**: mensagem de confirmação explicando que a avaliação
@@ -69,20 +73,25 @@ As cinco primeiras chegam preenchidas por URL. Continuam editáveis — o Forms 
 campo somente-leitura —, o que é conveniência, não integridade: quem edita cai na
 validação da ingestão.
 
-| # | Pergunta | Tipo | Origem | Obrigatória |
-|---|---|---|---|---|
-| 1 | Seu nome — confira, é ele que aparece publicamente | Resposta curta | prefill do histórico local | sim |
-| 2 | Código da disciplina | Resposta curta | prefill | sim |
-| 3 | Disciplina | Resposta curta | prefill | sim |
-| 4 | Semestre em que você cursou | Resposta curta | prefill | sim |
-| 5 | Professor(a) | Resposta curta | prefill (vazio se fora do elenco) | sim |
-| 6 | Avaliação geral | Escala linear 1–5 | aluno | sim |
-| 7 | Didática | Escala linear 1–5 | aluno | sim |
-| 8 | Carga de trabalho | Escala linear 1–5 | aluno | sim |
-| 9 | Dificuldade | Escala linear 1–5 | aluno | sim |
-| 10 | Como a disciplina era avaliada? | Múltipla escolha | aluno | sim |
-| 11 | Comentário | Parágrafo | aluno | não |
-| 12 | Consentimento | Caixas de seleção | aluno | sim |
+A coluna **Campo CSV** é o nome exigido pela ingestão (`scripts/ingerir-reviews.ts`) — é
+ele, não o rótulo da pergunta, que precisa bater com o cabeçalho da aba `Homologado`
+(§4.2). A pergunta 6 avalia **personalidade** (trato e acessibilidade do docente), não
+uma nota geral/de recomendação — ver a régua real em §3.3.
+
+| # | Pergunta | Campo CSV | Tipo | Origem | Obrigatória |
+|---|---|---|---|---|---|
+| 1 | Seu nome — confira, é ele que aparece publicamente | `autor` | Resposta curta | prefill do histórico local | sim |
+| 2 | Código da disciplina | `codigo` | Resposta curta | prefill | sim |
+| 3 | Disciplina | *(não publicado; só contexto na resposta)* | Resposta curta | prefill | sim |
+| 4 | Semestre em que você cursou | `semestre` | Resposta curta | prefill | sim |
+| 5 | Professor(a) | `professor` | Resposta curta | prefill (vazio se fora do elenco) | sim |
+| 6 | Personalidade (trato e acessibilidade) | `personalidade` | Escala linear 1–5 | aluno | sim |
+| 7 | Didática | `didatica` | Escala linear 1–5 | aluno | sim |
+| 8 | Carga de trabalho | `cargaTrabalho` | Escala linear 1–5 | aluno | sim |
+| 9 | Dificuldade | `dificuldade` | Escala linear 1–5 | aluno | sim |
+| 10 | Como a disciplina era avaliada? | `avaliacao` | Múltipla escolha | aluno | sim |
+| 11 | Comentário | `comentario` | Parágrafo | aluno | não |
+| 12 | Consentimento | *(não publicado)* | Caixas de seleção | aluno | sim |
 
 Detalhes que importam:
 
@@ -142,13 +151,15 @@ Nenhuma âncora descreve o professor como pessoa — todas descrevem o que acont
 o respondente. É o critério de comportamento observável que o desenho antigo aplicava às
 tags, e é ele que contém a superfície difamatória sem exigir moderação caso a caso.
 
-**Geral** — pontas *ruim* → *ótima*
+**Personalidade** — pontas *difícil de lidar* → *ótimo trato* — mede o **trato**: se o
+professor se comunica bem, é acessível para tirar dúvida dentro e fora da sala, trata a
+turma com respeito e é aberto a conversar sobre prazos, notas e dificuldades
 
-1. Não recomendo; teria evitado essa turma se pudesse
-2. Deixou a desejar; cursaria com outro professor se houvesse opção
-3. Cumpriu o esperado, sem se destacar
-4. Boa experiência; recomendo
-5. Das melhores que cursei; recomendo sem ressalva
+1. Trato difícil; evitava contato
+2. Pouco acessível ou pouco receptivo
+3. Cordial, sem muita abertura
+4. Acessível e aberto a conversar
+5. Excelente trato; procurava ajudar
 
 **Didática** — pontas *ruim* → *ótima*
 
@@ -299,10 +310,15 @@ colunas auxiliares à direita da última coluna do Forms, que é área livre.
 ### 4.2 Aba `Homologado`
 
 Aba nova, uma única fórmula na célula A1, projetando apenas as colunas públicas na
-ordem de cabeçalho que `ingerir-reviews.ts` exige (`carimbo, autor, codigo, semestre,
-situacao, professorId, geral, didatica, dificuldade, cargaTrabalho, avaliacao,
-comentario`), filtrando por `aprovado = "SIM"`. Nem e-mail nem RA nem as colunas de
-alerta atravessam.
+ordem de cabeçalho que `COLUNAS_OBRIGATORIAS`, em `scripts/ingerir-reviews.ts`, exige:
+`carimbo, autor, codigo, semestre, professor, personalidade, didatica, dificuldade,
+cargaTrabalho, avaliacao, comentario` (mais `qtdProvas`/`qtdTrabalhos`, opcionais, se o
+detalhamento estiver em uso), filtrando por `aprovado = "SIM"`. Nem e-mail nem RA nem as
+colunas de alerta atravessam.
+
+Essa lista é travada por teste (`tests/reviews-ingestao.test.ts`, "cabeçalho obrigatório
+bate com o documentado") — se o código mudar as colunas exigidas, o teste força a
+atualização deste parágrafo junto, em vez dos dois divergirem em silêncio.
 
 Publicar **essa aba** como CSV e guardar a URL. Ela é pública: não é segredo, é o dado
 que já ia para o site.
@@ -373,7 +389,8 @@ professor, devolve a URL. Os IDs `entry.*` moram só aqui.
 
 - Prefill não trava campo: a validação da ingestão é a linha de defesa real.
 - A restrição de domínio impede não-UTFPR, mas não impede um aluno de avaliar
-  disciplina que não cursou. O teto por pessoa e a moderação humana são a mitigação;
-  não há como verificar matrícula sem o RA, que é dado proibido.
+  disciplina que não cursou. Não há teto automático por pessoa (§3.1) — a moderação
+  humana é a única mitigação; não há como verificar matrícula sem o RA, que é dado
+  proibido.
 - Sem backend, a remoção vale para publicações futuras. O Git guarda o passado, e o
   texto de consentimento diz isso.

@@ -221,6 +221,8 @@ Avaliações atreladas a vínculo institucional são tratamento de dado pessoal:
 ## 6. Pipeline de Avaliações sem Back-end (Arquitetura Homologada)
 
 > **Status (2026-08-02):** caminho **homologado pelo dono**. Preserva a RNF02 — nenhum serviço em runtime, nenhum segredo versionado, custo zero em todos os estágios. Implementa RF15, RF16 e RF17.
+>
+> **Atualização (2026-08-04):** o estágio [1] deixou de ser um formulário nativo do site com Apps Script como endpoint (`tools/apps-script/recebe-review.gs`, `ModalAvaliacao.tsx`, `envio.ts` — todos removidos) e passou a ser um **Google Forms hospedado em conta Workspace da UTFPR**, com login obrigatório em domínio `@*.utfpr.edu.br`. Os estágios [2]–[4] não mudaram: mesma planilha de duas abas, mesma fronteira de confiança, mesma ingestão semanal para `data/reviews.json`. O desenho completo da troca, com o motivo, está em `docs/superpowers/specs/2026-08-04-reviews-forms-design.md`. §6.2, §6.5, §6.6 e §6.9 abaixo foram atualizadas para o fluxo atual; o texto anterior sobre o Apps Script existe só como registro de que essa vantagem (resposta de sucesso/erro, validação antes de gravar) foi trocada conscientemente pela autenticação institucional, que fecha a maior parte do limite do §5.1.
 
 ### 6.1 Princípio: Git como banco de dados
 
@@ -231,8 +233,8 @@ Consequência que sustenta a RNF02: **o site nunca fala com o Google em runtime.
 ### 6.2 Os quatro estágios e a fronteira de confiança
 
 ```
-[1] Coleta        Formulário NATIVO no site → Apps Script  só na tela de quem tem histórico
-[2] Bruto         Aba "Respostas" — NÃO publicada          contém RA; só o moderador vê
+[1] Coleta        Google Forms (login @*.utfpr.edu.br) → aba Respostas   só quem abre pelo botão "Avaliar" no site
+[2] Bruto         Aba "Respostas" — NÃO publicada, contém e-mail          só o moderador vê
 ──────────────────────── fronteira de confiança ────────────────────────
 [3] Curadoria     Aba "Homologado" — publicada como CSV    só linhas aprovadas, só colunas públicas
 [4] Publicação    Action semanal → data/reviews.json       público e versionado
@@ -240,7 +242,7 @@ Consequência que sustenta a RNF02: **o site nunca fala com o Google em runtime.
 
 A fronteira fica **entre [2] e [3]**, não na entrada. É o que permite ser "público e aberto" sem publicar texto não moderado: o que é público é a *saída curada*.
 
-**A fronteira é física, não convencional.** As duas abas vivem na mesma planilha, mas o recurso *Publicar na web* do Google Sheets opera **por aba**: só a `Homologado` recebe URL pública de CSV; a `Respostas` permanece acessível apenas a quem tem a planilha. A `Homologado` é gerada por fórmula (`FILTER`/`QUERY`) que seleciona **apenas as linhas com `aprovado`** e **apenas as colunas publicáveis** — o RA simplesmente não está entre as colunas projetadas. Logo o CSV público é, por construção, incapaz de conter RA ou linha não moderada; não se depende do validador para removê-los.
+**A fronteira é física, não convencional.** As duas abas vivem na mesma planilha, mas o recurso *Publicar na web* do Google Sheets opera **por aba**: só a `Homologado` recebe URL pública de CSV; a `Respostas` permanece acessível apenas a quem tem a planilha. A `Homologado` é gerada por fórmula (`FILTER`/`QUERY`) que seleciona **apenas as linhas com `aprovado`** e **apenas as colunas publicáveis** — o e-mail e o RA simplesmente não estão entre as colunas projetadas. Logo o CSV público é, por construção, incapaz de conter e-mail, RA ou linha não moderada; não se depende do validador para removê-los.
 
 Erro a evitar: publicar a aba de respostas brutas. Isso exporia todo texto submetido no instante do envio, anulando o portão de moderação e publicando conteúdo potencialmente difamatório sem revisão.
 
@@ -255,23 +257,24 @@ A unidade é o par **professor + disciplina + semestre**, e não a disciplina is
   "professorTexto": null,           // preenchido só na rota "Professor Não Ofertado"
   "codigo":        "ICSD20",
   "semestre":      "2025/2",        // ver 6.6: vem do histórico, não é digitado
-  "situacao":      "aprovado",      // ou "reprovado" — contexto legítimo da opinião
+  "situacao":      undefined,       // ausente — o Forms não pergunta (ver abaixo)
   "autor":         "Nome Completo",  // ou nome social completo — RNF06
-  "geral":         4,               // 1–5
+  "personalidade": 4,               // 1–5 — trato, acessibilidade (não é "geral")
   "didatica":      5,               // 1–5
   "dificuldade":   3,               // 1–5  (1 = fácil, 5 = difícil)
   "cargaTrabalho": 2,               // 1–5  (1 = pouca, 5 = muita)
   "avaliacao":     "provas",        // provas | trabalhos | misto
   "qtdProvas":     2,               // detalhamento OPCIONAL — ausente ≠ zero
   "qtdTrabalhos":  1,
-  "tags":          ["corrige-rapido", "cobra-so-o-ensinado"],
   "comentario":    "texto livre, ≤ 1000 caracteres"
 }
 ```
 
+O esquema real é o exportado por `src/domain/reviews/tipos.ts` (`Review`); o trecho acima é ilustrativo, não normativo — em caso de divergência a interface TypeScript vence. Duas mudanças em relação ao desenho original: a vertical antes chamada `geral` é **`personalidade`**, sobre trato e acessibilidade (a régua de 1–5 está em `reviewsComuns.tsx`, reproduzida no formulário); e o vocabulário de `tags` foi removido — ver §6.5.
+
 **Semestre (resposta ao cenário do item 8):** não é campo digitado nem inferido — `DisciplinaCursada` **já carrega `ano` e `semestre`** desde a ingestão do PDF, e a verificação nos históricos reais de referência confirmou **zero ausências** em 32 cursadas por documento, cobrindo de `2023/2` a `2026/1`. O site preenche o campo a partir do histórico e o validador o reconfere contra a oferta. Isso elimina a classe inteira de erro "aluno lembra errado do semestre" e é o que torna a chave `(professor, disciplina, semestre)` confiável.
 
-**Situação:** `aprovado` ou `reprovado` também vêm prontos do parser. Manter essa marca é deliberado — a avaliação de quem reprovou é informação legítima e o leitor merece o contexto.
+**Situação:** o Forms não pergunta se o aluno foi aprovado ou reprovado — perguntar convidaria à omissão de quem reprovou — e o campo fica ausente no registro publicado. Só disciplinas concluídas (aprovação ou consignação) são avaliáveis (§6.6); reprovação nunca chega ao formulário, então a marca `situacao` que o desenho original previa manter nunca é preenchida na prática.
 
 ### 6.4 Identidade do professor — seleção a partir da oferta
 
@@ -334,7 +337,9 @@ Efeito de longo prazo: o roster **cresce além da cobertura de ofertas**, alimen
 
 ### 6.5 Taxonomia de tags — critério de admissão
 
-**Regra:** toda tag precisa ser explicável por **comportamento observável**. Tags ancoradas em personalidade ("gente boa") são inadmissíveis: não são verificáveis, não ajudam a decidir turma e são exatamente a superfície de risco difamatório que a TASK-08 isola. Quando a intenção for elogiar postura, traduza para conduta observável.
+> **Revogada (2026-08-04, commit `aa2f37e`).** O vocabulário de tags saiu de escopo com a troca para o Google Forms — o custo de manter a validação de vocabulário nas três camadas (Forms, Apps Script, ingestão) era desproporcional ao ganho, e a taxonomia foi removida do domínio (`tipos.ts`), da ingestão e da UI. **A tabela abaixo permanece como registro do critério de "comportamento observável"**, que ainda governa a redação das cinco perguntas de nota do formulário atual (§3.3 do desenho em `docs/superpowers/specs/2026-08-04-reviews-forms-design.md`) — nenhuma âncora de escala descreve o professor como pessoa, todas descrevem o que aconteceu com quem respondeu.
+
+**Regra (histórica):** toda tag precisava ser explicável por **comportamento observável**. Tags ancoradas em personalidade ("gente boa") são inadmissíveis: não são verificáveis, não ajudam a decidir turma e são exatamente a superfície de risco difamatório que a TASK-08 isola. Quando a intenção for elogiar postura, traduza para conduta observável.
 
 As tags são agrupadas em quatro categorias — **Conteúdo e avaliação**, **Didática e material**, **Comunicação e trato** e **Rotina e prazos** —, o que reduz a lista a blocos legíveis e coloca cada par contraditório lado a lado.
 
@@ -364,64 +369,49 @@ As tags são agrupadas em quatro categorias — **Conteúdo e avaliação**, **D
 
 **Origem restrita (RF15).** O botão *Avaliar* só existe na tela de quem carregou o histórico, e só nas disciplinas concluídas por aprovação ou consignação. A consignação preserva duas identidades: o código original cursado alimenta nome, professor e formulário; o código canônico da matriz continua alimentando progresso, equivalências e Planejamento. Reprovações ficam fora.
 
-**O formulário é nativo do site.** O aluno não sai da plataforma: a mesma tela que conhece o histórico monta o seletor de professor da §6.4, pré-preenche `codigo`, `semestre`, `situacao` e `turma`, apresenta o consentimento e o diálogo de *Professor Não Ofertado*, e valida antes de enviar.
+**O formulário é o Google Forms, num domínio próprio da UTFPR.** O aluno sai da plataforma, mas a saída é curta: ao clicar *Avaliar* numa disciplina concluída, a mesma tela que conhece o histórico monta o seletor de professor da §6.4 (com busca, e a opção *Meu professor não está na lista*) e abre o Forms em nova aba com `autor`, `codigo`, `disciplina`, `semestre` e `professor` já preenchidos por URL (`src/domain/reviews/forms.ts`, `montarUrlDeAvaliacao`). O prefill **não trava campo** — o Forms não tem campo somente-leitura —, então quem edita o valor antes de enviar cai na validação da ingestão; é conveniência, não integridade.
 
-Isso só é possível porque a coleta deixou de depender de um formulário de terceiro com campos fixos: uma lista de professores que muda por disciplina não cabe num Google Form, cujas opções são estáticas.
+**Por que trocar o formulário nativo + Apps Script por isso:** o desenho anterior admitia, com honestidade, três limites — não autenticava o RA, o anti-Sybil era humano, e não havia rate limiting por IP (ver versão histórica destas notas em `docs/superpowers/plans/2026-08-04-reviews-forms.md`). O Forms hospedado em conta Workspace da UTFPR, com **login obrigatório em `@*.utfpr.edu.br`**, resolve o primeiro e, com ele, boa parte do segundo — é a âncora anti-Sybil institucional que o §5.2 buscava, só que sem custo de infraestrutura. Em troca, perde-se o controle sobre a UI de envio (resposta de sucesso/erro em tempo real, validação client-side antes de gravar), o que foi julgado aceitável frente ao custo de manter ~566 linhas de `ModalAvaliacao.tsx` mais um endpoint em Apps Script.
 
-**O envio vai para um Apps Script publicado como Web App**, vinculado à planilha (`tools/apps-script/recebe-review.gs`). Ele é gratuito, hospedado pelo Google e sem infraestrutura a manter — mesma categoria de dependência que o formulário externo teria —, mas com duas vantagens decisivas:
-
-- **Resposta real de sucesso ou erro.** Um POST direto ao endpoint do Google Forms é *fire-and-forget*: o CORS impede a leitura da resposta e o aluno nunca sabe se o envio valeu.
-- **Validação antes de gravar.** O script rejeita nota fora de 1–5, tag fora do vocabulário, comentário acima do limite, ausência de consentimento, as duas rotas de professor preenchidas ao mesmo tempo, e aplica a guarda de PII e o freio de vazão da §6.9. É uma camada a mais **antes** da fronteira de confiança, não no lugar dela.
-
-*Detalhe de implementação que quebra silenciosamente se ignorado:* o site envia `Content-Type: text/plain` com corpo JSON. Com `application/json` o navegador dispara um preflight `OPTIONS` que o Apps Script não responde, e a requisição falha inteira.
-
-**Limite honesto:** a URL do endpoint é pública e aceita POST de quem a descobrir — exatamente como aconteceria com um formulário externo. A defesa real continua sendo o validador da fronteira (§6.6) somada à moderação; o script apenas encarece o abuso.
-
-Limite honesto: uma URL de formulário conhecida **pode** receber envio direto. A restrição real não é o transporte, é o **validador na fronteira**, que rejeita a linha cujo `(código, turma, semestre)` não fecha com a oferta oficial. É defesa por validação, não por prevenção.
+**Limite honesto, que não muda com a troca:** a restrição de domínio impede quem não é da UTFPR, mas não impede um aluno de avaliar disciplina que não cursou — não há como verificar matrícula sem o RA, que é dado proibido. A defesa real continua sendo o **validador na fronteira** (abaixo) somado à **moderação humana**, não o transporte.
 
 #### Da planilha ao site, coluna a coluna
 
-A aba `Respostas` é criada pelo próprio Apps Script com este layout. A coluna `aprovado` é a que o moderador preenche:
+A aba `Respostas` é criada pelo próprio Google Forms; colunas de apoio à moderação (`aprovado`, `alerta_pii`, `alerta_prefill`) são acrescentadas à direita, em área livre, sem tocar nas colunas nativas do Forms. A coluna `aprovado` é a que o moderador preenche à mão — o padrão é vazio, ou seja, **nada é publicado por omissão**.
 
-| | A | B | C | D | E | F | G | H | I | J | K–N | O | P | Q | R | S | T | U |
-| :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- | :-- |
-| | carimbo | identidade | **ra** | autor | codigo | semestre | situacao | turma | professorId | professorTexto | notas | avaliacao | qtdProvas | qtdTrabalhos | tags | comentario | consentimento | **aprovado** |
+A aba `Homologado` projeta **só o que é público**, na ordem de cabeçalho que `scripts/ingerir-reviews.ts` exige: `carimbo, autor, codigo, semestre, professor, personalidade, didatica, dificuldade, cargaTrabalho, avaliacao, comentario` (mais `qtdProvas`/`qtdTrabalhos` quando o detalhamento opcional existir), filtrando por `aprovado = "SIM"`. É ela — e só ela — que recebe URL de CSV.
 
-A aba `Homologado` projeta **só o que é público**, e é ela — e só ela — que recebe URL de CSV:
+Três coisas que essa projeção garante por construção, sem depender de disciplina de ninguém:
 
-```
-=QUERY(Respostas!A:U; "select A,D,E,F,G,H,I,K,L,M,N,O,P,Q,R,S where U = 'SIM' and I <> ''"; 1)
-```
-
-Três coisas que essa fórmula garante por construção, sem depender de disciplina de ninguém:
-
-- **`B` e `C` ficam de fora.** A identidade de quem enviou e o RA não estão entre as colunas projetadas, então o CSV público é *incapaz* de contê-los.
-- **`where S = 'SIM'`** — nada não aprovado sai.
-- **`and I <> ''`** — linha da rota *Professor Não Ofertado* só publica depois que o moderador escreve o `professorId` no lugar do texto livre, promovendo o docente ao roster.
+- **E-mail e RA ficam de fora.** Nenhum dos dois está entre as colunas projetadas, então o CSV público é *incapaz* de contê-los — o validador da ingestão ainda assim confere a ausência (abaixo), como cinto e suspensório.
+- **A fórmula filtra por `aprovado = SIM`** — nada não aprovado sai.
+- **`professor` chega como nome, não como slug.** A ingestão resolve o nome contra o roster (`resolverProfessor`); quando não resolve, a linha entra na rota *Professor Não Ofertado* — não publica e **não é erro**, fica pendente até o nome ser promovido ao roster.
 
 **Regeneração total, nunca append.** A automação semanal reconstrói `data/reviews.json` **inteiro** a partir das linhas aprovadas. Com `id` estável por linha, o JSON é função pura da planilha: rodar duas vezes produz o mesmo resultado, e desaprovar uma linha a remove da próxima publicação. É a mesma disciplina dos parsers de `tools/`.
 
 **Validador (RNF03, `0 erros`).** Implementado em `scripts/ingerir-reviews.ts`, no espírito de `validate_turmas.py`: **qualquer erro aborta a ingestão inteira e nada é publicado.**
 
-Escrito em TypeScript, e não em Python como o resto de `tools/`, por correção: o vocabulário de tags, os limites e o tipo `Review` moram no domínio TS. Reimplementá-los em Python criaria duas fontes da verdade divergindo em silêncio — exatamente o que o validador existe para impedir.
+Escrito em TypeScript, e não em Python como o resto de `tools/`, por correção: os limites e o tipo `Review` moram no domínio TS. Reimplementá-los em Python criaria duas fontes da verdade divergindo em silêncio — exatamente o que o validador existe para impedir.
 
 *Estrutura do CSV:*
-- colunas obrigatórias presentes;
+- colunas obrigatórias presentes (`carimbo, autor, codigo, semestre, professor, personalidade, didatica, dificuldade, cargaTrabalho, avaliacao, comentario`);
 - **colunas `ra` e `identidade` ausentes** — se aparecerem, a projeção da aba foi alterada e está vazando dado privado: recusa o CSV inteiro;
 - parsing conforme RFC 4180, escrito à mão, porque o comentário é texto livre e pode conter vírgula, aspas e quebra de linha. Um `split(",")` corromperia essas linhas em silêncio.
 
-*Coerência com o dado oficial — o que o Apps Script não consegue checar:*
+*Coerência com o dado oficial — o que o Forms não consegue checar:*
 - `codigo` existe em alguma matriz ou oferta versionada;
-- `professorId` existe no **roster** construído a partir das ofertas de todos os cursos;
-- linha sem `professorId` é **pendente de roster**: não publica e **não é erro** — fica aguardando a promoção pela moderação.
+- `professor` resolve, pelo nome, para um id existente no **roster** construído a partir das ofertas de todos os cursos;
+- linha sem professor resolvido é **pendente de roster**: não publica e **não é erro** — fica aguardando a promoção pela moderação.
 
-*Forma e vocabulário:*
-- `semestre` em `AAAA/S`; `situacao` em aprovado/reprovado; `autor` não vazio;
-- notas inteiras de 1–5; `avaliacao` no enum; tags no vocabulário fechado da §6.5;
+*Forma:*
+- `semestre` em `AAAA/S`; `autor` não vazio;
+- notas inteiras de 1–5; `avaliacao` no enum (`provas`/`trabalhos`/`misto`, mapeado dos rótulos em português da pergunta 10 do Forms);
 - comentário dentro do limite de 1000 caracteres;
 - **guarda de PII por regex** — RA de 7 dígitos, e-mail e telefone reprovam a linha.
 
-*Determinismo:* o `id` é hash estável de `(carimbo, autor, codigo, semestre, professorId)`, e a saída é ordenada por ele. Rodar duas vezes produz byte a byte o mesmo arquivo, e `geradoEm` só avança quando o conteúdo muda de fato — sem isso o Action commitaria ruído toda semana.
+*Determinismo:* o `id` é hash estável de `(carimbo, autor, codigo, semestre, professor)`, e a saída é ordenada por ele. Rodar duas vezes produz byte a byte o mesmo arquivo, e `geradoEm` só avança quando o conteúdo muda de fato — sem isso o Action commitaria ruído toda semana.
+
+**Sem teto automático por pessoa.** `MAX_AVALIACOES_NO_SEMESTRE` (20) limita apenas `qtdProvas`/`qtdTrabalhos` como teto de sanidade contra erro de digitação — não é um limite de quantas avaliações uma pessoa pode enviar. Nada na ingestão impede um mesmo aluno de avaliar várias disciplinas; a mitigação para volume anômalo é a moderação semanal (§6.7), não um teto automático.
 
 **Limiar de exibição.** Agregado com N baixo mente: uma única avaliação vira "100%". Abaixo de um N mínimo, exibe-se o comentário mas **não** a estatística agregada. O valor exato é calibração de produto; a regra é estrutural.
 
@@ -445,27 +435,24 @@ Escrito em TypeScript, e não em Python como o resto de `tools/`, por correção
 
 ### 6.9 Controle de abuso por volume — o que é e o que não é possível
 
-**Bloqueio por IP não é implementável nesta arquitetura, e o motivo é anterior ao esforço: o dado não existe.** Duas razões independentes, ambas bloqueantes:
+**Bloqueio por IP continua não implementável nesta arquitetura, pelo mesmo motivo de sempre: o dado não existe.** O site é estático e nunca recebe a submissão — ela vai direto do navegador do aluno para o Google Forms. Limitar por IP exige um ponto que veja a requisição e guarde estado entre requisições; a RNF02 exclui exatamente isso, e o Forms não expõe o IP do respondente a quem é dono do formulário.
 
-1. **Não há servidor nosso no caminho.** O site é estático e nunca recebe a submissão — ela vai direto do navegador do aluno para o formulário externo. Limitar por IP exige um ponto que veja a requisição e guarde estado entre requisições; a RNF02 exclui exatamente isso.
-2. **O formulário não registra o IP do respondente.** Mesmo com um servidor nosso do lado de fora, o IP não é exposto ao dono do formulário. Não há o que ler.
+**A raiz anti-Sybil deixou de ser humana e passou a ser institucional.** Com *Coletar endereços de e-mail* → **Verificado** e *Restringir a usuários em utfpr.edu.br* → **ligado** nas configurações do Forms (§3.1 do desenho em `docs/superpowers/specs/2026-08-04-reviews-forms-design.md`), só responde quem está logado numa conta `@*.utfpr.edu.br`, e o Google grava esse e-mail sem que o respondente possa alterá-lo. Isso fecha a maior parte do que o §5.4 chamava de "verificação institucional = raiz anti-Sybil": cada identidade falsa exige uma conta institucional distinta, o que exige estar matriculado.
 
-**O endpoint de escrita também não tem como ficar oculto.** A URL do Apps Script precisa estar no JavaScript servido ao navegador; DevTools a revela. Repositório privado, repositório separado ou variável de ambiente não mudam isso — o Vite inlina `VITE_*` no bundle (§5.6). Assumir o contrário é o erro; o desenho parte de que a URL é conhecida.
+**Raio de dano de quem tem a conta e ainda assim abusa, e é aqui que a fronteira paga:** envios caem na aba **privada** de Respostas e só viram acervo público depois de um humano marcar `aprovado`. Enxurrada custa **tempo de moderação**, não polui o site. O acervo público é imune por construção — a mesma propriedade que segura conteúdo difamatório.
 
-**Raio de dano de quem a descobrir, e é aqui que a fronteira paga:** envios caem na aba **privada** e só viram acervo público depois de um humano marcar `aprovado`. Spam custa **tempo de moderação e cota**, não polui o site. O acervo público é imune por construção — a mesma propriedade que segura conteúdo difamatório.
-
-O que **é** possível sem back-end, em camadas:
+O que existe hoje, em camadas:
 
 | Camada | Mecanismo | Alcance real |
 | :--- | :--- | :--- |
-| **Anti-robô** | **Cloudflare Turnstile**, com a chave secreta em *Script Properties* do Apps Script | Defesa efetiva contra bot. É o **único ponto de todo o desenho onde cabe um segredo**, porque as Script Properties são server-side de verdade, fora do bundle |
-| Teto global | Contador por minuto em `CacheService`, somando todos os envios | Não depende de identidade: segura enxurrada e protege a cota do Apps Script e o tamanho da planilha |
-| Identidade | Exigir Conta do Google na implantação + freio por conta e janela | **Degrada em silêncio:** numa implantação aberta a qualquer pessoa, `Session.getActiveUser().getEmail()` devolve vazio e o freio vira no-op. Só vale com login exigido e e-mail legível |
+| **Anti-Sybil / anti-robô** | Login obrigatório em domínio `@*.utfpr.edu.br`, e-mail verificado gravado pelo Forms | Fecha a raiz: cada envio custa uma conta institucional distinta. Não impede um aluno real de avaliar disciplina que não cursou (§6.6) |
+| Teto por pessoa | **Não existe automaticamente.** `MAX_AVALIACOES_NO_SEMESTRE` só limita o detalhamento opcional (`qtdProvas`/`qtdTrabalhos`), não quantas avaliações uma pessoa envia | Um volume anômalo do mesmo `autor` é visível na planilha e pego na moderação — reativo, não preventivo |
+| Alerta de moderação | Colunas de apoio `alerta_pii` (RA/e-mail/telefone no comentário) e `alerta_prefill` (código fora do padrão esperado, indício de campo editado) | Reduz o custo de revisão: aprovar em lote olhando só as linhas acesas |
 | Publicação | Portão de moderação semanal (§6.2) | Uma enxurrada gera muitas linhas **não aprovadas**: o custo é tempo do moderador, não conteúdo público |
 
-Ou seja: o dano de um flood é **absorvido** pela fronteira de confiança, não evitado na origem. Nada não moderado chega ao público, por construção.
+Ou seja: o dano de um flood continua sendo **absorvido** pela fronteira de confiança, não evitado na origem — mas agora a origem já filtra quem não tem vínculo institucional, o que o desenho anterior não fazia.
 
-**Se o bloqueio por IP virar requisito firme**, é o gatilho para reabrir a §5: um *edge worker* (Cloudflare Workers + Turnstile) faz rate limiting por IP nativamente e cabe em faixa gratuita — mas isso reintroduz um serviço em runtime. A troca é precisa: preserva o **custo zero**, abandona o **back-end zero**.
+**Se um teto automático por pessoa virar requisito firme**, ele é implementável na ingestão contando linhas por `autor` e por semestre — mas `autor` é texto livre digitado, então o teto seria contornável trocando a grafia do nome; seria segurança de fachada sem a verificação de identidade que faltaria por trás. O gatilho real para reabrir essa discussão é o mesmo do bloqueio por IP: se o volume superar o que a moderação semanal absorve, é hora de reavaliar infraestrutura própria, não de simular um teto que não protege de fato.
 
 ### 6.10 Compartilhamento entre cursos
 
@@ -479,16 +466,17 @@ Três consequências de arquitetura:
 2. **Roster global.** O elenco de docentes é construído a partir das ofertas de **todos** os cursos cobertos, não só o do aluno. Além de correto, é medível: reduz a falha de seleção de 17% para 11% (§6.4).
 3. **Leitura resolve por equivalência.** Ao exibir avaliações de uma disciplina, o curso em que o leitor está resolve o código pelo seu próprio `MapaIdentidade` (`motor/identidade.ts`) e reúne as avaliações de **todos os códigos equivalentes**. Assim, se a mesma exigência curricular tem código distinto entre matrizes, o acervo continua único do ponto de vista de quem lê.
 
-O primeiro curso a receber a interface é **BSI 981**, mas nada no formato do dado é específico dele: habilitar outro curso é ligar a tela, não migrar acervo.
+O primeiro curso a receber a interface foi **BSI 981** — um piloto, não um recorte permanente. Com o piloto validado, a lista foi aberta para todas as matrizes cobertas pela plataforma: o ganho é imediato e cruzado, porque professores são compartilhados entre cursos.
 
-**O recorte é de superfície, e vive num lugar só.** `MATRIZES_COM_REVIEWS`, em `src/domain/reviews/config.ts`, lista as matrizes cujo curso já expõe a camada — hoje `[981]`. Enquanto uma matriz não estiver ali, o aluno daquele curso não vê a seção de avaliar nem o painel de professor.
+**O recorte é de superfície, e vive num lugar só.** `MATRIZES_COM_REVIEWS`, em `src/domain/reviews/config.ts`, lista as matrizes cujo curso já expõe a camada — hoje `[981, 806, 823, 844, 962, 968, 973, 978]`, ou seja, todas as matrizes que a plataforma cobre. Enquanto uma matriz não estiver ali, o aluno daquele curso não vê a seção de avaliar nem o painel de professor; habilitar uma nova matriz futura continua sendo uma linha nessa lista.
 
 O que **não** é recortado: o acervo continua único e o roster segue sendo construído sobre as ofertas de **todos** os cursos, habilitados ou não. A consequência é a pretendida — no instante em que uma matriz entra na lista, os alunos dela já enxergam as avaliações escritas por alunos de outros cursos sobre os docentes que compartilham. Habilitar é uma linha; não há migração, reprocessamento nem acervo separado.
 
 ### 6.11 Limites honestos desta arquitetura
 
-1. **Não autentica RA.** O PDF do histórico não tem assinatura verificável por terceiros (§5.1). O RA é autodeclarado: encarece a fraude e serve à moderação, não a impede.
-2. **Anti-Sybil é humano.** Sem verificação institucional, a defesa contra enxurrada de avaliações falsas é a revisão semanal. Escala até certo volume; acima dele, a §5 volta à mesa.
-   - **Sem rate limiting por IP** (§6.9): o formulário não expõe IP e não há servidor nosso no caminho. O que existe é throttle por identidade e absorção do flood na moderação.
-3. **Latência de uma semana.** Por desenho — é o preço do portão de moderação e do custo zero.
+1. **Não autentica RA.** O PDF do histórico não tem assinatura verificável por terceiros (§5.1). O RA é autodeclarado: encarece a fraude e serve à moderação, não a impede. O login institucional do Forms (§6.2, §6.9) prova vínculo com a UTFPR, não matrícula na disciplina avaliada.
+2. **Anti-Sybil é institucional, não mais puramente humano.** O login obrigatório em domínio `@*.utfpr.edu.br` fecha a raiz — cada identidade falsa exige uma conta institucional distinta —, mas a restrição de domínio não impede um aluno real de avaliar disciplina que não cursou, nem substitui a revisão semanal como última camada. Escala até certo volume; acima dele, a §5 volta à mesa.
+   - **Sem teto automático por pessoa nem rate limiting por IP** (§6.9): o Forms não expõe IP e não há servidor nosso no caminho. Um teto por `autor` seria contornável, já que o nome é texto livre. O que existe é a moderação absorvendo o flood.
+3. **Latência de uma semana.** Por desenho — é o preço do portão de moderação e do custo zero, e o Forms informa isso na tela de confirmação (§3.1 do desenho da coleta).
 4. **Publicação é permanente no Git.** Mitigada por consentimento explícito, não eliminável sem reescrever histórico.
+5. **Prefill não trava campo.** O Forms não tem campo somente-leitura; o aluno pode editar `codigo`, `semestre` ou `professor` antes de enviar. A validação da ingestão (§6.6) é a linha de defesa real contra isso, não o prefill em si.

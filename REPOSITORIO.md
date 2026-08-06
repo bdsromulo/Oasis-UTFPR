@@ -23,7 +23,7 @@ Este documento é o **contrato de trabalho e manual canônico de arquitetura** p
 
 ## 1. O que é o projeto e Metodologia de Desenvolvimento
 
-O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matrizes 981 e 806)**, à **Engenharia de Computação (844 e 962)**, à **Engenharia Eletrônica (968)** e à **Engenharia de Controle e Automação (978)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de um curso se aplica a outro — na 968 quase todo o currículo são grupos de escolha, enquanto a 978 exige separadamente 135h em cada uma de cinco trilhas de formação.
+O **Oásis UTFPR** é uma plataforma web moderna, local-first e independente para estudantes da UTFPR Câmpus Curitiba. Hoje atende ao **Bacharelado em Sistemas de Informação (matrizes 981 e 806)**, à **Engenharia de Computação (844 e 962)**, à **Engenharia Eletrônica (968)**, à **Engenharia de Controle e Automação (978)** e à **Engenharia Mecatrônica (823 e 973)**. As categorias curriculares, trilhas, estágios e extensão são parametrizados pela matriz ativa; não presuma que uma regra de um curso se aplica a outro — na 968 quase todo o currículo são grupos de escolha, a 978 exige separadamente 135h em cada uma de cinco trilhas de formação, e a 823 traz 264 equivalências para a nomenclatura atual de disciplinas.
 
 ### Metodologia e Escalação de Trabalho
 Atualmente, o projeto adota uma metodologia de **Desenvolvimento Ágil Individual com Vibe Coding / IA Assistida (Antigravity & Claude Code)**. Para garantir escalabilidade e transição suave para **trabalho grupal de mantenedores no futuro**, a documentação é dividida em **três documentos canônicos especializados**:
@@ -49,38 +49,47 @@ oasis-utfpr/
 ├── Tasks.md                  # Backlog vivo de tarefas e features
 ├── CLAUDE.md                 # Resumo rápido de diretrizes para IAs
 ├── index.html                # Ponto de entrada web (carrega fontes Outfit/Plus Jakarta Sans)
+├── docs/superpowers/         # Planos e specs de features maiores (ex.: troca do formulário de reviews)
 ├── data/                     # JSONs canônicos servidos à aplicação estática
 │   ├── matriz-981.json       # Matriz curricular de BSI 981
+│   ├── matriz-806.json       # Matriz curricular de BSI 806 (matriz antiga)
+│   ├── reviews.json          # Acervo de avaliações da comunidade (Estrategia.md §6), regenerado por Action
 │   ├── turmas/               # Ofertas semestrais de BSI
 │       ├── 2026-1.json       # Oferta primária gerada via PDF do Portal do Aluno
 │       └── 2025-2.json       # Oferta secundária (Grade na Hora)
 │   ├── eng-comp/             # Matrizes 844 e 962 e ofertas de Engenharia de Computação
 │   ├── eng-eletronica/       # Matriz 968, oferta e o complemento de conjuntos
-│   └── eng-controle/          # Matriz 978 e ofertas próprias de Controle e Automação
+│   ├── eng-controle/         # Matriz 978 e ofertas próprias de Controle e Automação
+│   └── eng-mecatronica/      # Matrizes 823 e 973 e ofertas próprias de Mecatrônica
 ├── tools/                    # Pipeline de extração e validação de dados em Python 3
 │   ├── parse_matriz.py       # Extrai Lista de Matérias PDF -> matriz-<n>.json
 │   ├── aplicar_anotacoes.py  # Soma a curadoria (anotacoes-981.json) ao parse do PDF
-│   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz
+│   ├── validate_matriz.py    # Valida invariantes M1 a M7 da matriz 981
+│   ├── validate_matriz_806.py / _823.py / _968.py / _973.py / _978.py # Invariantes por matriz
 │   ├── validate_matriz_equivalencias.py # Invariantes E1 a E3 das equivalências (qualquer matriz)
-│   ├── validate_matriz_968.py # Invariantes da 968, inclusive a árvore de conjuntos
-│   ├── validate_matriz_978.py # Invariantes da 978 e suas cinco trilhas obrigatórias
 │   ├── parse_turmas_pdf.py   # Extrai PDF de Turmas Abertas -> turmas/<sem>.json
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
 │   ├── validate_turmas_estrutura.py # Invariantes independentes da fonte
 │   ├── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
 │   └── parse_gnh_html.py     # Leitor terciário: página salva do GNH (ofertas passadas)
+├── scripts/                  # Automação em TypeScript, fora do pipeline Python de dados
+│   ├── ingerir-reviews.ts    # Ingestão semanal do CSV de reviews -> data/reviews.json
+│   ├── semear-reviews.ts     # Gera reviews sintéticas para desenvolvimento local
+│   └── verificar-bundle.mjs  # Reprova o build se o bundle inicial passar do teto gzip
 ├── src/                      # Código fonte da aplicação web (Vite + React 19 + TypeScript)
 │   ├── index.css             # Tokens Tailwind v4 e estilos base (--color-utfpr-*)
 │   ├── main.tsx              # Montagem do React no DOM
 │   ├── domain/               # Lógica de negócio pura (sem dependências de UI/React)
 │   │   ├── tipos.ts          # Contratos canônicos de dados (Matriz, Oferta, Perfil)
 │   │   ├── historico/        # Leitura de posições PDF e parser de histórico
-│   │   └── motor/            # Regras de situação curricular, elegibilidade e choques de grade
+│   │   ├── motor/            # Regras de situação curricular, elegibilidade e choques de grade
+│   │   ├── reviews/          # Domínio das avaliações da comunidade (tipos, acervo, roster, forms.ts)
+│   │   └── savefile.ts       # Exportação/importação portátil do perfil e planejamento local
 │   └── ui/                   # Camada visual React + Tailwind
 │       ├── App.tsx           # Orquestrador de estado e cabeçalho da plataforma
 │       ├── componentes.tsx   # Componentes base (Card, Botao, Badge, Barra)
 │       ├── icons.tsx         # Ícones SVG minimalistas (sem emojis) e LogoUTFPR
-│       └── telas/            # Telas especializadas (Situacao, PossoCursar, Grade)
+│       └── telas/            # Telas especializadas (Situacao, PossoCursar, Grade, reviews, savefile)
 └── tests/                    # Suíte de testes automatizados (Vitest)
     ├── fixtures/             # PDFs e arquivos sintéticos de teste (aluno fictício)
     ├── historico-sintetico.test.ts # Testes que rodam sempre em CI/CD
@@ -158,6 +167,21 @@ python tools/validate_matriz_968.py
 # é detectado pelo número da matriz; as fontes pessoais permanecem fora do Git.
 python tools/parse_matriz.py "Matriz Curricular Eng. Controle e Automação 978.pdf" data/eng-controle/matriz-978.json
 python tools/validate_matriz_978.py
+
+# Reimportar e validar as matrizes de Engenharia Mecatrônica (973 atual e 823 antiga,
+# com 264 equivalências para a nomenclatura vigente)
+python tools/parse_matriz.py "Matriz Curricular Eng. Mecatrônica 973.pdf" data/eng-mecatronica/matriz-973.json
+python tools/validate_matriz_973.py
+python tools/parse_matriz.py "Matriz Curricular Eng. Mecatrônica 823.pdf" data/eng-mecatronica/matriz-823.json
+python tools/validate_matriz_823.py
+
+# Reimportar e validar a matriz 806 de BSI (matriz antiga)
+python tools/parse_matriz.py "Matriz Curricular BSI 806.pdf" data/matriz-806.json
+python tools/validate_matriz_806.py
+
+# Ingestão semanal das avaliações da comunidade (Estrategia.md §6) — roda via Action
+# no repositório de produção; local só para depurar, nunca para publicar direto
+URL_CSV_REVIEWS="<url do CSV publicado da aba Homologado>" npx tsx scripts/ingerir-reviews.ts
 ```
 
 ### Hierarquia de conjuntos na matriz
@@ -204,3 +228,9 @@ Este repositório consolida as seguintes definições canônicas de interface e 
 5. **Terminologia Limpa e Feedbacks Interativos (`Situacao.tsx`):**
    - O título para disciplinas faltantes em cards foi padronizado de `Pendentemente:` para **`Pendente:`**.
    - Qualquer menção a códigos de disciplina em *Minha Situação* (lista de pendentes, dependências, avisos de importação) passa pela função `renderizarTextoComCodigos`, recebendo sublinhado interativo pontilhado e revelando em tooltip instantâneo o código, nome completo, período e carga horária.
+
+6. **Camada de avaliações da comunidade, savefile e Modo Livre:**
+   - Arquitetura e pipeline completos em `Estrategia.md` §6, não repetidos aqui. Resumo para quem só precisa navegar o código: a coleta é um Google Forms externo (`src/domain/reviews/forms.ts` monta a URL de prefill), a leitura é local (`src/domain/reviews/acervo.ts`, `professores.ts`, `config.ts`, e as telas `PainelProfessor.tsx`/`PainelDisciplina.tsx`/`reviewsComuns.tsx`), e o acervo publicado é `data/reviews.json`, regenerado só pelo workflow `ingerir-reviews.yml`.
+   - `MATRIZES_COM_REVIEWS` (`src/domain/reviews/config.ts`) é o único ponto que decide em quais matrizes a interface de avaliações aparece; o acervo e o roster de docentes são sempre globais (§6.10).
+   - **Modo Livre:** o aluno pode navegar sem carregar histórico, escolhendo curso e matriz manualmente. Sem `perfil`, a aba *Minha Situação* fica bloqueada e o Planejamento vira ponto de entrada (item 1 acima).
+   - **Savefile** (`src/domain/savefile.ts`): exportação/importação de um JSON versionado com o perfil já derivado e as grades montadas — nunca o PDF original. É o mecanismo de portar dados entre navegadores sem backend.
