@@ -304,22 +304,35 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   return { reviews: publicaveis, erros, ignoradas };
 }
 
+/**
+ * Encerra sinalizando falha, sem `process.exit()`.
+ *
+ * Chamar `process.exit()` com o socket do `fetch` ainda aberto derruba o libuv no
+ * Windows ("Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)"), e o código
+ * de saída vira 0xC0000409 em vez de 1 — quem chama este script de fora lê um
+ * crash onde havia uma recusa de validação. Marcar `exitCode` deixa o Node fechar
+ * o que está pendente e sair sozinho com o código certo.
+ */
+function falhar(mensagem: string): void {
+  console.error(mensagem);
+  process.exitCode = 1;
+}
+
 async function principal() {
   const url = process.argv[2] || process.env.URL_CSV_REVIEWS;
   if (!url) {
-    console.error("uso: npx tsx scripts/ingerir-reviews.ts <url-do-csv-publicado>");
-    process.exit(1);
+    return falhar("uso: npx tsx scripts/ingerir-reviews.ts <url-do-csv-publicado>");
   }
 
   const resposta = await fetch(url, { redirect: "follow" });
   if (!resposta.ok) {
-    console.error(`falha ao baixar o CSV: HTTP ${resposta.status}`);
-    process.exit(1);
+    return falhar(`falha ao baixar o CSV: HTTP ${resposta.status}`);
   }
   const csv = await resposta.text();
   if (/<html/i.test(csv.slice(0, 200))) {
-    console.error("a URL devolveu HTML, não CSV — a aba provavelmente não está publicada na web.");
-    process.exit(1);
+    return falhar(
+      "a URL devolveu HTML, não CSV — a aba provavelmente não está publicada na web.",
+    );
   }
 
   const { reviews, erros, ignoradas } = validarEConverter(parseCsv(csv));
@@ -327,7 +340,8 @@ async function principal() {
   if (erros.length) {
     console.error(`\n${erros.length} erro(s) na ingestão — nada foi publicado:\n`);
     erros.forEach((e) => console.error("  - " + e));
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   // preserva `geradoEm` quando o conteúdo não mudou, para o Action não commitar
