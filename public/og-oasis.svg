@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Oásis UTFPR — Planejamento acadêmico</title>
+  <desc id="desc">Cartão social escuro com a marca Oásis, detalhes amarelos e uma descrição da plataforma.</desc>
+  <defs>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="translate(185 95) rotate(44) scale(620 500)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FECD0F" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#FECD0F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="card" x1="82" y1="93" x2="378" y2="515" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B2719"/>
+      <stop offset="1" stop-color="#18181B"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#09090B"/>
+  <rect width="1200" height="630" fill="url(#halo)"/>
+  <path d="M0 518C172 469 283 527 433 491C585 454 677 375 827 391C971 407 1060 502 1200 473V630H0Z" fill="#FECD0F" fill-opacity=".055"/>
+  <path d="M0 543C173 493 297 551 450 511C609 470 701 409 846 423C994 438 1071 524 1200 499" fill="none" stroke="#FECD0F" stroke-opacity=".27" stroke-width="3"/>
+
+  <rect x="72" y="94" width="324" height="414" rx="48" fill="url(#card)" stroke="#FECD0F" stroke-opacity=".38" stroke-width="2"/>
+  <circle cx="234" cy="277" r="112" fill="#FECD0F" fill-opacity=".10" stroke="#FECD0F" stroke-opacity=".55" stroke-width="3"/>
+  <path d="M234 346V244M234 244C211 210 166 210 132 233C155 233 189 244 234 244ZM234 244C257 210 302 210 336 233C313 233 279 244 234 244ZM234 244C200 188 166 177 143 177C166 188 200 210 234 244ZM234 244C268 188 302 177 325 177C302 188 268 210 234 244Z" fill="none" stroke="#FECD0F" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 369C189 358 211 380 234 369C257 358 279 380 302 369M189 397C206 389 223 403 240 397C257 389 274 403 291 397" fill="none" stroke="#FECD0F" stroke-linecap="round" stroke-width="11"/>
+  <text x="234" y="467" text-anchor="middle" fill="#FAFAFA" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="4">LOCAL-FIRST</text>
+
+  <text x="466" y="190" fill="#FECD0F" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="5">PLANEJAMENTO ACADÊMICO</text>
+  <text x="462" y="285" fill="#FAFAFA" font-family="Arial, sans-serif" font-size="72" font-weight="800">Oásis UTFPR</text>
+  <text x="466" y="347" fill="#D4D4D8" font-family="Arial, sans-serif" font-size="27">Histórico, progresso curricular, turmas</text>
+  <text x="466" y="386" fill="#D4D4D8" font-family="Arial, sans-serif" font-size="27">e grade horária — tudo no seu navegador.</text>
+
+  <g font-family="Arial, sans-serif" font-size="20" font-weight="700">
+    <rect x="466" y="436" width="103" height="46" rx="23" fill="#27272A" stroke="#52525B"/>
+    <text x="517" y="466" text-anchor="middle" fill="#FAFAFA">BSI</text>
+    <rect x="585" y="436" width="226" height="46" rx="23" fill="#27272A" stroke="#52525B"/>
+    <text x="698" y="466" text-anchor="middle" fill="#FAFAFA">ENG. COMPUTAÇÃO</text>
+    <rect x="827" y="436" width="214" height="46" rx="23" fill="#27272A" stroke="#52525B"/>
+    <text x="934" y="466" text-anchor="middle" fill="#FAFAFA">ENG. ELETRÔNICA</text>
+  </g>
+  <text x="466" y="545" fill="#A1A1AA" font-family="Arial, sans-serif" font-size="21">oasisutfpr.com.br</text>
+</svg>

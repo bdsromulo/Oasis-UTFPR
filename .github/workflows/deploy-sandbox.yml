@@ -1,0 +1,61 @@
+name: Deploy do sandbox no GitHub Pages
+
+# Ambiente aberto de testes, servido por bdsromulo/oasisutfpr-sandbox em
+# https://bdsromulo.github.io/oasisutfpr-sandbox/
+#
+# Só roda NO repositório do sandbox: o mesmo código vive nos dois lugares, e sem
+# esta guarda o repositório de produção tentaria publicar um build de subpasta
+# por cima do site real.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-sandbox
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.repository == 'bdsromulo/oasisutfpr-sandbox'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+      # OASIS_BASE precisa ser a subpasta do repositório, com barra nas duas
+      # pontas: o Pages de um repositório comum serve em /<repo>/, e com base "/"
+      # o HTML carrega mas todo JS e CSS dá 404 — página branca, sem erro visível.
+      # OASIS_BETA liga o noindex (o sandbox exibe nomes reais de quem avaliou).
+      - run: npm run build
+        env:
+          OASIS_BASE: /oasisutfpr-sandbox/
+          OASIS_BETA: "1"
+
+      # o CNAME vem de public/ e reivindicaria oasisutfpr.com.br para este
+      # repositório, brigando com a produção pelo mesmo domínio
+      - run: rm -f dist/CNAME
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

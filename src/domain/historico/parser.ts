@@ -78,6 +78,60 @@ function acharSituacao(linhas: string[]): Situacao | null {
   return null;
 }
 
+/**
+ * Nas consignações, o Portal preserva o código realmente cursado dentro da
+ * observação `[disciplina CODIGO - Fechamento ...]`. O código principal da
+ * linha continua sendo o da matriz do aluno e não pode ser substituído: é ele
+ * que fecha o progresso. Guardamos os dois para a camada de avaliações conseguir
+ * reencontrar a oferta e o professor da experiência real.
+ */
+function acharCodigoOriginal(linhas: string[]): string | undefined {
+  for (const linha of linhas) {
+    const m = linha.match(/\[disciplina\s+([A-Z]{2,5}[0-9][A-Z0-9]{0,3})\b/i);
+    const codigo = m?.[1]?.toUpperCase();
+    if (codigo && ehCodigo(codigo)) return codigo;
+  }
+  return undefined;
+}
+
+/**
+ * O nome do docente vem depois do ano e termina na titulação. Ele pode estar
+ * na linha-núcleo ou no fragmento seguinte e uma turma pode ter mais de um
+ * professor. A titulação é usada como âncora para não confundir nomes de
+ * disciplina, observações de equivalência ou cabeçalhos de página com pessoas.
+ */
+function acharProfessores(
+  linhaNucleo: string,
+  antes: string[],
+  depois: string[],
+): string[] | undefined {
+  const candidatos: string[] = [];
+  // Algumas células saem acima do núcleo. Dentro de `antes`, tudo que precede
+  // a última situação ainda pertence à disciplina anterior; só o sufixo pode
+  // conter o docente da linha atual.
+  let ultimaSituacao = -1;
+  for (let i = antes.length - 1; i >= 0; i--) {
+    if (acharSituacao([antes[i]]) !== null) {
+      ultimaSituacao = i;
+      break;
+    }
+  }
+  candidatos.push(...antes.slice(ultimaSituacao + 1));
+  const sufixoDoNucleo = linhaNucleo.match(/20\d{2}\s+(.+)$/)?.[1];
+  if (sufixoDoNucleo) candidatos.push(sufixoDoNucleo);
+  candidatos.push(...depois);
+
+  const encontrados: string[] = [];
+  for (const trecho of candidatos) {
+    const re = /(?:^|\]\s*)([A-ZÀ-ÖØ-Þ][A-Za-zÀ-ÿ' .-]+?)\s+-\s+(?:Doutorado|Mestrado|Especialização|Graduação|Pós-Doutorado)\b/gi;
+    for (const m of trecho.matchAll(re)) {
+      const nome = m[1].replace(/\s+/g, " ").trim();
+      if (nome && !encontrados.includes(nome)) encontrados.push(nome);
+    }
+  }
+  return encontrados.length ? encontrados : undefined;
+}
+
 function num(s: string): number | null {
   if (s === "*" || s === undefined) return null;
   // com vírgula, o ponto é separador de milhar ("1.234,5"); sem ela, só é milhar
@@ -346,6 +400,7 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     }
     perfil.cursadas.push({
       codigo,
+      codigoOriginal: acharCodigoOriginal([linhaNucleo, ...antes, ...depois]),
       // o texto do PDF intercala células demais para reconstruir o nome com
       // segurança; quem exibe resolve o nome pelo código na matriz
       nome: "",
@@ -356,6 +411,7 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
       cht: parseInt(m[2]),
       semestre: parseInt(m[7]),
       ano: parseInt(m[8]),
+      professores: acharProfessores(linhaNucleo, antes, depois),
     } satisfies DisciplinaCursada);
   });
 

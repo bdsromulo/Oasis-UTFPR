@@ -5,12 +5,21 @@ import { montarPainel } from "../../domain/motor/situacao";
 import { Badge, Barra, Card, MenuOrdenacao } from "../componentes";
 import { IconCheck, IconSearch } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
+import { BotaoReviews } from "./reviewsComuns";
+import { criarConsulta } from "../../domain/reviews/acervo";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
   categoriaSimples,
+  ehTrilha,
   ehGrupoOpcao,
   exigeExtensao,
+  grupoOpcaoDe,
 } from "../../domain/cursos";
 
 function normNome(nome: string): string {
@@ -23,6 +32,49 @@ function normNome(nome: string): string {
 
 export type CategoriaCatalogo = "todas" | "obrigatorias" | "segundoEstrato" | "humanidades" | "opcoes" | "trilhas" | "eletivas" | "extensao";
 
+const ROTULOS_CLASSIFICACAO: Record<Exclude<CategoriaCatalogo, "todas">, string> = {
+  obrigatorias: "Obrigatória",
+  segundoEstrato: "2º estrato",
+  humanidades: "Humanidades",
+  opcoes: "Opção curricular",
+  trilhas: "Trilha",
+  eletivas: "Eletiva",
+  extensao: "Extensão",
+};
+
+/**
+ * Classifica a disciplina sem misturar o tipo curricular com o destino das
+ * horas. Em Controle 978, por exemplo, "Opção curricular" é o tipo e
+ * "Trilha de Ciências Humanas..." é a exigência específica que ela cumpre.
+ */
+export function rotulosClassificacaoCatalogo(
+  matriz: Matriz,
+  disciplina: DisciplinaMatriz,
+  categoria: Exclude<CategoriaCatalogo, "todas">,
+): { categoria: string; trilha: string | null } {
+  const curso = descricaoDoCurso(matriz);
+  let conjunto = disciplina.conjunto;
+
+  const grupoOpcao = grupoOpcaoDe(curso, conjunto);
+  if (grupoOpcao !== null) conjunto = grupoOpcao;
+
+  while (conjunto !== null && !ehTrilha(curso, conjunto)) {
+    const pai = matriz.conjuntos[String(conjunto)]?.pai;
+    if (pai === null || pai === undefined) break;
+    conjunto = Number(pai);
+  }
+
+  const nomeConjunto = conjunto === null ? null : matriz.conjuntos[String(conjunto)]?.nome ?? null;
+  const ehTrilhaNomeada =
+    nomeConjunto !== null &&
+    (categoria === "trilhas" || /^trilha\b/i.test(nomeConjunto));
+
+  return {
+    categoria: ROTULOS_CLASSIFICACAO[categoria],
+    trilha: ehTrilhaNomeada ? nomeConjunto : null,
+  };
+}
+
 export function TelaCatalogo(props: {
   perfil: PerfilAluno | null;
   matriz: Matriz;
@@ -32,6 +84,7 @@ export function TelaCatalogo(props: {
 }) {
   const { perfil, matriz, oferta } = props;
   const curso = descricaoDoCurso(matriz);
+  const temBlocoTrilhas = curso.agregadorTrilhas !== null || (curso.trilhas?.length ?? 0) > 0;
   const [categoria, setCategoria] = useState<CategoriaCatalogo>(props.categoriaInicial ?? "todas");
   const [filtroPeriodo, setFiltroPeriodo] = useState<string>("todos");
   const [filtroStatus, setFiltroStatus] = useState<
@@ -39,6 +92,28 @@ export function TelaCatalogo(props: {
   >(props.categoriaInicial && props.categoriaInicial !== "todas" ? "pendentes" : "todas");
   const [busca, setBusca] = useState("");
   const [ordenacao, setOrdenacao] = useState<string>("az");
+  const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
+
+  /**
+   * Quantas avaliações cada disciplina tem, pela identidade do curso de quem lê.
+   *
+   * Calculado uma vez para a tela inteira: o catálogo renderiza centenas de
+   * cards, e consultar o acervo dentro de cada um seria refazer o mesmo índice
+   * a cada card.
+   */
+  const contagemReviews = useMemo(() => {
+    if (!reviewsHabilitadasPara(matriz.matriz)) return new Map<string, number>();
+    const consulta = criarConsulta(
+      (acervoReviews as AcervoReviews).reviews,
+      criarMapaIdentidade(matriz),
+    );
+    const mapa = new Map<string, number>();
+    for (const d of matriz.disciplinas) {
+      const n = consulta.daDisciplina(d.codigo).length;
+      if (n > 0) mapa.set(d.codigo, n);
+    }
+    return mapa;
+  }, [matriz]);
 
   const painel = useMemo(() => (perfil ? montarPainel(perfil, matriz) : null), [perfil, matriz]);
   const periodosDisponiveis = useMemo(() => {
@@ -168,7 +243,7 @@ export function TelaCatalogo(props: {
         dm.equivalentes.some((eq) => codigosOfertados.has(eq.codigo)) ||
         oferta.disciplinas.some((o) => normNome(o.nome) === nomeNorm);
 
-      let cat: CategoriaCatalogo = "eletivas";
+      let cat: Exclude<CategoriaCatalogo, "todas"> = "eletivas";
       if (dm.conjunto === null) {
         cat = "obrigatorias";
       } else if (categoriaSimples(descricaoDoCurso(matriz), dm.conjunto)?.id === "segundoEstrato") {
@@ -226,7 +301,7 @@ export function TelaCatalogo(props: {
             origem: c.origem,
           },
           temOferta: false,
-          categoria: "eletivas" as CategoriaCatalogo,
+          categoria: "eletivas" as Exclude<CategoriaCatalogo, "todas">,
         };
       });
 
@@ -320,6 +395,25 @@ export function TelaCatalogo(props: {
     return { total, pendentes, concluidas, abertas, semoferta };
   }, [itensDisciplinas, categoria]);
 
+  // Eng. Comp. declara uma pool que soma para o bloco optativo, mas nunca
+  // substitui a validação de uma trilha. Ela precisa aparecer junto das
+  // trilhas para o aluno enxergar onde essas horas estão sendo acumuladas.
+  const conjuntosIsolados = Object.entries(matriz.conjuntos)
+    .filter(
+      ([codigo, conjunto]) =>
+        curso.naoValidaveis.includes(Number(codigo)) &&
+        normNome(conjunto.nome).includes("optativas isoladas"),
+    )
+    .map(([codigo, conjunto]) => {
+      const resumo = perfil?.resumoConjuntos.find((item) => item.conjunto === codigo);
+      return {
+        codigo,
+        nome: conjunto.nome,
+        exigido: resumo?.chObrigatoria ?? conjunto.ch,
+        cumprido: Math.min(resumo?.chCursadaAprovada ?? 0, resumo?.chObrigatoria ?? conjunto.ch),
+      };
+    });
+
   const categoriasOpcoes: [CategoriaCatalogo, string][] = [
     ["todas", "Todas as Disciplinas"],
     ["obrigatorias", curso.matriz === 981 ? "1º Estrato (Obrigatórias)" : "Obrigatórias"],
@@ -328,7 +422,9 @@ export function TelaCatalogo(props: {
     ...(curso.gruposOpcao?.length
       ? [["opcoes", curso.rotuloOpcoes ?? "Opções do Curso"] as [CategoriaCatalogo, string]]
       : []),
-    ["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"],
+    ...(temBlocoTrilhas
+      ? [["trilhas", curso.matriz === 981 ? "Trilhas em Computação (3º Estrato)" : "Optativas em Trilhas"] as [CategoriaCatalogo, string]]
+      : []),
     ["eletivas", "Eletivas"],
     ...(exigeExtensao(matriz) ? [["extensao", "Extensão"] as [CategoriaCatalogo, string]] : []),
   ];
@@ -413,10 +509,11 @@ export function TelaCatalogo(props: {
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-zinc-200/60 pb-4 dark:border-zinc-800/60">
             <div>
               <h3 className="font-display text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                Visão Geral das Trilhas de Aprofundamento
+                Visão Geral: {curso.rotuloBlocoTrilhas}
               </h3>
               <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
-                O estudante precisa validar pelo menos <strong>{descricaoDoCurso(matriz).trilhasExigidas} {descricaoDoCurso(matriz).trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong> (cada uma somando a carga horária exigida do conjunto).
+                O estudante precisa validar pelo menos <strong>{curso.trilhasExigidas} {curso.trilhasExigidas === 1 ? "trilha" : "trilhas distintas"}</strong> (cada uma somando a carga horária exigida do conjunto).
+                {conjuntosIsolados.length > 0 && " As optativas isoladas somam para a carga total do bloco, mas não validam uma trilha."}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -493,6 +590,75 @@ export function TelaCatalogo(props: {
                               <Badge tom="neutro" classe="!text-[10px] !px-1.5 !py-0.5">
                                 Sem Oferta
                               </Badge>
+                            )}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                </Card>
+              );
+            })}
+            {conjuntosIsolados.map((isoladas) => {
+              const disciplinasIsoladas = itensDisciplinas.filter(
+                (item) => item.disciplina.conjunto === Number(isoladas.codigo),
+              );
+
+              return (
+                <Card
+                  key={isoladas.codigo}
+                  classe="flex flex-col justify-between border-dashed border-zinc-300 p-4.5 bg-white dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  <div>
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h4 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+                        {isoladas.nome}
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span className="shrink-0 font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                          {isoladas.cumprido}/{isoladas.exigido}h
+                        </span>
+                        <Badge tom="neutro" classe="shrink-0">
+                          não valida trilha
+                        </Badge>
+                      </div>
+                    </div>
+                    <Barra valor={isoladas.cumprido} max={isoladas.exigido} destaque={isoladas.cumprido > 0} />
+                  </div>
+
+                  <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800 space-y-2">
+                    <span className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                      Disciplinas isoladas ({disciplinasIsoladas.length}):
+                    </span>
+                    <ul className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                      {[...disciplinasIsoladas]
+                        .sort((a, b) => {
+                          const pesoA = a.concluida ? 1 : a.temOferta ? 2 : 3;
+                          const pesoB = b.concluida ? 1 : b.temOferta ? 2 : 3;
+                          if (pesoA !== pesoB) return pesoA - pesoB;
+                          return a.disciplina.codigo.localeCompare(b.disciplina.codigo);
+                        })
+                        .map((disciplina) => (
+                          <li
+                            key={disciplina.disciplina.codigo}
+                            className="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-2 py-1.5 text-xs dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50"
+                          >
+                            <div className="min-w-0 flex items-center gap-1.5">
+                              <span
+                                title={`${disciplina.disciplina.codigo} — ${disciplina.disciplina.nome}`}
+                                className="shrink-0 cursor-help font-mono text-[11px] font-bold text-zinc-900 underline decoration-dotted decoration-zinc-400 dark:text-zinc-100"
+                              >
+                                {disciplina.disciplina.codigo}
+                              </span>
+                              <span className="truncate text-[11px] text-zinc-700 dark:text-zinc-300" title={disciplina.disciplina.nome}>
+                                {disciplina.disciplina.nome}
+                              </span>
+                            </div>
+                            {disciplina.concluida ? (
+                              <Badge tom="ok" classe="!text-[10px] !px-1.5 !py-0.5">OK</Badge>
+                            ) : disciplina.temOferta ? (
+                              <Badge tom="acento" classe="!text-[10px] !px-1.5 !py-0.5">Aberta</Badge>
+                            ) : (
+                              <Badge tom="neutro" classe="!text-[10px] !px-1.5 !py-0.5">Sem Oferta</Badge>
                             )}
                           </li>
                         ))}
@@ -592,6 +758,7 @@ export function TelaCatalogo(props: {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {itensOrdenados.map((item) => {
             const { disciplina: d, concluida, cursada, temOferta } = item;
+            const classificacao = rotulosClassificacaoCatalogo(matriz, d, item.categoria);
 
             return (
               <div
@@ -614,6 +781,12 @@ export function TelaCatalogo(props: {
                       <span className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                         {d.periodo ? `${d.periodo}º Período` : "Optativa"}
                       </span>
+                      {reviewsHabilitadasPara(matriz.matriz) && (
+                        <BotaoReviews
+                          n={contagemReviews.get(d.codigo) ?? 0}
+                          onAbrir={() => setRevisando({ codigo: d.codigo, nome: d.nome })}
+                        />
+                      )}
                     </div>
                     {concluida ? (
                       <Badge tom="ok" icon={<IconCheck className="h-3 w-3" />}>
@@ -629,6 +802,13 @@ export function TelaCatalogo(props: {
                   <h3 className="font-display text-base font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
                     {d.nome}
                   </h3>
+
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <Badge tom="neutro">{classificacao.categoria}</Badge>
+                    {classificacao.trilha && (
+                      <Badge tom="acento">{classificacao.trilha}</Badge>
+                    )}
+                  </div>
 
                   {/* Detalhes do cumprimento ou pré-requisitos */}
                   <div className="mt-2.5 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
@@ -688,6 +868,12 @@ export function TelaCatalogo(props: {
           })}
         </div>
       )}
+
+      <PainelDisciplina
+        alvo={revisando}
+        matriz={matriz}
+        onFechar={() => setRevisando(null)}
+      />
     </div>
   );
 }

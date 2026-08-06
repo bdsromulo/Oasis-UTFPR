@@ -21,6 +21,7 @@ import {
 import { faixaDoSlot } from "../domain/horarios";
 import type { SelecaoTurma } from "./App";
 import { Badge } from "./componentes";
+import { disciplinaCanonicaDaOferta } from "../domain/motor/identidade";
 
 const DIAS: [number, string][] = [
   [2, "S"],
@@ -113,14 +114,22 @@ export function MiniGrade(props: {
   const conflitos = useMemo(() => detectarConflitos(itens), [itens]);
 
   const porSlot = useMemo(() => {
-    const mapa = new Map<string, { cor: string; codigo: string; nome: string; turma: string; sede?: string }[]>();
+    const mapa = new Map<string, { cor: string; codigo: string; codigoSelecao: string; nome: string; turma: string; sede?: string }[]>();
     itens.forEach((item, i) => {
+      const codigoCurricular = props.matriz
+        ? disciplinaCanonicaDaOferta(
+            props.matriz,
+            item.disciplina.codigo,
+            item.disciplina.nome,
+          )?.codigo ?? item.disciplina.codigo
+        : item.disciplina.codigo;
       for (const h of horariosUnicos(item.turma)) {
         const k = chaveSlot(h);
         const lista = mapa.get(k) ?? [];
         lista.push({
           cor: CORES_GRADE[i % CORES_GRADE.length],
-          codigo: item.disciplina.codigo,
+          codigo: codigoCurricular,
+          codigoSelecao: item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo,
           nome: item.disciplina.nome,
           turma: item.turma.codigo,
           sede: h.sede,
@@ -129,7 +138,7 @@ export function MiniGrade(props: {
       }
     });
     return mapa;
-  }, [itens]);
+  }, [itens, props.matriz]);
 
   const slotsPreview = useMemo(() => {
     if (!preview) return new Set<string>();
@@ -434,6 +443,13 @@ export function MiniGrade(props: {
             <ul className="space-y-1">
               {itens.map((item, i) => {
                 const codIdentificador = item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo;
+                const codigoCurricular = props.matriz
+                  ? disciplinaCanonicaDaOferta(
+                      props.matriz,
+                      item.disciplina.codigo,
+                      item.disciplina.nome,
+                    )?.codigo ?? item.disciplina.codigo
+                  : item.disciplina.codigo;
                 const isHovered =
                   disciplinaHoverId === item.disciplina.codigo ||
                   disciplinaHoverId === codIdentificador;
@@ -443,7 +459,7 @@ export function MiniGrade(props: {
                     key={item.selecaoOriginal ? `${item.selecaoOriginal.codDisciplina}-${item.selecaoOriginal.codTurma}` : item.disciplina.codigo}
                     onMouseEnter={() => iniciarHover(codIdentificador)}
                     onMouseLeave={cancelarHover}
-                    title={item.disciplina.nome}
+                    title={`${item.disciplina.nome}${codigoCurricular !== item.disciplina.codigo ? ` · oferta ${item.disciplina.codigo}` : ""}`}
                     className={`group relative flex items-center justify-between gap-1.5 text-xs rounded-md px-1.5 py-1 transition-all ${
                       isHovered ? "bg-zinc-100 dark:bg-zinc-800 ring-1 ring-zinc-300 dark:ring-zinc-700 scale-[1.01] z-40 overflow-visible" : ""
                     }`}
@@ -453,7 +469,7 @@ export function MiniGrade(props: {
                         className={`h-2 w-2 shrink-0 rounded-full ${CORES_GRADE[i % CORES_GRADE.length]}`}
                       />
                       <span className="truncate text-zinc-600 dark:text-zinc-300">
-                        <span className="font-mono font-bold">{item.disciplina.codigo}</span> {item.turma.codigo} — <span className="font-semibold text-zinc-800 dark:text-zinc-200">{item.disciplina.nome}</span>
+                        <span className="font-mono font-bold">{codigoCurricular}</span> {item.turma.codigo} — <span className="font-semibold text-zinc-800 dark:text-zinc-200">{item.disciplina.nome}</span>
                       </span>
                     </div>
                     {onRemoverTurma && (
@@ -565,7 +581,7 @@ export function MiniGrade(props: {
                                         <button
                                           onClick={(e) => {
                                             e.stopPropagation();
-                                            onRemoverTurma(ocup.codigo);
+                                            onRemoverTurma(ocup.codigoSelecao);
                                           }}
                                           className={`absolute right-1.5 top-1.5 h-4 w-4 items-center justify-center rounded-full bg-red-600 font-mono text-[10px] font-bold text-white shadow-2xs hover:bg-red-700 cursor-pointer ${
                                             isHovered ? "flex" : "hidden group-hover:flex"

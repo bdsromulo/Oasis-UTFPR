@@ -44,6 +44,7 @@ const TELAS: Tela[] = [
     interacoes: [
       "Abrir cada categoria para ver o que já conta e o que ainda falta",
       "Saltar direto para o Catálogo a partir de uma pendência",
+      "Avaliar matérias aprovadas ou concluídas por consignação, nunca reprovações",
     ],
     alimenta:
       "Os quadros-resumo do seu histórico, cruzados com as exigências da sua matriz.",
@@ -85,6 +86,7 @@ const TELAS: Tela[] = [
       "Ocultar automaticamente turmas que conflitam com o que já está na grade",
       "Alternar entre o Layout Oásis e o Layout Grade na Hora",
       "Abrir a Grade Mágica para montar combinações automaticamente",
+      "Abrir, pelo professor ou pelo botão com estrela, as avaliações da comunidade",
     ],
     alimenta:
       "A relação de Turmas Abertas do semestre. Com histórico, o motor também confere os seus pré-requisitos cumpridos.",
@@ -126,11 +128,25 @@ const TELAS: Tela[] = [
       "Um código gerado no seu navegador e trocado direto entre vocês. Não existe servidor no meio. Nada é publicado, nada fica hospedado.",
   },
   {
+    nome: "Avaliações da Comunidade",
+    mostra:
+      "Relatos de estudantes sobre personalidade, didática, dificuldade e carga de trabalho. As notas ficam separadas para uma disciplina difícil não parecer automaticamente mal ministrada.",
+    interacoes: [
+      "Ler avaliações pelo professor ou pelo botão com estrela nas turmas do Planejamento",
+      "Com histórico carregado, escolher uma disciplina concluída e abrir o formulário preenchido",
+      "Nas consignações, conferir o código realmente cursado e o professor recuperado do PDF",
+    ],
+    alimenta:
+      "O acervo comunitário moderado, as ofertas oficiais de professores e apenas as aprovações ou consignações do seu histórico. Reprovações, estágio, ENADE e atividades complementares ficam fora.",
+  },
+  {
     nome: "Configurações",
     mostra:
-      "O controle da sessão local. Reúne tema, layout, importação e troca de histórico, filtros de conflito e limpeza dos dados.",
+      "O controle da sessão local. Reúne tema, layout, importação e troca de histórico, savefile, filtros de conflito e limpeza dos dados.",
     interacoes: [
       "Importar ou atualizar o PDF do Histórico Escolar",
+      "Baixar um savefile com o perfil já interpretado e as grades montadas",
+      "Importar o savefile em outro navegador e confirmar antes de substituir a sessão local",
       "Alternar tema (claro, escuro ou seguir o sistema) e layout",
       "Ativar o Modo Privado, que guarda a sessão só até a aba fechar",
       "Trocar de usuário ou apagar todos os dados salvos",
@@ -157,7 +173,7 @@ const FONTES: Fonte[] = [
     titulo: "Coleta coletiva de vivências",
     etiqueta: "Comunidade",
     texto:
-      "O que os estudantes relatam da prática e o documento oficial não mostra. Pré-requisito que não trava a matrícula, equivalência aceita no balcão, eletiva que vale para o curso. Cada caso observado vira uma correção sobre o dado oficial.",
+      "O que os estudantes relatam da prática e o documento oficial não mostra: pré-requisito que não trava, equivalência aceita, eletiva validada e experiência com uma turma. Correções curriculares ficam numa camada separada da fonte; avaliações só entram no acervo depois de moderação.",
   },
   {
     titulo: "Projetos Pedagógicos de Curso (PPCs)",
@@ -323,11 +339,18 @@ export function TelaComoUsar() {
             <Passo n={3} titulo="Cada linha vira dado estruturado">
               Saem daí as disciplinas cursadas, com código, nome, carga, nota, frequência
               e situação. Saem também as pendências por período e os quadros-resumo de
-              obrigatórias, optativas, eletivas, extensão e estágio.
+              obrigatórias, optativas, eletivas, extensão e estágio. Quando há
+              consignação, o parser preserva o código da matriz para o progresso e o
+              código realmente cursado, com o professor impresso, para a avaliação.
             </Passo>
             <Passo n={4} titulo="O motor cruza com a sua matriz">
               O motor compara o que foi extraído com a matriz curricular e as regras do
-              PPC do seu curso. Desse cruzamento sai tudo o que as telas mostram.
+              PPC do seu curso. Hoje o histórico identifica BSI 981 e 806, Engenharia de
+              Computação 844 e 962, Engenharia Eletrônica 968, Engenharia de Controle e
+              Automação 978 e Engenharia Mecatrônica 823 e 973, aplicando a regra da matriz correta.
+              Na 978, as 675h optativas
+              são cinco trilhas de formação de 135h que precisam ser cumpridas separadamente.
+              Desse cruzamento sai tudo o que as telas mostram.
             </Passo>
           </ol>
           <div className="mt-5 flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5">
@@ -494,7 +517,7 @@ export function TelaComoUsar() {
               icone: <IconShieldLock className="h-4.5 w-4.5" />,
               titulo: "Local-first",
               texto:
-                "O navegador processa o seu histórico e ele fica na sua máquina. Não existe servidor, banco de dados nem conta de usuário.",
+                "O navegador processa o seu histórico e ele fica na sua máquina. O savefile transporta apenas o perfil já interpretado e as grades, nunca o PDF original; não existe servidor, banco de dados nem conta de usuário.",
             },
             {
               icone: <IconFileText className="h-4.5 w-4.5" />,

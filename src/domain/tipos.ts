@@ -23,6 +23,8 @@ export interface Matriz {
 
 export interface Conjunto {
   nome: string;
+  /** conjunto-pai quando a legenda oficial declara uma subárea */
+  pai?: string | number | null;
   periodo_inicial: number;
   periodo_final: number;
   ch: number;
@@ -99,6 +101,15 @@ export type Situacao =
 
 export interface DisciplinaCursada {
   codigo: string;
+  /**
+   * Código da disciplina efetivamente cursada quando o histórico registra uma
+   * consignação sob o código canônico da matriz do aluno.
+   *
+   * Ex.: a 844 mostra `CSA30`, mas anota que a turma cursada foi `ICSA30`.
+   * O primeiro continua resolvendo o progresso; o segundo identifica a oferta e
+   * a avaliação da experiência real.
+   */
+  codigoOriginal?: string;
   nome: string;
   situacao: Situacao;
   /** "obrigatoria" | "optativa" (2º estrato/trilhas/humanidades) | "eletiva" */
@@ -115,6 +126,8 @@ export interface DisciplinaCursada {
   cht: number | null;
   ano: number | null;
   semestre: number | null;
+  /** Docentes impressos no histórico; nunca são inferidos quando ausentes. */
+  professores?: string[];
 }
 
 export interface ResumoConjunto {

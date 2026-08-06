@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useCamadaHistorico } from "./hooks/useCamadaHistorico";
 import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
-import { extrairLinhas } from "../domain/historico/extrair-linhas";
 import { parseHistorico } from "../domain/historico/parser";
 import {
   dadosDoCurso,
   dadosDoCursoPorMatriz,
+  carregarOfertasHistoricasMecatronica,
   semestresDoCurso,
 } from "../domain/dadosCurso";
 import { TelaSituacao } from "./telas/Situacao";
@@ -38,11 +38,26 @@ import {
   IconMenu,
   IconMoon,
   IconSettings,
+  IconSparkles,
+  IconStar,
   IconSun,
   IconUser,
   IconWarning,
   LogoUTFPR,
 } from "./icons";
+import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
+import { ModalNovidades } from "./telas/ModalNovidades";
+import { AvisoBeta } from "./telas/AvisoBeta";
+import { reviewsHabilitadasPara } from "../domain/reviews/config";
+import { coletaHabilitada } from "../domain/reviews/forms";
+import {
+  criarSavefile,
+  desserializarPerfil,
+  lerSavefile,
+  type SavefileOasis,
+} from "../domain/savefile";
+
+declare const __OASIS_BETA__: boolean;
 
 export interface SelecaoTurma {
   codDisciplina: string;
@@ -67,6 +82,17 @@ const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 // o Simulador de Formatura; a seleção em si continua vindo da cesta, para o
 // simulador acompanhar as edições feitas na grade
 const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
+// Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
+// novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
+// precisar de lógica de comparação de datas.
+// O sufixo beta/release separa o sandbox (bdsromulo.github.io/oasisutfpr-sandbox)
+// de qualquer outra project page do mesmo usuário no GitHub Pages — origens
+// diferentes já isolam o localStorage do site oficial (domínio próprio via CNAME),
+// mas sem o sufixo o sandbox ainda compartilharia a chave com outras project pages
+// eventuais em bdsromulo.github.io.
+const CHAVE_NOVIDADES = `oasis.novidades_lidas.cursos_matrizes_2026_08_v1.${
+  __OASIS_BETA__ ? "beta" : "release"
+}`;
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -118,6 +144,22 @@ export function App() {
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [modalAvaliacoesAberto, setModalAvaliacoesAberto] = useState(false);
+  const [modalNovidadesAberto, setModalNovidadesAberto] = useState(false);
+  // O realce vale uma vez. Depois de aberto o botão continua lá, porém calado:
+  // um destaque permanente vira mobília e deixa de ser notado.
+  const [novidadesLidas, setNovidadesLidas] = useState(
+    () => localStorage.getItem(CHAVE_NOVIDADES) === "true",
+  );
+
+  const abrirNovidades = () => setModalNovidadesAberto(true);
+  const fecharNovidades = () => {
+    setModalNovidadesAberto(false);
+    if (!novidadesLidas) {
+      localStorage.setItem(CHAVE_NOVIDADES, "true");
+      setNovidadesLidas(true);
+    }
+  };
   const [menuMobileAberto, setMenuMobileAberto] = useState(false);
   const [giAberta, setGiAberta] = useState(false);
   const [sobreAberta, setSobreAberta] = useState(false);
@@ -127,10 +169,28 @@ export function App() {
   // padrão apesar de conterem um histórico da matriz 844.
   const cursoDoPerfil = dadosDoCursoPorMatriz(perfil?.matriz);
   const cursoAtivo = cursoDoPerfil?.id ?? preferencias.curso ?? "bsi-981";
+  const [versaoOfertasMecatronica, setVersaoOfertasMecatronica] = useState(0);
+  useEffect(() => {
+    let ativo = true;
+    void carregarOfertasHistoricasMecatronica()
+      .then(() => {
+        if (ativo) setVersaoOfertasMecatronica((versao) => versao + 1);
+      })
+      .catch(() => {
+        // Uma falha de rede mantém o placeholder vazio sem derrubar a aplicação.
+        // O navegador pode tentar novamente no próximo carregamento da página.
+      });
+    return () => {
+      ativo = false;
+    };
+  }, []);
   const dadosCurso = useMemo(() => dadosDoCurso(cursoAtivo), [cursoAtivo]);
   const matriz = dadosCurso.matriz;
   const todasOfertas = dadosCurso.ofertas;
-  const semestresDisponiveis = useMemo(() => semestresDoCurso(dadosCurso), [dadosCurso]);
+  const semestresDisponiveis = useMemo(
+    () => semestresDoCurso(dadosCurso),
+    [dadosCurso, versaoOfertasMecatronica],
+  );
 
   // o semestre guardado pode ser de outro curso: cai no padrão se não existir
   const semestreAtivo =
@@ -142,7 +202,6 @@ export function App() {
     () => todasOfertas[semestreAtivo] ?? todasOfertas[dadosCurso.semestrePadrao],
     [semestreAtivo, todasOfertas, dadosCurso],
   );
-
   const ehPreMatricula = dadosCurso.semestresPreMatricula.includes(semestreAtivo);
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
@@ -362,6 +421,13 @@ export function App() {
     localStorage.setItem(CHAVE_LAYOUT, preferencias.layout);
   }, [preferencias]);
 
+  // A cada lançamento a chave é versionada. Assim, o aviso abre uma vez para
+  // quem já usa o site e também logo após concluir o primeiro cadastro; fechar
+  // é o gesto que confirma a leitura neste navegador.
+  useEffect(() => {
+    if (checkinConcluido && !novidadesLidas) setModalNovidadesAberto(true);
+  }, [checkinConcluido, novidadesLidas]);
+
   async function processarArquivo(arq: File, dados?: DadosCheckin) {
     setCarregando(true);
     setErro(null);
@@ -386,6 +452,10 @@ export function App() {
   }
 
   async function analisarPDFParaPreview(arq: File): Promise<PerfilAluno> {
+    // O pdf.js é o maior módulo da aplicação e só é necessário quando o aluno
+    // realmente escolhe um PDF. Mantê-lo fora do carregamento inicial reduz o
+    // custo de abrir o Oásis, sobretudo em redes móveis.
+    const { extrairLinhas } = await import("../domain/historico/extrair-pdf-browser");
     const linhas = await extrairLinhas(await arq.arrayBuffer());
     const p = parseHistorico(linhas.map((l) => l.texto));
     if (!p.nome || p.cursadas.length === 0) {
@@ -415,6 +485,78 @@ export function App() {
     localStorage.setItem(CHAVE_CHECKIN, "true");
     setAba("situacao");
     setAbaSituacao("painel");
+  }
+
+  function exportarSavefile() {
+    const savefile = criarSavefile({
+      perfil,
+      preferencias: {
+        campus: preferencias.campus,
+        curso: preferencias.curso,
+        matriz: preferencias.matriz,
+        semestreAtivo: preferencias.semestreAtivo,
+      },
+      cestasPorSemestre: todasCestasPorSemestre,
+      exclusoesPorSemestre: todasExclusoesPorSemestre,
+      gradeAtiva,
+      gradeParaSimulador,
+      ritmoSimulador,
+      exclusoesSimulador,
+    });
+    const blob = new Blob([JSON.stringify(savefile, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `oasis-utfpr-${new Date().toISOString().slice(0, 10)}.oasis.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function analisarSavefile(arquivo: File): Promise<SavefileOasis> {
+    return lerSavefile(await arquivo.text());
+  }
+
+  function confirmarSavefile(savefile: SavefileOasis) {
+    const dados = savefile.dados;
+    const perfilImportado = desserializarPerfil(dados.perfil);
+    const semestreImportado = dados.preferencias.semestreAtivo ?? "2026-2";
+    const cestasImportadas = dados.cestasPorSemestre;
+    const cestasDoSemestre = cestasImportadas[semestreImportado] ?? { A: [] };
+    const gradeImportada = cestasDoSemestre[dados.gradeAtiva]
+      ? dados.gradeAtiva
+      : Object.keys(cestasDoSemestre)[0] ?? "A";
+
+    setPreferencias((atuais) => ({
+      ...atuais,
+      ...dados.preferencias,
+      semestreAtivo: semestreImportado,
+    }));
+    setPerfil(perfilImportado);
+    if (perfilImportado) salvarPerfil(perfilImportado, preferencias.privado);
+    else {
+      localStorage.removeItem(CHAVE_PERFIL);
+      sessionStorage.removeItem(CHAVE_PERFIL);
+    }
+    setCheckinConcluido(true);
+    localStorage.setItem(CHAVE_CHECKIN, "true");
+    setTodasCestasPorSemestre(cestasImportadas);
+    localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(cestasImportadas));
+    setTodasExclusoesPorSemestre(dados.exclusoesPorSemestre);
+    localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(dados.exclusoesPorSemestre));
+    setGradeAtiva(gradeImportada);
+    localStorage.setItem(CHAVE_GRADE_ATIVA, gradeImportada);
+    setSelecao(cestasDoSemestre[gradeImportada] ?? []);
+    setGradeParaSimulador(dados.gradeParaSimulador);
+    if (dados.gradeParaSimulador) {
+      localStorage.setItem(CHAVE_GRADE_SIMULADOR, JSON.stringify(dados.gradeParaSimulador));
+    } else {
+      localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
+    }
+    setRitmoSimulador(dados.ritmoSimulador);
+    setExclusoesSimulador(dados.exclusoesSimulador as ValorExclusoes);
+    setAba(perfilImportado ? "situacao" : "planejamento");
+    setAbaSituacao("painel");
+    setAbaPlanejamento("cursar");
   }
 
   // O semestre é um contexto de PLANEJAMENTO, não um modo global do site: ele troca
@@ -535,8 +677,15 @@ export function App() {
     localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
 
+  const barraGradeMobileVisivel =
+    aba === "planejamento" &&
+    abaPlanejamento === "cursar" &&
+    !sobreAberta &&
+    !giAberta &&
+    !comoUsarAberta;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-20 pt-6">
+    <div className="mx-auto max-w-6xl px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-6">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/80 pb-6 dark:border-zinc-800/80">
         <div className="flex items-center gap-3.5">
           <LogoUTFPR className="h-9 w-9 shrink-0" />
@@ -567,6 +716,25 @@ export function App() {
             </span>
           ) : (
             checkinConcluido && <Badge tom="neutro">Modo Livre</Badge>
+          )}
+          {/* No celular só o ícone cabe ao lado do chip de perfil e do Menu; o
+              rótulo iria empurrar o Menu para uma segunda linha. */}
+          {reviewsHabilitadasPara(matriz.matriz) && (
+            <button
+              type="button"
+              onClick={abrirNovidades}
+              aria-label="Novidades"
+              title="Conheça as avaliações da comunidade"
+              className="relative flex h-11 min-w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3 text-utfpr-800 shadow-2xs active:scale-95 dark:border-utfpr-500/50 dark:text-utfpr-300"
+            >
+              <IconSparkles className="h-5 w-5 shrink-0" />
+              {!novidadesLidas && (
+                <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                </span>
+              )}
+            </button>
           )}
           <button
             type="button"
@@ -634,6 +802,41 @@ export function App() {
                 <IconSettings className="h-4 w-4" />
               </Botao>
             </div>
+
+            {/* Imediatamente à esquerda da estrela, e não no fim da fileira: o
+                modal ensina a usar aquele botão, então os dois precisam ser lidos
+                juntos. Fica dentro deste bloco por consequência — antes do
+                check-in a fileira inteira não existe, e ali a pessoa ainda não
+                entrou na plataforma. */}
+            {reviewsHabilitadasPara(matriz.matriz) && (
+              <button
+                type="button"
+                onClick={abrirNovidades}
+                title="Conheça as avaliações da comunidade"
+                className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
+              >
+                <IconSparkles className="h-4 w-4 shrink-0" />
+                <span>Novidades</span>
+                {!novidadesLidas && (
+                  <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                  </span>
+                )}
+              </button>
+            )}
+
+            {/* Avaliar não vive só na tela de progresso: quem quer opinar sobre
+                uma matéria antiga precisa de um caminho direto (RF15). */}
+            {perfil && reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && (
+              <BotaoIconeComDica
+                dica="Avaliar uma disciplina"
+                classe="text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
+                onClick={() => setModalAvaliacoesAberto(true)}
+              >
+                <IconStar className="h-4 w-4" />
+              </BotaoIconeComDica>
+            )}
             </>
           )}
 
@@ -665,6 +868,11 @@ export function App() {
           </BotaoIconeComDica>
         </div>
       </header>
+
+      {/* Antes de qualquer outro aviso e em qualquer tela, inclusive as de
+          material do projeto: o beta é o mesmo código do site, e quem chega por
+          um link não teria como saber que está numa cópia de teste. */}
+      <AvisoBeta />
 
       {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória).
           Fica fora do "Sobre", que é material do projeto e não do semestre. */}
@@ -722,6 +930,8 @@ export function App() {
         /* Se não tem perfil nem fez checkin (ou trocou de usuário), mostra Checkin */
         <TelaCheckin
           onProcessarArquivo={processarArquivo}
+          onAnalisarSavefile={analisarSavefile}
+          onConfirmarSavefile={confirmarSavefile}
           onContinuarSemRegistro={handleContinuarSemRegistro}
           onAbrirGestaoInformacao={() => setGiAberta(true)}
           carregando={carregando}
@@ -737,7 +947,10 @@ export function App() {
           {/* Menu Lateral (Sidebar Desktop / Mobile Drawer) */}
           <SidebarNavegacao
             abaAtiva={aba}
-            onSelecionarAba={setAba}
+            onSelecionarAba={(novaAba) => {
+              if (novaAba === "situacao" && !perfil) setAbaSituacao("catalogo");
+              setAba(novaAba);
+            }}
             temPerfil={!!perfil}
             qtdTurmasSelecao={selecao.length}
 
@@ -755,7 +968,7 @@ export function App() {
               </div>
             )}
 
-            {aba === "situacao" && perfil && (
+            {aba === "situacao" && (
               <div className="space-y-6">
                 {/* Sub-navegação em Minha Situação: Resumo, Catálogo e Trilhas */}
                 <div className="w-full rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md backdrop-blur-md dark:border-zinc-800/90 dark:bg-zinc-900/95 transition-all">
@@ -869,7 +1082,7 @@ export function App() {
                       </label>
                     </div>
                   </div>
-                  <p className="max-w-xs text-[11px] font-medium leading-snug text-zinc-500 dark:text-zinc-400">
+                  <p className="max-w-xs text-xs font-medium leading-snug text-zinc-500 dark:text-zinc-400">
                     Vale para as turmas e para a grade desta aba. Seu histórico, progresso e
                     coeficiente continuam no período atual.
                   </p>
@@ -1008,6 +1221,7 @@ export function App() {
                 todasCestasPorSemestre={todasCestasPorSemestre}
                 onImportarGrade={handleImportarGradeDoSimulador}
                 gradeDoPlanejamento={gradeDoPlanejamentoParaSimulador}
+                onUsarGradeDoPlanejamento={handleEnviarGradeParaSimulador}
                 onDescartarGradeDoPlanejamento={handleDescartarGradeDoSimulador}
                 ritmo={ritmoSimulador}
                 onMudarRitmo={setRitmoSimulador}
@@ -1090,6 +1304,16 @@ export function App() {
         }}
       />
 
+      {/* Apresentação do sistema de avaliações. "Avaliar" só existe com
+          histórico, que é o que prova ter cursado a matéria. */}
+      <ModalNovidades
+        aberto={modalNovidadesAberto}
+        onFechar={fecharNovidades}
+        onAvaliar={
+          perfil && coletaHabilitada() ? () => setModalAvaliacoesAberto(true) : undefined
+        }
+      />
+
       {/* Modal de Configurações Centralizadas (TASK-01) */}
       <TelaConfiguracoes
         aberto={modalConfigAberto}
@@ -1100,17 +1324,27 @@ export function App() {
         onAtualizarPDF={processarArquivo}
         onAnalisarPDF={analisarPDFParaPreview}
         onConfirmarPDF={confirmarNovoPerfil}
+        onExportarSavefile={exportarSavefile}
+        onAnalisarSavefile={analisarSavefile}
+        onConfirmarSavefile={confirmarSavefile}
         onTrocarUsuario={handleTrocarUsuario}
         onLimparDados={handleLimparDados}
         carregandoPDF={carregando}
       />
 
+      <ModalMinhasAvaliacoes
+        aberto={modalAvaliacoesAberto}
+        perfil={perfil}
+        matriz={matriz}
+        onFechar={() => setModalAvaliacoesAberto(false)}
+      />
+
       {/* Barra flutuante inferior para mobile e Bottom Sheet (Gaveta).
           Sobre e Gestão da Informação substituem o conteúdo principal: a barra
           de grade não pode ficar flutuando por cima delas. */}
-      {aba === "planejamento" && abaPlanejamento === "cursar" && !sobreAberta && !giAberta && !comoUsarAberta && (
+      {barraGradeMobileVisivel && (
         <>
-          <div className="fixed bottom-4 left-4 right-4 z-40 lg:hidden">
+          <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 right-4 z-40 lg:hidden">
             <div className="flex items-center justify-between rounded-2xl border border-zinc-200/80 bg-zinc-900/90 p-3.5 px-5 shadow-2xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-950/90 text-white">
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-2">
@@ -1148,7 +1382,7 @@ export function App() {
                   if (preview) setPreview(null);
                 }}
               />
-              <div className="relative z-10 max-h-[85vh] overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 flex flex-col">
+              <div className="relative z-10 flex max-h-[85dvh] flex-col overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-white p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl dark:border-zinc-800 dark:bg-zinc-900">
                 <div className="flex items-center justify-between border-b border-zinc-200/80 pb-4 mb-4 dark:border-zinc-800">
                   <div className="flex items-center gap-2">
                     <h3 className="font-display text-lg font-black text-zinc-900 dark:text-white">
@@ -1162,11 +1396,12 @@ export function App() {
                   </div>
                   <button
                     type="button"
+                    aria-label="Fechar mini-grade"
                     onClick={() => {
                       setMobileGradeDrawerAberto(false);
                       if (preview) setPreview(null);
                     }}
-                    className="rounded-full bg-zinc-100 p-2 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white cursor-pointer"
+                    className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
                   >
                     ✕
                   </button>
@@ -1213,7 +1448,7 @@ export function App() {
       </footer>
 
       {/* contato sempre à mão, em qualquer tela da plataforma */}
-      <PilulaFaleConosco />
+      <PilulaFaleConosco barraGradeMobileAtiva={barraGradeMobileVisivel} />
 
       <PainelMenuMobile
         aberto={menuMobileAberto}
@@ -1221,6 +1456,10 @@ export function App() {
         temaAtivo={preferencias.tema}
         onMudarTema={(t) => setPreferencias({ ...preferencias, tema: t })}
         mostrarConfiguracoes={!!perfil || checkinConcluido}
+        mostrarAvaliar={
+          !!perfil && reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada()
+        }
+        onAvaliar={() => setModalAvaliacoesAberto(true)}
         onAbrirConfiguracoes={() => setModalConfigAberto(true)}
         onAbrirComoUsar={() => {
           setGiAberta(false);

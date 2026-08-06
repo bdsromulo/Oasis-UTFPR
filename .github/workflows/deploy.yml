@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   build:
+    # não roda no sandbox, que tem workflow próprio e base em subpasta
+    if: github.repository == 'bdsromulo/Oasis-UTFPR'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

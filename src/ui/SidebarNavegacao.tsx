@@ -43,9 +43,10 @@ export function SidebarNavegacao({
       id: "situacao",
       rotulo: "Minha Situação",
       subrotulo: "Resumo, Catálogo e Trilhas",
-      bloqueado: !temPerfil,
-      motivoBloqueio: EXIGE_HISTORICO,
-      icone: !temPerfil ? <IconLock className="h-4 w-4 shrink-0" /> : <IconUser className="h-5 w-5 shrink-0" />,
+      // O painel de progresso exige histórico, mas Catálogo e Fluxograma são
+      // úteis no Modo Livre. A App abre diretamente o Catálogo nesse caso.
+      bloqueado: false,
+      icone: <IconUser className="h-5 w-5 shrink-0" />,
     },
     {
       id: "planejamento",
@@ -122,11 +123,16 @@ export function SidebarNavegacao({
                   item.bloqueado
                     ? "opacity-50 cursor-not-allowed bg-transparent text-zinc-400 dark:text-zinc-600"
                     : ativo
-                      ? "bg-zinc-900 text-utfpr-400 shadow-lg ring-2 ring-utfpr-500/40 dark:bg-zinc-800 dark:text-utfpr-400 scale-[1.02]"
+                      ? // Amarelo cheio, com texto quase preto: o mesmo par do
+                        // seletor de tema e do "Novidades". Sobre #fecd0f, o
+                        // zinc-950 dá ~13:1 de contraste, folgado para AA e AAA.
+                        // O amarelo é idêntico nos dois temas — ele já é o acento,
+                        // e escurecê-lo no escuro só enfraqueceria a marcação.
+                        "bg-utfpr-500 text-zinc-950 shadow-lg ring-2 ring-utfpr-600/50 dark:bg-utfpr-500 dark:text-zinc-950 scale-[1.02]"
                       : "bg-zinc-100/60 text-zinc-700 hover:bg-utfpr-50 hover:text-zinc-950 hover:border-utfpr-300 dark:bg-zinc-800/40 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white border border-transparent"
                 } ${colapsado ? "justify-center !p-3.5" : ""}`}
               >
-                <div className={`shrink-0 flex items-center justify-center text-xl ${ativo ? "text-utfpr-400" : ""}`}>
+                <div className={`shrink-0 flex items-center justify-center text-xl ${ativo ? "text-zinc-950" : ""}`}>
                   {item.icone}
                 </div>
                 {!colapsado && (
@@ -135,9 +141,10 @@ export function SidebarNavegacao({
                       <span className="truncate font-black text-sm">{item.rotulo}</span>
                       {item.badge !== undefined && (
                         <span
+                          // invertido no item ativo: amarelo sobre amarelo sumiria
                           className={`shrink-0 rounded-md px-1.5 py-0.5 font-mono text-[10px] font-bold ${
                             ativo
-                              ? "bg-utfpr-500 text-zinc-950"
+                              ? "bg-zinc-900 text-utfpr-400"
                               : "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300"
                           }`}
                         >
@@ -146,7 +153,15 @@ export function SidebarNavegacao({
                       )}
                     </div>
                     {item.subrotulo && (
-                      <p className="truncate text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+                      // o cinza claro do estado normal cairia para ~2:1 sobre o
+                      // amarelo; no item ativo o subrótulo escurece junto
+                      <p
+                        className={`truncate text-[11px] font-medium mt-0.5 ${
+                          ativo
+                            ? "text-zinc-800"
+                            : "text-zinc-500 dark:text-zinc-400"
+                        }`}
+                      >
                         {item.subrotulo}
                       </p>
                     )}
@@ -174,14 +189,20 @@ export function SidebarNavegacao({
                 item.bloqueado
                   ? "opacity-50 cursor-not-allowed text-zinc-400 dark:text-zinc-600"
                   : ativo
-                    ? "bg-zinc-900 text-utfpr-400 shadow-md ring-2 ring-utfpr-500/40 dark:bg-zinc-800 dark:text-utfpr-400"
+                    ? "bg-utfpr-500 text-zinc-950 shadow-md ring-2 ring-utfpr-600/50 dark:bg-utfpr-500 dark:text-zinc-950"
                     : "bg-zinc-100/80 text-zinc-700 hover:bg-utfpr-50 dark:bg-zinc-800/50 dark:text-zinc-300"
               }`}
             >
               <span className="text-base">{item.icone}</span>
               <span className="truncate">{item.rotulo}</span>
               {item.badge !== undefined && (
-                <span className="rounded bg-utfpr-500/20 px-1 py-0.2 font-mono text-[9px] text-utfpr-700 dark:text-utfpr-300 font-bold">
+                <span
+                  className={`rounded px-1 py-0.2 font-mono text-[9px] font-bold ${
+                    ativo
+                      ? "bg-zinc-900 text-utfpr-400"
+                      : "bg-utfpr-500/20 text-utfpr-700 dark:text-utfpr-300"
+                  }`}
+                >
                   {item.badge}
                 </span>
               )}

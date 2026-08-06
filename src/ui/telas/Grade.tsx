@@ -13,7 +13,7 @@ import {
 import type { Matriz, PerfilAluno, SelecaoTurma } from "../../domain/tipos";
 import { faixaDoSlot } from "../../domain/horarios";
 import { categoriaDe } from "../../domain/motor/elegiveis";
-import { normNome } from "../../domain/motor/identidade";
+import { disciplinaCanonicaDaOferta } from "../../domain/motor/identidade";
 import { calcularResumoProgressoGrade, obterCargaHoraria, type ResumoCategoriaGrade } from "../../domain/motor/progressoGrade";
 import { Badge, BalaoProgressoHover, BarraProgressoComPreview, Botao, Card, IconeStatusProgresso } from "../componentes";
 import {
@@ -36,6 +36,10 @@ import {
   IconWarning,
 } from "../icons";
 import { ModalGradeMagica } from "./ModalGradeMagica";
+import { PainelProfessor, type AlvoPainelProfessor } from "./PainelProfessor";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
+import { useContagemPorTurma } from "./reviewsComuns";
 import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 
 const DIAS: [number, string][] = [
@@ -409,6 +413,12 @@ export function TelaGrade(props: {
   const { oferta, selecao, setSelecao } = props;
   const [copiado, setCopiado] = useState(false);
   const [modalGradeMagica, setModalGradeMagica] = useState(false);
+  // painel lateral de avaliações do docente (RF17) — por enquanto só na BSI 981
+  const [profPainel, setProfPainel] = useState<AlvoPainelProfessor | null>(null);
+  const reviewsLigadas = reviewsHabilitadasPara(props.matriz?.matriz);
+  const [turmaRevisada, setTurmaRevisada] = useState<AlvoPainelDisciplina | null>(null);
+
+  const reviews = useContagemPorTurma(props.matriz);
   const [disciplinaHoverId, setDisciplinaHoverId] = useState<string | null>(null);
   const [elementoHoverKey, setElementoHoverKey] = useState<string | null>(null);
   const [progressoCarregadoKey, setProgressoCarregadoKey] = useState<string | null>(null);
@@ -587,7 +597,7 @@ export function TelaGrade(props: {
             <div key={g} className="group relative flex items-center">
               <button
                 onClick={() => props.onMudarGradeAtiva!(g)}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 font-mono text-xs font-black transition-all ${
+                className={`flex min-h-11 items-center gap-1.5 rounded-xl px-3 py-1.5 font-mono text-xs font-black transition-all sm:min-h-8 ${
                   ativa
                     ? "bg-zinc-900 text-utfpr-500 shadow-xs dark:bg-zinc-800 dark:text-utfpr-400 border border-utfpr-500/40"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800/60 dark:text-zinc-400 dark:hover:bg-zinc-800"
@@ -605,7 +615,8 @@ export function TelaGrade(props: {
                     e.stopPropagation();
                     props.onRemoverGrade!(g);
                   }}
-                  className="absolute -right-1.5 -top-1.5 hidden h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-2xs group-hover:flex hover:bg-red-600"
+                  aria-label={`Excluir Grade ${g}`}
+                  className="ml-1 flex h-11 w-11 items-center justify-center rounded-xl bg-red-500 text-sm font-bold text-white shadow-2xs hover:bg-red-600 sm:absolute sm:-right-1.5 sm:-top-1.5 sm:ml-0 sm:hidden sm:h-4 sm:w-4 sm:rounded-full sm:text-[10px] sm:group-hover:flex"
                   title={`Excluir Grade ${g}`}
                 >
                   ×
@@ -617,7 +628,7 @@ export function TelaGrade(props: {
         {props.onNovaGrade && chavesGrades.length < 3 && (
           <button
             onClick={props.onNovaGrade}
-            className="flex h-8 items-center gap-1 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-2.5 font-mono text-xs font-bold text-zinc-500 transition-colors hover:border-utfpr-500 hover:bg-utfpr-500/10 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-400 dark:hover:text-white"
+            className="flex h-11 items-center gap-1 rounded-xl border border-dashed border-zinc-300 bg-zinc-50 px-2.5 font-mono text-xs font-bold text-zinc-500 transition-colors hover:border-utfpr-500 hover:bg-utfpr-500/10 hover:text-zinc-900 sm:h-8 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-zinc-400 dark:hover:text-white"
             title="Criar nova Grade alternativa B ou C (+)"
           >
             <span>+ Nova Grade</span>
@@ -637,7 +648,7 @@ export function TelaGrade(props: {
               setConfirmacaoSobreescreverImportacao(false);
               setModalImportarAberto(true);
             }}
-            className="flex h-8 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 font-mono text-xs font-bold shadow-2xs transition-colors hover:border-utfpr-500 hover:bg-utfpr-50 hover:text-utfpr-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
+            className="flex h-11 items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-3 font-mono text-xs font-bold shadow-2xs transition-colors hover:border-utfpr-500 hover:bg-utfpr-50 hover:text-utfpr-700 sm:h-8 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
             title="Importar matérias cadastradas em outros semestres"
           >
             <span>{<IconDownload className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Importar Matérias</span>
@@ -655,6 +666,21 @@ export function TelaGrade(props: {
 
   const modaisJSX = (
     <>
+      {props.matriz && reviewsLigadas && (
+        <>
+          <PainelDisciplina
+            alvo={turmaRevisada}
+            matriz={props.matriz}
+            onFechar={() => setTurmaRevisada(null)}
+          />
+          <PainelProfessor
+            alvo={profPainel}
+            matriz={props.matriz}
+            onFechar={() => setProfPainel(null)}
+          />
+        </>
+      )}
+
       <ModalGradeMagica
         aberto={modalGradeMagica}
         onFechar={() => setModalGradeMagica(false)}
@@ -689,7 +715,7 @@ export function TelaGrade(props: {
                   setModalImportarAberto(false);
                   setConfirmacaoSobreescreverImportacao(false);
                 }}
-                className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white transition-colors"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 sm:h-8 sm:w-8 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
                 title="Fechar (ESC)"
               >
                 ×
@@ -1083,15 +1109,15 @@ export function TelaGrade(props: {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Filtrar Turno:</span>
-          <div className="flex gap-1.5">
+          <div className="flex flex-wrap gap-1.5">
             {(["TODOS", "M", "T", "N"] as const).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => setTurnoFiltro(t)}
-                className={`rounded-lg px-3 py-1 font-display text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-11 rounded-lg px-3 py-1 font-display text-xs font-bold transition-all cursor-pointer sm:min-h-0 ${
                   turnoFiltro === t
                     ? "bg-utfpr-500 text-zinc-950 shadow-xs"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
@@ -1104,7 +1130,16 @@ export function TelaGrade(props: {
         </div>
       </div>
 
-      <div ref={gradeTableRef} className="overflow-x-auto rounded-2xl border border-zinc-200/80 shadow-xs dark:border-zinc-800/80 bg-white dark:bg-zinc-900 p-2 sm:p-4">
+      <p className="px-1 text-xs font-medium text-zinc-500 sm:hidden dark:text-zinc-400">
+        Deslize horizontalmente para ver todos os dias da grade.
+      </p>
+      <div
+        ref={gradeTableRef}
+        className="overflow-x-auto rounded-2xl border border-zinc-200/80 bg-white p-2 shadow-xs sm:p-4 dark:border-zinc-800/80 dark:bg-zinc-900"
+        role="region"
+        aria-label="Grade horária com rolagem horizontal"
+        tabIndex={0}
+      >
         <table className="w-full min-w-[680px] border-collapse bg-white text-xs dark:bg-zinc-900">
           <thead>
             <tr className="bg-zinc-50/80 dark:bg-zinc-800/50">
@@ -1160,6 +1195,13 @@ export function TelaGrade(props: {
                         <div className="flex flex-col gap-1">
                           {ocupantes.map((o, i) => {
                             const codIdentificador = o.item.selecaoOriginal?.codDisciplina ?? o.item.disciplina.codigo;
+                            const codigoCurricular = props.matriz
+                              ? disciplinaCanonicaDaOferta(
+                                  props.matriz,
+                                  o.item.disciplina.codigo,
+                                  o.item.disciplina.nome,
+                                )?.codigo ?? o.item.disciplina.codigo
+                              : o.item.disciplina.codigo;
                             const isHovered =
                               disciplinaHoverId === o.item.disciplina.codigo ||
                               disciplinaHoverId === codIdentificador;
@@ -1177,7 +1219,7 @@ export function TelaGrade(props: {
                                 title={`${o.item.disciplina.nome} — ${o.item.turma.codigo}${o.sala ? ` (${o.sala})` : ""}`}
                               >
                                 <div className="truncate min-w-0">
-                                  <span className="font-mono font-bold">{o.item.disciplina.codigo}</span>
+                                  <span className="font-mono font-bold">{codigoCurricular}</span>
                                   {o.sala ? ` · ${o.sala}` : ""}
                                 </div>
                                 <button
@@ -1261,9 +1303,14 @@ export function TelaGrade(props: {
             um nome longo de disciplina estoura a largura da tela no celular */}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {itens.map((item, i) => {
-            const discMatriz = props.matriz?.disciplinas.find(
-              (x) => x.codigo === item.disciplina.codigo || (x.equivalentes || []).some((eq) => eq.codigo === item.disciplina.codigo) || normNome(x.nome) === normNome(item.disciplina.nome)
-            );
+            const discMatriz = props.matriz
+              ? disciplinaCanonicaDaOferta(
+                  props.matriz,
+                  item.disciplina.codigo,
+                  item.disciplina.nome,
+                )
+              : undefined;
+            const codigoCurricular = discMatriz?.codigo ?? item.disciplina.codigo;
             const catRaw = discMatriz && props.matriz ? categoriaDe(discMatriz, props.matriz) : "eletiva";
             const catNome =
               catRaw === "obrigatória"
@@ -1278,10 +1325,15 @@ export function TelaGrade(props: {
                 ? catRaw.charAt(0).toUpperCase() + catRaw.slice(1)
                 : "Eletiva";
 
-            const nomesProfessores =
-              item.turma.professores && item.turma.professores.length > 0
-                ? item.turma.professores.join(", ")
-                : item.turma.professores_raw || "Professor a definir";
+            // A turma inteira é a unidade avaliada: quem divide a mesma turma no
+            // mesmo horário é avaliado junto, porque a didática que o aluno viveu
+            // é a da dupla. `professores_raw` é o campo completo da fonte (2575
+            // das 2618 turmas), então ele vem primeiro.
+            const listaProfessores: string[] =
+              item.turma.professores_raw?.trim()
+                ? item.turma.professores_raw.split(/\s*,\s*/).filter(Boolean)
+                : (item.turma.professores ?? []).filter(Boolean);
+            const nomesProfessores = listaProfessores.join(", ") || "Professor a definir";
 
             const codIdentificador = item.selecaoOriginal?.codDisciplina ?? item.disciplina.codigo;
             const chaveElemento = `card-${codIdentificador}-${item.turma.codigo}-${i}`;
@@ -1311,7 +1363,7 @@ export function TelaGrade(props: {
               >
                 {isEsteElemento && (
                   <BalaoProgressoHover
-                    codigoDisciplina={item.disciplina.codigo}
+                    codigoDisciplina={codigoCurricular}
                     nomeDisciplina={item.disciplina.nome}
                     cargaHoraria={obterCargaHoraria(item.disciplina, props.matriz)}
                     perfil={props.perfil}
@@ -1329,8 +1381,16 @@ export function TelaGrade(props: {
                       </div>
                       <div className="mt-1 flex flex-wrap items-center gap-1.5 font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                         <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                          {item.disciplina.codigo}
+                          {codigoCurricular}
                         </span>
+                        {codigoCurricular !== item.disciplina.codigo && (
+                          <span
+                            className="rounded bg-zinc-100 px-1.5 py-0.5 font-sans text-[10px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                            title="Código usado pela oferta do semestre e pelo relatório de matrícula"
+                          >
+                            oferta {item.disciplina.codigo}
+                          </span>
+                        )}
                         <span>·</span>
                         <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                           Turma {item.turma.codigo}
@@ -1341,10 +1401,67 @@ export function TelaGrade(props: {
                       </div>
                       <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
                         <IconUser className="h-4 w-4 shrink-0" />
-                        <span className="truncate" title={nomesProfessores}>
-                          {nomesProfessores}
-                        </span>
+                        {reviewsLigadas && listaProfessores.length > 0 ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              // o card inteiro alterna o balão de progresso; abrir
+                              // o painel não pode disparar isso junto
+                              e.stopPropagation();
+                              setProfPainel({
+                                nomes: listaProfessores,
+                                codigo: codigoCurricular,
+                                nomeDisciplina: discMatriz?.nome ?? item.disciplina.nome,
+                              });
+                            }}
+                            className="cursor-pointer truncate underline decoration-dotted decoration-utfpr-500 underline-offset-2 transition-colors hover:text-utfpr-600 dark:hover:text-utfpr-400"
+                            title={
+                              listaProfessores.length > 1
+                                ? `Ver avaliações desta turma (${nomesProfessores})`
+                                : `Ver avaliações de ${nomesProfessores}`
+                            }
+                          >
+                            {nomesProfessores}
+                          </button>
+                        ) : (
+                          <span className="truncate">{nomesProfessores}</span>
+                        )}
                       </div>
+
+                      {reviewsLigadas && listaProfessores.length > 0 && (() => {
+                        const professoresRaw = item.turma.professores_raw ?? "";
+                        const quantas = reviews.contar(codigoCurricular, professoresRaw);
+                        return (
+                          <button
+                            type="button"
+                            disabled={quantas === 0}
+                            onClick={(e) => {
+                              // o card inteiro alterna o balão de progresso
+                              e.stopPropagation();
+                              setTurmaRevisada({
+                                codigo: codigoCurricular,
+                                nome: discMatriz?.nome ?? item.disciplina.nome,
+                                professorId: reviews.idDaTurma(professoresRaw),
+                                nomeProfessor: nomesProfessores,
+                              });
+                            }}
+                            title={
+                              quantas === 0
+                                ? "Ainda não há avaliações desta turma"
+                                : `Ver ${quantas} avaliação${quantas > 1 ? "ões" : ""} desta turma`
+                            }
+                            className={`mt-2 rounded-lg border px-2 py-1 text-[11px] font-bold transition ${
+                              quantas === 0
+                                ? "cursor-not-allowed border-zinc-200 text-zinc-300 dark:border-zinc-800 dark:text-zinc-600"
+                                : "border-utfpr-500/40 bg-utfpr-500/10 text-utfpr-700 hover:bg-utfpr-500/20 dark:text-utfpr-400"
+                            }`}
+                          >
+                            {quantas === 0
+                              ? "Sem avaliações"
+                              : `${quantas} avaliação${quantas > 1 ? "ões" : ""}`}
+                          </button>
+                        );
+                      })()}
                     </div>
                   </div>
                   <Botao

@@ -40,6 +40,23 @@ COLS_ENG_COMP = [
     ("optativa",   680, 800),
 ]
 
+# A exportação larga de Controle e Automação usa o mesmo gabarito geral, mas a
+# coluna Reserva começa em x≈261, enquanto o perfil largo compartilhado por BSI
+# e Eng. Comp. só a inicia em 263. O texto "Fechada" caía então em Vagas
+# Calouros e 284 das 410 turmas saíam sem tipo de reserva. A separação medida é
+# inequívoca: o zero de calouros fica em x≈248 e a reserva em x≈261.
+COLS_CONTROLE = [
+    ("turma",       35,  70),
+    ("enquadr",     70, 160),
+    ("vagas_total",160, 210),
+    ("vagas_cal",  210, 255),
+    ("reserva",    255, 300),
+    ("prioridade", 300, 360),
+    ("horario",    360, 600),
+    ("professor",  600, 680),
+    ("optativa",   680, 800),
+]
+
 COLS = COLS_BSI # default
 CURSO_NOME = "SIST DE INFORMAÇÃO"  # sobrescrito ao detectar o curso no cabeçalho
 
@@ -77,6 +94,8 @@ def parse():
         first_page_text = " ".join(w["text"] for w in pdf.pages[0].extract_words())
         CURSO_NOME = "SIST DE INFORMAÇÃO"
         for marca, nome in (
+            ("ENG MECATR", "ENG MECATRÔNICA"),
+            ("ENG CONTR/AUTOMA", "ENG CONTR/AUTOMAÇÃO"),
             ("ENG DE COMPUTA", "ENG DE COMPUTAÇÃO"),
             ("ENG ELETR", "ENG ELETRÔNICA"),
             ("SIST DE INFORMA", "SIST DE INFORMAÇÃO"),
@@ -94,8 +113,12 @@ def parse():
         matriz_xs = [w["x0"] for p in pdf.pages[:8] for w in p.extract_words()
                      if w["text"].startswith("Matriz:")]
         layout_largo = bool(matriz_xs) and (sum(matriz_xs) / len(matriz_xs)) > 600
-        COLS = COLS_ENG_COMP if layout_largo else COLS_BSI
-        print(f"curso={CURSO_NOME!r} layout={'largo(962)' if layout_largo else 'estreito(2026-1)'} "
+        COLS = (
+            COLS_CONTROLE
+            if CURSO_NOME == "ENG CONTR/AUTOMAÇÃO"
+            else COLS_ENG_COMP if layout_largo else COLS_BSI
+        )
+        print(f"curso={CURSO_NOME!r} layout={'largo' if layout_largo else 'estreito'} "
               f"matriz_x≈{round(sum(matriz_xs)/len(matriz_xs)) if matriz_xs else 'n/a'}", file=sys.stderr)
 
     def flush_header():
@@ -104,7 +127,7 @@ def parse():
             return
         text = " ".join(header_buf)
         m = re.match(
-            r"^([A-Z0-9]{4,7}) - (.+?) \(([\d,]*) Aulas semanais presenciais, ([\d,]*) Aulas semanais ass[ií]ncronas, ([\d,]*) horas semestrais extensionistas\)$",
+            r"^([A-Z0-9]{4,7}) - (.+?) \((-?[\d,]*) Aulas semanais presenciais, (-?[\d,]*) Aulas semanais ass[ií]ncronas, (-?[\d,]*) horas semestrais extensionistas\)$",
             text)
         def num(s):
             # a fonte às vezes imprime frações com vírgula (ex.: CSX41 "1,7333...")
@@ -176,7 +199,9 @@ def parse():
                         or "matriz curricular" in line or "prioridade e" in line
                         or "na ordem de" in line or "disciplina na" in line
                         or "Horários marcados" in line or line == "SIST DE INFORMAÇÃO"
-                        or line == "ENG DE COMPUTAÇÃO"):
+                        or line == "ENG DE COMPUTAÇÃO"
+                        or line == "ENG CONTR/AUTOMAÇÃO"
+                        or line == "ENG MECATRÔNICA"):
                     continue
                 first = ws[0]
                 # header de disciplina? começa na coluna 1 com CODIGO - ... ou continuação do header

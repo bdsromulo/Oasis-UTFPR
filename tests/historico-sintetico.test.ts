@@ -32,8 +32,8 @@ const LINHAS = [
   "2 ICSE20 Técnicas De Programação S01 R 4 60 0 7,0 85,0 1 2026 Aprovado Por Nota/Frequência",
   // consignação
   "Crédito Consignado",
-  "1 MAT7GA Geometria Analítica 4 60 0 8,0 100,0 1 2025 >> Consignação Manual - Programa de",
-  "Convalidação",
+  "1 MAT7GA Geometria Analítica 4 60 0 8,0 100,0 1 2025 Docente Consignacao - Doutorado [disciplina MA71B -",
+  "Fechamento de Turmas - Cursou Disciplina(s) Equivalente(s)]",
   // atividades complementares com média/freq "*"
   "2 ICSX50 Atividades S73 E 0 90 0 * * 1 2026 Aprovado",
   "Complementares",
@@ -125,6 +125,10 @@ describe("histórico sintético", () => {
     expect(perfil.aprovadas.has("ICSF13")).toBe(true); // situação na linha anterior
     expect(perfil.aprovadas.has("ICSE20")).toBe(true); // reprovado depois aprovado
     expect(perfil.aprovadas.has("MAT7GA")).toBe(true); // consignada
+    expect(perfil.cursadas.find((c) => c.codigo === "MAT7GA")).toMatchObject({
+      codigoOriginal: "MA71B",
+      professores: ["Docente Consignacao"],
+    });
     expect(perfil.aprovadas.has("ICSX50")).toBe(true); // média/freq "*"
     expect(perfil.aprovadas.has("ICSF20")).toBe(true); // via matriculadas
     expect(perfil.aprovadas.has("FCH7HA")).toBe(true); // optativa

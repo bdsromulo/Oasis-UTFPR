@@ -19,7 +19,7 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path
 COMPLEMENTO = sys.argv[3] if len(sys.argv) > 3 else None
 
 # fronteiras de coluna (x0) medidas no PDF (A4 paisagem, 841.92 x 1191.12)
-COLS = [
+COLS_PADRAO = [
     ("periodo",   30,  69),
     ("opt",       69, 102.5),
     ("codigo",   102.5, 141),
@@ -39,6 +39,135 @@ COLS = [
     ("eq_cht",   761, 784),
     ("eq_grupo", 784, 842),
 ]
+# A matriz 806 saiu do Portal com as MESMAS colunas, porém com larguras próprias.
+# O deslocamento global calibrado pelo âncora "Turmas" acerta o miolo numérico e
+# erra as duas pontas: o nome da disciplina invade a coluna de código, o "modelo
+# de disciplina" invade o nome, e CHEAD e carga horária caem uma casa adiante —
+# saíam 162 disciplinas com 0h e nome contaminado. Medido palavra a palavra no
+# cabeçalho e numa linha de disciplina do PDF de referência.
+COLS_806 = [
+    ("periodo",   30,  70),
+    ("opt",       70,  92),
+    ("codigo",    92, 122),
+    ("nome",     122, 215),
+    ("modelo",   215, 288),
+    ("teoricas", 288, 340),
+    ("praticas", 340, 390),
+    ("total",    390, 432),
+    ("aps",      432, 462),
+    ("apcc",     462, 498),
+    ("ad",       498, 536),
+    ("chext",    536, 576),
+    ("chead",    576, 626),
+    ("ch",       626, 666),
+    ("prereq",   666, 720),
+    ("eq_disc",  720, 758),
+    ("eq_cht",   758, 778),
+    ("eq_grupo", 778, 842),
+]
+
+# A matriz 978 desloca só as colunas textuais da esquerda: código em x≈95,
+# nome em x≈126 e modelo em x≈234. O miolo numérico e as equivalências mantêm
+# as posições do layout padrão. Corrigir tudo com um deslocamento global faria
+# as continuações do nome (também em x≈126) caírem dentro da coluna de código e
+# seriam remontadas fora de ordem, como acontecia em ELT71A.
+COLS_978 = [
+    ("periodo",   30,  69),
+    ("opt",       69,  94),
+    ("codigo",    94, 125),
+    ("nome",     125, 225),
+    ("modelo",   225, 300),
+    ("teoricas", 300, 350),
+    ("praticas", 350, 397),
+    ("total",    397, 440),
+    ("aps",      440, 470),
+    ("apcc",     470, 500),
+    ("ad",       500, 530),
+    ("chext",    530, 565),
+    ("chead",    565, 605),
+    ("ch",       605, 645),
+    ("prereq",   645, 711),
+    ("eq_disc",  711, 761),
+    ("eq_cht",   761, 784),
+    ("eq_grupo", 784, 842),
+]
+
+# A matriz 973 usa um gabarito A3 mais largo na coluna Disciplina e desloca
+# Código/Turmas para x≈89. As colunas numéricas também terminam em x≈653, fora
+# da faixa padrão: sem este perfil o parser descartava a primeira e a última
+# carga, produzia 0h e interpretava fragmentos de nomes como códigos.
+COLS_973 = [
+    ("periodo",   30,  64),
+    ("opt",       64,  88),
+    ("codigo",    88, 122),
+    ("nome",     122, 253),
+    ("modelo",   253, 310),
+    ("teoricas", 310, 352),
+    ("praticas", 352, 400),
+    ("total",    400, 447),
+    ("aps",      447, 482),
+    ("apcc",     482, 518),
+    ("ad",       518, 553),
+    ("chext",    553, 600),
+    ("chead",    600, 642),
+    ("ch",       642, 680),
+    ("prereq",   680, 730),
+    ("eq_disc",  730, 765),
+    ("eq_cht",   765, 790),
+    ("eq_grupo", 790, 842),
+]
+
+# A matriz antiga 823 usa o mesmo papel A3, mas com a tabela deslocada ainda
+# mais para a esquerda e uma coluna Disciplina bem mais estreita. A primeira
+# carga semanal fica em x≈287 e a carga total em x≈650. Com o perfil padrão, o
+# primeiro número era descartado, todos os demais escorregavam uma posição e as
+# 87 disciplinas com carga saíam com 0h; partes do nome também caíam em Código.
+COLS_823 = [
+    ("periodo",   30,  64),
+    ("opt",       64,  88),
+    ("codigo",    88, 115),
+    ("nome",     115, 208),
+    ("modelo",   208, 265),
+    ("teoricas", 265, 317),
+    ("praticas", 317, 369),
+    ("total",    369, 425),
+    ("aps",      425, 466),
+    ("apcc",     466, 506),
+    ("ad",       506, 549),
+    ("chext",    549, 590),
+    ("chead",    590, 645),
+    ("ch",       645, 685),
+    ("prereq",   685, 733),
+    ("eq_disc",  733, 767),
+    ("eq_cht",   767, 788),
+    ("eq_grupo", 788, 842),
+]
+
+# Perfil de layout por matriz: âncora de calibração, colunas e a faixa onde vivem
+# os números. A calibração fina por deslocamento continua valendo DENTRO do
+# perfil: ela resolve o mesmo layout impresso com folga diferente, que é o caso
+# da Eng. Comp. em relação à BSI 981.
+#
+# A faixa numérica é separada das colunas de propósito. Os números não são lidos
+# por `col_of`, e sim por posição relativa dentro da faixa, porque o escalonamento
+# do PDF joga um dígito para a coluna vizinha. O preço é que a faixa precisa
+# começar ANTES da primeira coluna numérica e terminar DEPOIS da última: na 806
+# ela começa em 296, e a faixa da 981 descartava esse primeiro valor, escorregando
+# todas as leituras uma casa — a carga horária caía em CHEAD e a disciplina saía
+# com 0h.
+PERFIS = {
+    "padrao": (102.9, COLS_PADRAO, (310, 645)),
+    "806": (95.0, COLS_806, (288, 666)),
+    "823": (88.8, COLS_823, (280, 670)),
+    "973": (88.9, COLS_973, (320, 670)),
+    # A primeira célula numérica da 978 fica em x≈305. A faixa padrão começava
+    # em 310, descartava esse valor e escorregava os nove números uma casa; a
+    # carga horária total de todas as 173 disciplinas virava zero.
+    "978": (95.1, COLS_978, (300, 645)),
+}
+
+COLS = COLS_PADRAO
+FAIXA_NUM = (310, 645)
 NUM_COLS = ("teoricas", "praticas", "total", "aps", "apcc", "ad", "chext", "chead", "ch")
 RE_COD = re.compile(r"^[A-Z0-9]{4,7}$")
 
@@ -61,7 +190,14 @@ X_TURMAS_REFERENCIA = 102.9
 _offset = 0.0
 
 
-def calibrar(paginas) -> float:
+def escolher_perfil(texto_pagina1: str):
+    """Perfil de colunas pela matriz declarada no cabeçalho da página 1."""
+    m = re.search(r"Matriz:\s*(\d+)", texto_pagina1)
+    numero = m.group(1) if m else ""
+    return PERFIS.get(numero, PERFIS["padrao"]), numero
+
+
+def calibrar(paginas, x_referencia: float) -> float:
     """Mede o deslocamento do documento pela posição do âncora 'Turmas'."""
     xs = [
         w["x0"]
@@ -74,7 +210,7 @@ def calibrar(paginas) -> float:
     # moda arredondada: robusta a uma ocorrência fora de lugar
     from collections import Counter
     modal = Counter(round(x, 1) for x in xs).most_common(1)[0][0]
-    return modal - X_TURMAS_REFERENCIA
+    return modal - x_referencia
 
 
 def col_of(x):
@@ -100,11 +236,14 @@ def group_rows(words, tol=3.5):
     return [sorted(ws, key=lambda w: w["x0"]) for _, ws in rows]
 
 def parse():
-    global _offset
+    global _offset, COLS, FAIXA_NUM
     blocks, buf, footer_lines, in_footer = [], [], [], False
     with pdfplumber.open(PDF) as pdf:
-        _offset = calibrar(pdf.pages)
         cabecalho_texto = pdf.pages[0].extract_text() or ""
+        (x_referencia, COLS, FAIXA_NUM), numero_matriz = escolher_perfil(cabecalho_texto)
+        if COLS is not COLS_PADRAO:
+            print(f"layout: perfil de colunas próprio da matriz {numero_matriz}", file=sys.stderr)
+        _offset = calibrar(pdf.pages, x_referencia)
         if abs(_offset) > 0.05:
             print(f"calibração: documento deslocado {_offset:+.1f}pt", file=sys.stderr)
         for page in pdf.pages:
@@ -152,6 +291,15 @@ def parse():
                 eq_lines.append(eq_line)
 
         raw_cod_toks = [t for t in cells.get("codigo", []) if t != "Turmas"]
+        # No PDF da 973 não há espaço gráfico entre [OPT] e Código: pdfplumber
+        # devolve um único token como "[1224]ARQ7DH", ancorado na coluna opt.
+        # Separar aqui preserva simultaneamente o conjunto e o código; sem isso
+        # todas as 143 optativas/extensionistas desapareciam da matriz.
+        for token in cells.get("opt", []):
+            combinado = re.fullmatch(r"\[(\d{3,4})\]([A-Z0-9]{4,7})", token)
+            if combinado:
+                raw_cod_toks.insert(0, combinado.group(2))
+                break
         cod_toks = []
         nome_extra = []
         for t in raw_cod_toks:
@@ -165,6 +313,12 @@ def parse():
             # fragmentos como "EM", "DE", "DA"), daí a letra única e maiúscula.
             elif cod_toks == ["ENADE"] and re.fullmatch(r"[A-Z]", t):
                 cod_toks.append(t)
+            # Na primeira página da 823 não há espaço entre o sufixo I e o nome
+            # ENADE da coluna seguinte: pdfplumber entrega "IENADE" ainda
+            # ancorado em Código. O I é o sufixo de ingressante; o restante já
+            # pertence ao nome e não pode contaminar o código nem a descrição.
+            elif cod_toks == ["ENADE"] and re.fullmatch(r"[IC]ENADE", t):
+                cod_toks.append(t[0])
             else:
                 nome_extra.append(t)
         if not cod_toks:
@@ -201,7 +355,7 @@ def parse():
         raw_nums = []
         for ws in blk[linha_codigo:]:
             for w in ws:
-                if 310 <= w["x0"] <= 645 and re.match(r"^\d+$", w["text"]):
+                if FAIXA_NUM[0] <= w["x0"] <= FAIXA_NUM[1] and re.match(r"^\d+$", w["text"]):
                     raw_nums.append((w["x0"], int(w["text"])))
         raw_nums.sort()
         nums = {}

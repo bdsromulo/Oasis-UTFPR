@@ -1,10 +1,19 @@
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { Matriz, PerfilAluno } from "../../domain/tipos";
-import { montarPainel } from "../../domain/motor/situacao";
+import { montarPainel, progressoGlobalDoCurso } from "../../domain/motor/situacao";
 import { nomeDeEletiva } from "../../domain/eletivas";
-import { Badge, Barra, Card, Rosca } from "../componentes";
+import { Badge, Barra, Botao, Card, Rosca } from "../componentes";
 import { IconCheck, IconWarning } from "../icons";
 import type { CategoriaCatalogo } from "./Catalogo";
+import { ModalEnvioForms } from "./ModalEnvioForms";
+import { coletaHabilitada, type AlvoAvaliacao } from "../../domain/reviews/forms";
+import { criarAlvoAvaliacao } from "../../domain/reviews/alvos";
+import { reviewsHabilitadasPara } from "../../domain/reviews/config";
+import { codigosJaAvaliadosPor } from "../../domain/reviews/acervo";
+import { criarMapaIdentidade } from "../../domain/motor/identidade";
+import { CURSOS } from "../../domain/dadosCurso";
+import type { AcervoReviews } from "../../domain/reviews/tipos";
+import acervoReviews from "../../../data/reviews.json";
 import {
   contaNoBlocoOptativo,
   descricaoDoCurso,
@@ -94,6 +103,38 @@ export function TelaSituacao(props: {
   onAbrirCatalogo?: (cat: CategoriaCatalogo) => void;
 }) {
   const { perfil, matriz, onAbrirCatalogo } = props;
+  const [avaliando, setAvaliando] = useState<AlvoAvaliacao | null>(null);
+
+  /** O que esta pessoa já avaliou — ver `codigosJaAvaliadosPor` para os limites. */
+  const jaAvaliadas = useMemo(() => {
+    if (!perfil?.nome) return new Set<string>();
+    return codigosJaAvaliadosPor(
+      (acervoReviews as AcervoReviews).reviews,
+      perfil.nome,
+      criarMapaIdentidade(matriz),
+    );
+  }, [perfil?.nome, matriz]);
+
+  /**
+   * Disciplinas do último semestre do histórico — o conjunto que a RF16 convida a
+   * avaliar. O semestre vem pronto de `DisciplinaCursada`, sem inferência.
+   *
+   * O que entra é decidido por `criarAlvoAvaliacao`, no domínio: aprovações e
+   * consignações representam conclusão; reprovações continuam fora.
+   */
+  const doUltimoSemestre = useMemo(() => {
+    if (!perfil) return { semestre: null as string | null, itens: [] as AlvoAvaliacao[] };
+    const codigosDeEstagio = descricaoDoCurso(matriz).estagios.map((e) => e.codigo);
+    const avaliaveis = perfil.cursadas
+      .map((c) => criarAlvoAvaliacao(c, matriz, CURSOS, codigosDeEstagio))
+      .filter((alvo): alvo is AlvoAvaliacao => alvo !== null);
+    if (!avaliaveis.length) return { semestre: null, itens: [] };
+    const ultimo = avaliaveis.map((alvo) => alvo.semestre).sort().at(-1)!;
+    const itens = avaliaveis
+      .filter((alvo) => alvo.semestre === ultimo)
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+    return { semestre: ultimo, itens };
+  }, [perfil, matriz]);
 
   const concluidasMapa = useMemo(() => {
     const mapa: Record<string, { codigo: string; nome: string; cht?: number | null }[]> = {
@@ -160,26 +201,11 @@ export function TelaSituacao(props: {
 
   const qtdEstagio = estagios.filter((e) => e.feito).length;
 
-  const horasTotalPPC = matriz.cargas.ch_total_ppc || 3200;
-  // A carga aprovada sai do Quadro Resumo do histórico, que já aplica os tetos por
-  // categoria — eletivas, por exemplo, param no teto da matriz mesmo quando o aluno
-  // cursou mais horas do que ele. Somar as cursadas devolveria um número acima do
-  // oficial. A soma só é usada como fallback em histórico sem Quadro Resumo.
-  const horasAprovadasGlobal = useMemo(() => {
-    if (!perfil) return 0;
-    const resumo = perfil.resumoGeral;
-    if (resumo) {
-      const oficial = resumo.obrigatorias.aprovada + resumo.optativas.aprovada + resumo.eletivas.aprovada;
-      return Math.min(oficial, horasTotalPPC);
-    }
-    let soma = 0;
-    for (const c of perfil.cursadas) {
-      if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {
-        soma += c.cht || 0;
-      }
-    }
-    return Math.min(soma, horasTotalPPC);
-  }, [perfil, horasTotalPPC]);
+  // Régua única, compartilhada com o Simulador de Formatura: as duas telas
+  // respondem "quanto do curso já fiz" e precisam do mesmo número.
+  const global = useMemo(() => progressoGlobalDoCurso(perfil, matriz), [perfil, matriz]);
+  const horasTotalPPC = global.total;
+  const horasAprovadasGlobal = global.cumprido;
 
   if (!perfil) {
     return (
@@ -214,6 +240,7 @@ export function TelaSituacao(props: {
     painel.trilhas.reduce((acc, t) => acc + t.cumprido, 0);
   const trilhasExigidas = cursoDesc.trilhasExigidas;
   const horasExcedentesTrilhas = Math.max(0, somaCumpridoTrilhas - totalExigido3Estrato);
+  const exibeBlocoTrilhas = painel.blocoOptativo !== null || painel.trilhas.length > 0;
 
   return (
     <div className="space-y-8">
@@ -456,8 +483,10 @@ export function TelaSituacao(props: {
         </Card>
       </section>
 
-      {/* BLOCO ÚNICO DE TRILHAS NO MENU PRINCIPAL (ITEM 4) */}
-      <section>
+      {/* BLOCO ÚNICO DE TRILHAS NO MENU PRINCIPAL (ITEM 4). A 978 distribui
+          suas optativas em cinco grupos obrigatórios, sem agregador nem piso de
+          trilhas validáveis; nesse curso o card correto é o de Opções acima. */}
+      {exibeBlocoTrilhas && <section>
         <Card
           classe="p-6 transition-all hover:border-utfpr-500/40 hover:shadow-md cursor-pointer group bg-gradient-to-r from-white via-white to-utfpr-500/5 dark:from-zinc-900 dark:via-zinc-900 dark:to-utfpr-500/10"
         >
@@ -551,7 +580,67 @@ export function TelaSituacao(props: {
             </div>
           </div>
         </Card>
-      </section>
+      </section>}
+
+      {/* por enquanto só a BSI 981 expõe a camada de avaliações (§6.10) */}
+      {reviewsHabilitadasPara(matriz.matriz) && coletaHabilitada() && doUltimoSemestre.itens.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            Avaliar o semestre {doUltimoSemestre.semestre}
+          </h2>
+          <Card>
+            <p className="mb-1.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+              Sua experiência ajuda quem vai escolher turma. A avaliação é pública e
+              assinada com o seu nome; seu RA não é publicado.
+            </p>
+            {/* Mesmo aviso dos outros dois pontos de entrada da avaliação: o campo
+                editado só cobra o preço dias depois, quando a resposta é recusada. */}
+            <p className="mb-3 text-xs font-semibold leading-relaxed text-amber-700 dark:text-amber-400">
+              O formulário abre com disciplina, semestre, professor e seu nome já
+              preenchidos. Não altere esses campos.
+            </p>
+            <div className="space-y-1.5">
+              {doUltimoSemestre.itens.map((d) => (
+                <div
+                  key={`${d.codigo}-${d.semestre}`}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200/70 px-3 py-2 dark:border-zinc-800/70"
+                >
+                  {/* mesma estrutura de duas linhas do seletor completo: o código
+                      inline fazia a altura do item variar com o comprimento do nome */}
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-1.5">
+                      <span className="font-mono text-xs font-bold text-zinc-500 dark:text-zinc-400">
+                        {d.codigo}
+                      </span>
+                    </span>
+                    <span className="block truncate text-sm text-zinc-700 dark:text-zinc-200">
+                      {d.nome}
+                    </span>
+                  </span>
+                  {jaAvaliadas.has(d.codigoCanonico) ? (
+                    <span
+                      title="Você já avaliou esta disciplina. Para mudar, edite sua resposta no formulário."
+                      className="shrink-0 cursor-help rounded-lg bg-emerald-500/10 px-2 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400"
+                    >
+                      ✓ avaliada
+                    </span>
+                  ) : (
+                    <Botao onClick={() => setAvaliando(d)} variante="sutil" classe="shrink-0 !px-3 !py-1.5 !text-xs">
+                      Avaliar
+                    </Botao>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Card>
+        </section>
+      )}
+
+      <ModalEnvioForms
+        alvo={avaliando}
+        autor={perfil.nome}
+        onFechar={() => setAvaliando(null)}
+      />
 
       {perfil.dependencias.length > 0 && (
         <section className="space-y-3">

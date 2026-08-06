@@ -28,14 +28,19 @@ function csp(): Plugin {
         if (!codigo.trim()) continue;
         hashes.push(`'sha256-${createHash("sha256").update(codigo, "utf8").digest("base64")}'`);
       }
+      // No beta o GoatCounter é removido do HTML (ver `beta()`), então a CSP
+      // não precisa abrir exceção nenhuma para ele.
+      const scriptExtra = BETA ? "" : ` ${GC_SCRIPT}`;
+      const imgExtra = BETA ? "" : ` ${GC_ENDPOINT}`;
+      const connectExtra = BETA ? "" : ` ${GC_ENDPOINT}`;
       const politica = [
         "default-src 'self'",
-        `script-src 'self' ${GC_SCRIPT} ${hashes.join(" ")}`.trim(),
+        `script-src 'self'${scriptExtra} ${hashes.join(" ")}`.trim(),
         // React/Tailwind aplicam estilos inline em runtime (baixo risco vs. script)
         "style-src 'self' 'unsafe-inline'",
-        `img-src 'self' data: ${GC_ENDPOINT}`,
+        `img-src 'self' data:${imgExtra}`,
         "font-src 'self'",
-        `connect-src 'self' ${GC_ENDPOINT}`,
+        `connect-src 'self'${connectExtra}`,
         // worker do pdf.js: mesma origem (bundle) e, em alguns navegadores, via blob:
         "worker-src 'self' blob:",
         "object-src 'none'",
@@ -51,12 +56,80 @@ function csp(): Plugin {
   };
 }
 
-// base: raiz do domínio próprio (oasisutfpr.com.br via public/CNAME).
-// Era "/Oasis-UTFPR/" enquanto o site vivia em bdsromulo.github.io/Oasis-UTFPR/;
-// com domínio customizado o GitHub Pages serve a partir da raiz.
+/**
+ * Ambiente de testes aberto, servido por outro repositório no GitHub Pages.
+ *
+ * Ligado por `OASIS_BETA=1` no build. Muda três coisas e nada mais, para que o
+ * beta continue sendo o mesmo código do site — um beta que diverge do produto
+ * deixa de testar o produto.
+ */
+const BETA = process.env.OASIS_BETA === "1";
+
+/**
+ * Prefixo do caminho servido.
+ *
+ * A produção vive na raiz do domínio próprio (oasisutfpr.com.br via
+ * public/CNAME). Um repositório comum no GitHub Pages serve em SUBPASTA
+ * (usuario.github.io/repo/), e nesse caso `base` precisa ser essa subpasta com
+ * as barras nas duas pontas — senão o HTML carrega e todo o JS e CSS dá 404,
+ * resultando numa página em branco sem erro visível.
+ */
+const BASE = process.env.OASIS_BASE ?? "/";
+const URL_PUBLICA = BETA
+  ? `https://bdsromulo.github.io${BASE}`
+  : "https://oasisutfpr.com.br/";
+
+/** Resolve URLs absolutas usadas por leitores de Open Graph fora do navegador. */
+function metadadosPublicos(): Plugin {
+  return {
+    name: "oasis-metadados-publicos",
+    apply: "build",
+    transformIndexHtml(html) {
+      return html.replaceAll("__OASIS_URL_PUBLICA__", URL_PUBLICA);
+    },
+  };
+}
+
+/**
+ * No beta, pede para os buscadores não indexarem e desliga a analytics.
+ *
+ * O noindex importa porque o beta serve as mesmas avaliações, com nome completo
+ * de gente real. Sem ele, o buscador indexa essas pessoas duas vezes, e o
+ * consentimento que elas deram fala do site do Oásis, não de uma cópia paralela.
+ *
+ * O GoatCounter sai porque `data-goatcounter` em `index.html` aponta para a
+ * conta única do site oficial — sem removê-lo aqui, todo acesso ao ambiente de
+ * testes seria contado junto com o tráfego real, contaminando a métrica que a
+ * produção usa para decisão.
+ *
+ * A remoção do `public/CNAME` — que reivindicaria oasisutfpr.com.br para o
+ * repositório do beta — NÃO mora aqui: `public/` é copiado pelo Vite fora do
+ * bundle e depois dos hooks, então o workflow apaga o arquivo do `dist`.
+ */
+function beta(): Plugin {
+  return {
+    name: "oasis-beta",
+    apply: "build",
+    enforce: "post",
+    transformIndexHtml(html) {
+      if (!BETA) return html;
+      return html
+        .replace(/\s*<script data-goatcounter[\s\S]*?<\/script>\n?/, "\n")
+        .replace(
+          "</head>",
+          '  <meta name="robots" content="noindex, nofollow" />\n  </head>',
+        );
+    },
+  };
+}
+
 export default defineConfig({
-  base: "/",
-  plugins: [react(), tailwindcss(), csp()],
+  base: BASE,
+  plugins: [react(), tailwindcss(), metadadosPublicos(), csp(), beta()],
+  // A interface precisa saber que está no beta para exibir o aviso de ambiente.
+  // Constante trocada no build, e não variável de runtime: na produção o valor
+  // vira `false` literal e o bloco inteiro sai do bundle.
+  define: { __OASIS_BETA__: JSON.stringify(BETA) },
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],

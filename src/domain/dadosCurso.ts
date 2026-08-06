@@ -1,5 +1,6 @@
 import type { Matriz, OfertaSemestre } from "./tipos";
 import matriz981Json from "../../data/matriz-981.json";
+import matriz806Json from "../../data/matriz-806.json";
 import turmasBsi20262 from "../../data/turmas/2026-2.json";
 import turmasBsi20261 from "../../data/turmas/2026-1.json";
 import turmasBsi20252 from "../../data/turmas/2025-2.json";
@@ -12,6 +13,12 @@ import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
 import turmasEletronica20262 from "../../data/eng-eletronica/turmas/2026-2.json";
 import turmasEletronica20261 from "../../data/eng-eletronica/turmas/2026-1.json";
 import turmasEletronica20252 from "../../data/eng-eletronica/turmas/2025-2.json";
+import matriz978Json from "../../data/eng-controle/matriz-978.json";
+import turmasControle20262 from "../../data/eng-controle/turmas/2026-2.json";
+import turmasControle20261 from "../../data/eng-controle/turmas/2026-1.json";
+import turmasControle20252 from "../../data/eng-controle/turmas/2025-2.json";
+import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
+import matriz823Json from "../../data/eng-mecatronica/matriz-823.json";
 
 /**
  * Reúne, por curso, a matriz e as ofertas de turma que a interface consome.
@@ -46,6 +53,25 @@ export const BSI: DadosCurso = {
   rotulo: "Bacharelado em Sistemas de Informação",
   rotuloCurto: "BSI",
   matriz: matriz981Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": bsi20262,
+    "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
+    "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+// A BSI tem uma oferta só por semestre, publicada com os códigos da matriz nova.
+// A 806 lê a mesma oferta pela camada de equivalências — 66 das 77 disciplinas
+// ofertadas em 2026-1 resolvem para ela, 8 pelo código direto e 58 por
+// equivalência. As 11 restantes existem apenas na 981, o que é esperado numa
+// oferta compartilhada entre matrizes.
+export const BSI_806: DadosCurso = {
+  id: "bsi-806",
+  rotulo: "Bacharelado em Sistemas de Informação (806)",
+  rotuloCurto: "BSI (806)",
+  matriz: matriz806Json as unknown as Matriz,
   ofertas: {
     "2026-2": bsi20262,
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
@@ -107,7 +133,82 @@ export const ENG_ELETRONICA: DadosCurso = {
   semestresPreMatricula: ["2026-2"],
 };
 
-const CURSOS = [BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA];
+// Controle e Automação tem oferta própria do Portal. 2026-2 é a fonte oficial
+// vigente; as duas ofertas anteriores vêm dos backups HTML do Grade na Hora e
+// preservam as duas paridades usadas pelo Simulador de Formatura.
+export const ENG_CONTROLE: DadosCurso = {
+  id: "eng-controle-978",
+  rotulo: "Engenharia de Controle e Automação (978)",
+  rotuloCurto: "Eng. Controle",
+  matriz: matriz978Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": turmasControle20262 as unknown as OfertaSemestre,
+    "2026-1": turmasControle20261 as unknown as OfertaSemestre,
+    "2025-2": turmasControle20252 as unknown as OfertaSemestre,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+// Mecatrônica tem uma das maiores ofertas do Portal. As três versões entram em
+// um chunk sob demanda logo depois da primeira renderização; este placeholder
+// mantém o contrato síncrono das telas durante os poucos instantes do download.
+const OFERTA_MECATRONICA_CARREGANDO: OfertaSemestre = {
+  curso: "ENG MECATRÔNICA",
+  semestre: "2026-2",
+  fonte: "Turmas de Engenharia Mecatrônica em carregamento",
+  disciplinas: [],
+};
+
+export const ENG_MECATRONICA: DadosCurso = {
+  id: "eng-mecatronica-973",
+  rotulo: "Engenharia Mecatrônica (973)",
+  rotuloCurto: "Eng. Mecatrônica",
+  matriz: matriz973Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": OFERTA_MECATRONICA_CARREGANDO,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+// As matrizes 823 e 973 pertencem ao mesmo curso e consultam a mesma lista de
+// Turmas Abertas. O casamento dos códigos atuais com a grade antiga acontece
+// pelas 264 equivalências publicadas na própria matriz 823.
+export const ENG_MECATRONICA_823: DadosCurso = {
+  id: "eng-mecatronica-823",
+  rotulo: "Engenharia Mecatrônica (823)",
+  rotuloCurto: "Eng. Mecatrônica (823)",
+  matriz: matriz823Json as unknown as Matriz,
+  ofertas: {
+    "2026-2": OFERTA_MECATRONICA_CARREGANDO,
+  },
+  semestrePadrao: "2026-2",
+  semestresPreMatricula: ["2026-2"],
+};
+
+/** Carrega as três ofertas de Mecatrônica sem bloquear o bundle inicial. */
+export async function carregarOfertasHistoricasMecatronica(): Promise<void> {
+  const { OFERTAS_MECATRONICA_HISTORICAS } = await import("./ofertasMecatronicaHistoricas");
+  Object.assign(ENG_MECATRONICA.ofertas, OFERTAS_MECATRONICA_HISTORICAS);
+  Object.assign(ENG_MECATRONICA_823.ofertas, OFERTAS_MECATRONICA_HISTORICAS);
+}
+
+/**
+ * Todos os cursos cobertos. Exportado porque o roster de docentes das avaliações
+ * é global — ele varre as ofertas de todos os cursos, não só o do aluno (§6.10),
+ * e manter uma segunda lista lá dentro daria drift assim que um curso novo entrar.
+ */
+export const CURSOS = [
+  BSI,
+  BSI_806,
+  ENG_COMP,
+  ENG_COMP_962,
+  ENG_ELETRONICA,
+  ENG_CONTROLE,
+  ENG_MECATRONICA,
+  ENG_MECATRONICA_823,
+];
 
 /** Dados do curso escolhido no check-in, com a BSI como padrão. */
 export function dadosDoCurso(id: string | undefined | null): DadosCurso {

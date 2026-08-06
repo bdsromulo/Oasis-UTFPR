@@ -2,8 +2,6 @@
 // Agrupa itens por coordenada Y (com tolerância) e ordena por X — mesmo método
 // dos parsers Python de tools/, portado para TypeScript.
 //
-// O setup do worker do pdf.js é responsabilidade de quem chama (a UI configura
-// GlobalWorkerOptions; os testes em Node usam o build legacy com fake worker).
 import * as pdfjs from "pdfjs-dist";
 
 export interface LinhaPdf {

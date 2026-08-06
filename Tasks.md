@@ -68,6 +68,11 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Decisão do dono: **motor específico por curso por enquanto** — não generalizar as regras agora.
 
 #### Interface Visual e Experiência do Usuário (UI/UX)
+- **TASK-39 — Identidade curricular no Planejamento de Engenharia de Computação:**
+  - A visão expandida das matrizes 844 e 962 ganhou um card próprio para `Optativas Isoladas`, deixando explícito que suas horas entram no bloco optativo sem validar uma trilha.
+  - A busca aceita o código canônico da matriz, o código equivalente usado pela oferta, nome e professor.
+  - O impacto da grade passa a resolver a identidade canônica antes da categoria: equivalentes mantêm sua categoria curricular e disciplinas externas à matriz entram como Eletivas.
+  - A grade conserva o código canônico visível e identifica separadamente o código real da oferta usado no relatório de matrícula.
 - **Repaginada Visual Completa (Remoção da "Cara de IA"):** Subscrição integral de todos os emojis decorativos e fontes padrão de sistema por uma identidade de produto digital de alta fidelidade.
 - **Tipografia Personalizada:** Integração com Google Fonts utilizando **`Outfit`** (`--font-display`) para cabeçalhos e **`Plus Jakarta Sans`** (`--font-sans`) para o corpo e números.
 - **Biblioteca Vetorial de Ícones (`src/ui/icons.tsx`):** Criação de ícones minimalistas (estilo Lucide, `stroke-width: 1.75`) e da representação vetorial geométrica oficial da **Logo da UTFPR** (`LogoUTFPR`) para o cabeçalho.
@@ -134,10 +139,83 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Turma sem horário é aviso (legítimo em TCC e EaD); domínio inválido ou locais diferentes no mesmo slot são erros.
 
 ### Em Revisão
+- **TASK-29 — Savefile local, Novidades de lançamento e créditos organizados:**
+  - O modal de **Novidades** abre automaticamente uma única vez por navegador após este lançamento, inclusive ao terminar o cadastro com PDF. A leitura só é marcada ao fechar; a chave versionada permite que o próximo lançamento volte a aparecer.
+  - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile. A seção de avaliações mostra visualmente qual botão procurar no Planejamento; o savefile é explicado sem duplicar o botão das Configurações dentro do modal.
+  - Em Configurações, o aluno pode baixar e importar um JSON versionado com o perfil já derivado do parser e as grades/planejamentos montados. O PDF original nunca entra no arquivo nem sai do navegador; a importação valida o formato e pede confirmação antes de substituir os dados locais.
+  - Na página Sobre, revisores e outros apoiadores agora aparecem em grupos distintos, ambos em ordem alfabética.
+  - O Como Usar passou a documentar as avaliações, o savefile, as matrizes cobertas e o tratamento de consignações. O Roadmap registra as datas de entrada de cada curso e mantém como objetivos as matrizes 708 de Controle e Automação e 973/823 de Mecatrônica.
+  - As matrizes de expansão foram retiradas da raiz do acervo privado e organizadas fora do repositório em uma pasta por curso e matriz, no mesmo padrão dos materiais de referência existentes.
+- **TASK-30 — Avaliações de disciplinas consignadas e identidade entre matrizes:**
+  - A coleta aceita disciplinas `aprovado` e `consignado`; `reprovado`, `dispensado`, `cancelado` e `cursando` continuam fora. ENADE, estágio e atividades complementares permanecem não avaliáveis.
+  - Nas consignações, o parser guarda o código canônico da matriz para progresso/Planejamento e, separadamente, o código original efetivamente cursado para nome, elenco e envio da avaliação.
+  - Quando o histórico imprime docentes, eles são preservados e a tela tenta pré-selecionar a unidade correspondente no roster global. Se a unidade não existir nas ofertas versionadas, o nome lido continua disponível como sugestão explícita, sem inventar correspondência.
+  - Nomes ausentes da matriz do aluno, como a eletiva externa `GE70L`, são resolvidos pelas matrizes e ofertas de todos os cursos. Testes sintéticos e regressão opt-in com a matriz 844 cobrem código original, professor, nome e round-trip para o código canônico do Planejamento.
+- **TASK-31 — Entrada portátil, próximos cursos e identidade pública do site:**
+  - O check-in inicial passa a aceitar diretamente um savefile exportado em outro navegador, usando a mesma validação versionada e a mesma confirmação já adotadas nas Configurações.
+  - Mecatrônica e Design aparecem no seletor como objetivos “Em breve”. Controle e Automação permaneceu bloqueado até a validação da matriz 978 e foi habilitado pela TASK-33.
+  - O compartilhamento recebe cartão Open Graph próprio em 1200×630, e a página passa a declarar canonical, identidade `WebSite`, favicon raster estável, sitemap e metadados sociais. No beta, as URLs sociais apontam para o próprio ambiente e o `noindex` permanece ativo.
+  - A política de dados no Sobre explicita discretamente que o GoatCounter, open source, contabiliza o uso e é a única integração de telemetria externa; histórico, perfil e grades permanecem fora dessa contagem.
+- **TASK-32 — Eletivas completas na coleta de avaliações:**
+  - Eletivas reconhecidas passam a resolver o nome pela pool versionada; `ELN8CB` e `ELN82D`, observadas nos históricos BSI 981, ficam cobertas no catálogo futuro com seus nomes e cargas oficiais do documento.
+  - Um alvo cujo nome não seja confirmado por matriz, oferta, pool ou histórico deixa de exibir o botão Avaliar, impedindo reviews identificadas apenas por código.
+  - A tabela de eletivas do Histórico Escolar não contém professor e o pipeline não publica docentes fora do roster. Por isso, uma eletiva só aparece nas avaliações quando existe oferta versionada com docente; `ELN8CB` e `ELN82D` ficam ocultas da coleta até essa fonte existir, em vez de oferecer um botão que produziria resposta eternamente pendente.
+  - Na rota geral “professor não está na lista”, a interface passa a exigir o nome completo antes de abrir o formulário e o envia preenchido, sem atribuir ao aluno um docente inventado.
+- **TASK-33 — Engenharia de Controle e Automação (matriz 978):**
+  - Implementada exclusivamente no sandbox com matriz oficial de 173 disciplinas, 3525h obrigatórias, 675h optativas, 420h de extensão, estágio `ELT78C` de 360h e as cinco trilhas de formação de 135h.
+  - A quinta trilha agrega as subáreas 1146–1149: disciplinas de qualquer uma delas creditam o conjunto-pai 1140 sem duplicar a exigência. Situação, Catálogo, Planejamento, Grade Mágica e Simulador usam esse descritor próprio.
+  - Importadas as ofertas de 2025/2, 2026/1 e 2026/2; a vigente tem 147 disciplinas, 410 turmas e 1371 horários. O parser de Turmas Abertas passou a reconhecer o cabeçalho e as colunas próprias do curso. O leitor de backup também passou a aceitar disciplinas sem o sufixo de aulas semanais, evitando anexar turmas e nomes ao bloco anterior.
+  - Check-in, avaliações da comunidade, Como Usar, Novidades e roadmap foram atualizados. Há validador Python específico e regressão Vitest, inclusive auditoria opt-in contra histórico real mantido fora do repositório.
+- **TASK-34 — Orientar a geração de PDF textual no check-in:**
+  - O tutorial “Não sei gerar meu histórico” recomenda a opção nativa **Salvar como PDF** do navegador, preferencialmente no Chrome, e desaconselha explicitamente **Microsoft Print to PDF**, que pode rasterizar o documento e impedir a extração de texto.
+  - A comparação visual destaca a opção correta e a incorreta, preserva a orientação de papel A3 e ensina a confirmar que uma palavra pode ser selecionada no arquivo antes do envio.
+  - Validado no modal renderizado, em modo escuro, além da suíte completa com 384 testes aprovados e do build de produção.
+- **TASK-35 — Régua qualitativa de Carga de Trabalho nas avaliações:**
+  - Removidas da descrição as estimativas objetivas de horas semanais, que variavam demais conforme ritmo, experiência e organização de cada aluno.
+  - Os cinco pontos agora usam somente qualificadores diretos de tempo, de **Muito leve** a **Muito pesada**, preservando a separação entre volume de trabalho e dificuldade conceitual.
+  - Regressão automatizada impede a reintrodução de faixas de horas na régua exibida pelo site.
+- **TASK-36 — Endurecimento e validação da experiência móvel:**
+  - Controles principais de Planejamento, cenários de grade, filtros, modais e contato respeitam alvo mínimo de toque de 44px no celular; textos operacionais abaixo de 12px foram elevados sem inflar metadados auxiliares.
+  - Barra de grade, contato e gavetas respeitam `safe-area-inset-bottom` e altura dinâmica (`dvh`), evitando sobreposição com a barra do navegador e o recorte de iPhones. O contato só sobe quando a barra de grade realmente está visível.
+  - Grades e tabelas de Gestão da Informação mantêm a densidade necessária, mas passam a anunciar a rolagem horizontal, têm região acessível por teclado e mostram instrução explícita no celular.
+  - O pdf.js e seu worker saem do carregamento inicial e só são baixados quando um PDF é escolhido. O bundle inicial caiu de **508,2 KiB para cerca de 400 KiB gzip**; o build agora reprova regressão acima de 420 KiB.
+  - Contratos Vitest cobrem carregamento tardio, área segura, alvos de toque e rolagem. A validação visual nos viewports de 320, 360, 390 e 412px confirmou zero overflow global, controle cortado ou alvo visível abaixo de 44px antes da publicação exclusiva no sandbox.
+- **TASK-37 — Classificação curricular no Catálogo e importação direta no Simulador:**
+  - Os cards do Catálogo passam a exibir a categoria curricular da disciplina e, quando aplicável, a trilha específica para a qual suas horas contam, sem repetir a carga horária.
+  - O Simulador de Formatura permite escolher diretamente uma grade A/B/C já montada no Planejamento de Matrícula e usá-la como primeiro semestre da projeção, reaproveitando a mesma ponte já oferecida na tela da grade.
+- **TASK-38 — Engenharia Mecatrônica (matriz 973):**
+  - Importada do PDF oficial do Portal a matriz 973: 208 componentes, 3435h obrigatórias, 300h optativas, 420h de extensão, Ciclo de Humanidades de 60h e duas trilhas formativas de 120h.
+  - O projeto K-Matrizes serviu como apoio inicial, mas a consulta oficial local prevalece nas divergências. O parser ganhou perfil posicional próprio para a 973 e o validador específico encerra com 0 erros.
+  - Check-in, Catálogo, Situação e Fluxograma reconhecem o curso, inclusive no Modo Livre. O Catálogo diferencia categoria, trilha e extensão; o Fluxograma cruza a matriz com as ofertas próprias.
+  - A oferta oficial 2026.2 contém 176 disciplinas, 440 turmas e 1523 horários; os backups do Grade na Hora cobrem 2026.1 e 2025.2. A anomalia publicada de `ME79B S01` sem horário é preservada e documentada como R9.
+  - Planejamento, Grade Mágica, Simulador e avaliações da comunidade usam as ofertas próprias de Mecatrônica, sem reutilizar dados de outro curso.
+  - Os dois semestres históricos carregam depois da primeira renderização, mantendo 2026.2 no caminho crítico. Validado com 403 testes aprovados, 16 testes opt-in ignorados e bundle inicial de 417,5 KiB gzip, abaixo do limite de 420 KiB.
+- **TASK-40 — Engenharia Mecatrônica (matriz 823 antiga):**
+  - Importada e validada a matriz oficial com 89 componentes, 4066h obrigatórias, 90h de Humanidades, 240h eletivas, estágio obrigatório de 400h e 264 equivalências para códigos posteriores.
+  - O histórico local de referência fecha sem divergências e permanece fora do repositório público; nenhum dado pessoal foi incorporado aos artefatos versionados.
+  - As fontes de Turmas Abertas da pasta 823 são idênticas às da 973, portanto as duas matrizes compartilham exatamente as ofertas de 2026.2, 2026.1 e 2025.2 sem duplicação de dados.
+  - Check-in, Situação, Catálogo, Planejamento, Grade Mágica, Simulador e avaliações reconhecem a matriz antiga e resolvem as turmas atuais pelas equivalências oficiais.
+  - Validada no navegador, com busca por código antigo e atual, além da suíte completa de 412 testes aprovados e bundle inicial de 402,1 KiB gzip.
+- **TASK-41 — Créditos por curso e matriz na página Sobre:**
+  - Incluídos os quatro históricos de apoio usados para Controle e Automação 978 e Mecatrônica 973/823, com os nomes completos conferidos localmente e sem versionar os PDFs pessoais.
+  - Todos os apoiadores e revisores passam a exibir curso e matriz; a revisora da matriz 978 foi identificada e os dois grupos permanecem em ordem alfabética.
+  - A ordenação e os 15 créditos são cobertos por regressão automatizada. A página foi validada visualmente com nomes, selos e matrizes legíveis.
+- **TASK-42 — Cursos disponíveis abaixo da importação:**
+  - O check-in passa a listar, logo após os controles de PDF e savefile, os cinco cursos e as oito matrizes cobertas pela plataforma.
+  - A relação inclui matrizes detectadas automaticamente pelo histórico mesmo quando não estão selecionadas no Modo Livre, como BSI 806.
+  - Posicionamento, cursos e matrizes são cobertos por regressão automatizada e o card foi validado visualmente no check-in.
+- **TASK-43 — Novos cursos e matrizes consolidados em Novidades:**
+  - Os cards isolados de BSI 806 e Controle 978 foram reunidos em um único bloco de expansão do sandbox.
+  - O bloco lista BSI 806, Controle e Automação 978 e Mecatrônica 823/973, com um resumo do suporte curricular entregue para cada curso.
+  - Estrutura, conteúdo e posição antes do savefile são cobertos por regressão; o resultado foi validado visualmente no modal.
 - **TASK-24 — Implementar Engenharia de Computação — Matriz 962** *(renumerado de TASK-17, colisão de ID — ver nota no topo do arquivo)*:
   - Obter e validar a matriz curricular oficial, seus conjuntos, cargas, equivalências, pré-requisitos e regras próprias, sem herdar automaticamente as regras da 844.
   - Importar e validar as Turmas Abertas correspondentes e parametrizar situação, catálogo, elegibilidade, grade, simulador e progressão.
   - Só habilitar a opção `962 (Nova)` no check-in depois de dados, motores e regressões estarem completos.
+
+- **TASK-44 — Nova versão do aviso de cursos e matrizes:**
+  - A chave versionada do aviso passou para `cursos_matrizes_2026_08_v1`, para exibir esta expansão uma vez também a quem já tinha fechado a edição anterior.
+  - O Roadmap mantém a matriz 708 de Controle e Automação como objetivo planejado após as matrizes já implementadas, enquanto sua implementação não é iniciada.
 
 ### Em Andamento
 *(nenhuma no momento)*
@@ -183,7 +261,8 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - **Limite honesto:** não autentica RA (o PDF não tem assinatura verificável). O anti-abuso é a moderação humana semanal, não a verificação institucional.
 
 - **TASK-25 — Pipeline de Ingestão Semanal de Avaliações (Git como Banco):**
-  - Formulário externo → planilha **privada** de respostas → coluna `aprovado` revisada semanalmente pelo moderador → GitHub Action agendado que baixa o CSV, valida e **regenera** `data/reviews.json` por inteiro.
+  - Formulário **nativo** no site → Apps Script Web App → planilha **privada** de respostas → coluna `aprovado` revisada semanalmente pelo moderador → GitHub Action agendado que baixa o CSV, valida e **regenera** `data/reviews.json` por inteiro.
+  - **Endpoint de escrita:** `tools/apps-script/recebe-review.gs`, colado no editor de Apps Script da planilha e publicado como App da Web (executar como o dono, acesso para qualquer pessoa). Valida notas, vocabulário de tags, limite de comentário, consentimento, exclusividade entre as duas rotas de professor, guarda de PII e freio de vazão. O site envia `Content-Type: text/plain` com corpo JSON — `application/json` dispara preflight que o Apps Script não responde.
   - **Regeneração total, nunca append:** com `id` estável por linha, o JSON é função pura das linhas aprovadas — rodar duas vezes dá o mesmo resultado, e desaprovar uma linha a remove da publicação seguinte.
   - **Validador no padrão `validate_turmas.py` (`0 erros`):** código existe na matriz/oferta; `(código, turma, semestre)` coerente com a oferta oficial; notas em 1–5; enum de sistema avaliativo; tags no vocabulário fechado; limite de caracteres; e **guarda de PII por regex** (RA, e-mail, telefone) reprovando a linha.
   - **Duas abas, fronteira física:** a aba `Respostas` (com RA) **não** é publicada; uma aba `Homologado`, gerada por `FILTER`/`QUERY`, projeta **só as linhas aprovadas e só as colunas públicas** e é essa que recebe a URL de CSV. O RA não está entre as colunas projetadas — o CSV público é incapaz de contê-lo por construção, sem depender do validador.
@@ -198,13 +277,15 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 - **TASK-27 — Painel Lateral de Avaliações por Professor no Planejamento de Matrícula:**
   - Implementa RF17. Tornar acionável o nome do professor associado à turma, abrindo painel lateral com agregados por classificação, tags mais frequentes e comentários daquele docente.
   - **Limiar de exibição:** abaixo de um N mínimo, mostrar comentários mas **não** a estatística agregada — com N baixo, uma única avaliação vira "100%".
+  - Implementado em `src/ui/telas/PainelProfessor.tsx`, acionado pelos nomes de docente nos cards de turma de `Grade.tsx`. Cada docente da turma é um acionador próprio (a fonte traz vários por turma, separados por vírgula em `professores_raw`). O painel separa "nesta disciplina" de "em todas as disciplinas" e resolve equivalência de código pela matriz do curso de quem lê (§6.10).
 
 - **TASK-28 — Seletor de Professor e Roster Curado (`professorId`):**
   - Pré-requisito de TASK-13 e TASK-27. Detalhamento em `Estrategia.md` §6.4.
   - **O professor não é lido do PDF — é selecionado pelo aluno**, numa lista montada a partir da **união das ofertas cobertas** daquela disciplina (`data/turmas/<sem>.json`, dado oficial já validado). Coleta ampla, filtragem na exibição.
-  - **A seleção acontece no site, não no formulário:** opções de Google Form são estáticas e não variam por disciplina. O site renderiza a lista e envia a escolha como campo pré-preenchido na URL.
+  - **O formulário é nativo do site**, não um Google Form: uma lista de professores que muda por disciplina não cabe num formulário de campos estáticos. O envio vai para um Apps Script publicado como Web App (`tools/apps-script/recebe-review.gs`), que valida antes de gravar e devolve sucesso ou erro de verdade.
   - **Rota "Professor Não Ofertado":** diálogo que explica o significado, pede confirmação, oferece contato via a constante `EMAIL_CONTATO` de `src/ui/telas/Contato.tsx` (**nunca** endereço repetido em literal) e **captura o nome em texto livre**. A avaliação é aceita e **retida**; a moderação semanal promove o docente ao **roster curado** em `data/` e a avaliação passa a ser publicável.
-  - **Dimensionamento medido:** 127 de 128 cursadas dos históricos de referência têm elenco disponível, mas **~14% dos professores reais não constam no elenco** — chegando a **31% na aluna mais adiantada**. O escape é rota comum, não borda; por isso não pode descartar a avaliação. O roster cresce com o uso e a taxa cai sozinha.
+  - **Dimensionamento medido:** 127 de 128 cursadas dos históricos de referência têm elenco disponível. Quanto aos docentes em si, o elenco cobre **100%** dos professores de quem está no meio do curso e falha em **17%** (elenco só de BSI) ou **11%** (elenco global de todos os cursos) no histórico mais adiantado. O escape é minoria, mas cresce com a senioridade — justamente quem tem mais a dizer —, por isso não pode descartar a avaliação. O roster cresce com o uso e a taxa cai sozinha.
+  - **O roster é global, não por curso:** unir o elenco de todos os cursos cobertos derruba a falha de 17% para 11%, porque docentes lecionam em mais de um curso. Ver `Estrategia.md` §6.11.
   - Slug normalizado (minúsculas, sem acento, sem titulação) + mapa de apelidos, no mesmo padrão que `motor/identidade.ts` já usa para códigos equivalentes.
   - **Alternativa descartada (registro):** extrair o professor do PDF é viável — a coluna `Situação/Professores` é padronizada e o pdf.js entrega `"Nome - Titulação"` num único item, sem precisar de lógica posicional. Descartada por desnecessária, não por impossível; o modo de falha era truncamento por largura de coluna (2, 8 e 10 nomes cortados conforme a variante de export). Retomar por aqui se o pré-preenchimento automático virar requisito.
 

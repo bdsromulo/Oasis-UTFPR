@@ -31,6 +31,8 @@ import {
   IconWarning,
 } from "../icons";
 import { renderizarTextoComCodigos } from "./Situacao";
+import { BotaoReviews, useContagemPorTurma } from "./reviewsComuns";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
 import {
   descricaoDoCurso,
   ehGrupoOpcao,
@@ -52,6 +54,35 @@ function grupoDe(e: Elegivel, matriz: Matriz): Grupo {
   // da 968 apareceriam no sub-filtro de trilhas, que é do 3º estrato
   if (ehGrupoOpcao(curso, c)) return "opcoes";
   return "trilhas";
+}
+
+function normalizarBusca(valor: string): string {
+  return valor
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+/** Busca pelo código curricular, pelo código real da oferta ou por equivalente. */
+export function elegivelCorrespondeBusca(e: Elegivel, busca: string): boolean {
+  const termo = normalizarBusca(busca);
+  if (!termo) return true;
+
+  const codigos = [
+    e.disciplina.codigo,
+    e.oferta?.codigo,
+    ...e.disciplina.equivalentes.map((equivalente) => equivalente.codigo),
+  ].filter((codigo): codigo is string => Boolean(codigo));
+  if (codigos.some((codigo) => normalizarBusca(codigo).includes(termo))) return true;
+
+  if (normalizarBusca(e.disciplina.nome).includes(termo)) return true;
+  if (e.oferta && normalizarBusca(e.oferta.nome).includes(termo)) return true;
+  return Boolean(
+    e.oferta?.turmas.some((turma) =>
+      normalizarBusca(turma.professores_raw || "").includes(termo),
+    ),
+  );
 }
 
 function CardDisciplinaPossoCursar({
@@ -77,6 +108,8 @@ function CardDisciplinaPossoCursar({
 }) {
   const isMobile = useIsMobile();
   const temHistorico = Boolean(perfil && perfil.cursadas && perfil.cursadas.length > 0);
+  const reviews = useContagemPorTurma(matriz);
+  const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
   const [statusHoverTurma, setStatusHoverTurma] = useState<string | null>(null);
   const [progressoCarregadoTurma, setProgressoCarregadoTurma] = useState<string | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -245,6 +278,28 @@ function CardDisciplinaPossoCursar({
                         </div>
 
                         <div className="flex shrink-0 items-center gap-1.5">
+                          {/* Junto de "Status", e não colado ao nome do professor:
+                              ali a estrela se perdia entre os botões de ação, e
+                              quem escolhe turma consulta a opinião no mesmo gesto
+                              em que consulta o progresso. O ajuste de tamanho
+                              acompanha os vizinhos desta tela, que são maiores
+                              que os do Planejamento. */}
+                          {reviews.habilitado && (
+                            <BotaoReviews
+                              variante="acao"
+                              classe="!rounded-xl !px-2.5 !py-1 !text-xs"
+                              n={reviews.contar(e.disciplina.codigo, t.professores_raw ?? "")}
+                              rotuloAlvo="desta turma"
+                              onAbrir={() =>
+                                setRevisando({
+                                  codigo: e.disciplina.codigo,
+                                  nome: e.disciplina.nome,
+                                  professorId: reviews.idDaTurma(t.professores_raw ?? ""),
+                                  nomeProfessor: t.professores_raw || "professor a definir",
+                                })
+                              }
+                            />
+                          )}
                           {isMobile && (
                             <button
                               type="button"
@@ -333,6 +388,14 @@ function CardDisciplinaPossoCursar({
           )}
         </div>
       )}
+
+      {matriz && (
+        <PainelDisciplina
+          alvo={revisando}
+          matriz={matriz}
+          onFechar={() => setRevisando(null)}
+        />
+      )}
     </Card>
   );
 }
@@ -419,25 +482,8 @@ export function TelaPossoCursar(props: {
       if (grupo === "trilhas" && trilha !== "todas" && String(e.disciplina.conjunto) !== trilha) {
         return false;
       }
-      // 4. Busca por texto (código, nome ou professor)
-      if (buscaLimpa) {
-        const porCodigo = e.disciplina.codigo.toLowerCase().includes(buscaLimpa);
-        const porNome = e.disciplina.nome
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .includes(buscaLimpa);
-        const porProf =
-          e.oferta?.turmas.some((t) =>
-            (t.professores_raw || "")
-              .toLowerCase()
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "")
-              .includes(buscaLimpa),
-          ) || false;
-
-        if (!porCodigo && !porNome && !porProf) return false;
-      }
+      // 4. Busca por código curricular, código da oferta, equivalente, nome ou professor
+      if (buscaLimpa && !elegivelCorrespondeBusca(e, buscaLimpa)) return false;
       // 5. Filtro de conflitos de horário (se ativo e a matéria tem turmas)
       if (filtrarConflitos && e.oferta && e.oferta.turmas.length > 0) {
         const temMarcada = selecao.some((s) => s.codDisciplina === (e.oferta?.codigo ?? e.disciplina.codigo));
@@ -502,7 +548,7 @@ export function TelaPossoCursar(props: {
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             placeholder="Buscar matéria, código ou professor…"
-            className="flex-1 min-w-[240px] sm:min-w-[320px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
+            className="min-h-11 flex-1 min-w-[240px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none sm:min-w-[320px] dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
           />
           <button
             onClick={() => setFiltrosAbertos(!filtrosAbertos)}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { SavefileOasis } from "../../domain/savefile";
 import { Card, Botao, Badge } from "../componentes";
 import { ModalComoGerarHistorico } from "./ModalComoGerarHistorico";
 import {
@@ -59,12 +60,45 @@ const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
       disponivel: true,
     },
   ],
+  "eng-controle": [
+    {
+      numero: "978",
+      rotulo: "978 (Vigente)",
+      nota: "Implementada: 3.525h obrigatórias, 675h em cinco trilhas de formação, 420h de extensão e estágio curricular de 360h.",
+      disponivel: true,
+    },
+  ],
+  "eng-mecatronica": [
+    {
+      numero: "973",
+      rotulo: "973 (Vigente)",
+      nota: "Implementada: matriz nova com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica e ofertas próprias de 2025.2 a 2026.2.",
+      disponivel: true,
+    },
+    {
+      numero: "823",
+      rotulo: "823 (Antiga)",
+      nota: "Implementada: 4.066h obrigatórias, 90h em Ciências Humanas, 240h eletivas e estágio curricular de 400h.",
+      disponivel: true,
+    },
+  ],
 };
+
+/** Relação pública exibida junto da importação, inclusive matrizes detectadas só pelo PDF. */
+const CURSOS_DISPONIVEIS = [
+  { nome: "Sistemas de Informação", matrizes: ["806", "981"] },
+  { nome: "Engenharia de Computação", matrizes: ["844", "962"] },
+  { nome: "Engenharia Eletrônica", matrizes: ["968"] },
+  { nome: "Engenharia de Controle e Automação", matrizes: ["978"] },
+  { nome: "Engenharia Mecatrônica", matrizes: ["823", "973"] },
+];
 
 interface Props {
   carregando: boolean;
   erro: string | null;
   onProcessarArquivo: (arquivo: File, dados?: DadosCheckin) => void;
+  onAnalisarSavefile: (arquivo: File) => Promise<SavefileOasis>;
+  onConfirmarSavefile: (savefile: SavefileOasis) => void;
   onContinuarSemRegistro: (dados: DadosCheckin) => void;
   onAbrirGestaoInformacao: () => void;
 }
@@ -85,6 +119,9 @@ export function TelaCheckin(props: Props) {
   const [openCurso, setOpenCurso] = useState(false);
   const [openMatriz, setOpenMatriz] = useState(false);
   const [comoGerarAberto, setComoGerarAberto] = useState(false);
+  const [savefilePreview, setSavefilePreview] = useState<SavefileOasis | null>(null);
+  const [erroSavefile, setErroSavefile] = useState<string | null>(null);
+  const [processandoSavefile, setProcessandoSavefile] = useState(false);
 
   const listaCampus = [
     { id: "curitiba", nome: "Câmpus Curitiba", disponivel: true },
@@ -98,6 +135,9 @@ export function TelaCheckin(props: Props) {
     { id: "bcc", nome: "Bacharelado em Ciência da Computação (BCC)", nomeCurto: "BCC", disponivel: false },
     { id: "eng-comp", nome: "Eng. Comp.", nomeCurto: "Eng. Comp.", disponivel: true },
     { id: "eng-eletronica-968", nome: "Engenharia Eletrônica", nomeCurto: "Eng. Eletrônica", disponivel: true },
+    { id: "eng-controle", nome: "Engenharia de Controle e Automação", nomeCurto: "Eng. Controle", disponivel: true },
+    { id: "eng-mecatronica", nome: "Engenharia Mecatrônica", nomeCurto: "Eng. Mecatrônica", disponivel: true },
+    { id: "design", nome: "Design", nomeCurto: "Design", disponivel: false },
     { id: "eng-soft", nome: "Engenharia de Software", nomeCurto: "Eng. Software", disponivel: false },
   ].filter((c) => c.nome.toLowerCase().includes(buscaCurso.toLowerCase()));
 
@@ -168,6 +208,116 @@ export function TelaCheckin(props: Props) {
           >
             Não sei gerar meu histórico
           </button>
+
+          <div className="my-4 flex items-center gap-3" aria-hidden="true">
+            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">ou</span>
+            <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+          </div>
+
+          <div className="rounded-xl border border-zinc-200/90 bg-white/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+            <p className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              Já tenho um savefile
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              Restaure aqui o perfil, as grades montadas e as preferências levadas de outro navegador.
+            </p>
+            <label className="mt-3 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-utfpr-500/70 px-3.5 py-2 text-xs font-bold text-utfpr-700 transition-colors hover:bg-utfpr-500/10 dark:text-utfpr-400">
+              <IconUpload className="h-4 w-4 shrink-0" />
+              <span>{processandoSavefile ? "Verificando arquivo..." : "Importar savefile"}</span>
+              <input
+                type="file"
+                accept="application/json,.json,.oasis"
+                className="hidden"
+                onChange={async (e) => {
+                  const arquivo = e.target.files?.[0];
+                  e.currentTarget.value = "";
+                  if (!arquivo) return;
+                  setErroSavefile(null);
+                  setProcessandoSavefile(true);
+                  try {
+                    setSavefilePreview(await props.onAnalisarSavefile(arquivo));
+                  } catch (erro) {
+                    setErroSavefile(
+                      erro instanceof Error
+                        ? erro.message
+                        : "Não foi possível ler o savefile.",
+                    );
+                  } finally {
+                    setProcessandoSavefile(false);
+                  }
+                }}
+              />
+            </label>
+
+            {erroSavefile && (
+              <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-600 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400">
+                <IconWarning className="mr-1 inline h-4 w-4 align-[-0.2em]" /> {erroSavefile}
+              </div>
+            )}
+
+            {savefilePreview && (
+              <div className="mt-3 rounded-xl border-2 border-utfpr-500 bg-utfpr-500/10 p-3 text-xs text-zinc-700 dark:text-zinc-200">
+                <p className="font-display font-bold text-zinc-900 dark:text-white">
+                  Confirmar importação
+                </p>
+                <p className="mt-1 leading-relaxed">
+                  {savefilePreview.dados.perfil
+                    ? `Perfil de ${savefilePreview.dados.perfil.nome} e `
+                    : "Sem perfil de histórico e "}
+                  {Object.values(savefilePreview.dados.cestasPorSemestre).reduce(
+                    (total, cestas) => total + Object.keys(cestas).length,
+                    0,
+                  )} grade(s) serão carregados neste navegador.
+                </p>
+                <div className="mt-3 flex flex-wrap justify-end gap-2">
+                  <Botao variante="sutil" onClick={() => setSavefilePreview(null)}>
+                    Cancelar
+                  </Botao>
+                  <Botao
+                    variante="primario"
+                    onClick={() => {
+                      props.onConfirmarSavefile(savefilePreview);
+                      setSavefilePreview(null);
+                    }}
+                  >
+                    Importar dados
+                  </Botao>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-zinc-200/90 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+          <div className="flex items-start gap-2.5">
+            <IconGraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-utfpr-600 dark:text-utfpr-400" />
+            <div>
+              <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                Cursos e matrizes disponíveis
+              </h3>
+              <p className="mt-0.5 text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                Ao importar o histórico, o Oásis identifica automaticamente uma destas matrizes.
+              </p>
+            </div>
+          </div>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {CURSOS_DISPONIVEIS.map((item) => (
+              <li
+                key={item.nome}
+                className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-zinc-200/80 bg-white/80 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-950/60"
+              >
+                <span className="min-w-0 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                  {item.nome}
+                </span>
+                <span className="flex shrink-0 flex-wrap justify-end gap-1">
+                  {item.matrizes.map((numero) => (
+                    <Badge key={numero} tom="ok">{numero}</Badge>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </Card>
 

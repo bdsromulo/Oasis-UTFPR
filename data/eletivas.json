@@ -1,10 +1,14 @@
 {
   "descricao": "Pool de disciplinas eletivas reconhecidas pelo Oásis. Serve APENAS para resolver o nome de uma eletiva a partir do código lido no Histórico Escolar — não tem relação com as ofertas de turmas em data/turmas/. A carga horária de eletivas do aluno vem sempre do Resumo Eletiva do histórico, nunca da soma desta lista.",
   "criterio": "A pool nasce das eletivas observadas em históricos reais e cresce por evidência: ao encontrar uma eletiva validada cujo código não está aqui, acrescente a entrada.",
-  "atualizado": "2026-07-19",
+  "atualizado": "2026-08-05",
   "disciplinas": {
     "EEX11": {
       "nome": "Introdução Às Práticas De Laboratório Em Eletricidade E Eletrônica",
+      "ch": 45
+    },
+    "ELN82D": {
+      "nome": "Frameworks De Gestão De Serviços",
       "ch": 45
     },
     "ELN8CB": {

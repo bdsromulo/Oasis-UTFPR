@@ -2,8 +2,11 @@
 
 Plataforma para estudantes da UTFPR Câmpus Curitiba acompanharem sua situação
 curricular, o que podem cursar e a grade do semestre. Hoje cobre **Sistemas de
-Informação (matriz 981)** e **Engenharia de Computação (matriz 844)**, preservando
-as exigências próprias de cada matriz.
+Informação (matrizes 981 e 806)**, **Engenharia de Computação (844 e 962)**,
+**Engenharia Eletrônica (968)**, **Engenharia de Controle e Automação (978)** e
+**Engenharia Mecatrônica (823 e 973)**, preservando as exigências próprias de
+cada matriz. Inclui também uma camada de avaliações de disciplinas e professores
+mantida pela própria comunidade (ver Estrategia.md §6).
 
 Princípios:
 
@@ -51,6 +54,13 @@ Camada de dados (M1) pronta:
 | `data/turmas/2025-2.json` | 85 disciplinas, 185 turmas | Backup do Grade na Hora (leitor secundário) |
 | `data/eng-comp/matriz-844.json` | Matriz de Eng. Comp., com 270h de optativas, duas trilhas e sem extensão curricular | Consulta Curso e Matriz Curricular (Portal do Aluno) |
 | `data/eng-comp/turmas/*.json` | Ofertas de Eng. Comp. de 2025.2 e 2026.1 | Backup do Grade na Hora e PDF oficial |
+| `data/eng-eletronica/` | Matriz 968 e ofertas de Engenharia Eletrônica | Consulta oficial, Turmas Abertas e backups do Grade na Hora |
+| `data/eng-controle/matriz-978.json` | Matriz 978, com cinco trilhas de formação de 135h | Consulta Curso e Matriz Curricular (Portal do Aluno) |
+| `data/eng-controle/turmas/*.json` | Ofertas de Controle e Automação de 2025.2, 2026.1 e 2026.2 | Turmas Abertas e backups do Grade na Hora |
+| `data/matriz-806.json` | Matriz antiga de BSI, com equivalências para a 981 | Consulta Curso e Matriz Curricular (Portal do Aluno) |
+| `data/eng-mecatronica/matriz-973.json` e `matriz-823.json` | Matriz vigente e matriz antiga de Mecatrônica, com 264 equivalências entre elas | Consulta Curso e Matriz Curricular (Portal do Aluno) |
+| `data/eng-mecatronica/turmas/*.json` | Ofertas de Mecatrônica de 2025.2, 2026.1 e 2026.2, compartilhadas pelas duas matrizes | Turmas Abertas e backups do Grade na Hora |
+| `data/reviews.json` | Avaliações de disciplinas e professores da comunidade, únicas e globais entre cursos | Google Forms → ingestão semanal (`scripts/ingerir-reviews.ts`) |
 
 ## Pipeline de dados (1× por semestre)
 
@@ -67,6 +77,8 @@ python tools/validate_turmas_estrutura.py data/eng-comp/turmas/2025-2.json
 # (matriz muda raramente; quando mudar:)
 python tools/parse_matriz.py "Lista de Matérias Matriz Curricular.pdf"
 python tools/validate_matriz.py
+# Validador específico da matriz 978 e sua árvore de trilhas
+python tools/validate_matriz_978.py
 ```
 
 Leitor secundário (contingência): `tools/parse_gnh.py` converte o backup do
@@ -84,7 +96,10 @@ Requisitos das ferramentas: Python 3 + `pdfplumber`.
 - **Consolidação multicurso** — ampliar testes de interface e manter auditada a
   ligação entre ofertas externas, equivalências e categorias das matrizes.
 - **Atualização semestral** — importar e homologar as ofertas oficiais de cada curso.
-- **Fase 2** — Camada de comunidade: avaliações, dicas e materiais por disciplina.
+
+Entregue: a camada de comunidade (avaliações de disciplinas e professores, ver
+Estrategia.md §6) está em produção desde agosto de 2026, cobrindo todas as
+matrizes listadas acima.
 
 ## Aviso
 

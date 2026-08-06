@@ -42,6 +42,70 @@ export interface Painel {
   inconsistencias: string[];
 }
 
+export interface ProgressoGlobal {
+  /** horas já integralizadas, pela consolidação oficial */
+  cumprido: number;
+  /** carga total do PPC */
+  total: number;
+  /** `cumprido / total`, já arredondado para exibição */
+  percentual: number;
+}
+
+/**
+ * Quanto do curso já foi concluído. Régua única de toda a plataforma.
+ *
+ * Mora aqui, e não na tela, porque duas telas respondiam a esta pergunta com
+ * contas próprias e chegavam a números diferentes para o mesmo histórico — 48%
+ * na Situação contra 54% no Simulador. Duas contas para uma pergunta só é sempre
+ * uma delas errada, e o aluno não tem como saber qual.
+ *
+ * A régua é a oficial: Quadro Resumo do histórico sobre o `ch_total_ppc`. Duas
+ * consequências que parecem omissões e não são:
+ *
+ * 1. A extensão NÃO entra como parcela. Suas horas vêm embutidas no CHEXT das
+ *    disciplinas, então já estão dentro de obrigatórias e optativas. Somá-la de
+ *    novo contaria as mesmas horas duas vezes.
+ * 2. O denominador é o `ch_total_ppc`, e não o `cargas.soma`. A soma das
+ *    categorias dá 3280h na 981 justamente porque repete essas horas de extensão;
+ *    o total do PPC é 3220h.
+ *
+ * A soma por categoria continua valendo para dizer o que FALTA em cada bloco —
+ * é o que a lista de requisitos do simulador faz. Ela só não serve de percentual
+ * global.
+ */
+export function progressoGlobalDoCurso(
+  perfil: PerfilAluno | null,
+  matriz: Matriz,
+): ProgressoGlobal {
+  const total = matriz.cargas.ch_total_ppc || 3200;
+  const pct = (cumprido: number) => ({
+    cumprido,
+    total,
+    percentual: Math.round((cumprido / Math.max(1, total)) * 100),
+  });
+
+  if (!perfil) return pct(0);
+
+  // O Quadro Resumo é a consolidação oficial e já aplica os tetos por categoria —
+  // eletivas, por exemplo, param no teto da matriz mesmo quando o aluno cursou
+  // mais horas. Somar as cursadas devolveria número acima do que o Portal
+  // reconhece, e por isso a soma só serve de fallback.
+  const resumo = perfil.resumoGeral;
+  if (resumo) {
+    const oficial =
+      resumo.obrigatorias.aprovada + resumo.optativas.aprovada + resumo.eletivas.aprovada;
+    return pct(Math.min(oficial, total));
+  }
+
+  let soma = 0;
+  for (const c of perfil.cursadas) {
+    if (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado") {
+      soma += c.cht || 0;
+    }
+  }
+  return pct(Math.min(soma, total));
+}
+
 function prog(r: ResumoConjunto, ehTrilha: boolean): ProgressoConjunto {
   return {
     conjunto: r.conjunto,

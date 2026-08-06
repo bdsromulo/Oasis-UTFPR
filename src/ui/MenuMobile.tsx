@@ -4,6 +4,7 @@ import {
   IconHelp,
   IconMoon,
   IconSettings,
+  IconStar,
   IconSun,
 } from "./icons";
 
@@ -55,6 +56,15 @@ export function PainelMenuMobile(props: {
   onAbrirConfiguracoes: () => void;
   onAbrirComoUsar: () => void;
   onAbrirSobre: () => void;
+  /**
+   * Avaliar depende de histórico importado, que é o que prova ter cursado.
+   * No computador este caminho é a estrela do cabeçalho; aqui ele não existia,
+   * e quem usa o site pelo celular ficava sem nenhuma porta para avaliar uma
+   * matéria antiga — só os convites do último semestre, dentro da tela de
+   * situação.
+   */
+  mostrarAvaliar?: boolean;
+  onAvaliar?: () => void;
 }) {
   const { aberto, onFechar } = props;
 
@@ -89,7 +99,7 @@ export function PainelMenuMobile(props: {
       onClick={onFechar}
     >
       <div
-        className="w-full animate-in rounded-t-3xl border-t border-zinc-200/80 bg-zinc-50 p-4 pb-8 shadow-2xl slide-in-from-bottom duration-200 dark:border-zinc-800 dark:bg-zinc-950"
+        className="max-h-[calc(100dvh-1rem)] w-full animate-in overflow-y-auto rounded-t-3xl border-t border-zinc-200/80 bg-zinc-50 p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl slide-in-from-bottom duration-200 dark:border-zinc-800 dark:bg-zinc-950"
         onClick={(e) => e.stopPropagation()}
       >
         {/* alça, para o painel se ler como gaveta */}
@@ -136,6 +146,14 @@ export function PainelMenuMobile(props: {
               rotulo="Configurações"
               descricao="Histórico, curso, semestre e privacidade"
               onClick={fecharEntao(props.onAbrirConfiguracoes)}
+            />
+          )}
+          {props.mostrarAvaliar && props.onAvaliar && (
+            <LinhaAcao
+              icone={<IconStar className="h-4 w-4" />}
+              rotulo="Avaliar uma disciplina"
+              descricao="Conte como foi qualquer matéria que você já concluiu"
+              onClick={fecharEntao(props.onAvaliar)}
             />
           )}
           <LinhaAcao

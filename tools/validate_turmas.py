@@ -13,6 +13,13 @@ Regras aprendidas na auditoria de 2026/1 (cada uma verificada no texto cru do PD
   R6. Enquadramentos válidos: Presencial, EaD.
   R7. A fonte pode imprimir mais horários que as aulas/sem declaradas (ex.: MAT7GA S02,
       5 horários p/ 4 aulas) — vira AVISO, não erro: leitura fiel > expectativa.
+  R8. Algumas disciplinas da matriz 978 imprimem aulas presenciais negativas para
+      compensar uma carga assíncrona maior (ex.: -1 presencial + 2 assíncronas).
+      Os valores são preservados como publicados; a soma continua sendo a quantidade
+      semanal esperada de horários.
+  R9. A oferta 2026/2 de Mecatrônica publica ME79B S01 como Presencial, com quatro
+      aulas semanais, mas deixa a coluna Horário vazia. Preservar a turma sem inventar
+      slots e registrar a anomalia como aviso.
 
 Uso: python tools/validate_turmas.py <turmas.pdf> <turmas.json>
 """
@@ -40,7 +47,7 @@ with pdfplumber.open(PDF) as pdf:
 # O prefixo é inequívoco (dia 2..7, turno M/T/N, aula 1..6) e sobrevive à quebra.
 raw_h = len(re.findall(r"(?<![A-Za-z0-9])[2-7][MTN]\d(?![0-9])", raw))
 raw_m = len(re.findall(r"Matriz:\d+", raw))
-raw_d = len(re.findall(r"\b[A-Z0-9]{4,7} - .*?\([\d,]* Aulas semanais presenciais", raw))
+raw_d = len(re.findall(r"\b[A-Z0-9]{4,7} - .*?\(-?[\d,]* Aulas semanais presenciais", raw))
 got_h = sum(len(t["horarios"]) for d in ds for t in d["turmas"])
 got_m = sum(len(t["optativa_matrizes"]) for d in ds for t in d["turmas"])
 if raw_h != got_h: erros.append(f"R1 horários: PDF={raw_h} JSON={got_h}")
@@ -69,7 +76,10 @@ for d in ds:
         fracionaria = (d["aulas_semanais_presenciais"] != int(d["aulas_semanais_presenciais"])
                        or d["aulas_semanais_assincronas"] != int(d["aulas_semanais_assincronas"]))
         eh_tcc = "Trabalho De Conclusão" in d["nome"] or "Tcc" in d["nome"] or d["codigo"].startswith("ICSXG")
-        if t["enquadramento"] == "Presencial" and n_unicos == 0 and not t["codigo"].startswith("E") \
+        sem_horario_na_fonte = d["codigo"] == "ME79B" and t["codigo"] == "S01"
+        if t["enquadramento"] == "Presencial" and n_unicos == 0 and sem_horario_na_fonte:
+            avisos.append(f"{tag}: presencial sem horários na fonte (R9)")
+        elif t["enquadramento"] == "Presencial" and n_unicos == 0 and not t["codigo"].startswith("E") \
            and esperado and not fracionaria and not eh_tcc:
             erros.append(f"{tag}: presencial sem horários (esperado {esperado})")
         elif t["enquadramento"] == "Presencial" and n_unicos == 0 and eh_tcc:

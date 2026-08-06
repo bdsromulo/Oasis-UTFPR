@@ -1,5 +1,5 @@
 import type { DisciplinaMatriz, Matriz, PerfilAluno } from "../tipos";
-import { normNome } from "./identidade";
+import { criarMapaIdentidade, disciplinaCanonicaDaOferta, normNome } from "./identidade";
 import type { ItemGrade } from "./grade";
 import {
   cargaAprovadaBlocoOptativo,
@@ -53,9 +53,7 @@ export function obterCargaHoraria(
   if (!d) return 60;
   if ("horas" in d && d.horas?.total) return d.horas.total;
   if (matriz && d.codigo) {
-    const dm = matriz.disciplinas.find(
-      (x) => x.codigo === d.codigo || (d.nome && normNome(x.nome) === normNome(d.nome))
-    );
+    const dm = disciplinaCanonicaDaOferta(matriz, d.codigo, d.nome);
     if (dm?.horas?.total) return dm.horas.total;
   }
   const pres = "aulas_semanais_presenciais" in d && d.aulas_semanais_presenciais ? d.aulas_semanais_presenciais : 4;
@@ -70,9 +68,11 @@ export function calcularProgressoMateria(
   perfil: PerfilAluno | null | undefined,
   matriz: Matriz | null | undefined
 ): DadosProgressoCategoria {
-  const d: DisciplinaMatriz | undefined = matriz?.disciplinas.find(
-    (x) => x.codigo === codigoDisciplina || normNome(x.nome) === normNome(nomeDisciplina)
-  );
+  const d: DisciplinaMatriz | undefined = matriz
+    ? disciplinaCanonicaDaOferta(matriz, codigoDisciplina, nomeDisciplina)
+    : undefined;
+  const mapaIdentidade = matriz ? criarMapaIdentidade(matriz) : null;
+  const codigoCanonico = d?.codigo ?? codigoDisciplina;
 
   const conjunto = d?.conjunto ?? null;
   const chext = d?.horas?.chext ?? 0;
@@ -81,9 +81,16 @@ export function calcularProgressoMateria(
   // Checar histórico se já foi concluída ou em curso
   const jaConcluidaNoHistorico = Boolean(
     perfil?.aprovadas?.has(codigoDisciplina) ||
+      perfil?.aprovadas?.has(codigoCanonico) ||
+      [...(perfil?.aprovadas ?? [])].some(
+        (codigo) => mapaIdentidade?.mesmaExigencia(codigoCanonico, codigo),
+      ) ||
       perfil?.cursadas?.some(
         (c) =>
-          (c.codigo === codigoDisciplina || (c.nome && normNome(c.nome) === normNome(nomeDisciplina))) &&
+          (c.codigo === codigoDisciplina ||
+            c.codigo === codigoCanonico ||
+            mapaIdentidade?.mesmaExigencia(codigoCanonico, c.codigo) ||
+            (c.nome && normNome(c.nome) === normNome(nomeDisciplina))) &&
           (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado")
       )
   );
@@ -91,7 +98,11 @@ export function calcularProgressoMateria(
   const emCursoNoHistorico = Boolean(
     !jaConcluidaNoHistorico &&
       perfil?.matriculadas?.some(
-        (m) => m.codigo === codigoDisciplina || (m.nome && normNome(m.nome) === normNome(nomeDisciplina))
+        (m) =>
+          m.codigo === codigoDisciplina ||
+          m.codigo === codigoCanonico ||
+          mapaIdentidade?.mesmaExigencia(codigoCanonico, m.codigo) ||
+          (m.nome && normNome(m.nome) === normNome(nomeDisciplina))
       )
   );
 
@@ -128,7 +139,7 @@ export function calcularProgressoMateria(
     categoriaNome = "Extensão Universitária";
     exigido = perfil?.extensao?.chTotal ?? 320;
     cumpridoBase = perfil?.extensao?.chCursada ?? 0;
-  } else if (conjunto === null || (!d && !chext)) {
+  } else if (d && conjunto === null) {
     categoriaId = "obrigatorias";
     categoriaNome = curso.matriz === 981 ? "Obrigatórias (1º Estrato)" : "Obrigatórias";
     exigido = perfil?.resumoGeral?.obrigatorias?.total ?? matriz?.cargas?.obrigatorias ?? 1815;
@@ -212,7 +223,7 @@ export function calcularResumoProgressoGrade(
   const chExigidaTrilhas =
     (curso.agregadorTrilhas
       ? matriz?.conjuntos?.[String(curso.agregadorTrilhas)]?.ch
-      : undefined) ?? 345;
+      : undefined) ?? (curso.trilhas?.length ? matriz?.cargas?.optativas ?? 0 : 0);
 
   const categoriasMapa: Record<
     string,
@@ -262,6 +273,10 @@ export function calcularResumoProgressoGrade(
       disciplinas: [],
     },
   };
+
+  // A 978 tem cinco grupos obrigatórios que já aparecem individualmente em
+  // `opcoes`; não existe um agregador de trilhas. Evita fabricar um card 0/345h.
+  if (chExigidaTrilhas <= 0) delete categoriasMapa.trilhas_geral;
 
   // Nem todo curso exige eletivas: a 962 declara `cargas.eletiva: 0`, e um
   // padrão fixo faria a tela cobrar horas que o PPC não pede. A matriz é a
@@ -325,26 +340,21 @@ export function calcularResumoProgressoGrade(
   }
 
   for (const item of itens) {
+    const disciplinaMatriz = matriz
+      ? disciplinaCanonicaDaOferta(matriz, item.disciplina.codigo, item.disciplina.nome)
+      : undefined;
+    const codigoCurricular = disciplinaMatriz?.codigo ?? item.disciplina.codigo;
     const carga = obterCargaHoraria(item.disciplina, matriz);
-    const jaConcluida = Boolean(
-      perfil?.aprovadas?.has(item.disciplina.codigo) ||
-        perfil?.cursadas?.some(
-          (c) =>
-            (c.codigo === item.disciplina.codigo || normNome(c.nome) === normNome(item.disciplina.nome)) &&
-            (c.situacao === "aprovado" || c.situacao === "consignado" || c.situacao === "dispensado")
-        )
-    );
-    const acrescimo = jaConcluida ? 0 : carga;
-
     const info = calcularProgressoMateria(item.disciplina.codigo, item.disciplina.nome, carga, perfil, matriz);
+    const acrescimo = info.jaConcluidaNoHistorico ? 0 : carga;
     const catId = info.categoriaId;
 
     if (catId === "obrigatorias") {
       categoriasMapa.obrigatorias.impulsoGrade += acrescimo;
-      categoriasMapa.obrigatorias.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa.obrigatorias.disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (categoriasMapa[catId] && curso.categorias.some((c) => String(c.conjunto) === catId)) {
       categoriasMapa[catId].impulsoGrade += acrescimo;
-      categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa[catId].disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (ehGrupoOpcao(curso, catId)) {
       // Cada grupo de escolha tem carga própria: o card é do grupo, e não há
       // bloco agregado que some todos (somar 1875h num card só esconderia que
@@ -359,10 +369,10 @@ export function calcularResumoProgressoGrade(
         };
       }
       categoriasMapa[catId].impulsoGrade += acrescimo;
-      categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa[catId].disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (contaNoBlocoOptativo(curso, catId)) {
       categoriasMapa.trilhas_geral.impulsoGrade += acrescimo;
-      categoriasMapa.trilhas_geral.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa.trilhas_geral.disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
 
       if (!categoriasMapa[catId]) {
         categoriasMapa[catId] = {
@@ -374,10 +384,10 @@ export function calcularResumoProgressoGrade(
         };
       }
       categoriasMapa[catId].impulsoGrade += acrescimo;
-      categoriasMapa[catId].disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa[catId].disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (catId === "extensao" && categoriasMapa.extensao) {
       categoriasMapa.extensao.impulsoGrade += acrescimo;
-      categoriasMapa.extensao.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa.extensao.disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (catId === "estagio") {
       if (!categoriasMapa.estagio) {
         categoriasMapa.estagio = {
@@ -389,11 +399,11 @@ export function calcularResumoProgressoGrade(
         };
       }
       categoriasMapa.estagio.impulsoGrade += acrescimo;
-      categoriasMapa.estagio.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa.estagio.disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     } else if (categoriasMapa.eletivas) {
       // sem exigência de eletivas no curso, não há bucket para creditar
       categoriasMapa.eletivas.impulsoGrade += acrescimo;
-      categoriasMapa.eletivas.disciplinas.push({ codigo: item.disciplina.codigo, nome: item.disciplina.nome, carga });
+      categoriasMapa.eletivas.disciplinas.push({ codigo: codigoCurricular, nome: disciplinaMatriz?.nome ?? item.disciplina.nome, carga });
     }
   }
 

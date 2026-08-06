@@ -1,5 +1,8 @@
 import type { Matriz, PerfilAluno } from "./tipos";
 import matriz968Json from "../../data/eng-eletronica/matriz-968.json";
+import matriz978Json from "../../data/eng-controle/matriz-978.json";
+import matriz973Json from "../../data/eng-mecatronica/matriz-973.json";
+import matriz823Json from "../../data/eng-mecatronica/matriz-823.json";
 
 /**
  * Descrição das categorias curriculares de cada curso.
@@ -143,6 +146,38 @@ export const BSI_981: DescricaoCurso = {
   naoValidaveis: [],
 };
 
+/**
+ * BSI, matriz 806 — a anterior à 981.
+ *
+ * Mesma arquitetura de estratos da 981, com três diferenças que importam ao
+ * motor. Não tem extensão curricular: o rodapé da matriz declara 0h, e por isso
+ * a categoria de extensão some sozinha da lista de requisitos. O bloco de
+ * humanidades chama-se apenas "Optativas" (948), sem o rótulo longo que a 981
+ * usa, mas reúne as mesmas famílias de disciplina. E as eletivas não formam
+ * conjunto: a exigência de 180h vive só no rodapé e no bloco de eletivas do
+ * Histórico Escolar, então não há o equivalente do 1199 da 981 para declarar.
+ *
+ * A oferta de turmas é a mesma da 981 — existe uma só para a BSI —, e o
+ * casamento entre o código ofertado (ICS…) e o da matriz (CS…) acontece pela
+ * camada de equivalências, que a 806 traz em 127 das 162 disciplinas.
+ */
+export const BSI_806: DescricaoCurso = {
+  matriz: 806,
+  agregadorTrilhas: 934,
+  trilhasExigidas: 3,
+  categorias: [
+    { id: "segundoEstrato", conjunto: 947, rotulo: "2º estrato", rotuloLongo: "2º Estrato" },
+    { id: "humanidades", conjunto: 948, rotulo: "optativas", rotuloLongo: "Optativas" },
+  ],
+  estagios: [
+    { codigo: "CSX51", rotulo: "Estágio 1", ch: 200 },
+    { codigo: "CSX52", rotulo: "Estágio 2", ch: 200 },
+  ],
+  rotuloBlocoTrilhas: "Trilhas em Computação (3º Estrato - Geral)",
+  sufixoTrilha: " (3º Estrato)",
+  naoValidaveis: [],
+};
+
 export const ENG_COMP_844: DescricaoCurso = {
   matriz: 844,
   agregadorTrilhas: 959,
@@ -212,7 +247,92 @@ export const ENG_ELETRONICA_968: DescricaoCurso = {
   hierarquia: hierarquiaDe(matriz968Json.conjuntos),
 };
 
-const CURSOS: DescricaoCurso[] = [BSI_981, ENG_COMP_844, ENG_COMP_962, ENG_ELETRONICA_968];
+/**
+ * Engenharia de Controle e Automação, matriz 978.
+ *
+ * As 675h optativas não formam um bloco de livre distribuição: a matriz exige
+ * 135h em cada uma das cinco trilhas de formação (1136..1140). A 1140 é um
+ * grupo composto por quatro subáreas; a disciplina aponta para a subárea, mas
+ * o crédito precisa subir até a trilha-pai. Esse desenho é o mesmo problema
+ * estrutural dos grupos de escolha da 968, portanto usa `gruposOpcao` em vez de
+ * inventar um agregador inexistente ou dizer que basta escolher N trilhas.
+ */
+export const ENG_CONTROLE_978: DescricaoCurso = {
+  matriz: 978,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [],
+  estagios: [{ codigo: "ELT78C", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
+  rotuloBlocoTrilhas: "Trilhas de Formação",
+  sufixoTrilha: "",
+  naoValidaveis: [],
+  trilhas: [],
+  gruposOpcao: [1136, 1137, 1138, 1139, 1140],
+  rotuloOpcoes: "Trilhas de Formação",
+  hierarquia: hierarquiaDe(matriz978Json.conjuntos),
+};
+
+/**
+ * Engenharia Mecatrônica, matriz 823.
+ *
+ * A grade antiga não tem trilhas: suas 90h optativas vêm de um único conjunto
+ * de Ciências Humanas, Sociais e Cidadania. As 240h eletivas ficam fora dos
+ * conjuntos, e o estágio obrigatório tem 400h. Declarar `trilhas: []` impede
+ * que o único conjunto seja promovido a trilha pela regra de compatibilidade
+ * usada nas matrizes de BSI e Engenharia de Computação.
+ */
+export const ENG_MECATRONICA_823: DescricaoCurso = {
+  matriz: 823,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [
+    { id: "humanidades", conjunto: 932, rotulo: "humanidades", rotuloLongo: "Ciências Humanas, Sociais e Cidadania" },
+  ],
+  estagios: [{ codigo: "EL70B", rotulo: "Estágio Curricular Obrigatório", ch: 400 }],
+  rotuloBlocoTrilhas: "Optativas",
+  sufixoTrilha: "",
+  naoValidaveis: [],
+  trilhas: [],
+  hierarquia: hierarquiaDe(matriz823Json.conjuntos),
+};
+
+/**
+ * Engenharia Mecatrônica, matriz 973.
+ *
+ * A grade separa 60h de Humanidades e duas trilhas formativas obrigatórias,
+ * de 120h cada. Como as duas precisam ser cumpridas, elas têm o mesmo contrato
+ * dos grupos obrigatórios da 978: são `gruposOpcao`, não trilhas entre as quais
+ * o aluno escolhe uma. As unidades extensionistas formam uma pool sem exigência
+ * própria; suas horas alimentam a exigência geral de extensão do curso.
+ */
+export const ENG_MECATRONICA_973: DescricaoCurso = {
+  matriz: 973,
+  agregadorTrilhas: null,
+  trilhasExigidas: 0,
+  categorias: [
+    { id: "humanidades", conjunto: 1122, rotulo: "humanidades", rotuloLongo: "Ciclo de Humanidades" },
+  ],
+  estagios: [{ codigo: "ELN70B", rotulo: "Estágio Curricular Obrigatório", ch: 360 }],
+  rotuloBlocoTrilhas: "Trilhas Formativas",
+  sufixoTrilha: "",
+  // A pool 1224 cumpre extensão, não as 300h optativas do curso.
+  naoValidaveis: [],
+  trilhas: [],
+  gruposOpcao: [1120, 1121],
+  rotuloOpcoes: "Trilhas Formativas",
+  hierarquia: hierarquiaDe(matriz973Json.conjuntos),
+};
+
+const CURSOS: DescricaoCurso[] = [
+  BSI_981,
+  BSI_806,
+  ENG_COMP_844,
+  ENG_COMP_962,
+  ENG_ELETRONICA_968,
+  ENG_CONTROLE_978,
+  ENG_MECATRONICA_823,
+  ENG_MECATRONICA_973,
+];
 
 /** Descrição do curso correspondente à matriz, com a BSI como padrão. */
 export function descricaoDoCurso(matriz: Matriz | number): DescricaoCurso {

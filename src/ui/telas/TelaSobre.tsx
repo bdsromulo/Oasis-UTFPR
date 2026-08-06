@@ -33,15 +33,53 @@ interface Pessoa {
 
 /** Quem cedeu o histórico que serviu de base para calibrar cada curso. */
 const APOIADORES: Pessoa[] = [
-  { nome: "Yago Augusto Constantino Ribeiro", curso: "Sistemas de Informação", revisor: "Revisor" },
-  { nome: "Namie Miquitera Yamada", curso: "Sistemas de Informação", revisor: "Revisora" },
-  { nome: "Victor Damasceno Oliveira", curso: "Engenharia de Computação", revisor: "Revisor" },
-  { nome: "Maria Luiza Cenci Stedile", curso: "Engenharia de Computação" },
-  { nome: "Victor Hugo Garrett", curso: "Engenharia de Computação" },
-  { nome: "Felipe Sledz Ferreira", curso: "Engenharia de Computação" },
-  { nome: "Deborah Feijo Pinto", curso: "Engenharia de Computação" },
-  { nome: "Carlos Eduardo Correa Zanon", curso: "Engenharia Eletrônica" },
+  { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisor" },
+  { nome: "Namie Miquitera Yamada", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisora" },
+  { nome: "Thayssa Gaia Alves de Oliveira", curso: "Engenharia de Controle e Automação (matriz 978)", revisor: "Revisora" },
+  { nome: "Victor Damasceno Oliveira", curso: "Engenharia de Computação (matriz 844)", revisor: "Revisor" },
+  { nome: "Yago Augusto Constantino Ribeiro", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisor" },
+  { nome: "Beatriz Freire Kobayashi", curso: "Engenharia Mecatrônica (matriz 973)" },
+  { nome: "Carlos Eduardo Correa Zanon", curso: "Engenharia Eletrônica (matriz 968)" },
+  { nome: "Deborah Feijo Pinto", curso: "Engenharia de Computação (matriz 962)" },
+  { nome: "Felipe Sledz Ferreira", curso: "Engenharia de Computação (matriz 962)" },
+  // A matriz 806 entrou na plataforma com estes dois históricos. Sem eles não
+  // haveria como calibrar o leitor: o PDF da 806 tem largura de coluna própria,
+  // e os totais do Quadro Resumo foram o que confirmou a leitura da matriz.
+  { nome: "Jezreel Gonzalez Rodriguez", curso: "Sistemas de Informação (matriz 806)" },
+  { nome: "Maria Heloisa Barbosa Benthiem", curso: "Engenharia de Controle e Automação (matriz 978)" },
+  { nome: "Maria Luiza Cenci Stedile", curso: "Engenharia de Computação (matriz 844)" },
+  { nome: "Rafael Furuyama", curso: "Engenharia Mecatrônica (matriz 823)" },
+  { nome: "Victor Hugo Garrett", curso: "Engenharia de Computação (matriz 844)" },
+  { nome: "Vitor dos Santos Maximo de Oliveira", curso: "Sistemas de Informação (matriz 806)" },
 ];
+
+const compararPorNome = (a: Pessoa, b: Pessoa) => a.nome.localeCompare(b.nome, "pt-BR");
+const REVISORES = APOIADORES.filter((pessoa) => pessoa.revisor).sort(compararPorNome);
+const OUTROS_APOIADORES = APOIADORES.filter((pessoa) => !pessoa.revisor).sort(compararPorNome);
+
+function ListaApoiadores({ pessoas }: { pessoas: Pessoa[] }) {
+  return (
+    <ul className="grid gap-2.5 sm:grid-cols-2">
+      {pessoas.map((p) => (
+        <li
+          key={p.nome}
+          className="flex items-start gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-800/40"
+        >
+          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-utfpr-500/20 text-utfpr-700 dark:text-utfpr-400">
+            <IconUser className="h-4 w-4" />
+          </span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="font-display text-sm font-bold text-zinc-900 dark:text-white">{p.nome}</span>
+              {p.revisor && <Badge tom="ok">{p.revisor}</Badge>}
+            </div>
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">{p.curso}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 interface Marco {
   data: string;
@@ -73,17 +111,45 @@ const ROADMAP: Marco[] = [
     estado: "concluido",
   },
   {
-    data: "Em aberto",
-    titulo: "Oásis da grade antiga de BSI e da grade nova de Eletrônica",
+    data: "26 jul 2026",
+    titulo: "Oásis de Engenharia Eletrônica (matriz 968)",
     descricao:
-      "Estender a cobertura para a matriz antiga de Sistemas de Informação (806) e para a matriz nova de Engenharia Eletrônica (968).",
-    estado: "aberto",
+      "A matriz 968 entra com sua árvore própria de conjuntos, grupos de opção, trilhas de aprofundamento, oferta de turmas e validação contra um histórico real.",
+    estado: "concluido",
   },
   {
-    data: "Em aberto",
-    titulo: "Oásis de mais cursos da UTFPR e Sistema de Comunidade",
+    data: "04 ago 2026",
+    titulo: "Oásis de Engenharia de Controle e Automação (matriz 978)",
     descricao:
-      "Levar a plataforma aos demais cursos do câmpus e abrir um sistema de comunidade, para que planejar o curso deixe de ser tarefa solitária.",
+      "A matriz 978 entra com suas cinco trilhas de formação, subáreas, estágio, extensão, ofertas próprias de três semestres e validação contra um histórico real.",
+    estado: "concluido",
+  },
+  {
+    data: "05 ago 2026",
+    titulo: "Oásis da grade antiga de BSI (matriz 806)",
+    descricao:
+      "A matriz 806 passa a ser identificada pelo histórico e usa suas próprias disciplinas, equivalências, categorias e regras de progresso, sem ser confundida com a 981.",
+    estado: "concluido",
+  },
+  {
+    data: "05 ago 2026",
+    titulo: "Oásis de Engenharia Mecatrônica (matriz 973)",
+    descricao:
+      "A matriz oficial 973 entra com Ciclo de Humanidades, trilhas formativas de Eletrônica e Mecânica, pré-requisitos, equivalências e ofertas próprias de 2025.2 a 2026.2.",
+    estado: "concluido",
+  },
+  {
+    data: "05 ago 2026",
+    titulo: "Engenharia Mecatrônica (matriz 823)",
+    descricao:
+      "A matriz antiga de Mecatrônica entra com Humanidades, eletivas, estágio de 400h e 264 equivalências para cruzar as ofertas atuais sem alterar o dado oficial da 823 ou da 973.",
+    estado: "concluido",
+  },
+  {
+    data: "Objetivo",
+    titulo: "Engenharia de Controle e Automação (matriz 708)",
+    descricao:
+      "Cobrir também a matriz antiga do curso, preservando suas equivalências e regras sem reaproveitar automaticamente as da 978.",
     estado: "aberto",
   },
 ];
@@ -222,8 +288,9 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               </p>
               <ul className="space-y-2">
                 {[
-                  ["Nada é transmitido", "nenhum upload, nenhuma API, nenhum rastreamento."],
-                  ["Fica na sua máquina", "o navegador guarda a sua grade no armazenamento local."],
+                  ["Nada acadêmico é transmitido", "nenhum upload do histórico e nenhuma API recebe perfil, notas ou grades."],
+                  ["Fica na sua máquina", "o navegador guarda o perfil e a sua grade no armazenamento local."],
+                  ["Você pode transportar", "o savefile leva o perfil já interpretado e as grades para outro navegador, sem incluir o PDF."],
                   ["Você apaga quando quiser", "as Configurações limpam todos os dados salvos de uma vez."],
                   ["Nada pessoal no repositório", "o código é público e guarda apenas matrizes e turmas."],
                 ].map(([titulo, texto]) => (
@@ -237,8 +304,14 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
                 ))}
               </ul>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Nada é sincronizado. Limpar os dados do navegador ou trocar de aparelho
-                também apaga a grade que você montou.
+                Nada é sincronizado automaticamente. Antes de limpar os dados ou trocar de
+                aparelho, baixe o savefile nas Configurações e importe-o no outro navegador.
+              </p>
+              <p className="text-[11px] leading-relaxed text-zinc-400 dark:text-zinc-500">
+                Os registros de uso do site são contabilizados pelo GoatCounter, provedor
+                open source de estatísticas e única integração do Oásis que envia telemetria
+                a um serviço externo. O histórico, o perfil e as grades não fazem parte dessa
+                contagem.
               </p>
             </div>
           </div>
@@ -368,27 +441,18 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <strong className="text-zinc-800 dark:text-zinc-200">revisor</strong>{" "}
               também conferiu o resultado e apontou os erros.
             </p>
-            <ul className="grid gap-2.5 sm:grid-cols-2">
-              {APOIADORES.map((p) => (
-                <li
-                  key={p.nome}
-                  className="flex items-start gap-3 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-800/40"
-                >
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-utfpr-500/20 text-utfpr-700 dark:text-utfpr-400">
-                    <IconUser className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="font-display text-sm font-bold text-zinc-900 dark:text-white">
-                        {p.nome}
-                      </span>
-                      {p.revisor && <Badge tom="ok">{p.revisor}</Badge>}
-                    </div>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">{p.curso}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <section>
+              <h5 className="mb-2 font-display text-xs font-black uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Revisores em ordem alfabética
+              </h5>
+              <ListaApoiadores pessoas={REVISORES} />
+            </section>
+            <section className="mt-5">
+              <h5 className="mb-2 font-display text-xs font-black uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Outros apoiadores em ordem alfabética
+              </h5>
+              <ListaApoiadores pessoas={OUTROS_APOIADORES} />
+            </section>
           </Card>
 
           {/* Método de desenvolvimento */}
@@ -418,10 +482,12 @@ export function TelaSobre(props: { onAbrirGestaoInformacao: () => void }) {
               <strong className="text-zinc-800 dark:text-zinc-200">
                 MatrizEngEletronicaUTFPR
               </strong>
-              , repositório de apoio de Engenharia Eletrônica mantido por{" "}
+              , repositório de apoio às matrizes de Engenharia Eletrônica e de
+              Controle e Automação mantido por{" "}
               <strong className="text-zinc-800 dark:text-zinc-200">Kcaiooooo</strong>,
-              inspirou o Oásis de Eletrônica. Ele serviu de base tanto para organizar o
-              material de apoio quanto para entender as exigências do curso.
+              inspirou os módulos desses dois cursos. Ele serviu de base para organizar o
+              material de apoio e como referência visual independente das estruturas curriculares;
+              os dados servidos pelo Oásis continuam vindo dos documentos oficiais da UTFPR.
             </p>
             <div className="mt-3">
               <LinkSocial

@@ -9,7 +9,8 @@ import { montarPainel } from "../src/domain/motor/situacao";
 import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { nomeDeEletiva } from "../src/domain/eletivas";
-import { ENG_COMP, dadosDoCursoPorMatriz, semestresDoCurso } from "../src/domain/dadosCurso";
+import { criarAlvoAvaliacao } from "../src/domain/reviews/alvos";
+import { CURSOS, ENG_COMP, dadosDoCursoPorMatriz, semestresDoCurso } from "../src/domain/dadosCurso";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
 import turmasJson from "../data/turmas/2026-1.json";
@@ -237,6 +238,26 @@ describe.skipIf(!existsSync(CASOS_844[1]))("fatos específicos 844: aprovação 
     }
     const elegiveis = listarElegiveis(perfil, matriz844, ENG_COMP.ofertas["2026-2"]) as any[];
     expect(elegiveis.some((e) => ["CSF13", "MA71A"].includes(e.disciplina.codigo))).toBe(false);
+  });
+});
+
+describe.skipIf(!existsSync(CASOS_844[0]))("fatos específicos 844: avaliações de consignadas", () => {
+  it("preserva código e professor reais sem romper o código canônico do planejamento", async () => {
+    const perfil = await carregar(CASOS_844[0]);
+    const consignada = perfil.cursadas.find((c) => c.codigo === "CSA30" && c.situacao === "consignado");
+    expect(consignada).toMatchObject({ codigoOriginal: "ICSA30" });
+    expect(consignada?.professores?.length).toBeGreaterThan(0);
+
+    const alvo = criarAlvoAvaliacao(consignada!, matriz844, CURSOS);
+    expect(alvo).toMatchObject({ codigo: "ICSA30", codigoCanonico: "CSA30", semestre: "2024/1" });
+    expect(alvo?.nome).not.toBe("ICSA30");
+    expect(mapa844.resolver(alvo!.codigo)).toBe(alvo!.codigoCanonico);
+  });
+
+  it("resolve o nome da eletiva externa pelas ofertas versionadas", async () => {
+    const perfil = await carregar(CASOS_844[0]);
+    const eletiva = perfil.cursadas.find((c) => c.codigo === "GE70L");
+    expect(criarAlvoAvaliacao(eletiva!, matriz844, CURSOS)?.nome).toBe("Gestão Da Produção");
   });
 });
 

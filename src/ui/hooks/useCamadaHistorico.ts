@@ -1,13 +1,19 @@
 import { useEffect, useRef } from "react";
+import { pilhaDeCamadas } from "./pilhaCamadas";
 
 /**
  * Hook para interceptar o botão voltar do Android e usá-lo para fechar
  * camadas sobrepostas (como Modais, Drawers ou Telas Auxiliares) sem
  * sair da aplicação.
  *
+ * Quem está no topo é decidido por `pilhaDeCamadas`, e não por `history.state`.
+ * O motivo está documentado lá: o WebKit reflete o `pushState` só na volta
+ * seguinte do event loop, e a leitura atrasada fazia o iPhone fechar a camada
+ * recém aberta.
+ *
  * @param aberto Se a camada está atualmente visível/aberta.
  * @param fechar Função para fechar a camada programaticamente.
- * @param id Identificador único da camada para ser gravado no history.state.
+ * @param id Identificador único da camada.
  */
 export function useCamadaHistorico(aberto: boolean, fechar: () => void, id: string) {
   const fecharRef = useRef(fechar);
@@ -16,11 +22,13 @@ export function useCamadaHistorico(aberto: boolean, fechar: () => void, id: stri
   useEffect(() => {
     if (!aberto) return;
 
-    // Empilha a camada atual no histórico do navegador
-    window.history.pushState({ camada: id }, "");
+    pilhaDeCamadas.abrir(id);
 
     const handler = () => {
-      // O usuário pressionou o botão voltar ou chamou history.back()
+      // Todas as camadas abertas escutam o mesmo evento; só a de cima responde,
+      // senão um único toque no voltar fecharia a pilha inteira.
+      if (!pilhaDeCamadas.ehTopo(id)) return;
+      pilhaDeCamadas.removerSemVoltar(id);
       fecharRef.current();
     };
 
@@ -29,11 +37,12 @@ export function useCamadaHistorico(aberto: boolean, fechar: () => void, id: stri
     return () => {
       window.removeEventListener("popstate", handler);
 
-      // Se o componente foi desmontado ou fechado por meio de um botão "X",
-      // precisamos remover o estado do topo da pilha de forma silenciosa.
-      if (window.history.state?.camada === id) {
-        window.history.back();
-      }
+      // Adiado para depois do commit: quando esta camada fecha no mesmo evento
+      // em que OUTRA abre — o menu do celular fechando e "Sobre" abrindo —, o
+      // React roda esta limpeza ANTES do efeito da camada nova. Sem o adiamento,
+      // a pilha ainda não conhece a camada de cima, esta se veria no topo e
+      // desfaria uma entrada de histórico que passou a ser da outra.
+      queueMicrotask(() => pilhaDeCamadas.fechar(id));
     };
   }, [aberto, id]);
 }

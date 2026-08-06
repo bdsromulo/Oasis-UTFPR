@@ -1,4 +1,4 @@
-import type { Matriz } from "../tipos";
+import type { DisciplinaMatriz, Matriz } from "../tipos";
 
 /** Mapa de equivalência canônica entre códigos. */
 export interface MapaIdentidade {
@@ -71,4 +71,28 @@ export function criarMapaIdentidade(matriz: Matriz): MapaIdentidade {
       return nomeParaCodigo.get(normNome(nome));
     }
   };
+}
+
+/**
+ * Encontra a disciplina da matriz à qual um código de oferta pertence.
+ *
+ * O Portal frequentemente abre a turma sob um equivalente (por exemplo,
+ * ELEC20 para EEC21 na matriz 844). O código da oferta continua necessário
+ * para a matrícula, mas categoria, carga e nome curricular precisam vir da
+ * disciplina canônica. O nome fica apenas como fallback para ofertas sem uma
+ * equivalência declarada.
+ */
+export function disciplinaCanonicaDaOferta(
+  matriz: Matriz,
+  codigoOferta: string,
+  nomeOferta?: string | null,
+): DisciplinaMatriz | undefined {
+  const mapa = criarMapaIdentidade(matriz);
+  const codigoCanonico = mapa.resolver(codigoOferta);
+  const porCodigo = matriz.disciplinas.find((d) => d.codigo === codigoCanonico);
+  if (porCodigo) return porCodigo;
+
+  if (!nomeOferta) return undefined;
+  const nomeNormalizado = normNome(nomeOferta);
+  return matriz.disciplinas.find((d) => normNome(d.nome) === nomeNormalizado);
 }

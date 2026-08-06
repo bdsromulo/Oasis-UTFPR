@@ -108,11 +108,28 @@ export function TelaFluxograma(props: {
   const arrastando = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  const abertos = useMemo(() => codigosOfertados(matriz, ofertas), [matriz, ofertas]);
+  const temOferta = ofertas.some((oferta) => oferta.disciplinas.length > 0);
+  const abertos = useMemo(
+    () =>
+      temOferta
+        ? codigosOfertados(matriz, ofertas)
+        : new Set(matriz.disciplinas.map((disciplina) => disciplina.codigo)),
+    [matriz, ofertas, temOferta],
+  );
 
   const boardObr = useMemo(() => montarBoardObrigatorias(matriz), [matriz]);
   const boardTri = useMemo(() => montarBoardTrilhas(matriz, abertos), [matriz, abertos]);
-  const boardOpc = useMemo(() => montarBoardOpcoes(matriz, abertos), [matriz, abertos]);
+  const boardOpc = useMemo(() => {
+    const resultado = montarBoardOpcoes(matriz, abertos);
+    if (temOferta) return resultado;
+    return {
+      ...resultado,
+      faixas: resultado.faixas.map((faixa) => ({
+        ...faixa,
+        subrotulo: faixa.subrotulo?.replace(/h abertas/g, "h na matriz"),
+      })),
+    };
+  }, [matriz, abertos, temOferta]);
   const board: Board =
     abaBoard === "obrigatorias" ? boardObr : abaBoard === "opcoes" ? boardOpc : boardTri;
 
@@ -239,11 +256,14 @@ export function TelaFluxograma(props: {
 
   const resultados = correspondem ? board.nos.filter((n) => correspondem.has(n.id)) : [];
   const gruposPresentes = [...new Set(board.nos.map((n) => n.grupo))];
+  const temBoardOpcoes = boardOpc.faixas.length > 0;
+  const temBoardTrilhas = boardTri.nos.some((no) => !no.externo);
+  const quantidadeBoards = 1 + Number(temBoardOpcoes) + Number(temBoardTrilhas);
 
   return (
     <div className="space-y-4">
       {/* Abas dos dois boards */}
-      <div className={`grid ${boardOpc.faixas.length ? "grid-cols-3" : "grid-cols-2"} gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95`}>
+      <div className={`grid ${quantidadeBoards === 3 ? "grid-cols-3" : quantidadeBoards === 2 ? "grid-cols-2" : "grid-cols-1"} gap-2 rounded-3xl border-2 border-zinc-200/90 bg-white/95 p-2 shadow-md dark:border-zinc-800/90 dark:bg-zinc-900/95`}>
         {(
           [
             { id: "obrigatorias" as const, rotulo: curso.matriz === 981 ? "Obrigatórias & 2º Estrato" : "Obrigatórias", icone: <IconGraduationCap className="h-4 w-4 shrink-0" />, qtd: boardObr.nos.length },
@@ -251,10 +271,12 @@ export function TelaFluxograma(props: {
             // tem grupos "Opções de …". O Ciclo de Humanidades vive aqui, e ele
             // existe em BSI e na 962 — travar no `gruposOpcao` deixava as
             // disciplinas montadas no board e inalcançáveis na tela.
-            ...(boardOpc.faixas.length
+            ...(temBoardOpcoes
               ? [{ id: "opcoes" as const, rotulo: curso.rotuloOpcoes ?? "Escolhas do Curso", icone: "◈", qtd: boardOpc.nos.filter((n) => !n.externo).length }]
               : []),
-            { id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length },
+            ...(temBoardTrilhas
+              ? [{ id: "trilhas" as const, rotulo: curso.matriz === 981 ? "Trilhas do 3º Estrato" : "Trilhas Optativas", icone: "⚡", qtd: boardTri.nos.filter((n) => !n.externo).length }]
+              : []),
           ]
         ).map((op) => {
           const ativo = abaBoard === op.id;
@@ -283,10 +305,16 @@ export function TelaFluxograma(props: {
         })}
       </div>
 
-      {abaBoard === "trilhas" && (
+      {abaBoard === "trilhas" && temOferta && (
         <p className="rounded-2xl border border-indigo-300/70 bg-indigo-50/70 px-4 py-3 text-xs font-medium leading-relaxed text-indigo-900 dark:border-indigo-800/70 dark:bg-indigo-950/40 dark:text-indigo-200">
           Este board mostra apenas disciplinas de trilha que <strong>efetivamente abriram</strong> em {ofertas.map((o) => o.semestre.replace("-", ".")).join(" ou ")} — trilhas sem oferta conhecida não aparecem. Blocos tracejados são
           pré-requisitos que vivem fora da trilha.
+        </p>
+      )}
+
+      {!temOferta && abaBoard !== "obrigatorias" && (
+        <p className="rounded-2xl border border-amber-300/70 bg-amber-50/70 px-4 py-3 text-xs font-medium leading-relaxed text-amber-900 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-200">
+          Como ainda não há Turmas Abertas importadas para este curso, este board mostra a lista curricular completa da matriz.
         </p>
       )}
 

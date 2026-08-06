@@ -29,6 +29,8 @@ import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
 import { obterCargaHoraria } from "../../domain/motor/progressoGrade";
+import { BotaoReviews, useContagemPorTurma } from "./reviewsComuns";
+import { PainelDisciplina, type AlvoPainelDisciplina } from "./PainelDisciplina";
 
 export function normalizarTextoBusca(str: string): string {
   return str
@@ -50,6 +52,9 @@ function DisciplinaGNHItem({
   itensSelecao,
   perfil,
   matriz,
+  onVerReviews,
+  contarReviews,
+  idDaTurma,
 }: {
   d: DisciplinaOfertada;
   est: { pendente: boolean; bloqueio: string | null; naMatriz: boolean };
@@ -59,6 +64,9 @@ function DisciplinaGNHItem({
   onAbrirMobilePreview?: (p: PreviewTurma) => void;
   filtrarConflitos: boolean;
   itensSelecao: ItemGrade[];
+  onVerReviews?: (alvo: AlvoPainelDisciplina) => void;
+  contarReviews?: (codigo: string, professoresRaw: string) => number;
+  idDaTurma?: (professoresRaw: string) => string;
   perfil?: PerfilAluno | null;
   matriz?: Matriz | null;
 }) {
@@ -169,6 +177,25 @@ function DisciplinaGNHItem({
                   {t.professores_raw || "professor a definir"}
                 </span>
                 <div className="ml-auto flex flex-wrap items-center gap-1.5 justify-end">
+                  {/* Junto de "Status", e não colado ao nome do professor: ali a
+                      estrela sozinha se perdia entre os botões de ação, e quem
+                      escolhe turma consulta a opinião no mesmo gesto em que
+                      consulta o progresso. */}
+                  {onVerReviews && contarReviews && idDaTurma && (
+                    <BotaoReviews
+                      variante="acao"
+                      n={contarReviews(d.codigo, t.professores_raw ?? "")}
+                      rotuloAlvo="desta turma"
+                      onAbrir={() =>
+                        onVerReviews({
+                          codigo: d.codigo,
+                          nome: d.nome,
+                          professorId: idDaTurma(t.professores_raw ?? ""),
+                          nomeProfessor: t.professores_raw || "professor a definir",
+                        })
+                      }
+                    />
+                  )}
                   {isMobile && (
                     <button
                       type="button"
@@ -279,6 +306,9 @@ export function TelaLayoutGNH(props: {
   const [soPendentes, setSoPendentes] = useState(false);
   const [soLiberadas, setSoLiberadas] = useState(false);
   const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
+  const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
+
+  const reviews = useContagemPorTurma(matriz);
 
   const itensSelecao = useMemo(() => itensDaSelecao(oferta, selecao), [oferta, selecao]);
 
@@ -391,7 +421,7 @@ export function TelaLayoutGNH(props: {
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder="Buscar matéria, código ou professor…"
-          className="flex-1 min-w-[240px] sm:min-w-[320px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
+          className="min-h-11 flex-1 min-w-[240px] rounded-xl border border-zinc-300 bg-zinc-50 px-3.5 py-2 text-sm font-medium focus:border-utfpr-500 focus:bg-white focus:outline-none sm:min-w-[320px] dark:border-zinc-700 dark:bg-zinc-800 dark:focus:border-amber-400 dark:focus:bg-zinc-900"
         />
         <label className="flex cursor-pointer items-center gap-2 font-medium text-zinc-700 select-none dark:text-zinc-300">
           <input
@@ -450,6 +480,9 @@ export function TelaLayoutGNH(props: {
               itensSelecao={itensSelecao}
               perfil={props.perfil}
               matriz={props.matriz}
+              onVerReviews={reviews.habilitado ? setRevisando : undefined}
+              contarReviews={reviews.habilitado ? reviews.contar : undefined}
+              idDaTurma={reviews.habilitado ? reviews.idDaTurma : undefined}
             />
           );
         })}
@@ -458,6 +491,12 @@ export function TelaLayoutGNH(props: {
       <ModalConflitoTurma
         bloqueio={conflitoBloqueado}
         onFechar={() => setConflitoBloqueado(null)}
+      />
+
+      <PainelDisciplina
+        alvo={revisando}
+        matriz={matriz}
+        onFechar={() => setRevisando(null)}
       />
     </div>
   );
