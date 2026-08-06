@@ -41,3 +41,7 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # A fila do Pages já segurou deployments por mais de dez minutos; com o
+          # timeout padrão a action aborta e cancela um deploy que ainda sairia.
+          timeout: 1800000
