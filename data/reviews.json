@@ -1,7 +1,20 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-04T22:06:08.601Z",
+  "geradoEm": "2026-08-06T12:52:19.035Z",
   "reviews": [
+    {
+      "id": "0855d75f4d36",
+      "professorId": "ohara-kerusauskas-rayel",
+      "codigo": "ELT76A",
+      "semestre": "2026/1",
+      "autor": "THAYSSA GAIA ALVES DE OLIVEIRA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 4,
+      "cargaTrabalho": 2,
+      "avaliacao": "misto",
+      "comentario": "As aulas teóricas são no modelo assíncrono, em que o professor libera as videoaulas e slides e você deve chegar na aula já sabendo do conteúdo. Ele apenas passa pelos slides de forma a dar um resumo do que ele fala na videoaula, para então partir para a prática, que consiste em simular o sistema do roteiro abordando o conteúdo da semana (um relatório por aula) no MATLAB. São 2 provas, com consulta no papel. E também há o projeto final, que é fácil se você entende o assunto. O professor é aberto para dúvidas e ajuda muito!"
+    },
     {
       "id": "29b263a69955",
       "professorId": "laudelino-cordeiro-bastos",
@@ -29,6 +42,19 @@
       "comentario": ""
     },
     {
+      "id": "50647d33dfd5",
+      "professorId": "luiz-amilton-pepplow",
+      "codigo": "ELT76G",
+      "semestre": "2026/1",
+      "autor": "THAYSSA GAIA ALVES DE OLIVEIRA",
+      "personalidade": 5,
+      "didatica": 4,
+      "dificuldade": 3,
+      "cargaTrabalho": 1,
+      "avaliacao": "misto",
+      "comentario": "Muito importante levar as simulações montadas para as práticas."
+    },
+    {
       "id": "be1434de0b67",
       "professorId": "sandro-marlus-wambier",
       "codigo": "FCH7HC",
@@ -40,6 +66,19 @@
       "cargaTrabalho": 1,
       "avaliacao": "provas",
       "comentario": "Matéria bem tranquila, o professor é um tanto flexível na chamada e a prova final é um texto simples de \"Escreva algo do conteúdo\". As explicações são legais e o professor claramente manja bastante do conteúdo até pra conversar com ele depois da aula, só que a aula ser à noite e ele orientar todo o conteúdo escrevendo no quadro (e sem disponibilizar nada além do material base online) torna a experiência um pouco mais difícil. Dá pra passar bem tranquilo se você fizer o absoluto mínimo e dá pra farmar CR se você fizer um pouco mais do que o mínimo."
+    },
+    {
+      "id": "c2ccc5cab20a",
+      "professorId": "vilmair-ermenio-wirmond",
+      "codigo": "ELT77D",
+      "semestre": "2026/1",
+      "autor": "THAYSSA GAIA ALVES DE OLIVEIRA",
+      "personalidade": 5,
+      "didatica": 4,
+      "dificuldade": 2,
+      "cargaTrabalho": 3,
+      "avaliacao": "trabalhos",
+      "comentario": "Além dos projetos a cada tema abordado, há um seminário no final. Difícil se comunicar com ele por e-mail, mas é um professor que ajuda muito se procurar ele na aula."
     },
     {
       "id": "d8a4ffbf0ff5",
@@ -66,6 +105,32 @@
       "cargaTrabalho": 4,
       "avaliacao": "misto",
       "comentario": "A matéria é bem interessante, bem técnica e prática e traz observações legais. Tem uma quantidade de trabalho até que razoável mas não é muito tensa de fazer, se colocar um pouco de energia vai. Tem 1 prova só e o resto da nota tá em 2 trabalhos maiores e umas atividades menores."
+    },
+    {
+      "id": "f720e3a5b2de",
+      "professorId": "thais-mariane-biembengut-faria",
+      "codigo": "MAT7AL",
+      "semestre": "2025/2",
+      "autor": "BEATRIZ FREIRE KOBAYASHI",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "misto",
+      "comentario": ""
+    },
+    {
+      "id": "f7ad1b5f1f8c",
+      "professorId": "clovis-ronaldo-da-costa-bento",
+      "codigo": "ELT76H",
+      "semestre": "2026/1",
+      "autor": "THAYSSA GAIA ALVES DE OLIVEIRA",
+      "personalidade": 3,
+      "didatica": 2,
+      "dificuldade": 2,
+      "cargaTrabalho": 3,
+      "avaliacao": "misto",
+      "comentario": ""
     }
   ]
 }
