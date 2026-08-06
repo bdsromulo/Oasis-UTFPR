@@ -71,7 +71,8 @@ oasis-utfpr/
 │   ├── validate_turmas.py    # Valida invariantes R1 a R7 das turmas
 │   ├── validate_turmas_estrutura.py # Invariantes independentes da fonte
 │   ├── parse_gnh.py          # Leitor secundário de JSON do Grade na Hora
-│   └── parse_gnh_html.py     # Leitor terciário: página salva do GNH (ofertas passadas)
+│   ├── parse_gnh_html.py     # Leitor terciário: página salva do GNH (ofertas passadas)
+│   └── publicar_reviews.py   # Roda o fluxo inteiro de reviews (CSV -> validação -> testes -> push)
 ├── scripts/                  # Automação em TypeScript, fora do pipeline Python de dados
 │   ├── ingerir-reviews.ts    # Ingestão semanal do CSV de reviews -> data/reviews.json
 │   ├── semear-reviews.ts     # Gera reviews sintéticas para desenvolvimento local
@@ -232,5 +233,6 @@ Este repositório consolida as seguintes definições canônicas de interface e 
 6. **Camada de avaliações da comunidade, savefile e Modo Livre:**
    - Arquitetura e pipeline completos em `Estrategia.md` §6, não repetidos aqui. Resumo para quem só precisa navegar o código: a coleta é um Google Forms externo (`src/domain/reviews/forms.ts` monta a URL de prefill), a leitura é local (`src/domain/reviews/acervo.ts`, `professores.ts`, `config.ts`, e as telas `PainelProfessor.tsx`/`PainelDisciplina.tsx`/`reviewsComuns.tsx`), e o acervo publicado é `data/reviews.json`, regenerado só pelo workflow `ingerir-reviews.yml`.
    - `MATRIZES_COM_REVIEWS` (`src/domain/reviews/config.ts`) é o único ponto que decide em quais matrizes a interface de avaliações aparece; o acervo e o roster de docentes são sempre globais (§6.10).
+   - **Publicação sob demanda:** `python tools/publicar_reviews.py` roda localmente a mesma sequência do workflow — baixa o CSV homologado, valida, regenera `data/reviews.json`, roda a suíte e publica com confirmação. Serve para não esperar o cron de segunda; o Action continua sendo o caminho normal. Use `--somente-gerar` para inspecionar sem publicar. A URL do CSV fica em `.env.local` (coberto pelo `.gitignore`) ou na variável `URL_CSV_REVIEWS` do repositório.
    - **Modo Livre:** o aluno pode navegar sem carregar histórico, escolhendo curso e matriz manualmente. Sem `perfil`, a aba *Minha Situação* fica bloqueada e o Planejamento vira ponto de entrada (item 1 acima).
    - **Savefile** (`src/domain/savefile.ts`): exportação/importação de um JSON versionado com o perfil já derivado e as grades montadas — nunca o PDF original. É o mecanismo de portar dados entre navegadores sem backend.
