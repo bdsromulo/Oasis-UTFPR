@@ -40,8 +40,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
+        # `timeout` não adianta aqui: a action limita o valor a MAX_TIMEOUT = 600000
+        # (dez minutos) e ignora qualquer coisa maior, com aviso no log.
         uses: actions/deploy-pages@v4
-        with:
-          # A fila do Pages já segurou deployments por mais de dez minutos; com o
-          # timeout padrão a action aborta e cancela um deploy que ainda sairia.
-          timeout: 1800000
