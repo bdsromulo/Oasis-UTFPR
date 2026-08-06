@@ -45,570 +45,6 @@
    ]
   },
   {
-   "codigo": "MAT7AL",
-   "nome": "Álgebra Linear",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-308",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S15",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-308",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 1,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-307",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-307",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 1,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-307",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-307",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S41",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Mari Sano",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S43",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Paula Olga Gneri",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S51",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Civil"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Mari Sano",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S55",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Amb/Sanitária"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Paula Olga Gneri",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S81",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Lic Fisica"
-      }
-     ],
-     "_hor_lixo": [
-      "9"
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
    "codigo": "ELB11",
    "nome": "Algoritmos De Programação",
    "aulas_semanais_presenciais": 3.0,
@@ -1247,7 +683,7 @@
    "turmas": [
     {
      "codigo": "S11",
-     "enquadramento": "EaD",
+     "enquadramento": "Presencial",
      "vagas_total": 22,
      "vagas_calouros": 0,
      "reserva": "Sem Reserva",
@@ -1511,6 +947,1285 @@
       "968",
       "962",
       "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Sandro Marlus Wambier",
+     "optativa_matrizes": [
+      "990",
+      "973",
+      "957",
+      "981",
+      "978",
+      "979",
+      "960",
+      "845",
+      "784",
+      "873",
+      "888",
+      "806",
+      "982",
+      "968",
+      "985",
+      "961",
+      "867",
+      "755",
+      "870",
+      "844",
+      "708",
+      "709",
+      "906",
+      "919",
+      "823",
+      "962",
+      "974",
+      "980"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Sandro Marlus Wambier",
+     "optativa_matrizes": [
+      "990",
+      "973",
+      "957",
+      "981",
+      "978",
+      "979",
+      "960",
+      "845",
+      "784",
+      "873",
+      "888",
+      "806",
+      "982",
+      "968",
+      "985",
+      "961",
+      "867",
+      "755",
+      "870",
+      "844",
+      "708",
+      "709",
+      "906",
+      "919",
+      "823",
+      "962",
+      "974",
+      "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELEB30",
+   "nome": "Circuitos Digitais",
+   "aulas_semanais_presenciais": 6.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Fabio Kurt Schneider",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELF41",
+   "nome": "Circuitos Digitais",
+   "aulas_semanais_presenciais": 5.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 4,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-202",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Gustavo Benvenutti Borba",
+     "optativa_matrizes": [
+      "968",
+      "957",
+      "906"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S12",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 4,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Gustavo Benvenutti Borba",
+     "optativa_matrizes": [
+      "968",
+      "957",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "QBI7CA",
+   "nome": "Ciências Do Ambiente",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-306",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-306",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jonas Golart Da Silva",
+     "optativa_matrizes": [
+      "995",
+      "973",
+      "968",
+      "983",
+      "981",
+      "978",
+      "979",
+      "961",
+      "977"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CA-102",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CA-102",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jonas Golart Da Silva",
+     "optativa_matrizes": [
+      "995",
+      "973",
+      "968",
+      "983",
+      "981",
+      "978",
+      "979",
+      "961",
+      "977"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "COE70A",
+   "nome": "Comunicação Oral E Escrita",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "E11",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Tecnol. Sist. Telec."
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-108",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-108",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jamea Cristina Batista Silva Franklin",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Lucas Roecker Lazarin",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 6,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Denise Regina Stacheski",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CC-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Gabriella Hauber Pimentel",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S55",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Amb/Sanitária"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Cora Catalina Gaete Quinteros",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELF73",
+   "nome": "Comunicações Digitais",
+   "aulas_semanais_presenciais": 5.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Bruno Sens Chang",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELTB3",
+   "nome": "Comunicações Sem Fio",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CB-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 4,
+       "sala": "CB-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 5,
+       "sala": "CB-304",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Joao Luiz Rebelatto",
+     "optativa_matrizes": [
+      "968",
+      "906",
+      "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELTB4",
+   "nome": "Comunicações Ópticas",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Alexandre De Almeida Prado Pohl",
+     "optativa_matrizes": [
+      "968",
+      "962",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELEC20",
+   "nome": "Controle 1",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CQ-203",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Lucia Valeria Ramos De Arruda",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S72",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Paulo De Tarso Neves Junior",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELF62",
+   "nome": "Controle 1",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-205",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-205",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Paulo De Tarso Neves Junior",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELF72",
+   "nome": "Controle 2",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 26,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Paulo Roberto Brero De Campos",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELF81",
+   "nome": "Controle A Eventos Discretos",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 24,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 4,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 5,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Joel Goncalves Pereira",
+     "optativa_matrizes": [
+      "968",
+      "906",
+      "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELN7AE",
+   "nome": "Controle De Processos",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S15",
+     "enquadramento": "Presencial",
+     "vagas_total": 28,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-110",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Anderson Levati Amoroso",
+     "optativa_matrizes": [
+      "973"
      ],
      "optativa": true
     }
@@ -2904,1285 +3619,6 @@
    ]
   },
   {
-   "codigo": "FCH7HC",
-   "nome": "Capitalismo Contemporâneo E Economia Política",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Sandro Marlus Wambier",
-     "optativa_matrizes": [
-      "990",
-      "973",
-      "957",
-      "981",
-      "978",
-      "979",
-      "960",
-      "845",
-      "784",
-      "873",
-      "888",
-      "806",
-      "982",
-      "968",
-      "985",
-      "961",
-      "867",
-      "755",
-      "870",
-      "844",
-      "708",
-      "709",
-      "906",
-      "919",
-      "823",
-      "962",
-      "974",
-      "980"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Sandro Marlus Wambier",
-     "optativa_matrizes": [
-      "990",
-      "973",
-      "957",
-      "981",
-      "978",
-      "979",
-      "960",
-      "845",
-      "784",
-      "873",
-      "888",
-      "806",
-      "982",
-      "968",
-      "985",
-      "961",
-      "867",
-      "755",
-      "870",
-      "844",
-      "708",
-      "709",
-      "906",
-      "919",
-      "823",
-      "962",
-      "974",
-      "980"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "QBI7CA",
-   "nome": "Ciências Do Ambiente",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-306",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-306",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jonas Golart Da Silva",
-     "optativa_matrizes": [
-      "995",
-      "973",
-      "968",
-      "983",
-      "981",
-      "978",
-      "979",
-      "961",
-      "977"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CA-102",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CA-102",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jonas Golart Da Silva",
-     "optativa_matrizes": [
-      "995",
-      "973",
-      "968",
-      "983",
-      "981",
-      "978",
-      "979",
-      "961",
-      "977"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELEB30",
-   "nome": "Circuitos Digitais",
-   "aulas_semanais_presenciais": 6.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Fabio Kurt Schneider",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "ELF41",
-   "nome": "Circuitos Digitais",
-   "aulas_semanais_presenciais": 5.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 4,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-202",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Gustavo Benvenutti Borba",
-     "optativa_matrizes": [
-      "968",
-      "957",
-      "906"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S12",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 4,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Gustavo Benvenutti Borba",
-     "optativa_matrizes": [
-      "968",
-      "957",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "COE70A",
-   "nome": "Comunicação Oral E Escrita",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "E11",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Tecnol. Sist. Telec."
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-108",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-108",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jamea Cristina Batista Silva Franklin",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Lucas Roecker Lazarin",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 6,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Denise Regina Stacheski",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CC-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Gabriella Hauber Pimentel",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S55",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Amb/Sanitária"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Cora Catalina Gaete Quinteros",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELF73",
-   "nome": "Comunicações Digitais",
-   "aulas_semanais_presenciais": 5.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Bruno Sens Chang",
-     "optativa_matrizes": [
-      "968",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELTB4",
-   "nome": "Comunicações Ópticas",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Alexandre De Almeida Prado Pohl",
-     "optativa_matrizes": [
-      "968",
-      "962",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELTB3",
-   "nome": "Comunicações Sem Fio",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CB-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 4,
-       "sala": "CB-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 5,
-       "sala": "CB-304",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Joao Luiz Rebelatto",
-     "optativa_matrizes": [
-      "968",
-      "906",
-      "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELF81",
-   "nome": "Controle A Eventos Discretos",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 24,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 4,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 5,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Joel Goncalves Pereira",
-     "optativa_matrizes": [
-      "968",
-      "906",
-      "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELN7AE",
-   "nome": "Controle De Processos",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S15",
-     "enquadramento": "Presencial",
-     "vagas_total": 28,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-110",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Anderson Levati Amoroso",
-     "optativa_matrizes": [
-      "973"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELEC20",
-   "nome": "Controle 1",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CQ-203",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Lucia Valeria Ramos De Arruda",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S72",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Paulo De Tarso Neves Junior",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "ELF62",
-   "nome": "Controle 1",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-205",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-205",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Paulo De Tarso Neves Junior",
-     "optativa_matrizes": [
-      "968",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELF72",
-   "nome": "Controle 2",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 26,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Paulo Roberto Brero De Campos",
-     "optativa_matrizes": [
-      "968",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "ELB13",
    "nome": "Desenho Técnico",
    "aulas_semanais_presenciais": 2.0,
@@ -4784,66 +4220,6 @@
    ]
   },
   {
-   "codigo": "ELTB5",
-   "nome": "Eletromagnetismo Aplicado",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-304",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Thomaz Milton Navarro Verastegui",
-     "optativa_matrizes": [
-      "616",
-      "968",
-      "962",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "ELB52",
    "nome": "Eletromagnetismo 1: Eletrostática E Magnetostática",
    "aulas_semanais_presenciais": 4.0,
@@ -5006,6 +4382,66 @@
       "968",
       "906",
       "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELTB5",
+   "nome": "Eletromagnetismo Aplicado",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-304",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Thomaz Milton Navarro Verastegui",
+     "optativa_matrizes": [
+      "616",
+      "968",
+      "962",
+      "906"
      ],
      "optativa": true
     }
@@ -6535,57 +5971,6 @@
    ]
   },
   {
-   "codigo": "ELO91",
-   "nome": "Ética, Profissão E Cidadania",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Amb/Sanitária"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-201",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Keiko Veronica Ono Fonseca",
-     "optativa_matrizes": [
-      "973"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "FCH7FA",
    "nome": "Filosofia Da Ciência E Da Tecnologia",
    "aulas_semanais_presenciais": 3.0,
@@ -6820,6 +6205,1484 @@
       "961",
       "974",
       "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELTA5",
+   "nome": "Fisiologia Quantitativa Para Engenharia",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-305",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Clayton Moura Belo Leandra Ulbricht",
+     "optativa_matrizes": [
+      "968",
+      "962",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7FB",
+   "nome": "Fundamentos Da Ética",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S31",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Design"
+      },
+      {
+       "ordem": 1,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 1,
+       "sala": "CE-108",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CE-108",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CE-108",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Marcio Luiz Miotto",
+     "optativa_matrizes": [
+      "957",
+      "948",
+      "981",
+      "972",
+      "978",
+      "979",
+      "960",
+      "985",
+      "982",
+      "945",
+      "959",
+      "961",
+      "962",
+      "970",
+      "974",
+      "980",
+      "977"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S32",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Design"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Andrea Maila Voss",
+     "optativa_matrizes": [
+      "957",
+      "948",
+      "981",
+      "972",
+      "978",
+      "979",
+      "960",
+      "985",
+      "982",
+      "945",
+      "959",
+      "961",
+      "962",
+      "970",
+      "974",
+      "980",
+      "977"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E3",
+   "nome": "Fundamentos De Economia",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 60,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CA-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CA-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Christian Luiz Da Silva",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 35,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CA-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 6,
+       "sala": "CA-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Maria Lucia Figueiredo Gomes De Meza",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 35,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CA-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 6,
+       "sala": "CA-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Maria Lucia Figueiredo Gomes De Meza",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S41",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "EK-201",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EK-201",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S43",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "EK-201",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EK-201",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Andrea De Souza",
+     "optativa_matrizes": [
+      "960",
+      "980",
+      "982",
+      "957",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "972"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E1",
+   "nome": "Fundamentos De Empreendedorismo",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Paulo Apelles Camboim De Oliveira",
+     "optativa_matrizes": [
+      "976",
+      "982",
+      "959",
+      "948",
+      "961",
+      "972",
+      "974"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7E5",
+   "nome": "Fundamentos De Engenharia Econômica E Análise De Viabilidade",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S51",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Civil"
+      },
+      {
+       "ordem": 2,
+       "curso": "Tecnol. Sist. Telec."
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "EB-304",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "EB-304",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "EB-201",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "EB-201",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Janine Nicolosi Correa",
+     "optativa_matrizes": [
+      "957",
+      "906",
+      "968",
+      "962",
+      "972",
+      "973"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S55",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Amb/Sanitária"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Civil"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EB-204",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EB-204",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EB-212",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EB-212",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Janine Nicolosi Correa",
+     "optativa_matrizes": [
+      "957",
+      "906",
+      "968",
+      "962",
+      "972",
+      "973"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELT74A",
+   "nome": "Fundamentos De Fenômenos De Transporte",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Antonio Gomes De Araujo",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Antonio Gomes De Araujo",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Antonio Gomes De Araujo",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 6,
+       "sala": "CC-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Antonio Gomes De Araujo",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Elétrica"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CA-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CA-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Antonio Gomes De Araujo",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7F1",
+   "nome": "Fundamentos De Finanças",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EB-210",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "EB-210",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "EB-210",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EB-210",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Armando Rasoto",
+     "optativa_matrizes": [
+      "973",
+      "957",
+      "906",
+      "920",
+      "968",
+      "985",
+      "948",
+      "962",
+      "972",
+      "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7G3",
+   "nome": "Fundamentos De Gestão Da Produção",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "N21",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Tecn Automação Ind"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-104",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Paula Caldas Brognoli",
+     "optativa_matrizes": [
+      "957",
+      "976",
+      "968",
+      "906",
+      "948",
+      "962",
+      "972",
+      "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7G1",
+   "nome": "Fundamentos De Gestão De Pessoas",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CC-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Ney Nakazato Miyahira",
+     "optativa_matrizes": [
+      "960",
+      "957",
+      "973",
+      "920",
+      "981",
+      "968",
+      "985",
+      "982",
+      "906",
+      "948",
+      "962",
+      "972",
+      "980"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Administração"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-303",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-303",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-303",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Rejane Cioli",
+     "optativa_matrizes": [
+      "960",
+      "957",
+      "973",
+      "920",
+      "981",
+      "968",
+      "985",
+      "982",
+      "906",
+      "948",
+      "962",
+      "972",
+      "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7G6",
+   "nome": "Fundamentos De Gestão De Projetos",
+   "aulas_semanais_presenciais": 1.0,
+   "aulas_semanais_assincronas": 1.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "N11",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Tecnol. Sist. Telec."
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-210",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-210",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jamea Cristina Batista Silva Franklin",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "GEE7M1",
+   "nome": "Fundamentos De Marketing",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Química Ambiental"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "EB-303",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "EB-303",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "EB-303",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "",
+     "optativa_matrizes": [
+      "960",
+      "973",
+      "957",
+      "976",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "962",
+      "972",
+      "980",
+      "977"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S95",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Comunic Organizacional"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-205",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-205",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-205",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Ney Nakazato Miyahira",
+     "optativa_matrizes": [
+      "960",
+      "973",
+      "957",
+      "976",
+      "920",
+      "968",
+      "985",
+      "906",
+      "948",
+      "961",
+      "962",
+      "972",
+      "980",
+      "977"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELH01",
+   "nome": "Fundamentos De Primeiros Socorros",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Clayton Moura Belo",
+     "optativa_matrizes": [
+      "973",
+      "906",
+      "957",
+      "919",
+      "968",
+      "985",
+      "962",
+      "616"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELTD6",
+   "nome": "Fundamentos Matemáticos Para Sinais, Imagens E Padrões",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 20,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Andre Eugenio Lazzaretti",
+     "optativa_matrizes": [
+      "973",
+      "968"
      ],
      "optativa": true
     }
@@ -9088,1418 +9951,6 @@
    ]
   },
   {
-   "codigo": "ELTA5",
-   "nome": "Fisiologia Quantitativa Para Engenharia",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-305",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Clayton Moura Belo Leandra Ulbricht",
-     "optativa_matrizes": [
-      "968",
-      "962",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "FCH7FB",
-   "nome": "Fundamentos Da Ética",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S31",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Design"
-      },
-      {
-       "ordem": 1,
-       "curso": "Química Ambiental"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 1,
-       "sala": "CE-108",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CE-108",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CE-108",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Marcio Luiz Miotto",
-     "optativa_matrizes": [
-      "957",
-      "948",
-      "981",
-      "972",
-      "978",
-      "979",
-      "960",
-      "985",
-      "982",
-      "945",
-      "959",
-      "961",
-      "962",
-      "970",
-      "974",
-      "980",
-      "977"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S32",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Design"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Andrea Maila Voss",
-     "optativa_matrizes": [
-      "957",
-      "948",
-      "981",
-      "972",
-      "978",
-      "979",
-      "960",
-      "985",
-      "982",
-      "945",
-      "959",
-      "961",
-      "962",
-      "970",
-      "974",
-      "980",
-      "977"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7E3",
-   "nome": "Fundamentos De Economia",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 60,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CA-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CA-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Christian Luiz Da Silva",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 35,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CA-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 6,
-       "sala": "CA-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Maria Lucia Figueiredo Gomes De Meza",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 35,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CA-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 6,
-       "sala": "CA-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Maria Lucia Figueiredo Gomes De Meza",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S41",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Química Ambiental"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "EK-201",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "EK-201",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S43",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Química Ambiental"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "EK-201",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "EK-201",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Andrea De Souza",
-     "optativa_matrizes": [
-      "960",
-      "980",
-      "982",
-      "957",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "972"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7E1",
-   "nome": "Fundamentos De Empreendedorismo",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Paulo Apelles Camboim De Oliveira",
-     "optativa_matrizes": [
-      "976",
-      "982",
-      "959",
-      "948",
-      "961",
-      "972",
-      "974"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7E5",
-   "nome": "Fundamentos De Engenharia Econômica E Análise De Viabilidade",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S51",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Civil"
-      },
-      {
-       "ordem": 2,
-       "curso": "Tecnol. Sist. Telec."
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "EB-304",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "EB-304",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "EB-201",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "EB-201",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Janine Nicolosi Correa",
-     "optativa_matrizes": [
-      "957",
-      "906",
-      "968",
-      "962",
-      "972",
-      "973"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S55",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Amb/Sanitária"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Civil"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EB-204",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EB-204",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EB-212",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EB-212",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Janine Nicolosi Correa",
-     "optativa_matrizes": [
-      "957",
-      "906",
-      "968",
-      "962",
-      "972",
-      "973"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELT74A",
-   "nome": "Fundamentos De Fenômenos De Transporte",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Antonio Gomes De Araujo",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-101",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Antonio Gomes De Araujo",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-101",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Antonio Gomes De Araujo",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 6,
-       "sala": "CC-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Antonio Gomes De Araujo",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Elétrica"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CA-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CA-101",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Antonio Gomes De Araujo",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7G3",
-   "nome": "Fundamentos De Gestão Da Produção",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "N21",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Tecn Automação Ind"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-104",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Paula Caldas Brognoli",
-     "optativa_matrizes": [
-      "957",
-      "976",
-      "968",
-      "906",
-      "948",
-      "962",
-      "972",
-      "980"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7G1",
-   "nome": "Fundamentos De Gestão De Pessoas",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Química Ambiental"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CC-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Ney Nakazato Miyahira",
-     "optativa_matrizes": [
-      "960",
-      "957",
-      "973",
-      "920",
-      "981",
-      "968",
-      "985",
-      "982",
-      "906",
-      "948",
-      "962",
-      "972",
-      "980"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Administração"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-303",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-303",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-303",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Rejane Cioli",
-     "optativa_matrizes": [
-      "960",
-      "957",
-      "973",
-      "920",
-      "981",
-      "968",
-      "985",
-      "982",
-      "906",
-      "948",
-      "962",
-      "972",
-      "980"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7G6",
-   "nome": "Fundamentos De Gestão De Projetos",
-   "aulas_semanais_presenciais": 1.0,
-   "aulas_semanais_assincronas": 1.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "N11",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Tecnol. Sist. Telec."
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-210",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-210",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jamea Cristina Batista Silva Franklin",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "GEE7M1",
-   "nome": "Fundamentos De Marketing",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Química Ambiental"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "EB-303",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "EB-303",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "EB-303",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "",
-     "optativa_matrizes": [
-      "960",
-      "973",
-      "957",
-      "976",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "962",
-      "972",
-      "980",
-      "977"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S95",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Comunic Organizacional"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-205",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-205",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-205",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Ney Nakazato Miyahira",
-     "optativa_matrizes": [
-      "960",
-      "973",
-      "957",
-      "976",
-      "920",
-      "968",
-      "985",
-      "906",
-      "948",
-      "961",
-      "962",
-      "972",
-      "980",
-      "977"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELH01",
-   "nome": "Fundamentos De Primeiros Socorros",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Clayton Moura Belo",
-     "optativa_matrizes": [
-      "973",
-      "906",
-      "957",
-      "919",
-      "968",
-      "985",
-      "962",
-      "616"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELTD6",
-   "nome": "Fundamentos Matemáticos Para Sinais, Imagens E Padrões",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 20,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Andre Eugenio Lazzaretti",
-     "optativa_matrizes": [
-      "973",
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "MAT7GA",
    "nome": "Geometria Analítica",
    "aulas_semanais_presenciais": 4.0,
@@ -10707,6 +10158,54 @@
      "professores_raw": "Thais Mariane Biembengut Faria",
      "optativa_matrizes": [],
      "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "GE70H",
+   "nome": "Gestão Financeira",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CA-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CA-203",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Armando Rasoto",
+     "optativa_matrizes": [
+      "708",
+      "709"
+     ],
+     "optativa": true
     }
    ]
   },
@@ -11268,6 +10767,120 @@
    ]
   },
   {
+   "codigo": "ELEX10",
+   "nome": "Introdução A Práticas De Laboratório Em Eletricidade E Eletrônica",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-103",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Valfredo Pilla Junior",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELTD7",
+   "nome": "Introdução Ao Aprendizado De Máquina",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 20,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-201",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Heitor Silverio Lopes",
+     "optativa_matrizes": [
+      "973",
+      "968"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
    "codigo": "ELE21",
    "nome": "Introdução À Comunição E Redes",
    "aulas_semanais_presenciais": 3.0,
@@ -11416,120 +11029,6 @@
      "optativa_matrizes": [
       "968",
       "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELEX10",
-   "nome": "Introdução A Práticas De Laboratório Em Eletricidade E Eletrônica",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-103",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Valfredo Pilla Junior",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "ELTD7",
-   "nome": "Introdução Ao Aprendizado De Máquina",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 20,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-201",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Heitor Silverio Lopes",
-     "optativa_matrizes": [
-      "973",
-      "968"
      ],
      "optativa": true
     }
@@ -12237,60 +11736,6 @@
    ]
   },
   {
-   "codigo": "ELP62",
-   "nome": "Máquinas Elétricas",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Ubirajara Zoccoli",
-     "optativa_matrizes": [
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "ICSD21",
    "nome": "Matemática Discreta",
    "aulas_semanais_presenciais": 3.0,
@@ -12668,6 +12113,60 @@
    ]
   },
   {
+   "codigo": "ELP62",
+   "nome": "Máquinas Elétricas",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-105",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Ubirajara Zoccoli",
+     "optativa_matrizes": [
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
    "codigo": "EST70B",
    "nome": "Noções De Estatística",
    "aulas_semanais_presenciais": 0.0,
@@ -12875,103 +12374,6 @@
    ]
   },
   {
-   "codigo": "ELE41",
-   "nome": "Oficina De Integração: Eletricidade, Eletrônica E Computação Na Prática",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CQ-102",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CQ-102",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-102",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Daniel Rossato De Oliveira",
-     "optativa_matrizes": [
-      "968",
-      "906"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S12",
-     "enquadramento": "Presencial",
-     "vagas_total": 0,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CQ-210",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CQ-210",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-210",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Rafael Eleodoro De Goes",
-     "optativa_matrizes": [
-      "968",
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "ELEX20",
    "nome": "Oficina De Integração 1",
    "aulas_semanais_presenciais": 3.0,
@@ -13076,6 +12478,103 @@
    ]
   },
   {
+   "codigo": "ELE41",
+   "nome": "Oficina De Integração: Eletricidade, Eletrônica E Computação Na Prática",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CQ-102",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CQ-102",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-102",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Daniel Rossato De Oliveira",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S12",
+     "enquadramento": "Presencial",
+     "vagas_total": 0,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CQ-210",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CQ-210",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-210",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Rafael Eleodoro De Goes",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
    "codigo": "ELP66",
    "nome": "Planejamento E Projeto De Carreira Do Engenheiro Eletrônico",
    "aulas_semanais_presenciais": 2.0,
@@ -13127,459 +12626,6 @@
      "professores_raw": "Simone Crocetti Luis Mauricio Martins De Resende",
      "optativa_matrizes": [],
      "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "CAART04",
-   "nome": "Prática Artística Musical: Grupos Instrumentais 1",
-   "aulas_semanais_presenciais": 6.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 90.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 15,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CT-016",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Matheus Theodorovitz Prust",
-     "optativa_matrizes": [
-      "973",
-      "920",
-      "968",
-      "906",
-      "957",
-      "961",
-      "962",
-      "972"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELP42P",
-   "nome": "Prática De Circuitos Elétricos",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CQ-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-101",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Sergio Luiz Bazan De Paula",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S12",
-     "enquadramento": "Presencial",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CQ-105",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Sergio Luiz Bazan De Paula",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELH16",
-   "nome": "Prática De Habilidades Sociais Por Meio De Jogos De Tabuleiros",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 12,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CC-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Elder Oroski",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "CAART02",
-   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo Acústico 1",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 60.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 15,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CT-016",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Matheus Theodorovitz Prust",
-     "optativa_matrizes": [
-      "973",
-      "968",
-      "957",
-      "961",
-      "962",
-      "906",
-      "972"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "CAART03",
-   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo Acústico 2",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 60.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 15,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CT-016",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CT-016",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Matheus Theodorovitz Prust",
-     "optativa_matrizes": [
-      "973",
-      "968",
-      "957",
-      "961",
-      "962",
-      "906",
-      "972"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "MAT7PC",
-   "nome": "Pré-Cálculo",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 60,
-     "vagas_calouros": 44,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-101",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Moises Aparecido Do Nascimento",
-     "optativa_matrizes": [
-      "985"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S16",
-     "enquadramento": "Presencial",
-     "vagas_total": 50,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecatrônica"
-      },
-      {
-       "ordem": 2,
-       "curso": "Tecnol. Sist. Telec."
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-106",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-106",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jamea Cristina Batista Silva Franklin",
-     "optativa_matrizes": [
-      "985"
-     ],
-     "optativa": true
     }
    ]
   },
@@ -14731,11 +13777,84 @@
    ]
   },
   {
-   "codigo": "ELX92",
-   "nome": "Prospecção E Estudo De Viabilidade De Projetos",
-   "aulas_semanais_presenciais": 2.0,
+   "codigo": "CAART04",
+   "nome": "Prática Artística Musical: Grupos Instrumentais 1",
+   "aulas_semanais_presenciais": 6.0,
    "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 30.0,
+   "horas_semestrais_extensionistas": 90.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 15,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CT-016",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Matheus Theodorovitz Prust",
+     "optativa_matrizes": [
+      "973",
+      "920",
+      "968",
+      "906",
+      "957",
+      "961",
+      "962",
+      "972"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELP42P",
+   "nome": "Prática De Circuitos Elétricos",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
    "turmas": [
     {
      "codigo": "S11",
@@ -14750,7 +13869,48 @@
       },
       {
        "ordem": 2,
-       "curso": "Eng De Computação"
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Sergio Luiz Bazan De Paula",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S12",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
       },
       {
        "ordem": 2,
@@ -14759,38 +13919,259 @@
      ],
      "horarios": [
       {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-101",
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CQ-105",
        "sede": "Centro"
       },
       {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CQ-101",
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CQ-105",
        "sede": "Centro"
       },
       {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-101",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CQ-101",
+       "dia": 4,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CQ-105",
        "sede": "Centro"
       }
      ],
-     "professores_raw": "Valfredo Pilla Junior Tania Lucia Monteiro",
+     "professores_raw": "Sergio Luiz Bazan De Paula",
      "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "CAART02",
+   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo Acústico 1",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 60.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 15,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CT-016",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Matheus Theodorovitz Prust",
+     "optativa_matrizes": [
+      "973",
       "968",
-      "906"
+      "957",
+      "961",
+      "962",
+      "906",
+      "972"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "CAART03",
+   "nome": "Prática Musical E Interações Humanas: Aprendizado Coletivo De Violino, Viola Erudita, Violoncelo E Contrabaixo Acústico 2",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 60.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 15,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CT-016",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CT-016",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Matheus Theodorovitz Prust",
+     "optativa_matrizes": [
+      "973",
+      "968",
+      "957",
+      "961",
+      "962",
+      "906",
+      "972"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7PC",
+   "nome": "Pré-Cálculo",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 60,
+     "vagas_calouros": 44,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Moises Aparecido Do Nascimento",
+     "optativa_matrizes": [
+      "985"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S16",
+     "enquadramento": "Presencial",
+     "vagas_total": 50,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Tecnol. Sist. Telec."
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-106",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-106",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jamea Cristina Batista Silva Franklin",
+     "optativa_matrizes": [
+      "985"
      ],
      "optativa": true
     }
@@ -15303,6 +14684,124 @@
       "980",
       "973",
       "977"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELX92",
+   "nome": "Prospecção E Estudo De Viabilidade De Projetos",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 30.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CQ-101",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Valfredo Pilla Junior Tania Lucia Monteiro",
+     "optativa_matrizes": [
+      "968",
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ELH16",
+   "nome": "Prática De Habilidades Sociais Por Meio De Jogos De Tabuleiros",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 12,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CC-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Elder Oroski",
+     "optativa_matrizes": [
+      "968"
      ],
      "optativa": true
     }
@@ -17080,231 +16579,6 @@
    ]
   },
   {
-   "codigo": "ICSE20",
-   "nome": "Técnicas De Programação",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "EaD",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 4,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Milton Borsato",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "EaD",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 3,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 4,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 5,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Milton Borsato",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 18,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CB-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CB-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Ionildo Jose Sanches",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CB-107",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jean Marcelo Simao",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "FCH7SB",
    "nome": "Tecnologia E Sociedade",
    "aulas_semanais_presenciais": 3.0,
@@ -18112,6 +17386,337 @@
    ]
   },
   {
+   "codigo": "ELE91",
+   "nome": "Trabalho De Conclusão De Curso 1",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S12",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 7,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CA-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 7,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CA-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 7,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CA-202",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Rubens Alexandre De Faria",
+     "optativa_matrizes": [
+      "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "EL60C",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "E01",
+     "enquadramento": "Presencial",
+     "vagas_total": 50,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng.Ind.Eletrônica"
+      },
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [],
+     "professores_raw": "",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELE92",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "aulas_semanais_presenciais": 0.0,
+   "aulas_semanais_assincronas": 1.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "E01",
+     "enquadramento": "Presencial",
+     "vagas_total": 50,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [],
+     "professores_raw": "",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ICSE20",
+   "nome": "Técnicas De Programação",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "EaD",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Milton Borsato",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "EaD",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 4,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 5,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Milton Borsato",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 18,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CB-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CB-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Ionildo Jose Sanches",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-107",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jean Marcelo Simao",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
    "codigo": "ELTB6",
    "nome": "Tópicos Avançados Em Comunicações",
    "aulas_semanais_presenciais": 4.0,
@@ -18196,112 +17801,6 @@
    ]
   },
   {
-   "codigo": "ELE91",
-   "nome": "Trabalho De Conclusão De Curso 1",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S12",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 7,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CA-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 7,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CA-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 7,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CA-202",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Rubens Alexandre De Faria",
-     "optativa_matrizes": [
-      "906"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ELE92",
-   "nome": "Trabalho De Conclusão De Curso 2",
-   "aulas_semanais_presenciais": 0.0,
-   "aulas_semanais_assincronas": 1.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "E01",
-     "enquadramento": "Presencial",
-     "vagas_total": 50,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [],
-     "professores_raw": "",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
-   "codigo": "EL60C",
-   "nome": "Trabalho De Conclusão De Curso 2",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "E01",
-     "enquadramento": "Presencial",
-     "vagas_total": 50,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng.Ind.Eletrônica"
-      },
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [],
-     "professores_raw": "",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
    "codigo": "ELTD5",
    "nome": "Visão Computacional",
    "aulas_semanais_presenciais": 3.0,
@@ -18355,6 +17854,621 @@
      "optativa_matrizes": [
       "616",
       "906"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "Álgebra Linear",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-308",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S15",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-308",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 1,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-307",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-307",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 1,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-307",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-307",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S41",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Mari Sano",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S43",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Paula Olga Gneri",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S51",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Civil"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Mari Sano",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S55",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Amb/Sanitária"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Paula Olga Gneri",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S81",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Lic Fisica"
+      }
+     ],
+     "_hor_lixo": [
+      "9"
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ELO91",
+   "nome": "Ética, Profissão E Cidadania",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Amb/Sanitária"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-201",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-201",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Keiko Veronica Ono Fonseca",
+     "optativa_matrizes": [
+      "973"
      ],
      "optativa": true
     }

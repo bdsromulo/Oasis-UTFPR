@@ -59,570 +59,6 @@
    ]
   },
   {
-   "codigo": "MAT7AL",
-   "nome": "Álgebra Linear",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S11",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-308",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S15",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-308",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 1,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-307",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-307",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 1,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-307",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-307",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Kennedy Martins Pedroso",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S41",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Mari Sano",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S43",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Mecânica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Paula Olga Gneri",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S51",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Civil"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Mari Sano",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S55",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Amb/Sanitária"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 2,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "EK-307",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Paula Olga Gneri",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CE-308",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S81",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Lic Fisica"
-      }
-     ],
-     "_hor_lixo": [
-      "9"
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 3,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 1,
-       "sala": "CE-208",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 2,
-       "sala": "CE-208",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Patricia Sanez Pacheco",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
    "codigo": "ICSG20",
    "nome": "Análise E Projeto De Sistemas",
    "aulas_semanais_presenciais": 3.0,
@@ -906,6 +342,604 @@
       "962",
       "806",
       "981"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "FCH7HC",
+   "nome": "Capitalismo Contemporâneo E Economia Política",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 6,
+       "sala": "EL-208",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Sandro Marlus Wambier",
+     "optativa_matrizes": [
+      "990",
+      "973",
+      "957",
+      "981",
+      "978",
+      "979",
+      "960",
+      "845",
+      "784",
+      "873",
+      "888",
+      "806",
+      "982",
+      "968",
+      "985",
+      "961",
+      "867",
+      "755",
+      "870",
+      "844",
+      "708",
+      "709",
+      "906",
+      "919",
+      "823",
+      "962",
+      "974",
+      "980"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-301",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-301",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Sandro Marlus Wambier",
+     "optativa_matrizes": [
+      "990",
+      "973",
+      "957",
+      "981",
+      "978",
+      "979",
+      "960",
+      "845",
+      "784",
+      "873",
+      "888",
+      "806",
+      "982",
+      "968",
+      "985",
+      "961",
+      "867",
+      "755",
+      "870",
+      "844",
+      "708",
+      "709",
+      "906",
+      "919",
+      "823",
+      "962",
+      "974",
+      "980"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ICSI31",
+   "nome": "Ciência Das Redes",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "EaD",
+     "vagas_total": 22,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 1,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 6,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Ricardo Luders",
+     "optativa_matrizes": [
+      "957",
+      "981",
+      "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ICSB56",
+   "nome": "Ciência De Dados",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CB-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CB-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CB-105",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-105",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Luiz Celso Gomes Junior",
+     "optativa_matrizes": [
+      "981"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ICSHX1",
+   "nome": "Computação E Sociedade",
+   "aulas_semanais_presenciais": 3.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 45.0,
+   "turmas": [
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CA-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CA-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CA-203",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Leander Cordeiro De Oliveira",
+     "optativa_matrizes": [
+      "981",
+      "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "ICSA47",
+   "nome": "Computação Quântica",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CB-104",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Leandro Miranda Zatesko",
+     "optativa_matrizes": [
+      "981",
+      "962"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "COE70A",
+   "nome": "Comunicação Oral E Escrita",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "E11",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Tecnol. Sist. Telec."
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 1,
+       "sala": "CE-108",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-108",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jamea Cristina Batista Silva Franklin",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Lucas Roecker Lazarin",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 6,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Denise Regina Stacheski",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CC-206",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CC-206",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Gabriella Hauber Pimentel",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S55",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Amb/Sanitária"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Cora Catalina Gaete Quinteros",
+     "optativa_matrizes": [
+      "995",
+      "983",
+      "981",
+      "985",
+      "959",
+      "962",
+      "970",
+      "974"
      ],
      "optativa": true
     }
@@ -1511,604 +1545,6 @@
       "981",
       "959",
       "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "FCH7HC",
-   "nome": "Capitalismo Contemporâneo E Economia Política",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 4,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 5,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      },
-      {
-       "dia": 5,
-       "turno": "T",
-       "aula": 6,
-       "sala": "EL-208",
-       "sede": "Ecoville"
-      }
-     ],
-     "professores_raw": "Sandro Marlus Wambier",
-     "optativa_matrizes": [
-      "990",
-      "973",
-      "957",
-      "981",
-      "978",
-      "979",
-      "960",
-      "845",
-      "784",
-      "873",
-      "888",
-      "806",
-      "982",
-      "968",
-      "985",
-      "961",
-      "867",
-      "755",
-      "870",
-      "844",
-      "708",
-      "709",
-      "906",
-      "919",
-      "823",
-      "962",
-      "974",
-      "980"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-301",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-301",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Sandro Marlus Wambier",
-     "optativa_matrizes": [
-      "990",
-      "973",
-      "957",
-      "981",
-      "978",
-      "979",
-      "960",
-      "845",
-      "784",
-      "873",
-      "888",
-      "806",
-      "982",
-      "968",
-      "985",
-      "961",
-      "867",
-      "755",
-      "870",
-      "844",
-      "708",
-      "709",
-      "906",
-      "919",
-      "823",
-      "962",
-      "974",
-      "980"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ICSI31",
-   "nome": "Ciência Das Redes",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S71",
-     "enquadramento": "EaD",
-     "vagas_total": 22,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 1,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 6,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Ricardo Luders",
-     "optativa_matrizes": [
-      "957",
-      "981",
-      "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ICSB56",
-   "nome": "Ciência De Dados",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 2,
-       "sala": "CB-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CB-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CB-105",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CB-105",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Luiz Celso Gomes Junior",
-     "optativa_matrizes": [
-      "981"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ICSHX1",
-   "nome": "Computação E Sociedade",
-   "aulas_semanais_presenciais": 3.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 45.0,
-   "turmas": [
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CA-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CA-203",
-       "sede": "Centro"
-      },
-      {
-       "dia": 6,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CA-203",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Leander Cordeiro De Oliveira",
-     "optativa_matrizes": [
-      "981",
-      "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ICSA47",
-   "nome": "Computação Quântica",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CB-104",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Leandro Miranda Zatesko",
-     "optativa_matrizes": [
-      "981",
-      "962"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "COE70A",
-   "nome": "Comunicação Oral E Escrita",
-   "aulas_semanais_presenciais": 2.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "E11",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Tecnol. Sist. Telec."
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Mecatrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 1,
-       "sala": "CE-108",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-108",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jamea Cristina Batista Silva Franklin",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S21",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 2,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "N",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Lucas Roecker Lazarin",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S23",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Elétrica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 6,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Denise Regina Stacheski",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S25",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Contr/Automação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CC-206",
-       "sede": "Centro"
-      },
-      {
-       "dia": 5,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CC-206",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Gabriella Hauber Pimentel",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S55",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Aberta",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng Amb/Sanitária"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 3,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Cora Catalina Gaete Quinteros",
-     "optativa_matrizes": [
-      "995",
-      "983",
-      "981",
-      "985",
-      "959",
-      "962",
-      "970",
-      "974"
      ],
      "optativa": true
     }
@@ -3894,6 +3330,54 @@
    ]
   },
   {
+   "codigo": "GE70H",
+   "nome": "Gestão Financeira",
+   "aulas_semanais_presenciais": 2.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CA-203",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CA-203",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Armando Rasoto",
+     "optativa_matrizes": [
+      "708",
+      "709"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
    "codigo": "FCH7HA",
    "nome": "História Da Técnica E Da Tecnologia",
    "aulas_semanais_presenciais": 3.0,
@@ -4537,6 +4021,163 @@
    ]
   },
   {
+   "codigo": "ICSX10",
+   "nome": "Introdução Ao Computar",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 48,
+     "vagas_calouros": 44,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CB-104",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-204",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-204",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Luiz Augusto Pelisson Marcia Regina Martelozo Cassitas Hino",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S74",
+     "enquadramento": "Presencial",
+     "vagas_total": 20,
+     "vagas_calouros": 20,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-304",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CA-001",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CA-001",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CA-001",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CA-001",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Luiz Augusto Pelisson Marcia Regina Martelozo Cassitas Hino",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
    "codigo": "EST70A",
    "nome": "Introdução À Estatística",
    "aulas_semanais_presenciais": 0.0,
@@ -4564,30 +4205,6 @@
      "prioridade_cursos": [],
      "horarios": [],
      "professores_raw": "Mauricio Koubay Do Amaral",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "EaD",
-     "vagas_total": 60,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [],
-     "professores_raw": "Angelica Maria Tortola Ribeiro",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S03",
-     "enquadramento": "EaD",
-     "vagas_total": 60,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [],
-     "horarios": [],
-     "professores_raw": "Angelica Maria Tortola Ribeiro",
      "optativa_matrizes": [],
      "optativa": false
     },
@@ -5035,163 +4652,6 @@
       "906"
      ],
      "optativa": true
-    }
-   ]
-  },
-  {
-   "codigo": "ICSX10",
-   "nome": "Introdução Ao Computar",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 48,
-     "vagas_calouros": 44,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CB-104",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-204",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-204",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Luiz Augusto Pelisson Marcia Regina Martelozo Cassitas Hino",
-     "optativa_matrizes": [],
-     "optativa": false
-    },
-    {
-     "codigo": "S74",
-     "enquadramento": "Presencial",
-     "vagas_total": 20,
-     "vagas_calouros": 20,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CE-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CE-304",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CA-001",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 4,
-       "sala": "CA-001",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CA-001",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CA-001",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Luiz Augusto Pelisson Marcia Regina Martelozo Cassitas Hino",
-     "optativa_matrizes": [],
-     "optativa": false
     }
    ]
   },
@@ -8262,235 +7722,6 @@
    ]
   },
   {
-   "codigo": "ICSE20",
-   "nome": "Técnicas De Programação",
-   "aulas_semanais_presenciais": 4.0,
-   "aulas_semanais_assincronas": 0.0,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S01",
-     "enquadramento": "EaD",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 2,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 3,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 4,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Milton Borsato",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S02",
-     "enquadramento": "EaD",
-     "vagas_total": 30,
-     "vagas_calouros": 0,
-     "reserva": "Sem Reserva",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 2,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 3,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 4,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "M",
-       "aula": 5,
-       "sala": "D-PTO",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Milton Borsato",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S71",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Eng De Computação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 3,
-       "curso": "Eng Eletrônica"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 2,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 4,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "M",
-       "aula": 5,
-       "sala": "CB-107",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jean Marcelo Simao",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    },
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 44,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      },
-      {
-       "ordem": 2,
-       "curso": "Eng De Computação"
-      }
-     ],
-     "horarios": [
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CB-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 3,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CB-202",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 5,
-       "sala": "CB-107",
-       "sede": "Centro"
-      },
-      {
-       "dia": 4,
-       "turno": "T",
-       "aula": 6,
-       "sala": "CB-107",
-       "sede": "Centro"
-      }
-     ],
-     "professores_raw": "Jean Marcelo Simao",
-     "optativa_matrizes": [
-      "968"
-     ],
-     "optativa": true
-    }
-   ]
-  },
-  {
    "codigo": "FCH7SB",
    "nome": "Tecnologia E Sociedade",
    "aulas_semanais_presenciais": 3.0,
@@ -9178,32 +8409,6 @@
    ]
   },
   {
-   "codigo": "CSX41",
-   "nome": "Trabalho De Conclusão De Curso 2",
-   "aulas_semanais_presenciais": 1.73,
-   "aulas_semanais_assincronas": 0.27,
-   "horas_semestrais_extensionistas": 0.0,
-   "turmas": [
-    {
-     "codigo": "S73",
-     "enquadramento": "Presencial",
-     "vagas_total": 65,
-     "vagas_calouros": 0,
-     "reserva": "Fechada",
-     "prioridade_cursos": [
-      {
-       "ordem": 1,
-       "curso": "Sist De Informação"
-      }
-     ],
-     "horarios": [],
-     "professores_raw": "Leyza Elmeri Baldo Dorini",
-     "optativa_matrizes": [],
-     "optativa": false
-    }
-   ]
-  },
-  {
    "codigo": "ICSX40",
    "nome": "Trabalho De Conclusão 1",
    "aulas_semanais_presenciais": 2.0,
@@ -9255,6 +8460,32 @@
      "codigo": "S73",
      "enquadramento": "Presencial",
      "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [],
+     "professores_raw": "Leyza Elmeri Baldo Dorini",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "CSX41",
+   "nome": "Trabalho De Conclusão De Curso 2",
+   "aulas_semanais_presenciais": 1.73,
+   "aulas_semanais_assincronas": 0.27,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 65,
      "vagas_calouros": 0,
      "reserva": "Fechada",
      "prioridade_cursos": [
@@ -9417,6 +8648,799 @@
       }
      ],
      "professores_raw": "Gustavo Alberto Gimenez Lugo Leander Cordeiro De Oliveira",
+     "optativa_matrizes": [],
+     "optativa": false
+    }
+   ]
+  },
+  {
+   "codigo": "ICSE20",
+   "nome": "Técnicas De Programação",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S01",
+     "enquadramento": "EaD",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Milton Borsato",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S02",
+     "enquadramento": "EaD",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Sem Reserva",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 3,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 4,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 5,
+       "sala": "D-PTO",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Milton Borsato",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 3,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 4,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "M",
+       "aula": 5,
+       "sala": "CB-107",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jean Marcelo Simao",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    },
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 44,
+     "vagas_calouros": 0,
+     "reserva": "Fechada",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      },
+      {
+       "ordem": 2,
+       "curso": "Eng De Computação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CB-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 3,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CB-202",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CB-107",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CB-107",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Jean Marcelo Simao",
+     "optativa_matrizes": [
+      "968"
+     ],
+     "optativa": true
+    }
+   ]
+  },
+  {
+   "codigo": "MAT7AL",
+   "nome": "Álgebra Linear",
+   "aulas_semanais_presenciais": 4.0,
+   "aulas_semanais_assincronas": 0.0,
+   "horas_semestrais_extensionistas": 0.0,
+   "turmas": [
+    {
+     "codigo": "S11",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Eletrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-308",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S15",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecatrônica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S21",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "N",
+       "aula": 3,
+       "sala": "CE-308",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S23",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Elétrica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 1,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-307",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-307",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S25",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Contr/Automação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 1,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "M",
+       "aula": 2,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-307",
+       "sede": "Centro"
+      },
+      {
+       "dia": 6,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-307",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Kennedy Martins Pedroso",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S41",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Mari Sano",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S43",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Mecânica"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Paula Olga Gneri",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S51",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Civil"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Mari Sano",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S55",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng Amb/Sanitária"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 2,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 2,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      },
+      {
+       "dia": 5,
+       "turno": "M",
+       "aula": 3,
+       "sala": "EK-307",
+       "sede": "Ecoville"
+      }
+     ],
+     "professores_raw": "Paula Olga Gneri",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S71",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Eng De Computação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S73",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Sist De Informação"
+      }
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 6,
+       "sala": "CE-308",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 5,
+       "turno": "T",
+       "aula": 5,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
+     "optativa_matrizes": [],
+     "optativa": false
+    },
+    {
+     "codigo": "S81",
+     "enquadramento": "Presencial",
+     "vagas_total": 30,
+     "vagas_calouros": 0,
+     "reserva": "Aberta",
+     "prioridade_cursos": [
+      {
+       "ordem": 1,
+       "curso": "Lic Fisica"
+      }
+     ],
+     "_hor_lixo": [
+      "9"
+     ],
+     "horarios": [
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 3,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 2,
+       "turno": "T",
+       "aula": 4,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 1,
+       "sala": "CE-208",
+       "sede": "Centro"
+      },
+      {
+       "dia": 4,
+       "turno": "T",
+       "aula": 2,
+       "sala": "CE-208",
+       "sede": "Centro"
+      }
+     ],
+     "professores_raw": "Patricia Sanez Pacheco",
      "optativa_matrizes": [],
      "optativa": false
     }
