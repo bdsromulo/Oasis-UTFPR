@@ -21,20 +21,31 @@ export interface DadosCheckin {
   matriz: string;
 }
 
-interface OpcaoMatriz {
+export interface OpcaoMatriz {
   numero: string;
   rotulo: string;
   nota: string;
   disponivel: boolean;
 }
 
-/** Matrizes conhecidas, inclusive as já anunciadas mas ainda não implementadas. */
-const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
+/**
+ * Matrizes conhecidas, inclusive as já anunciadas mas ainda não implementadas.
+ *
+ * A primeira opção disponível de cada curso é a que `selecionarCurso` adota
+ * como padrão, então a ordem aqui é significativa: matriz vigente primeiro.
+ */
+export const MATRIZES_DO_CURSO: Record<string, OpcaoMatriz[]> = {
   "bsi-981": [
     {
       numero: "981",
       rotulo: "981 (Nova)",
       nota: "Vigente para ingressantes a partir de 2023. Carga total de 3.240h com divisão por estratos.",
+      disponivel: true,
+    },
+    {
+      numero: "806",
+      rotulo: "806 (Antiga)",
+      nota: "Implementada: 2.095h obrigatórias, 765h de optativas e 180h de eletivas, sem extensão curricular. Lê a mesma oferta da 981 pela camada de equivalências.",
       disponivel: true,
     },
   ],
