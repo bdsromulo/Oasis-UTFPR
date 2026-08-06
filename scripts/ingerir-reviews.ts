@@ -73,6 +73,31 @@ export function parseCsv(texto: string): string[][] {
   return linhas.filter((l) => l.some((v) => v.trim() !== ""));
 }
 
+/**
+ * Converte o carimbo para milissegundos desde a época — única forma segura de
+ * comparar recência (abaixo). `null` quando o formato não é reconhecido.
+ *
+ * Aceita dois formatos porque o Google Forms grava `DD/MM/AAAA HH:MM:SS` (locale
+ * pt-BR da planilha, confirmado contra o CSV publicado em produção) e não
+ * ISO-8601 como o desenho original presumia. Comparar as duas strings direto
+ * ordena errado: "05/01/2026" vem antes de "04/08/2026" por comparação lexical,
+ * e o desempate de recência (linha 244 e arredores) escolheria a linha errada
+ * em silêncio.
+ */
+export function epocaDoCarimbo(carimbo: string): number | null {
+  const iso = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(carimbo);
+  if (iso) {
+    const [, ano, mes, dia, h, m, s] = iso;
+    return Date.UTC(+ano, +mes - 1, +dia, +h, +m, +s);
+  }
+  const brasileiro = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/.exec(carimbo);
+  if (brasileiro) {
+    const [, dia, mes, ano, h, m, s] = brasileiro;
+    return Date.UTC(+ano, +mes - 1, +dia, +h, +m, +s);
+  }
+  return null;
+}
+
 /** Identidade estável da avaliação: mesma linha, mesmo id, em qualquer execução. */
 function idDaLinha(campos: Record<string, string>): string {
   const semente = [
@@ -118,16 +143,26 @@ export interface ResultadoIngestao {
   ignoradas: number;
 }
 
+/**
+ * Cabeçalho que a aba `Homologado` precisa expor, na ordem citada pelo desenho da
+ * coleta (`docs/superpowers/specs/2026-08-04-reviews-forms-design.md` §4.2).
+ *
+ * Exportada para não haver duas fontes da verdade: a documentação cita este mesmo
+ * array por nome, e um teste de regressão (`tests/reviews-ingestao.test.ts`) trava
+ * o valor — reconstruir a planilha a partir de um desenho desatualizado quebra a
+ * ingestão com "coluna obrigatória ausente" em vez de publicar dado incompleto.
+ */
+export const COLUNAS_OBRIGATORIAS = [
+  "carimbo", "autor", "codigo", "semestre", "professor",
+  "personalidade", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
+] as const;
+
 export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   const erros: string[] = [];
   if (!tabela.length) return { reviews: [], erros: ["CSV vazio ou inacessível."], ignoradas: 0 };
 
   const cabecalho = tabela[0].map((c) => c.trim());
-  const obrigatorias = [
-    "carimbo", "autor", "codigo", "semestre", "professor",
-    "personalidade", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
-  ];
-  for (const col of obrigatorias) {
+  for (const col of COLUNAS_OBRIGATORIAS) {
     if (!cabecalho.includes(col)) erros.push(`Coluna obrigatória ausente no CSV: "${col}".`);
   }
   // colunas que JAMAIS podem aparecer: a projeção da aba Homologado não as inclui,
@@ -149,7 +184,6 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   }
 
   const reviews: ReviewEmTriagem[] = [];
-  const vistos = new Set<string>();
   let ignoradas = 0;
 
   for (let i = 1; i < tabela.length; i++) {
@@ -158,7 +192,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     const onde = `linha ${i + 1}`;
     const problemas: string[] = [];
 
-    // ---- coerência com o dado oficial (o que o Apps Script não consegue checar)
+    // ---- coerência com o dado oficial (o que o Forms não consegue checar)
     if (!codigosConhecidos.has(campos.codigo)) {
       problemas.push(`código "${campos.codigo}" não existe em nenhuma matriz ou oferta`);
     }
@@ -170,6 +204,11 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     }
 
     // ---- forma
+    if (epocaDoCarimbo(campos.carimbo) === null) {
+      problemas.push(
+        `carimbo "${campos.carimbo}" em formato não reconhecido — aceita ISO-8601 ou DD/MM/AAAA HH:MM:SS`,
+      );
+    }
     if (!/^20\d{2}\/[12]$/.test(campos.semestre)) problemas.push(`semestre "${campos.semestre}" fora de AAAA/S`);
     if (!campos.autor) problemas.push("autor vazio");
     const avaliacao = resolverSistemaAvaliativo(campos.avaliacao ?? "");
@@ -228,14 +267,15 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     const chavePessoa = `${campos.autor.trim().toLowerCase()}|${campos.codigo}`;
     const anterior = reviews.findIndex((r) => r.chavePessoa === chavePessoa);
     if (anterior >= 0) {
-      if (reviews[anterior].carimbo > campos.carimbo) {
+      // epocaDoCarimbo() nunca é null aqui: a validação de forma, acima, já
+      // recusou a linha antes de chegar neste ponto se o formato não bateu.
+      if (epocaDoCarimbo(reviews[anterior].carimbo)! > epocaDoCarimbo(campos.carimbo)!) {
         ignoradas++;
         continue;
       }
       reviews.splice(anterior, 1);
       ignoradas++;
     }
-    vistos.add(id);
 
     reviews.push({
       chavePessoa,

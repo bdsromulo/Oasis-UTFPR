@@ -6,6 +6,8 @@ import {
   validarEConverter,
   resolverSistemaAvaliativo,
   resolverProfessor,
+  epocaDoCarimbo,
+  COLUNAS_OBRIGATORIAS,
 } from "../scripts/ingerir-reviews";
 import { construirRoster } from "../src/domain/reviews/professores";
 import { CURSOS } from "../src/domain/dadosCurso";
@@ -115,6 +117,9 @@ describe("ingestão: forma e vocabulário", () => {
     ["nota não inteira", { didatica: "4,5" }, /didatica .* fora de 1–5/],
     ["sistema avaliativo", { avaliacao: "Oral" }, /sistema avaliativo .* inválido/],
     ["autor vazio", { autor: "" }, /autor vazio/],
+    // O CSV publicado em produção grava DD/MM/AAAA HH:MM:SS (locale pt-BR da
+    // planilha), então esse formato precisa ser aceito — só o irreconhecível recusa.
+    ["carimbo em formato não reconhecido", { carimbo: "carimbo qualquer" }, /carimbo .* não reconhecido/],
   ])("recusa %s inválido", (_rotulo, over, padrao) => {
     const r = validarEConverter(tabela(linha(over as Record<string, string>)));
     expect(r.reviews).toEqual([]);
@@ -154,6 +159,17 @@ describe("ingestão: proteção da fronteira", () => {
 
   it("CSV vazio não quebra", () => {
     expect(validarEConverter([]).erros.length).toBeGreaterThan(0);
+  });
+
+  // Trava o contrato citado em §4.2 do desenho da coleta (docs/superpowers/specs/
+  // 2026-08-04-reviews-forms-design.md). Uma mudança aqui sem atualizar o
+  // documento reconstrói a aba Homologado com o cabeçalho errado, e a ingestão
+  // só descobre isso em produção — "coluna obrigatória ausente".
+  it("cabeçalho obrigatório bate com o documentado para a aba Homologado", () => {
+    expect(COLUNAS_OBRIGATORIAS).toEqual([
+      "carimbo", "autor", "codigo", "semestre", "professor",
+      "personalidade", "didatica", "dificuldade", "cargaTrabalho", "avaliacao", "comentario",
+    ]);
   });
 });
 
@@ -207,6 +223,24 @@ describe("uma avaliação por pessoa e disciplina", () => {
     expect(invertida.map((x) => x.didatica)).toEqual([5]);
   });
 
+  // O CSV publicado em produção grava DD/MM/AAAA HH:MM:SS, não ISO-8601 — o
+  // desempate de recência precisa entender esse formato corretamente.
+  it("compara recência corretamente no formato DD/MM/AAAA HH:MM:SS do Sheets", () => {
+    const antiga = linha({ carimbo: "01/08/2026 10:00:00", didatica: "2" });
+    const nova = linha({ carimbo: "04/08/2026 10:00:00", didatica: "5" });
+    const r = validarEConverter(tabela(antiga, nova));
+    expect(r.reviews.length).toBe(1);
+    expect(r.reviews[0].didatica).toBe(5);
+  });
+
+  it("compara recência corretamente entre um carimbo ISO e um pt-BR", () => {
+    const antiga = linha({ carimbo: "2026-01-05T10:00:00Z", didatica: "2" });
+    const nova = linha({ carimbo: "04/08/2026 10:00:00", didatica: "5" });
+    const r = validarEConverter(tabela(antiga, nova));
+    expect(r.reviews.length).toBe(1);
+    expect(r.reviews[0].didatica).toBe(5);
+  });
+
   it("não descarta avaliações de pessoas diferentes sobre a mesma disciplina", () => {
     const r = validarEConverter(
       tabela(linha({ autor: "Alguem Ficticio" }), linha({ autor: "Outra Pessoa Ficticia" })),
@@ -219,5 +253,20 @@ describe("uma avaliação por pessoa e disciplina", () => {
     if (!outro) return;
     const r = validarEConverter(tabela(linha(), linha({ codigo: outro })));
     expect(r.reviews.length).toBe(2);
+  });
+});
+
+describe("epocaDoCarimbo", () => {
+  // Os dois formatos com os mesmos componentes de data/hora produzem o mesmo
+  // valor comparável — a função não conhece o fuso da planilha, só ordena
+  // consistentemente os carimbos de uma mesma execução (todos vêm da mesma
+  // fonte, então o desvio de fuso, se houver, é igual para todas as linhas).
+  it("reconhece ISO-8601 e DD/MM/AAAA HH:MM:SS com os mesmos componentes", () => {
+    expect(epocaDoCarimbo("2026-08-04T16:39:08Z")).toBe(epocaDoCarimbo("04/08/2026 16:39:08"));
+  });
+
+  it("devolve null para formato desconhecido", () => {
+    expect(epocaDoCarimbo("4 de agosto de 2026")).toBe(null);
+    expect(epocaDoCarimbo("")).toBe(null);
   });
 });
