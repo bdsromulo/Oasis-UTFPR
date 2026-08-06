@@ -7,7 +7,6 @@ function renderizarNovidades() {
   return renderToStaticMarkup(createElement(ModalNovidades, {
     aberto: true,
     onFechar: () => undefined,
-    onVerAvaliacoes: () => undefined,
   }));
 }
 

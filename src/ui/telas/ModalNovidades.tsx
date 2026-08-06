@@ -6,10 +6,9 @@ import { IconCheck, IconDownload, IconFileText, IconStar } from "../icons";
 export function ModalNovidades(props: {
   aberto: boolean;
   onFechar: () => void;
-  onVerAvaliacoes: () => void;
   onAvaliar?: () => void;
 }) {
-  const { aberto, onFechar, onVerAvaliacoes, onAvaliar } = props;
+  const { aberto, onFechar, onAvaliar } = props;
 
   useEffect(() => {
     if (!aberto) return;
@@ -146,14 +145,11 @@ export function ModalNovidades(props: {
         <div className="flex flex-wrap justify-end gap-2 border-t border-zinc-200 p-4 dark:border-zinc-800">
           <Botao variante="sutil" onClick={onFechar}>Fechar</Botao>
           {onAvaliar && (
-            <Botao variante="neutro" onClick={() => { onFechar(); onAvaliar(); }}>
+            <Botao variante="primario" onClick={() => { onFechar(); onAvaliar(); }}>
               <IconStar className="h-4 w-4 shrink-0" />
               Avaliar uma disciplina
             </Botao>
           )}
-          <Botao variante="primario" onClick={() => { onFechar(); onVerAvaliacoes(); }}>
-            Ver avaliações
-          </Botao>
         </div>
       </div>
     </div>

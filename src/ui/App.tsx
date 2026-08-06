@@ -85,9 +85,11 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
 // novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
 // precisar de lógica de comparação de datas.
-// Beta e release vivem no mesmo domínio do GitHub Pages durante a homologação,
-// portanto compartilham localStorage. O sufixo impede que fechar o aviso no
-// sandbox silencie o lançamento oficial depois.
+// O sufixo beta/release separa o sandbox (bdsromulo.github.io/oasisutfpr-sandbox)
+// de qualquer outra project page do mesmo usuário no GitHub Pages — origens
+// diferentes já isolam o localStorage do site oficial (domínio próprio via CNAME),
+// mas sem o sufixo o sandbox ainda compartilharia a chave com outras project pages
+// eventuais em bdsromulo.github.io.
 const CHAVE_NOVIDADES = `oasis.novidades_lidas.cursos_matrizes_2026_08_v1.${
   __OASIS_BETA__ ? "beta" : "release"
 }`;
@@ -1302,16 +1304,11 @@ export function App() {
         }}
       />
 
-      {/* Apresentação do sistema de avaliações. "Ver avaliações" leva ao
-          Planejamento porque é lá que o botão por turma aparece; "Avaliar" só
-          existe com histórico, que é o que prova ter cursado a matéria. */}
+      {/* Apresentação do sistema de avaliações. "Avaliar" só existe com
+          histórico, que é o que prova ter cursado a matéria. */}
       <ModalNovidades
         aberto={modalNovidadesAberto}
         onFechar={fecharNovidades}
-        onVerAvaliacoes={() => {
-          setAba("planejamento");
-          setAbaPlanejamento("cursar");
-        }}
         onAvaliar={
           perfil && coletaHabilitada() ? () => setModalAvaliacoesAberto(true) : undefined
         }
