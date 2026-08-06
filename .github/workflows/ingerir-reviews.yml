@@ -9,6 +9,12 @@ name: Ingestão semanal de avaliações
 # repositório, NÃO secret): não há segredo nenhum neste pipeline, e tratá-la como
 # secret só esconderia da revisão uma informação que já é pública.
 # Configurar em: Settings → Secrets and variables → Actions → Variables.
+#
+# Ingestão com dono único (produção): o mesmo código vive no repositório do
+# sandbox, mas sem a guarda abaixo os dois rodariam o cron de segunda e cada um
+# commitaria `data/reviews.json` por conta própria — os dois arquivos divergem e
+# a relação de fast-forward entre sandbox e produção quebra. O sandbox recebe o
+# acervo já gerado quando a main é mesclada nele, igual a qualquer outro dado.
 
 on:
   schedule:
@@ -25,6 +31,7 @@ concurrency:
 
 jobs:
   ingerir:
+    if: github.repository == 'bdsromulo/Oasis-UTFPR'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

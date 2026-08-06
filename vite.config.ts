@@ -28,14 +28,19 @@ function csp(): Plugin {
         if (!codigo.trim()) continue;
         hashes.push(`'sha256-${createHash("sha256").update(codigo, "utf8").digest("base64")}'`);
       }
+      // No beta o GoatCounter é removido do HTML (ver `beta()`), então a CSP
+      // não precisa abrir exceção nenhuma para ele.
+      const scriptExtra = BETA ? "" : ` ${GC_SCRIPT}`;
+      const imgExtra = BETA ? "" : ` ${GC_ENDPOINT}`;
+      const connectExtra = BETA ? "" : ` ${GC_ENDPOINT}`;
       const politica = [
         "default-src 'self'",
-        `script-src 'self' ${GC_SCRIPT} ${hashes.join(" ")}`.trim(),
+        `script-src 'self'${scriptExtra} ${hashes.join(" ")}`.trim(),
         // React/Tailwind aplicam estilos inline em runtime (baixo risco vs. script)
         "style-src 'self' 'unsafe-inline'",
-        `img-src 'self' data: ${GC_ENDPOINT}`,
+        `img-src 'self' data:${imgExtra}`,
         "font-src 'self'",
-        `connect-src 'self' ${GC_ENDPOINT}`,
+        `connect-src 'self'${connectExtra}`,
         // worker do pdf.js: mesma origem (bundle) e, em alguns navegadores, via blob:
         "worker-src 'self' blob:",
         "object-src 'none'",
@@ -86,12 +91,16 @@ function metadadosPublicos(): Plugin {
 }
 
 /**
- * No beta, pede para os buscadores não indexarem.
+ * No beta, pede para os buscadores não indexarem e desliga a analytics.
  *
- * É o ponto que importa deste ambiente: o beta serve as mesmas avaliações, com
- * nome completo de gente real. Sem o noindex, o buscador indexa essas pessoas
- * duas vezes, e o consentimento que elas deram fala do site do Oásis, não de uma
- * cópia paralela.
+ * O noindex importa porque o beta serve as mesmas avaliações, com nome completo
+ * de gente real. Sem ele, o buscador indexa essas pessoas duas vezes, e o
+ * consentimento que elas deram fala do site do Oásis, não de uma cópia paralela.
+ *
+ * O GoatCounter sai porque `data-goatcounter` em `index.html` aponta para a
+ * conta única do site oficial — sem removê-lo aqui, todo acesso ao ambiente de
+ * testes seria contado junto com o tráfego real, contaminando a métrica que a
+ * produção usa para decisão.
  *
  * A remoção do `public/CNAME` — que reivindicaria oasisutfpr.com.br para o
  * repositório do beta — NÃO mora aqui: `public/` é copiado pelo Vite fora do
@@ -104,10 +113,12 @@ function beta(): Plugin {
     enforce: "post",
     transformIndexHtml(html) {
       if (!BETA) return html;
-      return html.replace(
-        "</head>",
-        '  <meta name="robots" content="noindex, nofollow" />\n  </head>',
-      );
+      return html
+        .replace(/\s*<script data-goatcounter[\s\S]*?<\/script>\n?/, "\n")
+        .replace(
+          "</head>",
+          '  <meta name="robots" content="noindex, nofollow" />\n  </head>',
+        );
     },
   };
 }
