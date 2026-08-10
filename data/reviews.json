@@ -1,6 +1,6 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-06T12:52:19.035Z",
+  "geradoEm": "2026-08-10T10:11:26.357Z",
   "reviews": [
     {
       "id": "0855d75f4d36",
@@ -14,6 +14,19 @@
       "cargaTrabalho": 2,
       "avaliacao": "misto",
       "comentario": "As aulas teóricas são no modelo assíncrono, em que o professor libera as videoaulas e slides e você deve chegar na aula já sabendo do conteúdo. Ele apenas passa pelos slides de forma a dar um resumo do que ele fala na videoaula, para então partir para a prática, que consiste em simular o sistema do roteiro abordando o conteúdo da semana (um relatório por aula) no MATLAB. São 2 provas, com consulta no papel. E também há o projeto final, que é fácil se você entende o assunto. O professor é aberto para dúvidas e ajuda muito!"
+    },
+    {
+      "id": "1fc54b06f212",
+      "professorId": "rodrigo-minetto",
+      "codigo": "ICSF20",
+      "semestre": "2026/1",
+      "autor": "GUSTAVO WILKER",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "provas",
+      "comentario": ""
     },
     {
       "id": "29b263a69955",
@@ -42,6 +55,19 @@
       "comentario": ""
     },
     {
+      "id": "4ac7adad5856",
+      "professorId": "luiz-celso-gomes-junior",
+      "codigo": "ICSB56",
+      "semestre": "2026/1",
+      "autor": "ROMULO BARBOSA DA SILVA",
+      "personalidade": 3,
+      "didatica": 4,
+      "dificuldade": 3,
+      "cargaTrabalho": 4,
+      "avaliacao": "misto",
+      "comentario": "A matéria gira em torno do trabalho, com entregas parciais sendo feitas ao longo do semestre que somam em 60-70% da nota. Ele fazia em outros semestres uma prova escrita e tinha uma atividade de código que compunham o resto da nota. No meu semestre ele decidiu inovar e a avaliação síncrona foi uma prova da turma toda em conjunto respondendo algumas perguntas e cenários que ele passava (não sei se ele faria de novo). O professor mantém o discord pra tratar e ajuda, ele é aberto pra tratativas no geral também sobre o trabalho. Não falaria que ele é gente boa, mas ele manja do conteúdo e é justo no método e avaliação dele."
+    },
+    {
       "id": "50647d33dfd5",
       "professorId": "luiz-amilton-pepplow",
       "codigo": "ELT76G",
@@ -53,6 +79,45 @@
       "cargaTrabalho": 1,
       "avaliacao": "misto",
       "comentario": "Muito importante levar as simulações montadas para as práticas."
+    },
+    {
+      "id": "587393191baa",
+      "professorId": "marilia-abrahao-amaral",
+      "codigo": "ICSH31",
+      "semestre": "2026/1",
+      "autor": "JENNYFER MIKAELLY MELO DA SILVA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 2,
+      "avaliacao": "misto",
+      "comentario": ""
+    },
+    {
+      "id": "58b22a3fe9c6",
+      "professorId": "daniel-fernando-pigatto",
+      "codigo": "ICSF13",
+      "semestre": "2026/1",
+      "autor": "JOAO VICTOR AYRES DOS SANTOS",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 4,
+      "cargaTrabalho": 3,
+      "avaliacao": "misto",
+      "comentario": ""
+    },
+    {
+      "id": "bb27a6ca95e0",
+      "professorId": "thais-mariane-biembengut-faria",
+      "codigo": "MAT7AL",
+      "semestre": "2026/1",
+      "autor": "JULIA KAMILLY DE OLIVEIRA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 4,
+      "cargaTrabalho": 4,
+      "avaliacao": "provas",
+      "comentario": "A disciplina exige prática constante, principalmente para entender os conceitos e conseguir aplicá-los corretamente nos exercícios e principalmente nas provas. Para acompanhar bem, é importante resolver as listas que a professora passa, revisar os exemplos apresentados e não deixar o conteúdo acumular, porque os assuntos se conectam ao longo do semestre.\n\nO que mais me ajudou foi refazer exercícios e provas anteriores, prestando atenção no passo a passo das resoluções. Eu recomendaria que os próximos alunos praticassem desde o início e buscassem tirar as dúvidas assim que surgirem, principalmente nos conteúdos de subespaços, combinação linear, bases e ortogonalidade."
     },
     {
       "id": "be1434de0b67",
@@ -105,6 +170,19 @@
       "cargaTrabalho": 4,
       "avaliacao": "misto",
       "comentario": "A matéria é bem interessante, bem técnica e prática e traz observações legais. Tem uma quantidade de trabalho até que razoável mas não é muito tensa de fazer, se colocar um pouco de energia vai. Tem 1 prova só e o resto da nota tá em 2 trabalhos maiores e umas atividades menores."
+    },
+    {
+      "id": "f559716d2259",
+      "professorId": "ney-nakazato-miyahira",
+      "codigo": "GEE7G1",
+      "semestre": "2026/1",
+      "autor": "ISABELA MONTAGNINI GONCALVES",
+      "personalidade": 2,
+      "didatica": 3,
+      "dificuldade": 1,
+      "cargaTrabalho": 1,
+      "avaliacao": "misto",
+      "comentario": "No início do semestre, ele passa os temas do trabalho final, e os grupos são formados de acordo com o tema que você escolheu. Durante o semestre, as aulas são baseadas em explicações de slides e dinâmicas em grupo sobre o tema da aula. O trabalho final é um seminário sobre o tema escolhido, e também tem uma prova no final.\n\nA matéria e a prova são bem fáceis e quase não exigem dedicação fora do horário de aula. A parte mais difícil é ir até o Ecoville para assistir às aulas."
     },
     {
       "id": "f720e3a5b2de",
