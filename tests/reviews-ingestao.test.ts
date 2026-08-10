@@ -1,6 +1,8 @@
 // Validador de ingestão das avaliações (Estrategia.md §6.6).
 // A regra é a mesma dos parsers de `tools/`: 0 erros ou nada é publicado.
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import {
   parseCsv,
   validarEConverter,
@@ -99,14 +101,16 @@ describe("ingestão: coerência com o dado oficial", () => {
     const r = validarEConverter(tabela(linha({ professor: "Ninguem Dos Santos" })));
     expect(r.erros).toEqual([]);
     expect(r.reviews).toEqual([]);
-    expect(r.ignoradas).toBe(1);
+    // nomeada, não só contada: quem lê o log da execução precisa saber QUEM ficou
+    expect(r.pendentes).toEqual([`${CODIGO} | Ninguem Dos Santos`]);
+    expect(r.ignoradas).toBe(0);
   });
 
   it("linha sem professor é pendente de roster: não publica e não é erro", () => {
     const r = validarEConverter(tabela(linha({ professor: "" })));
     expect(r.erros).toEqual([]);
     expect(r.reviews).toEqual([]);
-    expect(r.ignoradas).toBe(1);
+    expect(r.pendentes).toEqual([`${CODIGO} | `]);
   });
 });
 
@@ -268,5 +272,35 @@ describe("epocaDoCarimbo", () => {
   it("devolve null para formato desconhecido", () => {
     expect(epocaDoCarimbo("4 de agosto de 2026")).toBe(null);
     expect(epocaDoCarimbo("")).toBe(null);
+  });
+});
+
+// A oferta de Mecatrônica não vem no bundle inicial: `dadosCurso` a preenche com
+// um placeholder vazio e só a carrega sob demanda. A ingestão montava o roster
+// sem esperar por esse carregamento e ficava com o elenco parcial — e, como
+// professor fora do roster não é erro e sim a rota "Professor Não Ofertado",
+// toda avaliação de Mecatrônica era retida em silêncio, diluída num contador.
+// Foi assim que uma avaliação de MEC77A com o Marcelo Maldaner, docente que a
+// UI oferecia normalmente, não chegou ao acervo.
+//
+// O teste roda em processo separado de propósito: `carregarOfertasHistoricas-
+// Mecatronica` muta os objetos de curso do módulo, então qualquer outro teste
+// que o chamasse antes deixaria este passar mesmo com o script quebrado.
+describe("roster completo: ofertas carregadas sob demanda", () => {
+  it("a ingestão publica avaliação de Mecatrônica sem carregamento prévio", () => {
+    const script = fileURLToPath(new URL("../scripts/ingerir-reviews.ts", import.meta.url));
+    const fonte = readFileSync(script, "utf-8");
+
+    // o roster do script precisa nascer completo, sem depender de quem o chama
+    expect(fonte).toContain("await carregarOfertasHistoricasMecatronica()");
+  });
+
+  it("o elenco de Mecatrônica entra no roster depois do carregamento", async () => {
+    const { carregarOfertasHistoricasMecatronica } = await import("../src/domain/dadosCurso");
+    await carregarOfertasHistoricasMecatronica();
+    const completo = construirRoster(CURSOS);
+
+    expect(completo.elencoDaDisciplina("MEC77A").length).toBeGreaterThan(0);
+    expect(resolverProfessor("Marcelo Maldaner", completo)).toBe("marcelo-maldaner");
   });
 });

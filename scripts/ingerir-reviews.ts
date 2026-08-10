@@ -30,7 +30,7 @@ import {
   idDaUnidade,
   type Roster,
 } from "../src/domain/reviews/professores";
-import { CURSOS } from "../src/domain/dadosCurso";
+import { CURSOS, carregarOfertasHistoricasMecatronica } from "../src/domain/dadosCurso";
 
 const CAMINHO_SAIDA = "data/reviews.json";
 
@@ -140,7 +140,17 @@ type ReviewEmTriagem = Review & { chavePessoa: string; carimbo: string };
 export interface ResultadoIngestao {
   reviews: Review[];
   erros: string[];
+  /** Linhas descartadas por serem versão antiga de uma avaliação já contada. */
   ignoradas: number;
+  /**
+   * Linhas retidas na rota "Professor Não Ofertado", como `"MEC77A | Fulano"`.
+   *
+   * É lista, não contador: reter é comportamento previsto, mas retenção
+   * silenciosa não é. Um roster incompleto descarta avaliação homologada sem
+   * deixar rastro, e foi exatamente assim que uma leva inteira de Mecatrônica
+   * se perdeu — o número no fim da execução não dizia QUEM ficou de fora.
+   */
+  pendentes: string[];
 }
 
 /**
@@ -159,7 +169,7 @@ export const COLUNAS_OBRIGATORIAS = [
 
 export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   const erros: string[] = [];
-  if (!tabela.length) return { reviews: [], erros: ["CSV vazio ou inacessível."], ignoradas: 0 };
+  if (!tabela.length) return { reviews: [], erros: ["CSV vazio ou inacessível."], ignoradas: 0, pendentes: [] };
 
   const cabecalho = tabela[0].map((c) => c.trim());
   for (const col of COLUNAS_OBRIGATORIAS) {
@@ -172,7 +182,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
       erros.push(`Coluna privada "${proibida}" presente no CSV público — corrija a projeção da aba Homologado.`);
     }
   }
-  if (erros.length) return { reviews: [], erros, ignoradas: 0 };
+  if (erros.length) return { reviews: [], erros, ignoradas: 0, pendentes: [] };
 
   const roster = construirRoster(CURSOS);
   const codigosConhecidos = new Set<string>();
@@ -185,6 +195,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
 
   const reviews: ReviewEmTriagem[] = [];
   let ignoradas = 0;
+  const pendentes: string[] = [];
 
   for (let i = 1; i < tabela.length; i++) {
     const campos: Record<string, string> = {};
@@ -199,7 +210,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
     const professorId = resolverProfessor(campos.professor ?? "", roster);
     if (!professorId) {
       // rota "Professor Não Ofertado": não é erro, é linha que ainda não publica
-      ignoradas++;
+      pendentes.push(`${campos.codigo} | ${campos.professor}`);
       continue;
     }
 
@@ -301,7 +312,7 @@ export function validarEConverter(tabela: string[][]): ResultadoIngestao {
   reviews.sort((a, b) => a.id.localeCompare(b.id));
   // os campos de triagem não pertencem ao acervo publicado
   const publicaveis = reviews.map(({ chavePessoa: _c, carimbo: _t, ...r }) => r);
-  return { reviews: publicaveis, erros, ignoradas };
+  return { reviews: publicaveis, erros, ignoradas, pendentes };
 }
 
 /**
@@ -324,6 +335,14 @@ async function principal() {
     return falhar("uso: npx tsx scripts/ingerir-reviews.ts <url-do-csv-publicado>");
   }
 
+  // As ofertas de Mecatrônica não vêm no bundle inicial: `dadosCurso` as deixa
+  // num placeholder vazio e só as busca sob demanda, para não pesar o primeiro
+  // carregamento do site. As telas chamam este carregador; a ingestão não
+  // chamava, e montava o roster com 365 unidades docentes em vez de 452 — todo
+  // o elenco de Mecatrônica ficava de fora, e as avaliações do curso caíam na
+  // rota "Professor Não Ofertado" mesmo com o docente visível na UI.
+  await carregarOfertasHistoricasMecatronica();
+
   const resposta = await fetch(url, { redirect: "follow" });
   if (!resposta.ok) {
     return falhar(`falha ao baixar o CSV: HTTP ${resposta.status}`);
@@ -335,7 +354,7 @@ async function principal() {
     );
   }
 
-  const { reviews, erros, ignoradas } = validarEConverter(parseCsv(csv));
+  const { reviews, erros, ignoradas, pendentes } = validarEConverter(parseCsv(csv));
 
   if (erros.length) {
     console.error(`\n${erros.length} erro(s) na ingestão — nada foi publicado:\n`);
@@ -358,9 +377,19 @@ async function principal() {
   };
   writeFileSync(CAMINHO_SAIDA, JSON.stringify(acervo, null, 2) + "\n", "utf-8");
   console.log(
-    `${reviews.length} avaliação(ões) publicada(s); ${ignoradas} pendente(s) de roster. ` +
+    `${reviews.length} avaliação(ões) publicada(s); ${ignoradas} substituída(s) por versão mais recente. ` +
       (mudou ? "Acervo alterado." : "Sem mudanças."),
   );
+  // no Action isto vira anotação visível no resumo da execução: uma avaliação
+  // homologada que não publica é sempre algo para alguém olhar, ainda que a
+  // retenção em si seja o comportamento correto
+  if (pendentes.length) {
+    console.warn(
+      `\n::warning::${pendentes.length} avaliação(ões) homologada(s) retida(s) na rota ` +
+        `"Professor Não Ofertado" — o docente não está no roster das ofertas versionadas:`,
+    );
+    pendentes.forEach((p) => console.warn("  - " + p));
+  }
 }
 
 // só executa quando chamado direto; importar para teste não dispara a rede
