@@ -1,6 +1,6 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-10T19:52:25.713Z",
+  "geradoEm": "2026-08-10T20:30:37.149Z",
   "reviews": [
     {
       "id": "0855d75f4d36",
@@ -105,6 +105,19 @@
       "cargaTrabalho": 1,
       "avaliacao": "trabalhos",
       "comentario": "Disciplina super tranquila, apenas um trabalho que tem duas entregas principais."
+    },
+    {
+      "id": "3147b0918690",
+      "professorId": "marcelo-maldaner",
+      "codigo": "MEC77A",
+      "semestre": "2026/1",
+      "autor": "ANA JULIA DE PAULA MILITAO",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "provas",
+      "comentario": "As aulas eram longas, mas o professor tem uma boa didática e tem experiência de trabalho na área, então traz bons exemplos de aplicação. Ele faz os exercícios passo a passo em sala de aula.e toda aula ele traz pelo menos 2 exercícios pra fazer junto com a turma. No final de algumas aulas, ele modifica alguma coisa dos exercícios em sala e diz pra resolvermos em dupla e entregar antes da aula acabar valendo até 1 ponto extra na prova. Super atencioso para tirar dúvidas principalmente nesses dias de exercício de entrega. Estudar para a prova fica muito mais fácil porque a gente vai construindo bem o conteúdo por módulos conforme o semestre passa."
     },
     {
       "id": "31d96ee05e40",
