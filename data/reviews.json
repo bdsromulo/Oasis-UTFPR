@@ -1,6 +1,6 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-10T10:11:26.357Z",
+  "geradoEm": "2026-08-10T19:52:25.713Z",
   "reviews": [
     {
       "id": "0855d75f4d36",
@@ -14,6 +14,71 @@
       "cargaTrabalho": 2,
       "avaliacao": "misto",
       "comentario": "As aulas teóricas são no modelo assíncrono, em que o professor libera as videoaulas e slides e você deve chegar na aula já sabendo do conteúdo. Ele apenas passa pelos slides de forma a dar um resumo do que ele fala na videoaula, para então partir para a prática, que consiste em simular o sistema do roteiro abordando o conteúdo da semana (um relatório por aula) no MATLAB. São 2 provas, com consulta no papel. E também há o projeto final, que é fácil se você entende o assunto. O professor é aberto para dúvidas e ajuda muito!"
+    },
+    {
+      "id": "10bc235bd1b3",
+      "professorId": "patricia-aparecida-manholi",
+      "codigo": "MAT7ED",
+      "semestre": "2026/1",
+      "autor": "GUSTAVO BRAZ GONCALVES LIMA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 2,
+      "cargaTrabalho": 1,
+      "avaliacao": "trabalhos",
+      "comentario": ""
+    },
+    {
+      "id": "1179bc49e59a",
+      "professorId": "diane-rizzotto-rossetto",
+      "codigo": "MAT7AL",
+      "semestre": "2026/1",
+      "autor": "CECILIA SUSS",
+      "personalidade": 5,
+      "didatica": 4,
+      "dificuldade": 2,
+      "cargaTrabalho": 3,
+      "avaliacao": "provas",
+      "comentario": "A Prof Diane foca muito nos teoremas, então as aulas dela tinham muitos slides com conteúdos e uma ou outra resolução de exercícios. Ela passa listas de apoio, mas não adianta muito fazer as listas se não estiver bem com os conceitos teóricos, então fica bem secundário. Ela usa uma dinâmica de \"cola comunitária\" nos dias das provas, com partes do conteúdo no quadro, o que facilita MUITO, mas não tira a necessidade de estudar, óbvio. Eu achei a abordagem dela para a disciplina muito diferente e muito boa. Para quem estiver enroscado em álgebra, é uma boa opção."
+    },
+    {
+      "id": "145ecea5998e",
+      "professorId": "fabio-antonio-dorini",
+      "codigo": "MAT7C1",
+      "semestre": "2026/1",
+      "autor": "GABRIEL SANTANA CARIVALIS",
+      "personalidade": 3,
+      "didatica": 4,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "provas",
+      "comentario": ""
+    },
+    {
+      "id": "17fc907f1005",
+      "professorId": "omero-francisco-bertol",
+      "codigo": "ELN74B",
+      "semestre": "2026/1",
+      "autor": "LUISE MARQUES SCHEUER",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 2,
+      "cargaTrabalho": 3,
+      "avaliacao": "misto",
+      "comentario": "As aulas eram bem expositivas, com boa explicação e o professor acessível para explicar novamente e tirar dúvidas. \nForam 7 listas de códigos com exercícios variando entre fácil e mediano (não tão fácil, mas nem tão díficil), 1 questionário teórico que ele basicamente fez junto na aula, 1 lista com 30 códigos para serem feitos ao longo do semestre todo (programas tirado da plataforma Beecrowd, que acredito serem mais complexos, pois acabei fazendo só alguns) e 2 avaliações (1 sendo um questionário com 2 códigos para serem feitos, baseados principalmente nos códigos das listas, e a outra sendo um programa/projeto \"completo\" para mostrar a ele, também não sendo tão complexo se prestar atenção na aula e fizer tudo conforme pedido). \nAs aulas eram divididas em 1 dia da semana sendo teoria e na outra a prática (podendo mudar conforme ele for passando o conteúdo), na aula teórica era basicamente ele explicando o conteúdo e codando e na prática um tempo para fazer a lista e tirar dúvidas."
+    },
+    {
+      "id": "1abfb932d90d",
+      "professorId": "jamil-de-araujo-farhat",
+      "codigo": "ELN75B",
+      "semestre": "2026/1",
+      "autor": "GUSTAVO BRAZ GONCALVES LIMA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 3,
+      "cargaTrabalho": 4,
+      "avaliacao": "misto",
+      "comentario": ""
     },
     {
       "id": "1fc54b06f212",
@@ -40,6 +105,32 @@
       "cargaTrabalho": 1,
       "avaliacao": "trabalhos",
       "comentario": "Disciplina super tranquila, apenas um trabalho que tem duas entregas principais."
+    },
+    {
+      "id": "31d96ee05e40",
+      "professorId": "douglas-paulo-bertrand-renaux",
+      "codigo": "CSW41",
+      "semestre": "2026/1",
+      "autor": "ETORE MALOSO TRONCONI",
+      "personalidade": 4,
+      "didatica": 4,
+      "dificuldade": 5,
+      "cargaTrabalho": 5,
+      "avaliacao": "misto",
+      "comentario": ""
+    },
+    {
+      "id": "36884bc92cb8",
+      "professorId": "andre-fabiano-steklain-lisboa",
+      "codigo": "MAT7C1",
+      "semestre": "2026/1",
+      "autor": "AGATHA MENDES DA SILVEIRA PAIXAO DUBIELLA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 1,
+      "cargaTrabalho": 1,
+      "avaliacao": "provas",
+      "comentario": ""
     },
     {
       "id": "3b84f8f3b5a5",
@@ -107,6 +198,45 @@
       "comentario": ""
     },
     {
+      "id": "65e2ed3ab6c8",
+      "professorId": "juliana-de-santi",
+      "codigo": "ICSF30",
+      "semestre": "2025/2",
+      "autor": "BIANCA MIYAZATO VIZEU FERREIRA",
+      "personalidade": 5,
+      "didatica": 5,
+      "dificuldade": 2,
+      "cargaTrabalho": 2,
+      "avaliacao": "provas",
+      "comentario": "As aulas e os materiais eram ótimos de estudar, adorei a didática, minha única reclamação é o método de correção da professora. Qualquer erro ela descontava tudo, a prova era pra ser fácil, mas pela maneira que ela corrige acaba dificultando um pouco."
+    },
+    {
+      "id": "a97f301db226",
+      "professorId": "jorge-luis-torrejon-matos",
+      "codigo": "MAT7C2",
+      "semestre": "2026/1",
+      "autor": "CECILIA SUSS",
+      "personalidade": 4,
+      "didatica": 2,
+      "dificuldade": 4,
+      "cargaTrabalho": 3,
+      "avaliacao": "provas",
+      "comentario": "As provas eram exatamente iguais as listas, mas as listas eram muito longas. Eu achei a didática do professor muito boa, mas lá pelo meio do semestre eu percebi que estava aprendendo mais com as listas do que com ele. Matéria bem puxada. Prestem atenção nas dicas que ele dá sobre o que ele estudaria mais, ou o que ele enfatiza mais em sala para estudar. Nem sempre o conteúdo que ele passa mais tempo explicando é o que ele vai cobrar na prova."
+    },
+    {
+      "id": "b8c73ff54c1a",
+      "professorId": "jonas-golart-da-silva",
+      "codigo": "QB70E",
+      "semestre": "2024/2",
+      "autor": "ETORE MALOSO TRONCONI",
+      "personalidade": 1,
+      "didatica": 1,
+      "dificuldade": 5,
+      "cargaTrabalho": 4,
+      "avaliacao": "misto",
+      "comentario": "Faça em campo mourão, medianeira, pato branco, mas não faça com ele"
+    },
+    {
       "id": "bb27a6ca95e0",
       "professorId": "thais-mariane-biembengut-faria",
       "codigo": "MAT7AL",
@@ -159,6 +289,19 @@
       "comentario": "A Rita é maneira, a aula dela é boa e ela costuma liberar metade da aula depois de passar o conteúdo pra fazer o trabalho final, que se você parar pra fazer e consultar com ela, torna a matéria bem mais de boas inclusive pra estudar pra prova. A matéria em si também é bem maneira, não à toa tem uma seção de Gestão da Informação dentro do Oásis baseado no conteúdo dela."
     },
     {
+      "id": "e70656bc1732",
+      "professorId": "israel-rede",
+      "codigo": "QBI7QE",
+      "semestre": "2026/1",
+      "autor": "MATEUS CHIMICOVIAKI SANCHES",
+      "personalidade": 1,
+      "didatica": 4,
+      "dificuldade": 2,
+      "cargaTrabalho": 2,
+      "avaliacao": "misto",
+      "comentario": "O professor apresenta uma postura frequentemente desrespeitosa e pouco profissional com os alunos. É muito difícil tirar dúvidas ou estabelecer um diálogo durante as aulas, devido à maneira grosseira com que algumas situações são conduzidas.\n\nAo longo do período, presenciei e também vivenciei diversas situações em que alunos foram constrangidos e tiveram sua imagem exposta negativamente diante de toda a turma. Esse tipo de comportamento torna o ambiente de aprendizagem desconfortável e dificulta que os alunos se sintam à vontade para fazer perguntas ou buscar esclarecimentos sobre o conteúdo.\n\nMinha experiência com a disciplina neste período foi bastante negativa, principalmente em razão da postura adotada pelo professor em sala de aula. Considero que atitudes como essas são incompatíveis com o profissionalismo e com a postura que se espera de um docente em um ambiente acadêmico."
+    },
+    {
       "id": "ea0f094899ed",
       "professorId": "leandro-batista-de-almeida",
       "codigo": "ICSB60",
@@ -170,6 +313,19 @@
       "cargaTrabalho": 4,
       "avaliacao": "misto",
       "comentario": "A matéria é bem interessante, bem técnica e prática e traz observações legais. Tem uma quantidade de trabalho até que razoável mas não é muito tensa de fazer, se colocar um pouco de energia vai. Tem 1 prova só e o resto da nota tá em 2 trabalhos maiores e umas atividades menores."
+    },
+    {
+      "id": "edc487eac6a8",
+      "professorId": "luiz-fernando-copetti",
+      "codigo": "CSW42",
+      "semestre": "2026/1",
+      "autor": "ETORE MALOSO TRONCONI",
+      "personalidade": 2,
+      "didatica": 2,
+      "dificuldade": 3,
+      "cargaTrabalho": 3,
+      "avaliacao": "trabalhos",
+      "comentario": ""
     },
     {
       "id": "f559716d2259",
