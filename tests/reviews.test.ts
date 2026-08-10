@@ -18,7 +18,12 @@ import {
 } from "../src/domain/reviews/acervo";
 import { LIMITE_COMENTARIO, type Review } from "../src/domain/reviews/tipos";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
-import { BSI, ENG_COMP, CURSOS } from "../src/domain/dadosCurso";
+import {
+  BSI,
+  ENG_COMP,
+  CURSOS,
+  carregarOfertasHistoricasMecatronica,
+} from "../src/domain/dadosCurso";
 import type { DadosCurso } from "../src/domain/dadosCurso";
 import type { Matriz, Turma } from "../src/domain/tipos";
 import acervoJson from "../data/reviews.json";
@@ -338,7 +343,14 @@ describe("acervo publicado", () => {
   // antes de um acervo malformado ser commitado. Por isso valida o conteúdo real
   // do arquivo, e não que ele esteja vazio — afirmar vazio quebraria o workflow
   // na primeira ingestão bem-sucedida.
-  it("toda avaliação publicada é bem formada", () => {
+  //
+  // O carregamento das ofertas de Mecatrônica precisa ser aguardado aqui pelo
+  // mesmo motivo que na ingestão: sem ele, `CURSOS` traz o placeholder vazio do
+  // curso, e esta barreira acusaria "unidade fora do roster" para avaliações
+  // legítimas de Mecatrônica — reprovando o acervo correto que a ingestão
+  // acabou de gerar.
+  it("toda avaliação publicada é bem formada", async () => {
+    await carregarOfertasHistoricasMecatronica();
     const roster = construirRoster(CURSOS);
     const codigos = new Set<string>();
     for (const c of CURSOS) {
