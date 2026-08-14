@@ -271,7 +271,21 @@ describe.skipIf(!existsSync(CASOS_844[0]))("fatos específicos 844: avaliações
 //
 // A primeira asserção é a porta de entrada da UI (App.tsx, analisarPDFParaPreview):
 // sem nome ou sem cursadas o PDF é recusado inteiro no check-in.
-const HISTORICOS_LOCAIS = globSync("materiais-referencia/**/*.pdf").sort();
+//
+// BUG-03 (2026-08-14): a pasta passou a acumular matrizes, PPCs e Turmas
+// Abertas ao lado dos históricos (TASK-29/TASK-40 reorganizaram o acervo por
+// curso/matriz na mesma árvore). Um glob sem filtro varria os 24 PDFs da pasta
+// e reprovava os 16 que não são histórico de aluno por "nome vazio" — correto
+// em si, mas testando a coisa errada. O acervo nomeia todo histórico com o
+// prefixo "Histórico"; filtrar por ele restaura a varredura sem exigir uma
+// lista mantida à mão.
+function ehHistorico(caminho: string): boolean {
+  const nomeArquivo = caminho.split(/[\\/]/).pop() ?? "";
+  const semAcento = nomeArquivo.normalize("NFD").replace(/[̀-ͯ]/g, "");
+  return /^historico/i.test(semAcento);
+}
+
+const HISTORICOS_LOCAIS = globSync("materiais-referencia/**/*.pdf").filter(ehHistorico).sort();
 
 describe.skipIf(HISTORICOS_LOCAIS.length === 0)("históricos locais de referência", () => {
   it.each(HISTORICOS_LOCAIS)("%s é aceito e fecha com o próprio histórico", async (arquivo) => {

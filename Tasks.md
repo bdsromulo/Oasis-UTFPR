@@ -13,6 +13,8 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 > **Nota de consistência (2026-07-30):** o arquivo tinha duas tarefas diferentes numeradas `TASK-17` ("Simulador de Formatura" e "Implementar Engenharia de Computação — Matriz 962"). A segunda foi renumerada para **TASK-24** para eliminar a colisão de ID; nenhum conteúdo foi alterado, só o número.
 
+> **Nota de consistência (2026-08-14):** a "Visão de Matérias Eletivas (Pool de Inclusão)", na seção 3, tinha sido numerada `TASK-31`, número já ocupado por "Entrada portátil, próximos cursos e identidade pública do site". Foi renumerada para **TASK-52**; nenhum conteúdo foi alterado, só o número. As TASK-45 a TASK-50 vivem hoje só no `Tasks.md` do sandbox e entram neste arquivo pelo merge — ver seção 4.
+
 ---
 
 ## 1. Features
@@ -222,6 +224,23 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 ### Pendente
 
+- **TASK-53 — Cascata de leitores com detector explícito, para históricos que o `pdf.js` estilhaça:**
+  - **Resolve BUG-02** e converte a saída silenciosa do **BUG-01** numa recusa explicada. Desenhada a partir da avaliação da ferramenta `markitdown` (§5): o que vale copiar de lá não é o Markdown nem o Python — é a arquitetura de **conversores tentados em ordem, com um detector explícito no meio** — e, isolando o motor, o algoritmo de segmentação de palavras do `pdfminer.six` (o `word_margin`: lacuna comparada à largura do caractere, não a um limiar absoluto em pontos).
+  - **Passo 1 — o detector, sozinho, já vale a pena.** Hoje o `pdf.js` estilhaçado devolve perfil vazio em silêncio (BUG-02). Medir a proporção de espaços dentro do `str` bruto (histórico saudável: 13,8%–14,8%; espécime doente: 20,5%, medidos em seis cursos e um caso patológico) e recusar a importação com mensagem explícita quando o limiar estoura, em vez de deixar `parseHistorico` devolver um perfil sem cursadas. Sem motor novo, sem dependência nova — é a "mitigação barata" já registrada no BUG-02, promovida a primeiro passo desta task porque não depende do resto para entregar valor.
+  - **Passo 2 — reescrever `extrair-linhas.ts` sobre `getOperatorList`.** As posições de glifo (`showText`/`moveText`) já estão disponíveis no `pdf.js` sem dependência nova (confirmado em 2026-08-14: 4.730 `showText` no espécime do BUG-02, batendo com a contagem de glifos da causa medida). Só roda quando o detector do Passo 1 dispara — os 6 de 8 históricos saudáveis continuam no caminho rápido de hoje (~0,1s).
+  - **Oráculo de validação:** o `markitdown`/`pdfminer.six` já lê o espécime do BUG-02 corretamente (`ELEX10`, notas, situações, sem estilhaço — ver BUG-02). Gerar offline o texto de referência com ele e comparar com a saída da reescrita fecha o maior risco da correção robusta: regredir os 15 históricos que hoje passam.
+  - **Fora de escopo desta task:** motor OCR/WASM para o BUG-01 (arquivo sem nenhuma camada de texto — duas implementações independentes, `pdf.js` e `pdfminer.six`, concordam nisso). Exigiria CSP mais permissiva (`wasm-unsafe-eval`, hoje ausente) e alguns MB auto-hospedados pela política de zero CDN. Fica registrado como extensão futura do detector, não como parte desta correção.
+  - **Não adotar:** o `markitdown` em si no caminho do aluno — é Python, exigiria servidor, e viola de uma vez as regras invioláveis de histórico 100% client-side e de site estático sem backend. Também não muda a flexibilidade com formatos novos de Turmas Abertas: quem absorve variação de formato hoje é o perfil posicional por curso em `tools/parse_turmas_pdf.py`, que já lê `w["x0"]` do `pdfplumber` — nenhuma variação do markitdown expõe coordenada.
+
+- **TASK-51 — Aviso de mudança na oferta oficial (cenário pós-matrícula):**
+  - **Desenho completo e homologado, implementação zero.** `docs/superpowers/specs/2026-08-06-mudancas-oferta-design.md` descreve as dez seções da funcionalidade — camada de dados, domínio, visual, persistência, degradação, testes e carga inicial por curso. Auditoria de 2026-08-14 confirmou que **nenhum** dos artefatos existe, nem na `main` nem no sandbox: `tools/diff_turmas.py`, `src/domain/motor/mudancasOferta.ts`, `src/ui/telas/FaixaMudancasOferta.tsx`, `tests/mudancas-oferta.test.ts` e os JSONs `mudancas-<semestre>.json`. O desenho estava fora do rastreador — esta task o traz para dentro.
+  - **O defeito que a motiva é ativo hoje:** `itensDaSelecao`, em `src/domain/motor/grade.ts`, percorre a seleção salva e só emite o item quando acha disciplina **e** turma na oferta atual. Não há `else`. Quando a UTFPR tira a turma da oferta, a matéria some da grade do aluno **sem aviso nenhum** — desaparecimento silencioso, pior que a ausência de aviso.
+  - **É o cenário pós-matrícula por excelência:** cobre o intervalo entre a grade montada e a oferta que a UTFPR revisa depois. Complementa os dois modos da TASK-05D, que tratam *quando* o aluno planeja, mas não o que fazer quando a fonte muda debaixo de um plano já feito.
+  - **Casos reais que dispararam o desenho** (reimportação de Turmas Abertas 2026/2 em 06/08/2026): `EST70A S02` e `S03` saíram da oferta de BSI e Eng. Computação; `ELTA8 S11` (Eng. Eletrônica) deixou de ser `EaD` e passou a `Presencial`.
+  - **O dado bruto sobrevive:** as cestas ficam em `localStorage` como pares `{codDisciplina, codTurma}` gravados verbatim e **não** são podados na escrita — a poda é só de renderização. Há do que reconstruir o aviso sem migração de schema.
+  - Escopo do aviso: `removida`, `horario`, `sede` e `enquadramento`. Fora: professor, vagas, reserva e prioridade — nenhum muda o que o aluno consegue cursar, e professor tornaria a estreia ruidosa (este import preencheu `MAT7PC S25` e `S15`, que estavam vazios).
+  - **Ordem de execução a documentar no `REPOSITORIO.md`:** o diff roda **antes** do commit da oferta nova; com o dado já em `HEAD`, a comparação sai vazia.
+
 - **TASK-15 — Alinhar e Retificar a Exibição de CR Absoluto e CR Normalizado:**
   - No cabeçalho de *Minha Situação*, CR Absoluto e CR Normalizado aparecem lado a lado sem explicar a diferença entre eles nem por que divergem tanto (ex.: `0.7583` contra `0.5653` no mesmo histórico), e com pesos visuais diferentes — o CR Absoluto vem destacado em amarelo e o Normalizado em cor neutra, sugerindo hierarquia que não existe.
   - Padronizar o tratamento visual dos dois, deixar explícito qual é usado na **priorização de vagas na matrícula**, e explicar em tooltip como cada um é calculado.
@@ -307,7 +326,14 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 ## 2. Bugs
 
 ### Concluída
-*(nenhum no momento)*
+- **BUG-03 — A varredura de históricos locais reprovava documentos-fonte e desligava a rede de proteção em silêncio:**
+  - **Sintoma medido (2026-08-14):** `npm test` na `main` fechava em **436 aprovados e 16 reprovados**. As 16 falhas saíam todas de `tests/historico-real.test.ts`, na asserção `nome do aluno — a UI recusa o PDF sem ele`.
+  - **Causa:** a varredura era `globSync("materiais-referencia/**/*.pdf")` e assumia que **todo** PDF da pasta é histórico de aluno. Depois da reorganização do acervo por curso e matriz (TASK-29 e TASK-40), matrizes curriculares, PPCs, listas de matérias e relações de Turmas Abertas passaram a morar nas mesmas pastas. A varredura os recolhia e reprovava cada um por `perfil.nome` vazio — corretamente, porque de fato não têm nome de aluno, mas testando a coisa errada.
+  - **Nenhum defeito de parser envolvido:** dos 24 PDFs da pasta local, 8 são históricos de verdade e **os 8 sempre passaram**. Os 16 reprovados eram documentos-fonte: `matrizengcomp.pdf`, `trilhas eng comp.pdf`, `Turmas Abertas *.pdf`, `Matriz Curricular *.pdf`, `806Consulta Curso e Matriz Curricular`, entre outros.
+  - **Por que passou despercebido:** o `describe.skipIf` desliga o bloco inteiro quando a pasta não existe, que é o caso da CI. A suíte remota seguia verde e a regressão só aparecia na máquina do dono — exatamente a rede de proteção que o projeto trata como inegociável ficando inerte sem ninguém notar.
+  - **Correção (2026-08-14):** `tests/historico-real.test.ts` ganhou o filtro `ehHistorico`, que restringe a varredura a arquivos cujo nome começa com "Histórico" (normalizado sem acento, case-insensitive) — o acervo já nomeia todo histórico assim. Mantém a propriedade original: histórico novo continua coberto só de ser copiado para a pasta, sem nome de aluno entrando no repositório público, e sem lista mantida à mão.
+  - **Validado:** `historico-real.test.ts` fecha em 8 aprovados, 14 pulados (os documentos-fonte, agora corretamente excluídos da varredura), 0 falhas. Suíte completa: 36/36 arquivos, 436 aprovados, 17 pulados, 0 falhas.
+  - **Achado colateral, ainda aberto:** a pasta local `materiais-referencia/` cobre só BSI 981/806, Eng. Comp. 844/962 e Eletrônica 968. Os históricos de Controle 978 e Mecatrônica 823/973 citados na TASK-41 estão no acervo do Drive, não nela — as auditorias opt-in desses três cursos não rodam nesta máquina como está.
 
 ### Em Revisão
 *(nenhum no momento)*
@@ -319,6 +345,8 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 - **BUG-01 — Falha de reconhecimento de nome em PDFs de histórico gerados por certos navegadores/SOs:** os históricos do Victor Hugo Maltezo (gerados via Opera e Edge) e da Nathalya Chaves (gerado via Chrome + Windows) não são lidos com sucesso — o parser client-side (`historico/parser.ts`) acusa que não conseguiu identificar o nome do aluno. Contorno testado: gerar o PDF pelo celular no Chrome resolveu para os dois casos, mas a causa raiz (provavelmente diferença na extração de texto/coordenadas conforme o motor de renderização do PDF usado por cada navegador/SO) ainda não foi diagnosticada nem corrigida no parser.
   - **Espécime reprodutível (2026-08-06):** `Material Referência Eng. Controle e Automação Nova 978/Histórico do Aluno - Thayssa CA.PDF` reproduz exatamente este sintoma e está versionado na pasta de referência. Producer `Microsoft: Print To PDF`. A extração devolve **zero itens de texto** — o arquivo não tem camada de texto, é imagem. Nenhum ajuste no parser resolve; exigiria OCR ou recusa explícita. O teste que o cobriria hoje é pulado por ausência do arquivo em CI, então a falha não aparece na suíte.
   - Investigar junto do **BUG-02**: a hipótese de "diferença por navegador" foi **refutada** lá (ver medições), e a causa real está em como os glifos são gravados, não em qual navegador gerou.
+  - **Confirmado por segunda ferramenta (2026-08-14):** o `markitdown`, que usa `pdfminer.six` — motor completamente distinto do `pdf.js` —, devolve **0 caracteres** para este arquivo depois de **64,05s** de processamento. Duas implementações independentes concordam: não há camada de texto a extrair. Fecha a questão de "talvez outro leitor resolva" e reduz o BUG-01 a duas saídas reais: **OCR** ou **recusa explícita**. Dado o custo medido (64s só para descobrir que não há texto), a recusa explícita é a saída barata; o OCR não roda client-side sem inflar o bundle.
+  - **Reprodução medida com o pipeline atual:** 0,43s, 0 caracteres, avisos `cabeçalho: nome do aluno não encontrado`, `nenhuma disciplina cursada encontrada` e `Resumo Optativas não encontrado`. O aluno recebe recusa, não perfil vazio — este caso já falha alto, ao contrário do BUG-02.
 
 - **BUG-02 — Histórico com texto estilhaçado é importado como perfil vazio, sem erro:** o arquivo `Material Referência Eng. Comp Nova 962/Histórico Completo Carolina.pdf` (matriz 962) é importado sem exceção, mas resulta em **0 disciplinas cursadas**. O cabeçalho é lido corretamente (nome, curso, matriz, período, coeficiente); só a tabela morre. Os avisos do parser são `"nenhuma disciplina cursada encontrada"` e `"Resumo Optativas não encontrado"`, e nada disso chega à interface — o aluno recebe um perfil vazio sem entender o motivo.
   - **Causa medida (2026-08-06).** O PDF grava **um glifo por operação de desenho** (4.730 runs para 4.730 glifos); os arquivos que funcionam agrupam 1,8 a 3 glifos por run. Os avanços vêm inflados: largura média por caractere dividida pelo tamanho da fonte dá **0,634** contra **0,589** nos íntegros. O `pdfjs-dist` lê essa sobra como separação de palavra e **insere espaço literal dentro do `str` do item**: `Introdução` vira `I ntroduç ão`, `ELEX10` vira `E LE X1 0`, `345` vira `3 4 5 0`. Resultado: **17,1% dos caracteres extraídos são espaços**, contra ~7% na linha de base. O cabeçalho sobrevive porque é localizado por rótulo (`Aluno:`, `Curso:`); a tabela não, porque casa por formato de código e de coluna numérica.
@@ -326,4 +354,157 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - **Duas correções descartadas por teste, não por suposição.** `getTextContent({ disableCombineTextItems: true })` não altera o texto em nada. Elevar o `LACUNA_DE_ESPACO` de `extrair-linhas.ts` para 1,0 / 1,4 / 1,8 / 2,2pt também não. Ambas são inalcançáveis: os espaços já chegam dentro do `str`, fabricados pelo pdf.js antes de qualquer lógica nossa de junção.
   - **Hipótese não confirmada sobre a origem:** a assinatura (um glifo por run, os três estilos uniformizados em 7.00pt, avanços inflados) é a de um documento **já em PDF que foi reimpresso**, e não a de impressão da página HTML do Portal. Confirmável gerando os dois caminhos da mesma origem e comparando glifos por run.
   - **Correção robusta:** reconstruir o texto a partir de `getOperatorList`, que entrega a posição de cada glifo, e derivar os espaços das lacunas medidas contra o tamanho da fonte, em vez de confiar nos espaços fabricados pelo pdf.js. Resolve a classe inteira, mas é reescrita do `extrair-linhas.ts` e precisa ser validada contra os 15 históricos que hoje passam.
+  - **A correção robusta está validada por evidência externa (2026-08-14).** O `markitdown`/`pdfminer.six` lê **este mesmo arquivo corretamente**: devolve `ELEX10`, `Introdução À Lógica Para Computação`, `FIS7F1 Física Teórica 1`, notas, frequências, semestres, professores e as situações (`Aprovado Por Nota/Frequência`, `Cancelado`, `Reprovado Por Nota/Frequência`) sem estilhaço. A contagem de códigos de disciplina no texto extraído dá **54 únicos** para a Carolina contra **59** da Deborah (histórico saudável da mesma matriz 962) — ou seja, a tabela inteira é recuperável. O defeito **não está no PDF**: está exclusivamente na fabricação de espaços do `pdf.js`. Isso eleva a correção robusta de hipótese a caminho comprovado e fornece um **oráculo**: o `pdfminer` gera o texto de referência contra o qual validar a reescrita do `extrair-linhas.ts`.
+  - **Medição do pipeline atual neste arquivo (2026-08-14):** 0,16s, 15.976 caracteres, **0 cursadas**, nome e matriz lidos (`CAROLINA VITORIAH FERREIRA BRUNO`, 962). Confirma o diagnóstico: cabeçalho sobrevive, tabela morre.
+  - **Limiar de triagem remedido no ponto de junção das linhas:** os históricos saudáveis dos seis cursos ficam em **13,8% a 14,8%** de espaços (981, 962, 973, 823, 978 e 806), e este arquivo em **20,5%**. A separação é limpa e sustenta a mitigação barata. Atenção: os números de ~7% e ~12% registrados acima foram medidos na extração crua do `pdf.js`, estágio anterior; os dois conjuntos não são comparáveis entre si, e a implementação precisa fixar em qual estágio o limiar é aplicado.
   - **Mitigação barata:** detectar a patologia (proporção de espaços acima de ~12%, ou razão de um glifo por run) e recusar a importação com mensagem explícita, em vez de entregar perfil vazio em silêncio. Métrica de triagem para novos arquivos: acima de ~12% de espaços falha, abaixo de ~7% passa.
+  - **A matéria-prima da correção robusta já está no navegador (2026-08-14).** `page.getOperatorList()` sobre este arquivo devolve **4.730 operações `showText`** na página 1 — o número bate exatamente com "4.730 glifos" da causa medida — mais 4.253 `moveText` carregando o posicionamento. Não é preciso nenhuma dependência nova: a posição individual de cada glifo já está disponível, só não é usada hoje.
+  - **As quatro combinações de opção do `getTextContent` testadas não mudam nada:** `disableCombineTextItems`, `disableNormalization` e as duas juntas devolvem exatamente os mesmos 952 itens, 5,75 caracteres/item e 23% de espaços que o padrão. Reconfirma que não há alavanca de configuração — a reescrita é obrigatória, não opcional.
+  - **Encaminhamento decidido:** a reescrita vira `TASK-53` (ver Pendente, Features), com o `pdfminer` como oráculo de validação contra os históricos saudáveis.
+
+## 3. Tarefas em Backlog / Visão Futura (`[ ]`)
+
+- **TASK-52 — Visão de Matérias Eletivas (Pool de Inclusão)** *(renumerado de TASK-31, colisão de ID — ver nota no topo do arquivo)*:
+  - Desenvolver uma visão que consolide um "pool" gigante de todas as matérias de outros cursos que o aluno pode contemplar.
+  - O intuito é permitir que o aluno se planeje adequadamente para a fase de inclusão, período após a matrícula em que ele escolhe matérias fora da sua grade padrão para participar.
+  - **Cenário pós-matrícula:** junto da TASK-51 (aviso de mudança na oferta) e da TASK-26 (convite de avaliação pós-semestre), fecha o que o Oásis oferece depois que a matrícula acontece. A TASK-05D cobre *quando* o aluno planeja; estas três cobrem o que vem depois.
+
+---
+
+## 4. Auditoria de Ambientes (2026-08-14)
+
+Estado medido dos dois ambientes na data. Esta seção é um retrato, não um backlog:
+quando o merge do sandbox acontecer, ela é substituída pelo retrato seguinte.
+
+### 4.1 Ambientes
+
+| | Repositório | Endereço | `HEAD` | Data | Deploy |
+|---|---|---|---|---|---|
+| Produção | `bdsromulo/Oasis-UTFPR` | `oasisutfpr.com.br` | `ac7f3de` | 10/08 | success |
+| Sandbox | `bdsromulo/oasisutfpr-sandbox` | `bdsromulo.github.io/oasisutfpr-sandbox/` | `b2d9023` | 07/08 | success |
+
+Cada repositório carrega os dois workflows de deploy e cada um se desliga no
+outro pela guarda `if: github.repository == …`. Nenhum PR aberto nos dois lados.
+
+**O `gh api .../compare` entre os dois repositórios mente.** O sandbox não é fork
+do repositório de produção, então a sintaxe `owner:repo:ref` não resolve e a API
+devolve `identical` por ter comparado a produção consigo mesma. A comparação
+verdadeira exige adicionar o sandbox como remote e usar `git rev-list`.
+
+### 4.2 Divergência
+
+Sandbox está **11 commits à frente** (TASK-45 a TASK-50); produção está **5
+commits à frente**, todos de ingestão de avaliações — os dois `fix(reviews)` de
+Mecatrônica e três execuções semanais.
+
+**O merge é limpo e não perde avaliações.** `git merge-tree` não acusa conflito.
+O ponto de risco era `data/reviews.json`, que a produção regenera e o
+`CLAUDE.md` proíbe editar à mão: contra a base comum (`0b707e4`), o sandbox
+**não tocou** nem `data/reviews.json` nem `scripts/ingerir-reviews.ts`. As **29**
+avaliações publicadas sobrevivem ao merge; as **10** do sandbox, de 06/08, não
+voltam por cima.
+
+### 4.3 Saúde da `main`
+
+- **Build:** 407,6 KiB gzip, dentro do teto móvel de 420 KiB.
+- **Suíte:** 436 aprovados, **16 reprovados**, 17 pulados. As 16 falhas são o
+  **BUG-03** e não indicam defeito de produto.
+- **Ingestão semanal:** segundas 09:00 UTC, última execução em 10/08 com
+  sucesso, 29 avaliações publicadas.
+
+### 4.4 Acervo de referência
+
+O acervo canônico é o Google Drive local, em `J:\Meu Drive\Oásis UTFPR`, com
+**45 PDFs** e cobertura dos oito cursos/matrizes. A pasta `materiais-referencia/`
+do repositório é uma **cópia parcial com nomenclatura diferente** (`Eng-Comp-844`
+contra `Material Referência Eng. Comp Antiga 844`): tem 24 PDFs e não cobre
+Controle 978 nem Mecatrônica 823/973. Os caminhos citados no BUG-01 e no BUG-02
+seguem a nomenclatura do Drive, não a da pasta local — daí os espécimes não serem
+encontráveis por quem procura só no repositório. Nada disso entra no Git; os dois
+locais são gitignorados.
+
+---
+
+## 5. Avaliação de Ferramenta: `markitdown` (2026-08-14)
+
+Avaliação pedida pelo dono: `microsoft/markitdown` como alternativa ao parsing
+atual, medida sobre os 45 PDFs do acervo do Drive. Versão testada: **0.1.7**.
+
+**Veredito: não substitui nenhum dos dois pipelines, mas resolve o BUG-02 e vira
+ferramenta de apoio.**
+
+### 5.1 O que impede a substituição
+
+- **Histórico escolar é client-side por regra inviolável.** O `markitdown` é
+  Python. Adotá-lo para históricos exigiria servidor, violando de uma vez a
+  regra 2 (PDF de aluno nunca sai do navegador) e a regra 3 (sem backend). Não é
+  questão de qualidade: é incompatibilidade arquitetural.
+- **Ele descarta a coordenada, que é exatamente o que os parsers usam.** O
+  `parse_turmas_pdf.py` abre com `pdfplumber`, chama `extract_words()` e lê
+  `w["x0"]` para descobrir a faixa horizontal de cada coluna. O `markitdown`
+  entrega texto corrido e tabelas Markdown sintetizadas — **zero coordenadas**.
+  Trocar seria remover o sentido em que o pipeline enxerga, e reintroduzir por
+  heurística de texto as anomalias que as regras R1–R9 e M1–M7 já domam por
+  posição.
+- **A síntese de tabela atrapalha em vez de ajudar.** Nos históricos, o
+  `markitdown` produz tabelas Markdown desalinhadas com o conteúdo — cabeçalhos
+  quebrados em colunas vazias e as linhas de disciplina caindo **fora** da tabela,
+  como texto solto intercalado. O dado continua lá, mas menos estruturado do que
+  no texto plano.
+- **A fusão de colunas não é culpa dele e não some.** `MAT7GAGeometria` (código
+  colado ao nome) aparece igual no `pdfplumber`: está gravado assim no PDF. Quem
+  separa hoje é a lógica posicional; sem ela o problema fica pior, não melhor.
+
+### 5.2 Desempenho medido
+
+| Alvo | Pipeline atual | `markitdown` | Razão |
+|---|---|---|---|
+| Histórico (6 págs, 981) | 0,08s (`pdf.js`) | 2,49s | **~31x** |
+| Histórico (média dos saudáveis) | 0,06–0,15s | 0,9–3,6s | **~20–30x** |
+| Turmas Abertas BSI (19 págs) | 5,91s (`pdfplumber`) | 6,97s | 1,18x |
+| Turmas Abertas Mecatrônica (5 MB) | — | 191,19s | — |
+| PDF sem camada de texto | 0,43s | 64,05s | **~149x** |
+
+Na leitura de histórico a diferença é de ordem de grandeza e seria sentida pelo
+aluno. No pipeline Python a diferença é pequena — os dois lados são
+`pdfminer` por baixo —, o que confirma que ali o custo da troca não é tempo, é a
+perda da coordenada. Três PDFs consumiram entre 29s e 191s, e **dois deles
+devolveram 0 caracteres** depois de todo esse trabalho.
+
+### 5.3 Precisão medida — pipeline atual sobre o acervo do Drive
+
+| Caso | Tempo | Cursadas | Avisos |
+|---|---|---|---|
+| 981 Rômulo | 0,08s | 44 | nenhum |
+| 962 Deborah | 0,06s | 36 | nenhum |
+| 973 Beatriz | 0,06s | 22 | nenhum |
+| 823 Rafael | 0,09s | 56 | nenhum |
+| 978 Maria H | 0,15s | 48 | nenhum |
+| 806 Vitor | 0,15s | 73 | nenhum |
+| **962 Carolina (BUG-02)** | 0,16s | **0** | 2 avisos |
+| **978 Thayssa (BUG-01)** | 0,43s | **0** | 3 avisos |
+
+Seis dos oito históricos fecham com **zero avisos**, cobrindo as seis matrizes
+com histórico disponível. O parser atual não tem problema de precisão geral: tem
+duas patologias de fonte nomeadas, que são exatamente os dois bugs abertos.
+
+### 5.4 O ganho real, e onde ele entra
+
+O `markitdown` **lê o espécime do BUG-02 corretamente** — ver o registro no
+próprio BUG-02. Mas o mérito é do `pdfminer.six`, não da camada Markdown, e a
+conclusão que interessa é sobre o `pdf.js`: o arquivo é são, o estilhaço é
+fabricado pelo leitor. Isso promove a "correção robusta" do BUG-02 de hipótese a
+caminho comprovado.
+
+Usos legítimos, todos **fora** do caminho do aluno:
+
+- **Oráculo de validação** para a reescrita do `extrair-linhas.ts`: gerar offline
+  o texto de referência e comparar com o que o `pdf.js` reconstruído produz.
+- **Triagem de acervo novo:** detectar em lote qual PDF não tem camada de texto,
+  ainda que caro (64s no espécime do BUG-01).
+
+Não adotar para: leitura de histórico no site, `parse_matriz.py`,
+`parse_turmas_pdf.py` e `validate_turmas.py`. E a flexibilidade com formatos
+novos de Turmas Abertas **não** aumenta com ele: o que absorve variação de
+formato hoje é o perfil posicional por curso, e é justamente o que ele não tem
+como expressar.
