@@ -678,6 +678,7 @@ export function App() {
   }
 
   const barraGradeMobileVisivel =
+    (!!perfil || checkinConcluido) &&
     aba === "planejamento" &&
     abaPlanejamento === "cursar" &&
     !sobreAberta &&
@@ -718,8 +719,12 @@ export function App() {
             checkinConcluido && <Badge tom="neutro">Modo Livre</Badge>
           )}
           {/* No celular só o ícone cabe ao lado do chip de perfil e do Menu; o
-              rótulo iria empurrar o Menu para uma segunda linha. */}
-          {reviewsHabilitadasPara(matriz.matriz) && (
+              rótulo iria empurrar o Menu para uma segunda linha. Gated também
+              por perfil/checkinConcluido, como no bloco desktop logo abaixo:
+              sem isso o convite para avaliar aparecia na própria tela de
+              check-in, citando telas (Planejamento, Configurações) que quem
+              ainda não entrou na plataforma nunca viu. */}
+          {(!!perfil || checkinConcluido) && reviewsHabilitadasPara(matriz.matriz) && (
             <button
               type="button"
               onClick={abrirNovidades}
