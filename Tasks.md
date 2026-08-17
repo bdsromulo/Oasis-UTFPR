@@ -224,6 +224,24 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 ### Pendente
 
+- **TASK-54 — Páginas de conceitos da formação (o vocabulário curricular explicado):**
+  - **O problema:** a plataforma usa o tempo todo *estrato*, *trilha*, *optativa*, *eletiva*, *disciplina extensionista*, *projeto de extensão* e *atividade complementar* como se fossem conhecidos. Não são — e a confusão entre eles é justamente onde o aluno erra a matrícula e descobre tarde. O Como Usar explica **a plataforma**; falta explicar **o currículo**.
+  - **Conceitos a cobrir:** 1º e 2º estratos; trilhas de aprofundamento/formação; disciplinas optativas; disciplinas eletivas; grupos de escolha ("Opções de…", desenho próprio da 968); Ciclo de Humanidades; disciplinas extensionistas (CHEXT embutida na disciplina); projetos/atividades de extensão (carga que o aluno busca fora da matriz); atividades complementares; estágio supervisionado; TCC; ENADE; consignação e equivalência.
+  - **Três camadas por conceito, e a terceira é a que não existe em lugar nenhum hoje:**
+    - `a)` **Definição formal** — o que o PPC e a UTFPR entendem por aquilo.
+    - `b)` **Contexto prático por curso** — o mesmo nome significa coisas diferentes conforme a matriz, e é isso que confunde. Exemplos reais já medidos: a **968** concentra o curso em 25 grupos de escolha e por isso tem bloco optativo (2.385h) **maior que o obrigatório** (1.710h), o que parece erro de leitura e não é; a **978** modela cinco trilhas como cinco exigências de 135h, não como "escolha N trilhas"; a **823** não cobra extensão nenhuma, enquanto a 973 cobra 420h; a **806** não tem extensão curricular, ao contrário da 981.
+    - `c)` **Como aquilo aparece no Oásis** — em que tela, com que rótulo, e o que faz o número subir. Fecha o laço entre o vocabulário oficial e o que está na tela.
+  - **Encaixe:** mesma estrutura visual de `TelaComoUsar.tsx` e `TelaSobre.tsx` (seções numeradas, `Card`, `Badge`). Acessível antes do check-in, porque é material do projeto e não do aluno. Os códigos com tooltip da TASK-03 são o gancho natural para linkar do dado para o conceito.
+  - **Fonte:** PPCs e matrizes oficiais já no acervo. Onde a prática divergir do documento, a divergência vai para a camada de anotações — nunca sobrescrevendo a fonte.
+
+- **TASK-55 — Crawler de Turmas Abertas direto do Portal:**
+  - **O que resolve:** hoje toda oferta entra por PDF baixado à mão do Portal do Aluno e processado por `tools/parse_turmas_pdf.py`. São cinco cursos × cada revisão da oferta, e a reimportação de 06/08/2026 já mostrou que a UTFPR **revisa a oferta depois de publicada** (`EST70A S02/S03` saíram, `ELTA8 S11` mudou de enquadramento). O trabalho manual é o que faz essas revisões passarem despercebidas.
+  - **Casa com a TASK-51:** o aviso de mudança na oferta precisa de um diff entre revisões. Coleta automática é o que torna esse diff frequente o bastante para o aviso chegar antes da matrícula, em vez de depois.
+  - **Restrições inegociáveis:** o site é estático e sem backend, então o crawler é ferramenta **offline** de `tools/`, no mesmo padrão dos parsers — roda na máquina do mantenedor (ou num Action agendado, como a ingestão de avaliações), versiona o JSON derivado, e **nunca** é chamado pelo navegador do aluno em runtime. Nenhuma credencial de aluno entra no repositório.
+  - **Pontos a resolver antes de escrever código:** se a listagem pública de Turmas Abertas exige sessão autenticada; se há caminho sem login (a relação de turmas costuma ser pública); e a política de acesso do Portal — coleta educada, com intervalo entre requisições e identificação honesta, sem paralelismo agressivo.
+  - **A validação não muda:** o JSON produzido passa por `validate_turmas_estrutura.py` com **0 erros** antes de entrar em `data/`, exatamente como o backup do Grade na Hora já faz. O crawler troca a origem do dado, nunca a rede de proteção.
+  - **Degradação obrigatória:** se a coleta falhar ou o layout do Portal mudar, o pipeline mantém o último JSON bom e falha alto no log — nunca publica oferta parcial. Mesma disciplina do "erro alto > erro silencioso" que rege os parsers.
+
 - **TASK-53 — Cascata de leitores com detector explícito, para históricos que o `pdf.js` estilhaça:**
   - **Resolve BUG-02** e converte a saída silenciosa do **BUG-01** numa recusa explicada. Desenhada a partir da avaliação da ferramenta `markitdown` (§5): o que vale copiar de lá não é o Markdown nem o Python — é a arquitetura de **conversores tentados em ordem, com um detector explícito no meio** — e, isolando o motor, o algoritmo de segmentação de palavras do `pdfminer.six` (o `word_margin`: lacuna comparada à largura do caractere, não a um limiar absoluto em pontos).
   - **Passo 1 — o detector, sozinho, já vale a pena.** Hoje o `pdf.js` estilhaçado devolve perfil vazio em silêncio (BUG-02). Medir a proporção de espaços dentro do `str` bruto (histórico saudável: 13,8%–14,8%; espécime doente: 20,5%, medidos em seis cursos e um caso patológico) e recusar a importação com mensagem explícita quando o limiar estoura, em vez de deixar `parseHistorico` devolver um perfil sem cursadas. Sem motor novo, sem dependência nova — é a "mitigação barata" já registrada no BUG-02, promovida a primeiro passo desta task porque não depende do resto para entregar valor.
@@ -352,6 +370,22 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 *(nenhum no momento)*
 
 ### Pendente
+- **BUG-06 — Quem já integralizou o curso não recebe data de formatura, recebe um traço:**
+  - **Medido (2026-08-16)** com histórico real da matriz 844, 10º período, 68 disciplinas cursadas. O Quadro Resumo do Portal confirma que **nada falta**: obrigatórias 3460/3460 `faltante: 0`, optativas 270/270, eletivas 90/90.
+  - **O que o motor devolve:** `semestreFormatura: null`, `semestres: []`, `horasRestantes: 0`, e **todos os requisitos com `atendido: true`**. Ou seja, o motor sabe que está tudo cumprido — ele só não tem um semestre projetado para chamar de formatura, porque não há nada a projetar.
+  - **O que a aluna vê:** em `TelaSimuladorFormatura.tsx`, `Formatura estimada` cai no ramo `: "—"` e o subtítulo com o semestre por extenso não renderiza. A pessoa mais perto de colar grau recebe a tela **menos** informativa da plataforma — um traço, sem nenhuma explicação.
+  - **Testado em ritmos 4, 6 e 8 e horizontes 24 e 40:** o resultado é idêntico em todos. Não é questão de horizonte curto; é o caso "conjunto vazio" não tratado.
+  - **Correção sugerida:** tratar `horasRestantes === 0 && semestres.length === 0` como estado próprio — "curso integralizado" — em vez de deixá-lo cair no mesmo ramo de "não fecha". São situações opostas exibidas igual.
+  - **Cobertura:** `tests/conservacao-formatura.test.ts` reconhece o caso e o isenta da asserção de fechamento, com a exceção comentada e apontando para este bug. Ao corrigir, remover a exceção.
+
+- **BUG-05 — Situação e Simulador exibem números diferentes para o mesmo bloco de trilhas (BSI 806):**
+  - **Medido (2026-08-16)** com histórico real da 806, na `main` e no sandbox — não é regressão, já está em produção.
+  - **O aluno vê três números para a mesma pergunta.** Na tela **Situação**, somando trilha a trilha: **315h** (cada trilha capada no próprio piso de 90h por `prog()`, em `motor/situacao.ts`). No `blocoOptativo` do mesmo painel e no **Simulador**: **450h**, o agregado bruto do conjunto 934. O Portal, por sua vez, valida **345h** das 450h cursadas (`conj 934 exig=345 cursAprov=450 valid=345`).
+  - **Origem:** o aluno superinvestiu numa trilha — `937 "Desenvolvimento Baseado Em Plataformas"` tem 210h cursadas para um piso de 90h, e `935` tem 105h para 90h. O excedente é real, mas só 345h integralizam.
+  - **Não compromete a formatura:** o requisito é atendido corretamente (`faltante: 0`), e o Portal confirma `valid=345 = exig=345`. Ninguém formaria a menos por isso. É defeito de **exibição**, não de integralização — por isso Pendente e não urgente.
+  - **Por que corrigir mesmo assim:** é exatamente o que o próprio código combate. O comentário de `progressoGlobalDoCurso` diz que "duas contas para uma pergunta só é sempre uma delas errada, e o aluno não tem como saber qual" — e aqui são três.
+  - **Decisão a tomar antes de mexer:** qual número é o certo a exibir. Candidato natural é o **validado pelo Portal (345h)** para "quanto conta", mantendo as 450h visíveis como "quanto você cursou", explicitamente rotulado — em vez de escolher um e esconder o outro.
+
 - **BUG-01 — Falha de reconhecimento de nome em PDFs de histórico gerados por certos navegadores/SOs:** os históricos do Victor Hugo Maltezo (gerados via Opera e Edge) e da Nathalya Chaves (gerado via Chrome + Windows) não são lidos com sucesso — o parser client-side (`historico/parser.ts`) acusa que não conseguiu identificar o nome do aluno. Contorno testado: gerar o PDF pelo celular no Chrome resolveu para os dois casos, mas a causa raiz (provavelmente diferença na extração de texto/coordenadas conforme o motor de renderização do PDF usado por cada navegador/SO) ainda não foi diagnosticada nem corrigida no parser.
   - **Espécime reprodutível (2026-08-06):** `Material Referência Eng. Controle e Automação Nova 978/Histórico do Aluno - Thayssa CA.PDF` reproduz exatamente este sintoma e está versionado na pasta de referência. Producer `Microsoft: Print To PDF`. A extração devolve **zero itens de texto** — o arquivo não tem camada de texto, é imagem. Nenhum ajuste no parser resolve; exigiria OCR ou recusa explícita. O teste que o cobriria hoje é pulado por ausência do arquivo em CI, então a falha não aparece na suíte.
   - Investigar junto do **BUG-02**: a hipótese de "diferença por navegador" foi **refutada** lá (ver medições), e a causa real está em como os glifos são gravados, não em qual navegador gerou.
@@ -518,3 +552,72 @@ Não adotar para: leitura de histórico no site, `parse_matriz.py`,
 novos de Turmas Abertas **não** aumenta com ele: o que absorve variação de
 formato hoje é o perfil posicional por curso, e é justamente o que ele não tem
 como expressar.
+
+---
+
+## 6. Auditoria de Integralização por Curso (2026-08-16)
+
+Auditoria pedida pelo dono, com foco declarado nos cursos **fora de BSI e Eng.
+Comp.**: lendo históricos reais, tudo que a formatura exige está sendo cobrado?
+Sete históricos do acervo, cruzados contra o Quadro Resumo oficial do Portal e
+contra as cargas da matriz. Rodada na `main` e no sandbox, com resultados
+idênticos.
+
+### 6.1 Resultado: os cursos auditados estão corretos
+
+**Conservação da exigência** — a soma do que o simulador cobra reconstrói as
+cargas declaradas, curso a curso:
+
+| Curso | Categorias cobradas | Soma | PPC |
+|---|---|---|---|
+| Eletrônica 968 | 1710 + 210 + 1875 + 300 (+465 ext) | 4095 | 4560 |
+| Controle 978 | 3525 + 675 | 4200 | 4200 |
+| Mecatrônica 973 | 3435 + 60 + 240 (+420 ext) | 3735 | 4155 |
+| Mecatrônica 823 | 4066 + 90 + 240 | 4396 | 4396 |
+| BSI 806 | 2095 + 360 + 60 + 345 + 180 | 3040 | 3040 |
+
+Nenhuma categoria declarada na matriz fica sem ser cobrada. Estágio e TCC
+pendentes entram na projeção em todos os casos. As projeções fecham: 968 em
+2029.1, 978 em 2028.1, 973 em 2030.2, 823 em 2027.2, 806 em 2027.1.
+
+**Fidelidade ao Quadro Resumo** — seis dos sete históricos reproduzem a **coluna
+E** exatamente: 968 795h, 978 240h, 823 90h, 806 795h, 981 495h, 962 120h.
+
+Único achado real: **BUG-05** (divergência de exibição na 806).
+
+### 6.2 Rede de proteção criada
+
+`tests/conservacao-formatura.test.ts`, em dois blocos:
+
+- **Conservação (48 testes, roda na CI, sem nenhum PDF).** A exigência sai da
+  matriz, não do aluno — então perfil sintético zerado basta. É o bloco que pega
+  **matriz nova com categoria órfã**, que era o modo de falha temido.
+- **Fidelidade (12 testes, opt-in via `OASIS_ACERVO`).** Confere o cumprido
+  contra a coluna E e exige que estágio/TCC pendentes entrem na projeção.
+
+### 6.3 Armadilhas de medição, registradas para não se repetirem
+
+Quatro falsos positivos apareceram antes do resultado final. Ficam aqui porque
+qualquer auditoria futura cairá nos mesmos:
+
+1. **Coluna C x coluna E.** Comparar o cumprido contra `optativas.aprovada`
+   (coluna C, só o validado) produz "sobre-crédito" em **todos** os cursos. O
+   Oásis usa `aprovadaTotal` (coluna E) de propósito. Foi a universalidade do
+   sintoma — inclusive nos cursos-controle já auditados — que denunciou o erro.
+2. **Ofertas de Mecatrônica são carregadas sob demanda.** Sem aguardar
+   `carregarOfertasHistoricasMecatronica()`, a simulação roda com oferta vazia,
+   acusa "sem oferta recente" para 42 disciplinas e a 973 não fecha. A App faz
+   isso num `useEffect`; o teste precisa imitar.
+3. **`OfertaSemestre.disciplinas` é array, não `Record`.** `Object.keys` devolve
+   índices e faz parecer que a matriz inteira está ausente da oferta.
+4. **`ch_total_ppc` não é função uniforme das cargas.** Na 978 o PPC já é
+   exatamente obrigatórias + optativas; na 981 a soma das categorias dá 3280h
+   contra PPC de 3220h, e as 60h são extensão contada duas vezes. Invariante
+   única sobre o PPC reprova matriz correta.
+
+### 6.4 Diferença observada entre `main` e sandbox
+
+Na **968**, a extensão restante informada ao aluno é **315h na `main`** e **345h
+no sandbox** — 30h de diferença. Os requisitos batem nos dois (`0/465`); só o
+aviso diverge. Não investigado a fundo; **verificar antes de publicar o
+sandbox**, porque muda o número que o aluno de Eletrônica lê na tela.
