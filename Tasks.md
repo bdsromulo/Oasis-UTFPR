@@ -224,6 +224,14 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 ### Pendente
 
+- **TASK-56 — Ao escolher entre disciplinas equivalentes, preferir a que carrega mais extensão:**
+  - **Medido (2026-08-16), matriz 968.** O conjunto 1215 tem disciplinas intercambiáveis — mesmo conjunto, mesmo período 2, sem pré-requisito — mas com CHEXT diferente: `CAART02` e `CAART03` valem 60h, `CAART04` a `CAART07` valem 90h. Para o guloso do simulador elas são equivalentes; **para o aluno não são**.
+  - **Efeito observado:** fechando o conjunto com `CAART03` + `CAART02` (120h de CHEXT) em vez de `CAART02` + `CAART05` (150h), o aluno passa a precisar de **345h** de extensão em projeto próprio em vez de **315h**. São 30h que ele poderia receber embutidas numa disciplina que cursaria de todo jeito.
+  - **Como apareceu:** não é bug de extensão, é falta de critério de desempate. A janela de período da TASK-48 (commit `81eb1b3`) reordenou o guloso e a escolha mudou junto — ver §6.4. A janela está certa e o adiamento do TCC que ela produz vale mais que as 30h; o que falta é o desempate.
+  - **Regra proposta:** quando duas candidatas satisfazem a mesma exigência e disputam a mesma vaga, desempatar pela **maior CHEXT**. Extensão embutida é carga que o aluno cumpre assistindo a uma aula que já ia assistir; extensão genérica é projeto que ele precisa procurar sozinho. Preferir a primeira é sempre melhor, nunca pior.
+  - **Cuidado ao implementar:** o desempate vale só entre candidatas **realmente equivalentes** (mesma exigência atendida, mesma disponibilidade de turma). Não pode virar preferência por disciplina maior — trocar 60h por 90h só compensa quando as 30h extras são de extensão, e não carga a mais para integralizar.
+  - Vale para todos os cursos com extensão: 968 (465h), 978 (420h), 973 (420h), 962 (420h) e 981 (330h).
+
 - **TASK-54 — Páginas de conceitos da formação (o vocabulário curricular explicado):**
   - **O problema:** a plataforma usa o tempo todo *estrato*, *trilha*, *optativa*, *eletiva*, *disciplina extensionista*, *projeto de extensão* e *atividade complementar* como se fossem conhecidos. Não são — e a confusão entre eles é justamente onde o aluno erra a matrícula e descobre tarde. O Como Usar explica **a plataforma**; falta explicar **o currículo**.
   - **Conceitos a cobrir:** 1º e 2º estratos; trilhas de aprofundamento/formação; disciplinas optativas; disciplinas eletivas; grupos de escolha ("Opções de…", desenho próprio da 968); Ciclo de Humanidades; disciplinas extensionistas (CHEXT embutida na disciplina); projetos/atividades de extensão (carga que o aluno busca fora da matriz); atividades complementares; estágio supervisionado; TCC; ENADE; consignação e equivalência.
@@ -615,9 +623,37 @@ qualquer auditoria futura cairá nos mesmos:
    contra PPC de 3220h, e as 60h são extensão contada duas vezes. Invariante
    única sobre o PPC reprova matriz correta.
 
-### 6.4 Diferença observada entre `main` e sandbox
+### 6.4 As 30h de extensão da 968 entre `main` e sandbox — resolvido
 
-Na **968**, a extensão restante informada ao aluno é **315h na `main`** e **345h
-no sandbox** — 30h de diferença. Os requisitos batem nos dois (`0/465`); só o
-aviso diverge. Não investigado a fundo; **verificar antes de publicar o
-sandbox**, porque muda o número que o aluno de Eletrônica lê na tela.
+**Diagnóstico concluído em 2026-08-16.** A extensão restante informada ao aluno
+da 968 é **315h na `main`** e **345h no sandbox**. Os requisitos batem nos dois
+(`extensao 0/465`); diverge só o aviso.
+
+**Aritmética.** `horasExtensaoGenerica` é o que sobra da exigência depois de
+descontar o CHEXT das disciplinas que a projeção agenda. As duas versões
+escolhem disciplinas diferentes do **mesmo conjunto 1215** (humanidades, todas
+de período 2, sem pré-requisito, portanto intercambiáveis):
+
+| | Escolha | CHEXT somado | 465 − CHEXT |
+|---|---|---|---|
+| `main` | `CAART02` (60h) + `CAART05` (90h) | 150h | **315h** |
+| sandbox | `CAART03` (60h) + `CAART02` (60h) | 120h | **345h** |
+
+**Causa isolada por bisect:** commit `81eb1b3` ("barra disciplina adiantada mais
+de dois períodos"), a janela de período da TASK-48. No pai dele (`1ad2bac`) o
+número ainda é 315h; a partir dele, 345h.
+
+**A janela está certa — o efeito colateral é que não está.** Na `main`, o
+primeiro semestre projetado traz `ELE91` (TCC 1) e `ELO91`, ambos de **período
+9**, para um aluno que não chegou lá: é exatamente o defeito que motivou a
+TASK-48. O sandbox corretamente os adia para 2027-1. O rearranjo, porém,
+reordenou o guloso e ele passou a fechar o conjunto 1215 com duas disciplinas de
+60h em vez de uma de 60h e uma de 90h.
+
+**Consequência para o aluno:** 30h a mais de extensão que ele precisa caçar em
+projeto fora da matriz, em vez de receber embutidas numa disciplina que cursaria
+de todo jeito. Nenhuma das duas projeções é inválida; a da `main` é
+**estritamente melhor** neste eixo.
+
+**Não bloqueia a publicação do sandbox:** adiar o TCC de período 9 vale muito
+mais que 30h de extensão. Fica registrado como **TASK-56**.
