@@ -44,54 +44,133 @@ Abaixo estão listados os Requisitos Funcionais (RF) e Não Funcionais (RNF) da 
 
 ## 2. Modelagem de Gestão da Informação (GI)
 
-A arquitetura informacional do Oásis UTFPR é guiada pelos frameworks canônicos de Planejamento Estratégico de Negócios (PEN), Planejamento Estratégico de TI (PETI) e do Ciclo de Gestão da Informação (GI).
+O planejamento informacional do Oásis UTFPR segue quatro blocos. O **PEN** define onde o projeto está, para onde quer ir e como pretende chegar. O **PETI** traduz isso em tecnologia, pessoas e indicadores. O **Processo de GI** descreve o ciclo de vida da informação acadêmica tratada pela plataforma. A **Qualidade da Informação** fecha com as dimensões usadas para julgar cada dado publicado.
 
-### 2.1 PEN — Planejamento Estratégico de Negócios
-- **1.1 Análise do Cenário Atendido:** O Portal do Aluno da UTFPR apresenta interfaces fragmentadas, relatórios densos em texto (PDFs multicolecionados) e ausência de simulação preditiva de grade que alerte sobre choques de horários e deslocamento inter-sedes em tempo hábil durante o curto período de matrícula.
-- **1.2 Definição de Objetivos:** Reduzir a carga cognitiva e o tempo gasto pelos estudantes dos cursos atendidos na tomada de decisão curricular, respeitando as diferenças entre as matrizes 981, 806, 844, 962, 968 e 978.
-- **1.3 Definição da Estratégia:** Atuar como camada de inteligência e consolidação visual local sobre os documentos brutos da instituição, democratizando o acesso às regras de progressão sem competir com os sistemas oficiais de registro de notas.
+A numeração interna desta seção (1, 2, 3 e 4) é a do roteiro canônico de GI, e é replicada na tela `src/ui/telas/TelaGestaoInformacao.tsx`. Ao alterar as tabelas aqui, replique lá.
 
-### 2.2 PETI — Planejamento Estratégico de TI
-- **2.1 Estratégia de TI:** Infraestrutura descentralizada (Client-side computing) alavancando a capacidade de processamento dos navegadores modernos para parsing e motor de inferência, com deploy contínuo via Git no GitHub Pages.
-- **2.2 Elementos de TI Sugeridos:**
-  - *Frontend & Build:* React 19, TypeScript, Vite, Tailwind CSS v4.
-  - *Engine de Extração Posicional:* Python 3 + `pypdf`/`pdfplumber` (camada de build/análise offline de dados) e `pdfjs-dist` (camada de runtime no browser do usuário).
-- **2.3 Indicadores de Desempenho (KPIs de TI):**
-  - Taxa de sucesso no parseamento do Histórico Escolar em formato PDF (`>= 99.5%`).
-  - Tempo de processamento do PDF no cliente (`< 1000ms`).
-  - Zero falsos positivos ou omissões na detecção de choques de horário na grade.
+### 1. PEN — Planejamento Estratégico de Negócios
 
-### 2.3 Processo de GI — Ciclo de Vida da Informação
+#### 1.1 Análise do cenário atendido — *onde estamos*
 
-O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canônicas — **Determinação das Exigências**, **Obtenção/Aquisição**, **Distribuição** e **Feedback** — atendendo a três perfis de agentes: o **Aluno de um curso atendido** (usuário final), o **Aluno Contribuidor** (avaliador autenticado por vínculo) e os **Mantenedores/Administradores** (curadoria dos dados semestrais e moderação).
+O planejamento acadêmico na UTFPR Curitiba depende de documentos que vivem separados. A matriz curricular chega em um PDF, a oferta do semestre em outro, e o histórico escolar em um terceiro. Cada um usa numeração e vocabulário próprios, e nenhum deles responde sozinho à pergunta que o aluno faz no período de matrícula, que é o que dá para cursar agora sem choque de horário e sem atrasar a formatura.
 
-#### 3.1 Determinação das Exigências — *quem precisa de qual informação, e quando*
+Ferramentas de apoio como o Grade na Hora cobrem a montagem de horários, porém não conhecem pré-requisito, categoria de matriz nem progresso individual. O resultado é uma decisão de alto impacto tomada em poucos dias, com planilha improvisada e conversa de corredor.
+
+**Análise SWOT do Oásis como produto**
+
+| Forças (S) | Fraquezas (W) |
+| :--- | :--- |
+| Histórico escolar processado inteiro no navegador, sem trânsito de dado pessoal | Leitura posicional dos PDFs oficiais, que quebra quando a instituição muda o layout |
+| Oito matrizes de cinco cursos cobertas pelo mesmo motor de pré-requisitos e equivalências | Ausência de backend impede autenticação forte e moderação em tempo real |
+| Pipeline de dados versionado, com validadores que reprovam a importação diante de qualquer erro | O aluno precisa gerar e carregar o histórico de novo a cada semestre |
+| Avaliações da comunidade já publicadas, com moderação humana antes de irem ao ar | Nada é medido em produção, então falha de leitura e adoção ficam invisíveis |
+| Custo de operação nulo, por rodar como site estático | Manutenção concentrada em uma pessoa |
+
+| Oportunidades (O) | Ameaças (T) |
+| :--- | :--- |
+| Demanda sazonal garantida a cada rematrícula, duas vezes por ano | Troca de matriz vigente invalida dados já publicados |
+| Comunidade disposta a contribuir com avaliação de turma e de professor | Mudança de formato do PDF de Turmas Abertas interrompe a atualização semestral |
+| Novos cursos do câmpus publicam documentos no mesmo formato, o que barateia a expansão | Conteúdo difamatório nas avaliações, com risco de exposição de professores |
+| Reconhecimento como material de apoio pelas coordenações e centros acadêmicos | Leitura do projeto como concorrente do Portal do Aluno, e evasão de contribuidores |
+
+#### 1.2 Definição de objetivos — *para onde queremos ir*
+
+- **Encurtar a decisão de matrícula.** Levar o aluno da dúvida ao conjunto de turmas viáveis em poucos minutos, sem precisar abrir o PDF da matriz nem cruzar tabelas à mão.
+- **Tornar a integralização legível.** Mostrar quanto falta em cada categoria da matriz do aluno, contando estágio, extensão curricular, trilhas e eletivas.
+- **Evitar o erro que custa um semestre.** Apontar choque de horário, pré-requisito não cumprido e deslocamento inviável entre sedes ainda durante a montagem da grade.
+- **Dar transparência à experiência de turma.** Publicar avaliação moderada de disciplina e de professor, para que a escolha de turma deixe de depender de conversa de corredor.
+- **Manter o dado pessoal fora do projeto.** Garantir que o histórico escolar seja lido apenas na máquina do aluno, sem envio, sem armazenamento remoto e sem registro.
+
+#### 1.3 Definição da estratégia — *como pretendemos chegar lá*
+
+A estratégia adotada é a de camada de leitura sobre os documentos oficiais. O Oásis não registra nota, não efetiva matrícula e não substitui o Portal do Aluno. Ele consome o que a instituição já publica, converte em dado estruturado e versionado, e devolve ao aluno uma resposta acionável.
+
+A operação segue como site estático, decisão que mantém custo nulo, elimina superfície de servidor e permite auditar cada dado publicado pelo histórico do Git. O dado pessoal fica fora dessa equação por desenho, já que o histórico escolar nunca sai da máquina de quem o carrega.
+
+### 2. PETI — Planejamento Estratégico de TI
+
+#### 2.1 Estratégia de TI
+
+- **Computação no cliente.** O navegador do aluno faz a leitura do histórico e roda o motor de inferência, o que dispensa servidor e mantém o documento em memória local.
+- **Dado público versionado.** Matriz e oferta viram JSON no repositório, com validador dedicado por matriz que reprova a importação diante de qualquer erro.
+- **Entrega contínua** no GitHub Pages, com build tipado e verificação de bundle a cada publicação.
+- **Terceiros apenas na fronteira de coleta.** O formulário recebe a avaliação, e a publicação só acontece depois de moderação humana (ver §6).
+
+#### 2.2 Elementos de TI sugeridos
+
+- **Plano de Software.** React 19, TypeScript, Vite e Tailwind CSS v4 na interface. A biblioteca `pdfjs-dist` lê o histórico em tempo de execução. Python 3 com `pypdf` e `pdfplumber` alimenta os parsers de matriz e de turmas, que rodam fora do site.
+- **Plano de Hardware e Infraestrutura.** Nenhum servidor próprio. Hospedagem estática no GitHub Pages, GitHub Actions para a ingestão semanal das avaliações, e o navegador do usuário como unidade de processamento. Interface responsiva do celular ao desktop.
+- **Plano de Informação.** Importação validada por matriz, camada de anotações curadas separada da fonte oficial, e o ciclo de GI do bloco 3 como contrato de manutenção semestral.
+- **Plano de RH.** Manutenção pelo dono do projeto, com moderação semanal das avaliações e revisão semestral da oferta. A comunidade contribui pela submissão de avaliação, sem acesso de escrita ao repositório.
+
+#### 2.3 Indicadores
+
+Cada indicador nasce amarrado a um objetivo do PEN. A última coluna registra, sem maquiagem, o que já é medido e o que ainda depende de instrumentação.
+
+| Objetivo relacionado (PEN) | Indicador | Meta | Aferição hoje |
+| :--- | :--- | :--- | :--- |
+| Encurtar a decisão de matrícula | Tempo entre carregar o histórico e obter a lista de turmas viáveis | Abaixo de 2 minutos | Sem instrumentação |
+| Encurtar a decisão de matrícula | Tempo de leitura do histórico em PDF dentro do navegador | Abaixo de 1000 ms | Sem instrumentação |
+| Tornar a integralização legível | Divergência entre o progresso calculado e o histórico oficial | Zero divergência nas matrizes cobertas | Suíte de testes por curso |
+| Tornar a integralização legível | Erros nos validadores de matriz e de turmas | Zero erro em toda importação | `tools/validate_*.py` |
+| Evitar o erro que custa um semestre | Choque de horário não apontado na montagem da grade | Zero falso negativo | Testes do motor de grade |
+| Dar transparência à experiência de turma | Avaliações moderadas e publicadas por ciclo de ingestão | Crescimento a cada semestre letivo | Moderação semanal e commit da Action |
+| Manter o dado pessoal fora do projeto | Bytes do histórico escolar que alcançam a rede | Zero | Revisão de código e verificação de bundle |
+
+### 3. Processo de GI — Ciclo de Vida da Informação
+
+O ciclo percorre quatro etapas canônicas, que são **Determinação das Exigências**, **Obtenção**, **Distribuição** e **Feedback**, e atende quatro perfis, que são o **Aluno dos cursos atendidos**, o **Aluno Contribuidor**, o **Moderador** e o **Mantenedor**.
+
+#### 3.1 Determinação das exigências — *quem precisa de qual informação, e quando*
 
 | Quem? | Informação Exigida | Quando? |
 | :--- | :--- | :--- |
-| **Aluno dos cursos atendidos** | Quanto falta para integralizar cada categoria da sua matriz? Qual meu Coeficiente de Rendimento absoluto e normalizado? | Contínuo; pico ao fim do semestre |
-| **Aluno dos cursos atendidos** | Quais disciplinas estou liberado a cursar (pré-requisitos cumpridos × oferta do semestre)? | Períodos de matrícula e rematrícula |
-| **Aluno dos cursos atendidos** | Há choque de horário ou conflito de deslocamento entre sedes (Centro/Ecoville/Neoville) na grade que estou montando? Quanto esta grade me faz avançar? | Período de matrícula |
-| **Aluno dos cursos atendidos** | Qual a dificuldade percebida e a experiência de quem já cursou uma dada disciplina/turma? | Antes de escolher turmas |
-| **Aluno Contribuidor** | Quais das minhas disciplinas concluídas posso avaliar, e como registrar dificuldade e comentário de forma autenticada? | Após concluir a disciplina |
-| **Mantenedores** | Quais turmas foram abertas no semestre? A matriz sofreu alteração? Há avaliações da comunidade pendentes de moderação? | Semestral; contínuo para moderação |
+| **Aluno dos cursos atendidos** | Quanto falta para integralizar cada categoria da minha matriz, contando estágio, extensão curricular, trilhas e eletivas? Qual meu coeficiente de rendimento absoluto e normalizado? | Contínuo, com pico ao fim do semestre |
+| **Aluno dos cursos atendidos** | Quais disciplinas estou liberado a cursar, cruzando os pré-requisitos já cumpridos com a oferta do semestre? | Matrícula e rematrícula |
+| **Aluno dos cursos atendidos** | Há choque de horário ou deslocamento inviável entre Centro, Ecoville e Neoville na grade que estou montando? Quanto ela me aproxima da formatura? | Período de matrícula |
+| **Aluno dos cursos atendidos** | Em quantos semestres eu me formo mantendo este ritmo, e qual sequência de disciplinas sustenta essa projeção? | Planejamento de médio prazo |
+| **Aluno dos cursos atendidos** | Como foi a experiência de quem já cursou esta disciplina com este professor, em didática, dificuldade e carga de trabalho? | Antes de escolher turmas |
+| **Aluno Contribuidor** | Quais das minhas disciplinas concluídas posso avaliar, e o que exatamente ficará público quando eu enviar? | Após concluir a disciplina |
+| **Moderador** | Quais respostas novas chegaram desde a última rodada, e quais trazem ataque pessoal ou dado pessoal de terceiros? | Semanal |
+| **Mantenedor** | A matriz vigente mudou? Quais turmas abriram no semestre? Os validadores fecham sem nenhum erro? | Semestral |
 
-#### 3.2 Obtenção e Plano de Aquisição da Informação — *qual dado, de qual fonte*
+#### 3.2 Obtenção da informação — *de onde vem, quem busca, com que periodicidade*
 
-| Informação exigida | Dado a ser obtido | Fonte do dado |
+##### 3.2.1 Fontes e responsáveis
+
+| Fonte | Formato | Quem obtém | Periodicidade |
+| :--- | :--- | :--- | :--- |
+| **Matriz curricular por curso** | PDF do Portal do Aluno, na Consulta Curso e Matriz Curricular | Mantenedor | A cada alteração de matriz |
+| **Turmas abertas do semestre** | PDF oficial de Turmas Abertas | Mantenedor | Semestral, antes da rematrícula |
+| **Grade na Hora** | Página exportada em HTML | Mantenedor | Conferência secundária da oferta, quando o PDF oficial atrasa |
+| **Projeto Pedagógico de Curso** | PDF público do curso | Mantenedor | Referência das regras de estágio, extensão e trilhas |
+| **Histórico escolar** | PDF gerado pelo próprio aluno no Portal | O aluno, dentro do navegador dele | A cada semestre, ou quando quiser reconferir |
+| **Avaliação de turma** | Formulário com login institucional obrigatório | Aluno Contribuidor | Contínuo, com publicação semanal |
+
+##### 3.2.2 Plano de aquisição de dados
+
+| Informação exigida | Dado a ser obtido | Fonte do dado a ser obtido |
 | :--- | :--- | :--- |
-| **Matrizes curriculares atendidas (981, 806, 844, 962, 968 e 978)** | Disciplinas, período, conjunto/categoria, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular — Portal do Aluno UTFPR → JSON canônico em `data/` por curso |
-| **Oferta de turmas do semestre** | Códigos de turma, horários (turno M/T/N + slot), sede/sala, professores e prioridades de curso | PDF oficial de Turmas Abertas — Portal do Aluno → `data/turmas/<sem>.json` e `data/eng-comp/turmas/<sem>.json` |
-| **Progresso individual do aluno** | RA, disciplinas cursadas, notas, frequência, status (aprovado/equivalência/aproveitamento/dependência) e créditos | Histórico Escolar em PDF — **processado 100% no navegador, sem trânsito em rede** |
-| **Avaliação de disciplina pela comunidade** | Nível de dificuldade (1–3), comentário textual, código da disciplina e token de prova de vínculo | Submissão autenticada do Aluno Contribuidor (e-mail institucional + histórico validado localmente) — *futuro, ver §5* |
+| **Matrizes atendidas (981, 806, 844, 962, 968, 978, 823 e 973)** | Disciplinas, período, conjunto e categoria, cargas horárias, pré-requisitos e equivalências | Consulta Curso e Matriz Curricular no Portal do Aluno, convertida por `tools/parse_matriz.py` em `data/matriz-<n>.json` |
+| **Regras de integralização de cada curso** | Exigência de estágio, de extensão curricular, número de trilhas e carga de eletivas | Rodapé da matriz e Projeto Pedagógico do Curso, refletidos em `src/domain/cursos.ts` |
+| **Oferta de turmas do semestre** | Códigos de turma, horários por turno e slot, sede e sala, professores e prioridade de curso | PDF oficial de Turmas Abertas, convertido por `tools/parse_turmas_pdf.py` em `data/<curso>/turmas/<sem>.json` |
+| **Conferência da oferta publicada** | Turmas e horários divulgados fora do PDF oficial | Exportação do Grade na Hora, lida por `tools/parse_gnh_html.py` como leitura secundária de backup |
+| **Correções vindas da vivência do curso** | Divergências entre a matriz publicada e a prática, como o pré-requisito de TC1 | Camada curada em `data/anotacoes-981.json`, aplicada por `tools/aplicar_anotacoes.py` sem sobrescrever a fonte oficial |
+| **Progresso individual do aluno** | RA, disciplinas cursadas, notas, frequência, situação e créditos | Histórico Escolar em PDF, **processado apenas no navegador, sem trânsito em rede** |
+| **Avaliação de disciplina e de professor** | Didática, personalidade, dificuldade, carga de trabalho, recomendação e comentário em texto | Formulário com login institucional, moderado na planilha privada e publicado em `data/reviews.json` pela ingestão semanal (ver §6) |
 
-#### 3.3 Distribuição e Disponibilização da Informação — *quem recebe, e como*
+#### 3.3 Distribuição da informação — *quem recebe, e como*
 
 | Quem? | Como? |
 | :--- | :--- |
-| **Aluno de um curso atendido** | Abas **Minha Situação** (visão estratégica/longo prazo), **Planejamento de Matrícula** (posso cursar + grade + conflitos) e **Catálogo de Matérias**; tooltips de códigos; relatório copiável para o Portal; simulação gamificada de impulso da grade no progresso |
-| **Aluno Contribuidor** | Botão **Avaliar** habilitado por disciplina concluída (validada no próprio histórico); painel de dificuldade média e comentários agregados por disciplina — *futuro* |
-| **Mantenedores** | Pipeline de dados versionado (`data/` + validadores Python com erro alto); futuro portal de administração/moderação para homologar ofertas e avaliações sem editar JSON manualmente |
+| **Aluno dos cursos atendidos** | **Minha Situação**, com progresso por categoria e coeficiente de rendimento. **Posso Cursar**, com o cruzamento entre pré-requisito cumprido e oferta do semestre. **Catálogo de Matérias**, com busca e filtro por categoria |
+| **Aluno montando a grade** | **Grade** visual com detecção de choque de horário e alerta de deslocamento entre sedes. **Grade Mágica**, que sugere combinações automáticas. Relatório copiável pronto para colar no Portal do Aluno |
+| **Aluno planejando o curso inteiro** | **Fluxograma** da matriz, que mostra o caminho de pré-requisitos até cada disciplina. **Simulador de Formatura**, com projeção dos semestres restantes a partir do ritmo atual |
+| **Aluno escolhendo entre turmas** | Painel de professor e painel de disciplina, abertos direto da turma na grade, com médias, distribuição das notas dadas pela comunidade e comentários já moderados |
+| **Aluno Contribuidor** | Botão **Avaliar** nas disciplinas concluídas, seletor de professor montado a partir da oferta, aviso do que ficará público antes do envio, e a lista das próprias avaliações enviadas |
+| **Aluno planejando com colegas** | **Amigos e Match**, com compartilhamento de grade por link e comparação de horários entre pessoas do mesmo curso |
+| **Moderador** | Planilha privada com as respostas brutas, coluna de aprovação preenchida à mão, e nada publicado por omissão |
+| **Mantenedor** | Repositório versionado, validadores que reprovam a importação em qualquer erro, e Action semanal que regenera as avaliações publicadas |
 
 #### 3.4 Feedback da Utilização
 - Alertas visuais imediatos de observações do parser e inconsistências (`perfil.avisos`, `painel.inconsistencias`).
@@ -99,16 +178,37 @@ O ciclo de gestão da informação do Oásis UTFPR percorre quatro etapas canôn
 - Copiador de relatório de matrícula pronto para colagem no portal oficial.
 - *Futuro:* fila de moderação de avaliações da comunidade e sinal de "dificuldade média" retroalimentando a decisão de escolha de turmas de outros alunos.
 
-### 2.4 Dimensões e Atributos de Qualidade da Informação (QI)
+### 4. Qualidade da Informação (QI)
 
-Conforme a metodologia de avaliação de qualidade de dados do projeto, cada informação coletada é mensurada por dimensões e atributos rigorosos:
+#### 4.1 Definição das dimensões e atributos
+
+Cada informação tratada pela plataforma é julgada por dimensões e atributos, com faixas explícitas de nível alto e baixo.
 
 | Informação | Dado Coletado Avaliado | Dimensão Avaliada | Atributos Avaliados |
 | :--- | :--- | :--- | :--- |
-| **Disciplinas abertas no semestre vigente** | Matérias ofertadas no semestre (`data/turmas/<sem>.json`) | **d1: Atualidade** | **a1: intervalo de tempo**<br>• **Alto:** se a informação é datada com intervalo máximo de até 2 meses antes do início do semestre letivo vigente.<br>• **Baixo:** se a informação é datada com intervalo superior a 2 meses antes do início do semestre letivo vigente. |
-| **Progresso no curso e integralização** | Histórico Escolar em PDF do aluno | **d2: Confiabilidade / Precisão** | **a2: fidelidade posicional**<br>• **Alto:** se todas as linhas de disciplina possuem código, nome e carga horária perfeitamente alinhados e validados contra invariantes do curso (`0 erros`).<br>• **Baixo:** se há falhas de parsing ou divergências em cargas horárias de dependências/equivalências. |
-| **Horários e sedes das aulas** | Conflito de turno e sala (`motor/grade.ts`) | **d3: Integridade** | **a3: completeza relacional**<br>• **Alto:** se cada slot da grade identifica sem ambiguidade dia, turno, aula, disciplina, turma e sala/sede.<br>• **Baixo:** se há slots órfãos ou turmas sem indicação de sede para cálculo de deslocamento. |
-| **Avaliações da comunidade** | Dificuldade (1–3) e comentário por disciplina (*futuro*) | **d4: Credibilidade / Autenticidade** | **a4: prova de vínculo**<br>• **Alto:** se a avaliação está atrelada a um RA autenticado pela submissão do histórico e por verificação institucional, com no máximo uma avaliação por (aluno, disciplina).<br>• **Baixo:** se a avaliação é anônima e não verificável, sujeita a spam, Sybil ou falsificação de RA. |
+| **Disciplinas abertas no semestre vigente** | Matérias ofertadas no semestre (`data/<curso>/turmas/<sem>.json`) | **d1 Atualidade** | **a1 intervalo de tempo**<br>• **Alto:** se a oferta publicada é datada com intervalo máximo de até 2 meses antes do início do semestre letivo vigente.<br>• **Baixo:** se a oferta publicada é datada com intervalo superior a 2 meses antes do início do semestre letivo vigente. |
+| **Progresso no curso e integralização** | Histórico Escolar em PDF do aluno | **d2 Confiabilidade e Precisão** | **a2 fidelidade posicional**<br>• **Alto:** se toda linha de disciplina traz código, nome e carga horária alinhados, validados contra as invariantes do curso, sem nenhum erro.<br>• **Baixo:** se há falha de leitura ou divergência de carga horária em dependências e equivalências. |
+| **Horários e sedes das aulas** | Conflito de turno e de sala (`motor/grade.ts`) | **d3 Integridade** | **a3 completeza relacional**<br>• **Alto:** se cada slot da grade identifica sem ambiguidade dia, turno, aula, disciplina, turma e sala com sede.<br>• **Baixo:** se há slot órfão ou turma sem indicação de sede, o que inviabiliza o cálculo de deslocamento. |
+| **Avaliações da comunidade** | Didática, dificuldade, carga de trabalho e comentário por turma | **d4 Credibilidade** | **a4 origem institucional e curadoria**<br>• **Alto:** se a resposta vem de conta institucional da UTFPR, passa por revisão humana e chega ao site pela ingestão validada.<br>• **Baixo:** se o texto é publicado sem moderação, ou sem âncora de vínculo, o que abre espaço para spam e ataque pessoal. |
+| **Dado pessoal do aluno** | Conteúdo do histórico escolar carregado na plataforma | **d5 Confidencialidade e Privacidade** | **a5 superfície de exposição**<br>• **Alto:** se o documento é lido apenas em memória, no navegador do aluno, e nenhum byte dele alcança a rede ou o repositório.<br>• **Baixo:** se qualquer trecho do documento é enviado, registrado em log ou versionado. |
+
+#### 4.2 Referência das dimensões
+
+O quadro completo de dimensões de qualidade da informação, com a marca de onde cada uma entra no Oásis. As não avaliadas ficam declaradas, e não escondidas.
+
+| Dimensão | Aspecto a ser analisado | No Oásis |
+| :--- | :--- | :--- |
+| Abrangência e escopo | A informação de que o público precisa está completa e sem excesso desnecessário? | Não avaliada nesta versão |
+| Integridade | A informação está íntegra, sem corrupção nem adulteração? | `d3` |
+| Acurácia e veracidade | A informação pode ser considerada fiel aos fatos que representa? | `d2` |
+| Confidencialidade e privacidade | A informação é acessada somente por quem tem direito a ela? | `d5` |
+| Disponibilidade | A informação é acessada com facilidade por quem tem direito a ela? | Não avaliada nesta versão |
+| Atualidade | A informação é gerada e atualizada nos intervalos que o público considera adequados? | `d1` |
+| Ineditismo e raridade | Trata-se de informação difícil de obter, rara ou escassa? | Não avaliada nesta versão |
+| Contextualização | A informação é atraente para o público a que se destina? | Não avaliada nesta versão |
+| Precisão | A informação está detalhada o bastante para uso imediato? | `d2` |
+| Confiabilidade | A fonte e o conteúdo têm credibilidade perante o público? | `d2`, `d4` |
+| Existência | Em quantas mentes, locais físicos e locais virtuais a informação está disponível? | Não avaliada nesta versão |
 
 ---
 
