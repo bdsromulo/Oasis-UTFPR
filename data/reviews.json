@@ -1,6 +1,6 @@
 {
   "fonte": "Avaliações da Comunidade — Oásis UTFPR (ver Estrategia.md §6)",
-  "geradoEm": "2026-08-10T20:30:37.149Z",
+  "geradoEm": "2026-08-24T09:40:02.023Z",
   "reviews": [
     {
       "id": "0855d75f4d36",
@@ -222,6 +222,19 @@
       "cargaTrabalho": 2,
       "avaliacao": "provas",
       "comentario": "As aulas e os materiais eram ótimos de estudar, adorei a didática, minha única reclamação é o método de correção da professora. Qualquer erro ela descontava tudo, a prova era pra ser fácil, mas pela maneira que ela corrige acaba dificultando um pouco."
+    },
+    {
+      "id": "9af3b03b061f",
+      "professorId": "fabio-antonio-dorini",
+      "codigo": "MAT7C1",
+      "semestre": "2026/1",
+      "autor": "THIAGO MACEDO DOS REIS",
+      "personalidade": 4,
+      "didatica": 5,
+      "dificuldade": 4,
+      "cargaTrabalho": 2,
+      "avaliacao": "provas",
+      "comentario": ""
     },
     {
       "id": "a97f301db226",
