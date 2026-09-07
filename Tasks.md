@@ -141,6 +141,64 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
   - Turma sem horário é aviso (legítimo em TCC e EaD); domínio inválido ou locais diferentes no mesmo slot são erros.
 
 ### Em Revisão
+
+> As TASK-45, 46, 47, 49 e 50 foram desenvolvidas no repositório **sandbox**
+> (`oasisutfpr-sandbox`), cada uma em sua branch e integradas na `main` de lá.
+> Nenhuma foi publicada no repositório oficial.
+
+- **TASK-49 — Painel de filtros unificado e filtro de turno/horário no Planejamento:**
+  - Os filtros abriam um **segundo cartão** solto abaixo da busca — duas caixas falando da mesma coisa. Agora o próprio bloco da busca expande para baixo.
+  - Entram as duas travas da Sugestão de Grade: **turnos** (manhã/tarde/noite) e **janela de aulas**, com o rótulo `T2 · 13:50–14:40`.
+  - **Os filtros agem em dois níveis:** escondem a matéria que não tem nenhuma turma no horário pedido e, dentro do card, escondem as turmas que não servem. Só o primeiro nível deixaria o aluno filtrar por noite e ainda escolher turma de manhã na hora de marcar.
+  - Turma já marcada nunca some da lista, mesmo fora do filtro: ele perderia de vista o que escolheu e não teria como desmarcar. Janela invertida é ignorada com aviso, em vez de devolver lista vazia sem explicação.
+  - Credita **Gabriela Jahn Henning** como revisora na página Sobre.
+
+- **TASK-50 — Manipular a oferta de cada semestre no Simulador:**
+  - Cada disciplina projetada ganha setas `‹ ›` para mover ao semestre vizinho, `✕` para tirar do plano (**nunca em obrigatória** — sem ela não há formatura) e **arrasto** para qualquer outro semestre.
+  - Botão **adicionar matéria neste semestre**, com o que ainda falta **agrupado por categoria** e as horas faltantes de cada uma: o aluno escolhe pelo que falta, não decorando código.
+  - No motor, `fixacoesPorSemestre` prende a disciplina a um semestre. Ela fica fora de todos os outros e ganha prioridade máxima no dela — acima até das obrigatórias, porque o aluno apontou o lugar.
+  - **É pedido, não ordem:** se lá não couber (pré-requisito travado, teto de carga estourado, sem turma sem choque), o motor relata via `semestre-fixado` e devolve a disciplina ao pool. Sem essa devolução ela ficaria reservada para um semestre já passado, e a projeção deixaria de fechar por causa de um arrasto.
+  - Duas guardas de borda: prender a semestre **anterior ao início** da projeção é recusado na entrada (aquele semestre nunca seria visitado), e fixação que o horizonte não alcançou é relatada no fim.
+  - **Arrasto por Pointer Events, não pelo drag-and-drop do HTML5:** aquele simplesmente não existe em toque, e o recurso nascia restrito ao desktop. Pointer unifica mouse, dedo e caneta no mesmo caminho de código.
+  - O gesto sai de uma **alça dedicada** (`⠿`), e não do bloco inteiro: `touch-none` desliga a rolagem no elemento que o recebe, e no bloco inteiro o dedo não conseguiria mais rolar a linha do tempo.
+  - O destino é descoberto por `elementFromPoint` sobre `data-semestre`: no toque não existe "elemento sob o cursor" durante o gesto — os eventos continuam indo para quem iniciou o toque.
+  - Etiqueta seguindo o ponteiro, com `pointer-events-none`. No toque é o único retorno visual (o dedo cobre a origem); sem o `pointer-events-none` ela seria o próprio alvo do `elementFromPoint`.
+  - Soltar no semestre de origem não conta como mudança: sem essa guarda, um toque acidental fixaria a disciplina onde ela já estava e ela apareceria no painel de ajustes como pedido do aluno.
+  - O `Card` passou a repassar os atributos ao elemento raiz; antes ele engolia o `data-semestre`.
+
+- **TASK-45 — Pré-requisito liberado por reprovação com média ≥ 4,0 (todos os cursos):**
+  - Desenho em `docs/superpowers/specs/2026-08-06-liberacao-janela-simulador-design.md` §1. Desenvolvimento no sandbox.
+  - **Regra da UTFPR:** quem reprova na pré-requisito **por nota**, com `media >= 4.0`, fica liberado para cursar a subsequente. Reprovação **por frequência** (`frequencia < 75`) não libera, ainda que a média seja alta.
+  - **A regra não pode entrar em `cumpre()`:** aquela função responde "isto integraliza?" e é a base do cálculo de carga de `situacao.ts`, `progressoGrade.ts` e do simulador. Creditar a reprovada ali inflaria o 1º estrato e anteciparia a formatura projetada. Vive isolada em `motor/prerequisitos.ts`, resolvendo o código pelo `MapaIdentidade` para valer também por equivalência.
+  - **Dois gates recebem a regra:** `motor/elegiveis.ts` (Planejamento) e `motor/simuladorFormatura.ts` (projeção, em `alcancavel()` e no laço). O `motor/fluxograma.ts` chegou a ser listado no desenho e **não** é gate: nunca recebe `PerfilAluno`, desenha a cadeia institucional da matriz, e a tela só pinta o que está em `perfil.aprovadas`.
+  - **Fim do bloqueio de adição:** hoje o card com pré-requisito pendente simplesmente não renderiza a lista de turmas. Passa a renderizar sempre, com o aviso como linha de alerta acima dela. A badge sobrevive, renomeada de `bloqueada` para `pré-requisito pendente` — depois desta mudança nada está bloqueado, e chamar de bloqueio o que o aluno consegue fazer é a interface mentindo.
+  - **Não muda:** o bloqueio por conflito de horário, e a Sugestão de Grade continua não sugerindo matéria com pré-requisito pendente (sugerir ≠ permitir).
+
+- **TASK-46 — Filtro de janela de aulas na Sugestão de Grade:**
+  - Desenho em `docs/superpowers/specs/2026-08-06-liberacao-janela-simulador-design.md` §2.
+  - Os checkboxes de turno são grossos demais: quem não consegue chegar antes das 13h50 não tem como pedir "tarde a partir de T2". Entram `aulaInicial`/`aulaFinal` sobre a régua contínua M1→N5, com rótulo `T2 · 13:50–14:40` (via `rotuloComHora`, que já existe) — o filtro se orienta pela estrutura de aulas da grade, nunca por horário solto.
+  - **Turnos e janela compõem, não se substituem:** a turma passa se o turno está permitido **E** todos os slots caem na janela. É o que mantém expressável o caso não-contíguo ("manhã e noite, sem tarde, nada depois de N3"). Padrão M1–N5 = filtro inerte.
+  - Guardas para janela invertida e para combinação que não deixa nenhum slot de pé.
+
+- **TASK-47 — Simulador de Formatura modelável (trilhas, troca de matérias, ritmo e horário):**
+  - Desenho em `docs/superpowers/specs/2026-08-06-liberacao-janela-simulador-design.md` §3.
+  - Hoje `escolherTrilhasAlvo()` decide sozinho em quais trilhas o aluno investe, e ele só consegue dizer o que **não** quer (exclusões). Esta task inverte isso.
+  - **Camada 1 (óbvia, junto do ritmo):** seletor de trilhas-alvo com progresso por trilha (`45/90h`); só renderiza em curso que tem trilha.
+  - **Camada 2 (contextual, na linha do tempo):** botão *trocar* em cada disciplina projetada substituível, listando candidatas da mesma categoria/conjunto e re-simulando com a escolhida fixada. Obrigatória não tem substituta e não ganha botão.
+  - **Camada 3 (painel avançado, o das exclusões):** ritmo por semestre, janela de horário na projeção (reusa TASK-46) e a lista bruta de disciplinas fixadas.
+  - **Pedidos impossíveis** (trilha sem oferta que feche as 90h, optativa fixada em categoria já fechada) saem pelo canal que já existe: `TipoExclusao` alargado com `trilha-alvo` e `disciplina-fixada`, e a copy do painel passa a "pedidos que a integralização não permitiu atender". Segue valendo que são pedidos, não ordens.
+
+- **TASK-48 — Janela de período na Sugestão de Grade e no Simulador:**
+  - Desenho em `docs/superpowers/specs/2026-08-07-janela-periodo-design.md`.
+  - **O caso:** o Histórico de Eng. Eletrônica (968) de um aluno no 6º período gerava Sugestão de Grade com **TCC1 (ELE91, 9º período) em segundo lugar**, e o Simulador punha o TCC no primeiro semestre projetado.
+  - **Não faltava dado:** as 1.290 disciplinas das oito matrizes têm `periodo` preenchido, e nas 172 optativas da 968 ele já é idêntico ao `periodo_inicial` do conjunto. O defeito era que **`bloqueio()` nunca lia `d.periodo`** — iterava só sobre `d.prerequisitos`, e a 968 não declara pré-requisito para o TCC porque a trava é regimental, fora da tabela da matriz.
+  - **A regra (decisão do dono, 2026-08-07):** é trava real de matrícula, não recomendação. Diferença de **até 2 períodos é permitida** — quem está no 7º alcança a do 9º; no 6º, não. Por ser trava, o motivo entra no `motivoBloqueio`, ao lado dos pré-requisitos, e o "Posso Cursar" o exibe sem trabalho adicional.
+  - **Só limita para cima:** a dependência do 3º período continua à mão de quem está no 6º. E falha aberto onde falta período — histórico sem período, disciplina que só existe na oferta.
+  - **No Simulador, contra o período projetado**, não o de hoje: o TCC não some da projeção, espera o 7º. Lá o gate lê o período declarado pelo histórico, **sem** o fallback `?? 1` que existe para a projeção andar — usá-lo como dado real fazia o modo livre simular um calouro e barrar tudo do 4º para cima (quebrou a invariante de pagamento duplo da 962 até ser isolado).
+  - **Pontuação por distância, em commit separado:** o termo `(10 - período) × 12` era ancorado num 10 fixo e nunca ficava negativo, então o TCC voltava ao topo assim que o aluno chegava ao 7º. Vira assimétrico — atrasada é dívida e ganha até +40, adiantada paga −25 por período à frente, zero no próprio período para não inflar optativa contra obrigatória — e passa a valer para **toda** categoria (grupo de escolha não tinha noção de período nenhuma, parte do motivo de a 968 se comportar tão mal). Sem histórico, o termo antigo é o fallback.
+  - **A UI acompanhou:** o modal de explicação dos cálculos citava `(10 - período) × 12` textualmente ao aluno.
+  - **Fora de escopo, aberto:** a matriz 823 (Mecatrônica) não declara **nenhum** pré-requisito — 0 de 89 disciplinas, contra 105/201 na 968. Tem cara de coluna não lida pelo parser; a janela de período reduz o estrago, mas não substitui as cadeias ausentes.
+
 - **TASK-29 — Savefile local, Novidades de lançamento e créditos organizados:**
   - O modal de **Novidades** abre automaticamente uma única vez por navegador após este lançamento, inclusive ao terminar o cadastro com PDF. A leitura só é marcada ao fechar; a chave versionada permite que o próximo lançamento volte a aparecer.
   - O conteúdo foi organizado em Avaliações da Comunidade, matriz 806 de Sistemas de Informação e savefile. A seção de avaliações mostra visualmente qual botão procurar no Planejamento; o savefile é explicado sem duplicar o botão das Configurações dentro do modal.

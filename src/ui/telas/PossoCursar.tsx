@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef } from "react";
-import type { Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
+import type { Matriz, OfertaSemestre, PerfilAluno, Turma } from "../../domain/tipos";
 import { listarElegiveis, type Elegivel } from "../../domain/motor/elegiveis";
 import {
   horariosUnicos,
@@ -7,7 +7,14 @@ import {
   haveriaConflito,
   type ItemGrade,
 } from "../../domain/motor/grade";
-import { faixaDoSlot } from "../../domain/horarios";
+import {
+  faixaDoSlot,
+  PRIMEIRO_SLOT,
+  rotuloDoSlot,
+  SLOTS_ORDENADOS,
+  ULTIMO_SLOT,
+} from "../../domain/horarios";
+import { turmaViolaJanela, turmaViolaTurnos } from "../../domain/motor/grade-magica";
 import {
   ModalConflitoTurma,
   verificarChoqueAoAdicionar,
@@ -95,6 +102,7 @@ function CardDisciplinaPossoCursar({
   itensSelecao = [],
   matriz,
   perfil,
+  turmaNoHorario = () => true,
 }: {
   e: Elegivel;
   selecao: SelecaoTurma[];
@@ -105,6 +113,8 @@ function CardDisciplinaPossoCursar({
   itensSelecao?: ItemGrade[];
   matriz?: Matriz;
   perfil?: PerfilAluno | null;
+  /** filtro de turno e janela vindo do painel de filtros (TASK-49) */
+  turmaNoHorario?: (t: Turma) => boolean;
 }) {
   const isMobile = useIsMobile();
   const temHistorico = Boolean(perfil && perfil.cursadas && perfil.cursadas.length > 0);
@@ -146,16 +156,19 @@ function CardDisciplinaPossoCursar({
       return { turmasBSI: [] };
     }
     const todas = e.oferta.turmas.filter((t) => {
-      if (!filtrarConflitos) return true;
       const marcada = selecao.some(
         (s) => s.codDisciplina === codIdentificador && s.codTurma === t.codigo,
       );
+      // turma já escolhida nunca some da lista: o aluno perderia de vista o que
+      // ele mesmo marcou e não teria como desmarcar
       if (marcada) return true;
+      if (!turmaNoHorario(t)) return false;
+      if (!filtrarConflitos) return true;
       return !haveriaConflito(itensSelecao, e.oferta!, t);
     });
 
     return { turmasBSI: todas };
-  }, [e.oferta, filtrarConflitos, selecao, itensSelecao, codIdentificador]);
+  }, [e.oferta, filtrarConflitos, selecao, itensSelecao, codIdentificador, turmaNoHorario]);
 
   return (
     <Card classe="flex flex-col justify-start !p-0 overflow-hidden">
@@ -195,7 +208,7 @@ function CardDisciplinaPossoCursar({
           )}
           {e.motivoBloqueio && (
             <span title={e.motivoBloqueio} className="cursor-help">
-              <Badge tom="alerta" icon={<IconWarning className="h-3 w-3" />}>bloqueada</Badge>
+              <Badge tom="alerta" icon={<IconWarning className="h-3 w-3" />}>pré-requisito pendente</Badge>
             </span>
           )}
         </div>
@@ -203,12 +216,17 @@ function CardDisciplinaPossoCursar({
 
       {expandido && (
         <div className="p-4 pt-0 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2 mt-1">
-          {e.motivoBloqueio ? (
-            <div className="flex items-center gap-2 text-xs font-semibold text-red-600 dark:text-red-400">
+          {/* Aviso, e não mais bloqueio (TASK-45): a lista de turmas segue logo
+              abaixo e a adição está liberada. O vermelho saiu junto com o
+              bloqueio — quem lê precisa entender que é pendência a conferir no
+              Portal, não porta fechada. */}
+          {e.motivoBloqueio && (
+            <div className="flex items-start gap-2 rounded-xl border border-amber-300/70 bg-amber-50 p-2.5 text-xs font-semibold text-amber-800 dark:border-amber-500/40 dark:bg-amber-950/30 dark:text-amber-300">
               <IconWarning className="h-4 w-4 shrink-0" />
               <span>{matriz ? renderizarTextoComCodigos(e.motivoBloqueio, matriz) : e.motivoBloqueio}</span>
             </div>
-          ) : e.oferta ? (
+          )}
+          {e.oferta ? (
             <>
               {turmasBSI.length > 0 ? (
                 <ul className="space-y-2">
@@ -419,6 +437,12 @@ export function TelaPossoCursar(props: {
   const [soLiberadas, setSoLiberadas] = useState(true);
   const [grupo, setGrupo] = useState<Grupo>("todas");
   const [trilha, setTrilha] = useState<string>("todas");
+  // Turno e janela de aulas (TASK-49), as mesmas travas da Sugestão de Grade.
+  const [naoManha, setNaoManha] = useState(false);
+  const [naoTarde, setNaoTarde] = useState(false);
+  const [naoNoite, setNaoNoite] = useState(false);
+  const [aulaInicial, setAulaInicial] = useState(PRIMEIRO_SLOT);
+  const [aulaFinal, setAulaFinal] = useState(ULTIMO_SLOT);
   const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
   const curso = descricaoDoCurso(matriz);
   const grupos = useMemo<[Grupo, string][]>(() => [
@@ -459,6 +483,31 @@ export function TelaPossoCursar(props: {
     return [...vistos.entries()].sort((a, b) => a[1].localeCompare(b[1]));
   }, [elegiveis]);
 
+  // Janela invertida é pedido incoerente, não filtro: ignorar é melhor que
+  // devolver lista vazia sem o aluno entender por quê. O aviso na tela diz isso.
+  const janelaInvertida =
+    SLOTS_ORDENADOS.indexOf(aulaInicial) > SLOTS_ORDENADOS.indexOf(aulaFinal);
+  const restricaoHorario = useMemo(
+    () => ({
+      naoManha,
+      naoTarde,
+      naoNoite,
+      aulaInicial: janelaInvertida ? PRIMEIRO_SLOT : aulaInicial,
+      aulaFinal: janelaInvertida ? ULTIMO_SLOT : aulaFinal,
+    }),
+    [naoManha, naoTarde, naoNoite, aulaInicial, aulaFinal, janelaInvertida],
+  );
+  const horarioFiltrado =
+    naoManha || naoTarde || naoNoite || aulaInicial !== PRIMEIRO_SLOT || aulaFinal !== ULTIMO_SLOT;
+
+  /** A turma cabe no turno e na janela que o aluno pediu? */
+  const turmaNoHorario = useMemo(
+    () => (t: Turma) =>
+      !horarioFiltrado ||
+      (!turmaViolaTurnos(t, restricaoHorario) && !turmaViolaJanela(t, restricaoHorario)),
+    [horarioFiltrado, restricaoHorario],
+  );
+
   const filtrados = useMemo(() => {
     const buscaLimpa = busca
       .toLowerCase()
@@ -484,6 +533,12 @@ export function TelaPossoCursar(props: {
       }
       // 4. Busca por código curricular, código da oferta, equivalente, nome ou professor
       if (buscaLimpa && !elegivelCorrespondeBusca(e, buscaLimpa)) return false;
+      // 4.5. Turno e janela de aulas: some a matéria que não tem nenhuma turma
+      // no horário pedido. Matéria sem turma nenhuma (TCC, estágio) não é
+      // afetada — ela não tem horário para violar.
+      if (horarioFiltrado && e.oferta && e.oferta.turmas.length > 0) {
+        if (!e.oferta.turmas.some(turmaNoHorario)) return false;
+      }
       // 5. Filtro de conflitos de horário (se ativo e a matéria tem turmas)
       if (filtrarConflitos && e.oferta && e.oferta.turmas.length > 0) {
         const temMarcada = selecao.some((s) => s.codDisciplina === (e.oferta?.codigo ?? e.disciplina.codigo));
@@ -511,7 +566,7 @@ export function TelaPossoCursar(props: {
       if (ordenacao === "per_desc") return perB - perA || nomeA.localeCompare(nomeB, "pt-BR");
       return 0;
     });
-  }, [elegiveis, soOfertadas, soLiberadas, grupo, trilha, busca, filtrarConflitos, selecao, itensSelecao, ordenacao]);
+  }, [elegiveis, soOfertadas, soLiberadas, grupo, trilha, busca, filtrarConflitos, selecao, itensSelecao, ordenacao, horarioFiltrado, turmaNoHorario]);
 
   function alternarTurma(codDisciplina: string, codTurma: string) {
     const existe = selecao.find(
@@ -541,7 +596,11 @@ export function TelaPossoCursar(props: {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-200/80 bg-white/80 p-3.5 text-sm shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
+      {/* Busca e filtros no MESMO bloco: abrir os filtros expande este cartão
+          para baixo, em vez de fazer nascer um segundo cartão solto. Eram duas
+          caixas falando da mesma coisa. */}
+      <div className="rounded-2xl border border-zinc-200/80 bg-white/80 text-sm shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5">
         <div className="flex flex-wrap items-center gap-3 flex-1">
           <input
             type="search"
@@ -553,7 +612,7 @@ export function TelaPossoCursar(props: {
           <button
             onClick={() => setFiltrosAbertos(!filtrosAbertos)}
             className={`inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2 font-display text-sm font-bold transition-all max-sm:min-h-11 ${
-              filtrosAbertos || grupo !== "todas" || !soOfertadas || !soLiberadas
+              filtrosAbertos || grupo !== "todas" || !soOfertadas || !soLiberadas || horarioFiltrado
                 ? "bg-utfpr-500 text-zinc-950 shadow-xs border-2 border-zinc-900 dark:border-amber-400"
                 : "border border-zinc-300 bg-zinc-100 text-zinc-800 hover:border-zinc-900 hover:bg-zinc-200 dark:border-amber-400/70 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:border-amber-400 dark:hover:bg-zinc-700"
             }`}
@@ -589,7 +648,7 @@ export function TelaPossoCursar(props: {
       </div>
 
       {filtrosAbertos && (
-        <div className="space-y-3 rounded-2xl border border-zinc-200/80 bg-white/80 p-4 shadow-2xs backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/80 transition-all">
+        <div className="animate-in fade-in space-y-3 border-t border-zinc-200/80 p-4 transition-all dark:border-zinc-800/80">
           {/* grupos de categoria (Dropdown) */}
           <div className="flex flex-wrap items-center gap-2">
             <label htmlFor="grupo-possocursar" className="font-display text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
@@ -668,8 +727,90 @@ export function TelaPossoCursar(props: {
               <span>Liberadas (pré-requisitos cumpridos)</span>
             </label>
           </div>
+
+          {/* Turnos e janela de aulas, as mesmas travas da Sugestão de Grade.
+              Aqui elas agem em dois níveis: escondem a matéria que não tem
+              nenhuma turma no horário pedido e, dentro do card, escondem as
+              turmas que não servem — do contrário o aluno filtraria por noite e
+              ainda veria turma de manhã na hora de escolher. */}
+          <div className="space-y-2.5 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="font-display text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Turno:
+              </span>
+              {(
+                [
+                  ["M", "Manhã", naoManha, setNaoManha],
+                  ["T", "Tarde", naoTarde, setNaoTarde],
+                  ["N", "Noite", naoNoite, setNaoNoite],
+                ] as const
+              ).map(([id, rotulo, recusado, definir]) => (
+                <label
+                  key={id}
+                  className="flex cursor-pointer items-center gap-2 text-sm font-medium text-zinc-700 select-none dark:text-zinc-300"
+                >
+                  <input
+                    type="checkbox"
+                    checked={!recusado}
+                    onChange={(e) => definir(!e.target.checked)}
+                    className="h-4 w-4 rounded border-zinc-300 accent-utfpr-500 dark:border-zinc-700"
+                  />
+                  <span>{rotulo}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-display text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                Horário:
+              </span>
+              <select
+                value={aulaInicial}
+                onChange={(e) => setAulaInicial(e.target.value)}
+                className="cursor-pointer rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs font-bold text-zinc-900 focus:border-utfpr-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+              >
+                {SLOTS_ORDENADOS.map((s) => (
+                  <option key={s} value={s}>
+                    A partir de {rotuloDoSlot(s)}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={aulaFinal}
+                onChange={(e) => setAulaFinal(e.target.value)}
+                className="cursor-pointer rounded-xl border border-zinc-300 bg-white px-3 py-1.5 text-xs font-bold text-zinc-900 focus:border-utfpr-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+              >
+                {SLOTS_ORDENADOS.map((s) => (
+                  <option key={s} value={s}>
+                    Até {rotuloDoSlot(s)}
+                  </option>
+                ))}
+              </select>
+              {horarioFiltrado && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setNaoManha(false);
+                    setNaoTarde(false);
+                    setNaoNoite(false);
+                    setAulaInicial(PRIMEIRO_SLOT);
+                    setAulaFinal(ULTIMO_SLOT);
+                  }}
+                  className="cursor-pointer rounded-xl border border-zinc-300 px-3 py-1.5 font-display text-xs font-bold text-zinc-600 transition-colors hover:border-red-400 hover:text-red-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:text-red-300"
+                >
+                  Limpar horário
+                </button>
+              )}
+            </div>
+            {janelaInvertida && (
+              <p className="text-[11px] font-bold text-red-600 dark:text-red-400">
+                A aula final vem antes da inicial — a janela está sendo ignorada.
+              </p>
+            )}
+          </div>
         </div>
       )}
+      </div>
 
       <div className="space-y-4">
         {filtrados.map((e) => (
@@ -684,6 +825,7 @@ export function TelaPossoCursar(props: {
             itensSelecao={itensSelecao}
             matriz={matriz}
             perfil={perfil}
+            turmaNoHorario={turmaNoHorario}
           />
         ))}
       </div>

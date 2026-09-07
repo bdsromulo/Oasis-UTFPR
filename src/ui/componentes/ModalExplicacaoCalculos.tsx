@@ -73,7 +73,13 @@ export function ConteudoExplicacaoCalculos(props: {
             <li className="flex gap-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
               <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-utfpr-500" />
               <span>
-                <strong>Bônus de Atraso:</strong> Matérias atrasadas ganham a fórmula <code>(10 - período) × 12</code> de pontuação. Um choque entre uma matéria do 4º e outra do 6º período é sempre vencido pela do 4º período, para destravar a sua progressão. Esse bônus só se aplica a disciplinas obrigatórias{props.cursoSimulado === "bsi" ? " e de 2º Estrato." : "."}
+                <strong>Janela de período:</strong> A matrícula só aceita matéria de até dois períodos à frente do seu, então o algoritmo não sugere nada além disso — se você está no 6º, o TCC do 9º fica de fora até você chegar ao 7º. Matéria atrasada nunca é escondida, por mais antiga que seja.
+              </span>
+            </li>
+            <li className="flex gap-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-utfpr-500" />
+              <span>
+                <strong>Distância do seu período:</strong> O algoritmo compara o período de cada matéria com o período em que você está. Matéria atrasada é dívida e ganha bônus — num choque entre uma do 4º e outra do 6º, a do 4º vence, para destravar a sua progressão. Matéria adiantada paga pedágio, para que o TCC não apareça na frente do que você deveria cursar agora. Vale para todas as categorias. Sem histórico importado não há período seu de que medir distância, e o algoritmo volta a priorizar simplesmente as matérias mais iniciais do curso.
               </span>
             </li>
             <li className="flex gap-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">

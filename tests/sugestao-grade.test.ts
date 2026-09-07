@@ -3,6 +3,7 @@ import { BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA } from "../src/domain/dados
 import { gerarSugestaoGrade } from "../src/domain/motor/grade-magica";
 import { haveriaConflito, itensDaSelecao } from "../src/domain/motor/grade";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
+import { indiceDoSlot, PRIMEIRO_SLOT, ULTIMO_SLOT } from "../src/domain/horarios";
 
 /**
  * Contrato da Grade Inteligente, igual para todo curso servido.
@@ -69,6 +70,103 @@ describe("Grade Inteligente em todos os cursos cobertos", () => {
           i.turma.horarios.some((h) => h.turno === "M"),
         );
         expect(naManha.map((i) => i.disciplina.codigo)).toEqual([]);
+      });
+    });
+  }
+});
+
+/**
+ * TASK-46 — janela de aulas.
+ *
+ * Os checkboxes de turno são grossos demais: quem não consegue chegar antes das
+ * 13h50 não tem como pedir "tarde a partir de T2". A janela recorta a régua
+ * contínua M1→N5, e compõe com os turnos em vez de substituí-los.
+ */
+describe("janela de aulas", () => {
+  for (const curso of cursos) {
+    describe(curso.rotuloCurto, () => {
+      const oferta = curso.ofertas[curso.semestrePadrao];
+      const slotsDe = (selecao: ReturnType<typeof gerarSugestaoGrade>) =>
+        itensDaSelecao(oferta, selecao).flatMap((i) =>
+          i.turma.horarios.map((h) => indiceDoSlot(h.turno, h.aula)),
+        );
+
+      it("a janela cheia M1–N5 não muda nada", () => {
+        const comJanela = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          aulaInicial: PRIMEIRO_SLOT,
+          aulaFinal: ULTIMO_SLOT,
+        });
+        expect(comJanela).toEqual(gerarSugestaoGrade(null, curso.matriz, oferta, OPCOES));
+      });
+
+      it("a ausência de janela é equivalente à janela cheia", () => {
+        expect(gerarSugestaoGrade(null, curso.matriz, oferta, OPCOES)).toEqual(
+          gerarSugestaoGrade(null, curso.matriz, oferta, {
+            ...OPCOES,
+            aulaInicial: undefined,
+            aulaFinal: undefined,
+          }),
+        );
+      });
+
+      it("nenhuma aula antes do início pedido", () => {
+        const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          aulaInicial: "T2",
+        });
+        const minimo = indiceDoSlot("T", 2);
+        for (const idx of slotsDe(selecao)) expect(idx).toBeGreaterThanOrEqual(minimo);
+      });
+
+      it("nenhuma aula depois do fim pedido", () => {
+        const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          aulaFinal: "T5",
+        });
+        const maximo = indiceDoSlot("T", 5);
+        for (const idx of slotsDe(selecao)) expect(idx).toBeLessThanOrEqual(maximo);
+      });
+
+      it("turno e janela compõem: sem tarde, e nada depois de N3", () => {
+        const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          naoTarde: true,
+          aulaFinal: "N3",
+        });
+        const limite = indiceDoSlot("N", 3);
+        for (const item of itensDaSelecao(oferta, selecao)) {
+          for (const h of item.turma.horarios) {
+            expect(h.turno, `${item.disciplina.codigo}`).not.toBe("T");
+            expect(indiceDoSlot(h.turno, h.aula)).toBeLessThanOrEqual(limite);
+          }
+        }
+      });
+
+      it("a turma é cortada por inteiro quando um só slot cai fora", () => {
+        // meia-turma não existe: se qualquer horário viola a janela, a turma sai
+        const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          aulaInicial: "T1",
+          aulaFinal: "T3",
+        });
+        const dentro = [indiceDoSlot("T", 1), indiceDoSlot("T", 3)];
+        for (const idx of slotsDe(selecao)) {
+          expect(idx).toBeGreaterThanOrEqual(dentro[0]);
+          expect(idx).toBeLessThanOrEqual(dentro[1]);
+        }
+      });
+
+      it("janela impossível devolve grade vazia em vez de ignorar o pedido", () => {
+        const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, {
+          ...OPCOES,
+          naoManha: true,
+          naoTarde: true,
+          naoNoite: true,
+          aulaInicial: "M1",
+          aulaFinal: "M1",
+        });
+        expect(selecao).toEqual([]);
       });
     });
   }

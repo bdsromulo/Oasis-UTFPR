@@ -21,6 +21,12 @@ export interface DadosSavefile {
   gradeParaSimulador: { semestre: string; grade: string } | null;
   ritmoSimulador: number;
   exclusoesSimulador: unknown;
+  /**
+   * Alavancas de modelagem do simulador (TASK-47). Opcional de propósito:
+   * savefile gerado antes dela não tem o campo, e recusar esses arquivos
+   * custaria ao aluno a grade inteira por causa de um ajuste que ele nem fez.
+   */
+  modelagemSimulador?: unknown;
 }
 
 export interface SavefileOasis {

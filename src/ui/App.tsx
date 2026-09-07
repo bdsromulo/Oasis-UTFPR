@@ -28,6 +28,7 @@ import { TelaComoUsar } from "./telas/TelaComoUsar";
 import { PilulaFaleConosco } from "./telas/Contato";
 import { PainelMenuMobile } from "./MenuMobile";
 import { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./telas/SeletorExclusoes";
+import { MODELAGEM_VAZIA, type ValorModelagem } from "./telas/ControlesSimulador";
 import {
   IconBookOpen,
   IconCalendar,
@@ -282,6 +283,7 @@ export function App() {
   // ritmo que o aluno tinha acabado de escolher.
   const [ritmoSimulador, setRitmoSimulador] = useState(5);
   const [exclusoesSimulador, setExclusoesSimulador] = useState<ValorExclusoes>(EXCLUSOES_VAZIAS);
+  const [modelagemSimulador, setModelagemSimulador] = useState<ValorModelagem>(MODELAGEM_VAZIA);
 
   const cestaExclusoes = useMemo(() => {
     return todasExclusoesPorSemestre[semestreAtivo] ?? {};
@@ -502,6 +504,7 @@ export function App() {
       gradeParaSimulador,
       ritmoSimulador,
       exclusoesSimulador,
+      modelagemSimulador,
     });
     const blob = new Blob([JSON.stringify(savefile, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -554,6 +557,14 @@ export function App() {
     }
     setRitmoSimulador(dados.ritmoSimulador);
     setExclusoesSimulador(dados.exclusoesSimulador as ValorExclusoes);
+    // savefile anterior a TASK-47 nao tem o campo: cai no padrao inerte
+    // Espalhado sobre o padrão, e não substituindo-o: savefile gravado antes de
+    // cada alavanca nova não tem o campo dela, e ler `undefined` como se fosse
+    // lista quebraria a tela inteira do simulador na importação.
+    setModelagemSimulador({
+      ...MODELAGEM_VAZIA,
+      ...((dados.modelagemSimulador as Partial<ValorModelagem> | undefined) ?? {}),
+    });
     setAba(perfilImportado ? "situacao" : "planejamento");
     setAbaSituacao("painel");
     setAbaPlanejamento("cursar");
@@ -655,6 +666,7 @@ export function App() {
     setAbaPlanejamento("cursar");
     setRitmoSimulador(5);
     setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setModelagemSimulador(MODELAGEM_VAZIA);
     setGradeParaSimulador(null);
     localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
@@ -673,6 +685,7 @@ export function App() {
     setAbaPlanejamento("cursar");
     setRitmoSimulador(5);
     setExclusoesSimulador(EXCLUSOES_VAZIAS);
+    setModelagemSimulador(MODELAGEM_VAZIA);
     setGradeParaSimulador(null);
     localStorage.removeItem(CHAVE_GRADE_SIMULADOR);
   }
@@ -1232,6 +1245,8 @@ export function App() {
                 onMudarRitmo={setRitmoSimulador}
                 exclusoes={exclusoesSimulador}
                 onMudarExclusoes={setExclusoesSimulador}
+                modelagem={modelagemSimulador}
+                onMudarModelagem={setModelagemSimulador}
               />
             )}
 

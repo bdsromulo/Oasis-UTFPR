@@ -1,16 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from "../../domain/tipos";
 import {
+  alternativasPara,
   formatarSemestre,
   formatarSemestreExtenso,
   gradeFixadaDaSelecao,
+  proximoSemestre,
   rotuloSazonalidade,
   simularFormatura,
   type DisciplinaPlanejada,
   type IdCategoria,
   type Requisito,
+  type TipoExclusao,
 } from "../../domain/motor/simuladorFormatura";
-import { descricaoDoCurso, ehTrilha, TETO_CH_SEMESTRE } from "../../domain/cursos";
+import {
+  ControlesAvancados,
+  fixarNoSemestre,
+  listarTrilhasDisponiveis,
+  MODELAGEM_VAZIA,
+  SeletorTrilhasAlvo,
+  totalModelagem,
+  type ValorModelagem,
+} from "./ControlesSimulador";
+import {
+  categoriaSimples,
+  descricaoDoCurso,
+  ehGrupoOpcao,
+  ehTrilha,
+  TETO_CH_SEMESTRE,
+} from "../../domain/cursos";
 import { progressoGlobalDoCurso } from "../../domain/motor/situacao";
 import { buscarOfertaParaPlanejamento } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
@@ -22,6 +40,7 @@ import {
   IconCheck,
   IconDownload,
   IconGraduationCap,
+  IconPlus,
   IconWarning,
   IconInfo,
 } from "../icons";
@@ -155,6 +174,16 @@ const ROTULO_CURTO: Record<IdCategoria, string> = {
   extensao: "Extensão",
 };
 
+/** O tipo cru do pedido não serve de rótulo: "disciplina-fixada" não é português. */
+const ROTULO_PEDIDO: Record<TipoExclusao, string> = {
+  disciplina: "não cursar",
+  professor: "evitar docente",
+  trilha: "evitar trilha",
+  "trilha-alvo": "trilha escolhida",
+  "disciplina-fixada": "quero cursar",
+  "semestre-fixado": "semestre escolhido",
+};
+
 function CardRequisito(props: { req: Requisito }) {
   const { req } = props;
   const total = req.cumprido + req.planejado;
@@ -213,10 +242,14 @@ export function TelaSimuladorFormatura(props: {
   onMudarRitmo: (r: number) => void;
   exclusoes: ValorExclusoes;
   onMudarExclusoes: (v: ValorExclusoes) => void;
+  /** alavancas de modelagem (TASK-47); sobem ao pai pelo mesmo motivo do ritmo */
+  modelagem: ValorModelagem;
+  onMudarModelagem: (v: ValorModelagem) => void;
 }) {
-  const { perfil, matriz, ofertas, ritmo, exclusoes } = props;
+  const { perfil, matriz, ofertas, ritmo, exclusoes, modelagem } = props;
   const setRitmo = props.onMudarRitmo;
   const setExclusoes = props.onMudarExclusoes;
+  const setModelagem = props.onMudarModelagem;
   const [semestreInicial, setSemestreInicial] = useState(props.semestreAtivo);
   const [menuImportacaoSemestre, setMenuImportacaoSemestre] = useState<string | null>(null);
   const [seletorGradePlanejamentoAberto, setSeletorGradePlanejamentoAberto] = useState(false);
@@ -249,6 +282,26 @@ export function TelaSimuladorFormatura(props: {
   }, [props.todasCestasPorSemestre]);
 
   const [painelExclusoesAberto, setPainelExclusoesAberto] = useState(false);
+  const [painelAvancadoAberto, setPainelAvancadoAberto] = useState(false);
+  /** disciplina cuja lista de substitutas está aberta (camada 2) */
+  const [trocando, setTrocando] = useState<string | null>(null);
+  /** semestre com o menu "adicionar matéria" aberto (TASK-50) */
+  const [adicionandoEm, setAdicionandoEm] = useState<string | null>(null);
+  /**
+   * Arrasto de disciplina entre semestres (TASK-50).
+   *
+   * Feito com Pointer Events, e não com o drag-and-drop nativo do HTML5: aquele
+   * simplesmente não existe em toque, e o recurso ficava restrito ao desktop.
+   * Pointer unifica mouse, dedo e caneta no mesmo caminho de código.
+   */
+  const [arrasto, setArrasto] = useState<{
+    codigo: string;
+    nome: string;
+    origem: string;
+    x: number;
+    y: number;
+  } | null>(null);
+  const [alvoArrasto, setAlvoArrasto] = useState<string | null>(null);
 
   const resultado = useMemo(
     () =>
@@ -261,9 +314,137 @@ export function TelaSimuladorFormatura(props: {
           professores: exclusoes.professores,
           trilhas: exclusoes.trilhas.map((t) => t.conjunto),
         },
+        trilhasAlvo: modelagem.trilhasAlvo,
+        disciplinasFixadas: modelagem.disciplinasFixadas,
+        ritmoPorSemestre: modelagem.ritmoPorSemestre,
+        janela: { aulaInicial: modelagem.aulaInicial, aulaFinal: modelagem.aulaFinal },
+        fixacoesPorSemestre: modelagem.fixacoesPorSemestre,
       }),
-    [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada, exclusoes],
+    [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada, exclusoes, modelagem],
   );
+
+  // Trilhas do curso com o progresso real do aluno, para os chips da camada 1.
+  const trilhasDisponiveis = useMemo(() => {
+    const progresso = new Map<string, { cursada: number; exigida: number }>();
+    for (const r of perfil?.resumoConjuntos ?? []) {
+      progresso.set(r.conjunto, { cursada: r.chCursadaAprovada, exigida: r.chObrigatoria });
+    }
+    return listarTrilhasDisponiveis(matriz, progresso);
+  }, [matriz, perfil]);
+
+  /**
+   * Troca uma disciplina projetada por outra: fixa a escolhida e exclui a que
+   * saiu. Só fixar não bastaria — a substituída continuaria elegível e o motor
+   * poderia repescá-la, deixando a troca sem efeito visível.
+   */
+  function trocarDisciplina(sai: string, entra: string) {
+    setModelagem({
+      ...modelagem,
+      disciplinasFixadas: [
+        ...modelagem.disciplinasFixadas.filter((c) => c !== entra && c !== sai),
+        entra,
+      ],
+    });
+    const nomeQueSai = matriz.disciplinas.find((d) => d.codigo === sai);
+    if (nomeQueSai && !exclusoes.disciplinas.some((x) => x.codigo === sai)) {
+      setExclusoes({
+        ...exclusoes,
+        disciplinas: [...exclusoes.disciplinas, { codigo: sai, nome: nomeQueSai.nome }],
+      });
+    }
+    setTrocando(null);
+  }
+
+  /**
+   * O que ainda falta cursar, agrupado por categoria — alimenta o menu de
+   * adicionar. Sai da própria lista de requisitos do motor, então a categoria
+   * já atendida não aparece e o aluno não gasta clique com o que não falta.
+   */
+  const faltantesPorCategoria = useMemo(() => {
+    const noPlano = new Set(resultado.semestres.flatMap((s) => s.disciplinas.map((d) => d.codigo)));
+    const cumpridas = (d: { codigo: string }) => noPlano.has(d.codigo);
+    const grupos: [IdCategoria, { horasFaltantes: number; disciplinas: typeof matriz.disciplinas }][] =
+      [];
+
+    for (const req of resultado.requisitos) {
+      if (req.atendido || req.id === "extensao") continue;
+      const disciplinas = matriz.disciplinas.filter(
+        (d) =>
+          !d.codigo.startsWith("ENADE") &&
+          !cumpridas(d) &&
+          categoriaDaDisciplina(d) === req.id,
+      );
+      if (disciplinas.length === 0) continue;
+      grupos.push([req.id, { horasFaltantes: Math.max(0, req.faltante - req.planejado), disciplinas }]);
+    }
+    return grupos;
+
+    /** Mesma classificação que o motor usa, derivada do conjunto da disciplina. */
+    function categoriaDaDisciplina(d: (typeof matriz.disciplinas)[number]): IdCategoria | null {
+      if (d.conjunto === null) return "obrigatorias";
+      const simples = categoriaSimples(curso, d.conjunto);
+      if (simples?.id === "humanidades") return "humanidades";
+      if (simples?.id === "segundoEstrato") return "segundoEstrato";
+      if (ehGrupoOpcao(curso, d.conjunto)) return "opcoes";
+      if (ehTrilha(curso, d.conjunto)) return "trilhas";
+      return "eletivas";
+    }
+  }, [resultado, matriz, perfil, ofertas, curso]);
+
+  /** Prende a disciplina ao semestre vizinho (setas ‹ ›) ou ao alvo do arrasto. */
+  function moverParaSemestre(codigo: string, destino: string) {
+    setModelagem(fixarNoSemestre(modelagem, codigo, destino));
+  }
+
+  /**
+   * Semestre sob as coordenadas do ponteiro.
+   *
+   * `elementFromPoint` é o que faz o arrasto por toque funcionar: no dedo não há
+   * "elemento sob o cursor" durante o gesto — os eventos continuam indo para
+   * quem iniciou o toque —, então o destino tem de ser descoberto por posição.
+   */
+  function semestreSob(x: number, y: number): string | null {
+    const alvo = document.elementFromPoint(x, y);
+    return alvo?.closest<HTMLElement>("[data-semestre]")?.dataset.semestre ?? null;
+  }
+
+  useEffect(() => {
+    if (!arrasto) return;
+
+    const mover = (ev: PointerEvent) => {
+      setArrasto((a) => (a ? { ...a, x: ev.clientX, y: ev.clientY } : a));
+      setAlvoArrasto(semestreSob(ev.clientX, ev.clientY));
+    };
+    const soltar = (ev: PointerEvent) => {
+      const destino = semestreSob(ev.clientX, ev.clientY);
+      // soltar no próprio semestre de origem não é uma mudança: sem esta
+      // guarda, um toque acidental fixaria a disciplina onde ela já estava e
+      // ela apareceria no painel de ajustes como se o aluno tivesse pedido
+      if (destino && destino !== arrasto.origem) {
+        moverParaSemestre(arrasto.codigo, destino);
+      }
+      setArrasto(null);
+      setAlvoArrasto(null);
+    };
+
+    window.addEventListener("pointermove", mover);
+    window.addEventListener("pointerup", soltar);
+    window.addEventListener("pointercancel", soltar);
+    return () => {
+      window.removeEventListener("pointermove", mover);
+      window.removeEventListener("pointerup", soltar);
+      window.removeEventListener("pointercancel", soltar);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrasto?.codigo, arrasto?.origem, modelagem]);
+
+  /** X: tira do plano de vez. Obrigatória não recebe o botão. */
+  function removerDoPlano(codigo: string, nome: string) {
+    setModelagem(fixarNoSemestre(modelagem, codigo, null));
+    if (!exclusoes.disciplinas.some((x) => x.codigo === codigo)) {
+      setExclusoes({ ...exclusoes, disciplinas: [...exclusoes.disciplinas, { codigo, nome }] });
+    }
+  }
 
   const totalMaterias = resultado.semestres.reduce((a, s) => a + s.materias, 0);
   const totalHoras = resultado.semestres.reduce((a, s) => a + s.horas, 0);
@@ -470,6 +651,15 @@ export function TelaSimuladorFormatura(props: {
           </select>
         </div>
 
+        {/* Camada 1 (TASK-47): a escolha que todo aluno de curso com trilha
+            entende de imediato fica aqui, ao lado do ritmo, sem clique extra. */}
+        <SeletorTrilhasAlvo
+          trilhas={trilhasDisponiveis}
+          exigidas={resultado.trilhasExigidas}
+          valor={modelagem.trilhasAlvo}
+          onChange={(v) => setModelagem({ ...modelagem, trilhasAlvo: v })}
+        />
+
         <div className="ml-auto text-right">
           <span className="block font-display text-[11px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
             Formatura estimada
@@ -537,22 +727,75 @@ export function TelaSimuladorFormatura(props: {
         )}
       </div>
 
+      {/* Camada 3 (TASK-47): ajustes finos atrás de um clique. Quem abre o
+          simulador quer a data da formatura; quem quer modelar ritmo semestre a
+          semestre e janela de horário vai atrás, e para esse não custa nada. */}
+      <div className="overflow-hidden rounded-2xl border border-zinc-200/90 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <button
+          type="button"
+          onClick={() => setPainelAvancadoAberto((v) => !v)}
+          className="flex w-full cursor-pointer items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+        >
+          <span>
+            <span className="block font-display text-sm font-black text-zinc-900 dark:text-zinc-100">
+              Ajustes avançados
+            </span>
+            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              Ritmo por semestre, janela de horário e matérias que você fixou
+            </span>
+          </span>
+          <span className="flex items-center gap-2">
+            {totalModelagem(modelagem) > 0 && (
+              <span className="rounded-lg bg-utfpr-500/20 px-2 py-0.5 font-mono text-xs font-black text-utfpr-800 dark:text-utfpr-300">
+                {totalModelagem(modelagem)}
+              </span>
+            )}
+            <span className="font-mono text-xs font-bold text-zinc-400">
+              {painelAvancadoAberto ? "▲" : "▼"}
+            </span>
+          </span>
+        </button>
+        {painelAvancadoAberto && (
+          <div className="animate-in fade-in border-t border-zinc-200/70 p-4 dark:border-zinc-800">
+            <ControlesAvancados
+              valor={modelagem}
+              onChange={setModelagem}
+              semestres={resultado.semestres.map((s) => s.semestre)}
+              ritmoGlobal={ritmo}
+            />
+            {totalModelagem(modelagem) > 0 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setModelagem({ ...MODELAGEM_VAZIA, trilhasAlvo: modelagem.trilhasAlvo })
+                }
+                className="mt-4 cursor-pointer rounded-xl border border-zinc-300 px-3 py-1.5 font-display text-xs font-bold text-zinc-600 transition-colors hover:border-red-400 hover:text-red-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:text-red-300"
+              >
+                Limpar os ajustes avançados
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* Exclusões que a integralização não permitiu respeitar */}
       {resultado.exclusoesImpossiveis.length > 0 && (
         <section className="rounded-2xl border-2 border-red-400/60 bg-red-50/70 p-4 dark:border-red-800/70 dark:bg-red-950/40">
           <div className="flex items-start gap-2.5">
             <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
             <div>
+              {/* A seção nasceu só para exclusões; com as alavancas da TASK-47
+                  ela passou a receber também pedidos de escolha, e o texto
+                  precisou deixar de falar só em "excluir". */}
               <h3 className="font-display text-sm font-black text-red-900 dark:text-red-200">
-                Não é possível se formar respeitando{" "}
                 {resultado.exclusoesImpossiveis.length === 1
-                  ? "esta exclusão"
-                  : `estas ${resultado.exclusoesImpossiveis.length} exclusões`}
+                  ? "Um pedido que a integralização não permitiu atender"
+                  : `${resultado.exclusoesImpossiveis.length} pedidos que a integralização não permitiu atender`}
               </h3>
               <p className="mt-1 text-xs leading-relaxed text-red-900/80 dark:text-red-200/80">
-                A projeção abaixo <strong>mantém</strong> o que você pediu para excluir — sem isso
-                não haveria como integralizar o curso. As disciplinas afetadas aparecem marcadas na
-                linha do tempo.
+                A projeção abaixo é a que fecha o curso. O que você pediu para{" "}
+                <strong>excluir</strong> e o motor manteve aparece marcado na linha do tempo; o que
+                você pediu para <strong>cursar</strong> e não coube está explicado aqui.
               </p>
             </div>
           </div>
@@ -564,7 +807,7 @@ export function TelaSimuladorFormatura(props: {
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-md bg-red-500/15 px-1.5 py-0.5 font-display text-[10px] font-black uppercase tracking-wide text-red-700 dark:text-red-300">
-                    {x.tipo}
+                    {ROTULO_PEDIDO[x.tipo]}
                   </span>
                   <span className="font-display font-black text-zinc-900 dark:text-zinc-100">
                     {x.rotulo}
@@ -613,7 +856,16 @@ export function TelaSimuladorFormatura(props: {
             return (
               <Card
                 key={s.semestre}
-                classe={ultimo && resultado.semestreFormatura ? "!border-utfpr-500/60 !border-2" : ""}
+                // Zona de soltura do arrasto (TASK-50): o gesto localiza o
+                // destino por este atributo, via elementFromPoint.
+                data-semestre={s.semestre}
+                classe={`transition-all ${
+                  alvoArrasto === s.semestre && arrasto?.origem !== s.semestre
+                    ? "!border-utfpr-500 !border-2 !border-dashed bg-utfpr-500/5"
+                    : ultimo && resultado.semestreFormatura
+                      ? "!border-utfpr-500/60 !border-2"
+                      : ""
+                }`}
               >
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-2.5 dark:border-zinc-800">
                   <div className="flex items-center gap-2.5">
@@ -670,9 +922,124 @@ export function TelaSimuladorFormatura(props: {
                   {s.disciplinas.map((d) => (
                     <li
                       key={d.codigo + d.nome}
-                      className="flex flex-wrap items-center gap-2 text-sm"
+                      className={`flex flex-wrap items-center gap-2 rounded-lg text-sm transition-opacity ${
+                        arrasto?.codigo === d.codigo ? "opacity-40" : ""
+                      }`}
                       title={rotuloSazonalidade(d.sazonalidade)}
                     >
+                      {/* Alça de arrasto (TASK-50). O gesto sai de uma alça
+                          dedicada, e não do bloco inteiro, porque `touch-none`
+                          desliga a rolagem da página no elemento que o recebe —
+                          no bloco inteiro, o dedo não conseguiria mais rolar a
+                          linha do tempo. O placeholder de categoria não tem
+                          código na matriz e não pode ser preso a lugar nenhum. */}
+                      {!d.codigo.startsWith("PLACEHOLDER_") && (
+                        <span
+                          onPointerDown={(ev) => {
+                            ev.preventDefault();
+                            setArrasto({
+                              codigo: d.codigo,
+                              nome: d.nome,
+                              origem: s.semestre,
+                              x: ev.clientX,
+                              y: ev.clientY,
+                            });
+                          }}
+                          title="Arraste para outro semestre"
+                          className="shrink-0 touch-none cursor-grab select-none px-0.5 font-mono text-xs leading-none text-zinc-300 transition-colors hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-600 dark:hover:text-zinc-300"
+                        >
+                          ⠿
+                        </span>
+                      )}
+                      {/* Ações do bloco (TASK-50): mover para o semestre vizinho
+                          e, quando há substituta, tirar do plano. Obrigatória
+                          nunca ganha o X — sem ela não há formatura, e o motor
+                          recusaria o pedido de qualquer forma. */}
+                      {!d.codigo.startsWith("PLACEHOLDER_") && (
+                        <span className="order-last flex items-center gap-0.5">
+                          {i > 0 && (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                moverParaSemestre(d.codigo, resultado.semestres[i - 1].semestre)
+                              }
+                              title={`Mover para ${formatarSemestre(resultado.semestres[i - 1].semestre)}`}
+                              className="cursor-pointer rounded-lg border border-zinc-200 px-1.5 font-mono text-xs font-black text-zinc-500 transition-colors hover:border-utfpr-500 hover:text-zinc-900 dark:border-zinc-700 dark:hover:text-white"
+                            >
+                              ‹
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              moverParaSemestre(
+                                d.codigo,
+                                resultado.semestres[i + 1]?.semestre ?? proximoSemestre(s.semestre),
+                              )
+                            }
+                            title="Mover para o semestre seguinte"
+                            className="cursor-pointer rounded-lg border border-zinc-200 px-1.5 font-mono text-xs font-black text-zinc-500 transition-colors hover:border-utfpr-500 hover:text-zinc-900 dark:border-zinc-700 dark:hover:text-white"
+                          >
+                            ›
+                          </button>
+                          {d.categoria !== "obrigatorias" && (
+                            <button
+                              type="button"
+                              onClick={() => removerDoPlano(d.codigo, d.nome)}
+                              title="Não quero cursar esta matéria"
+                              className="cursor-pointer rounded-lg border border-zinc-200 px-1.5 font-mono text-xs font-black text-zinc-500 transition-colors hover:border-red-400 hover:text-red-600 dark:border-zinc-700 dark:hover:text-red-400"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </span>
+                      )}
+                      {/* Camada 2 (TASK-47): a troca é contextual à disciplina.
+                          Obrigatória não tem substituta e `alternativasPara`
+                          devolve lista vazia — o botão simplesmente não nasce. */}
+                      {(() => {
+                        const opcoes = alternativasPara(
+                          d.codigo,
+                          matriz,
+                          perfil,
+                          ofertas,
+                          resultado.semestres.flatMap((x) => x.disciplinas.map((y) => y.codigo)),
+                        );
+                        if (opcoes.length === 0) return null;
+                        const aberta = trocando === d.codigo;
+                        return (
+                          <span className="relative order-last">
+                            <button
+                              type="button"
+                              onClick={() => setTrocando(aberta ? null : d.codigo)}
+                              className="cursor-pointer rounded-lg border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-display text-[10px] font-black text-zinc-600 transition-colors hover:border-utfpr-500 hover:bg-utfpr-500/15 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:text-white"
+                              title="Cursar outra matéria desta categoria no lugar desta"
+                            >
+                              trocar
+                            </button>
+                            {aberta && (
+                              <div className="absolute left-0 top-full z-20 mt-1 max-h-72 w-80 overflow-y-auto rounded-2xl border-2 border-utfpr-500/40 bg-white p-2 shadow-lg dark:bg-zinc-900">
+                                <p className="px-1.5 pb-1.5 text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
+                                  Cursar no lugar de <strong>{d.nome}</strong>:
+                                </p>
+                                {opcoes.map((alt) => (
+                                  <button
+                                    key={alt.codigo}
+                                    type="button"
+                                    onClick={() => trocarDisciplina(d.codigo, alt.codigo)}
+                                    className="block w-full cursor-pointer rounded-xl px-2 py-1.5 text-left text-xs font-semibold text-zinc-700 hover:bg-utfpr-500/15 dark:text-zinc-200"
+                                  >
+                                    {alt.nome}
+                                    <span className="ml-1.5 font-mono text-[10px] text-zinc-400">
+                                      {alt.codigo} · {alt.horas.total}h
+                                    </span>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </span>
+                        );
+                      })()}
                       <span
                         className={`h-2 w-2 shrink-0 rounded-full ${CORES_CATEGORIA[d.categoria].ponto}`}
                       />
@@ -712,6 +1079,55 @@ export function TelaSimuladorFormatura(props: {
                     </li>
                   ))}
                 </ul>
+
+                {/* Adicionar matéria a ESTE semestre (TASK-50). A lista é o que
+                    ainda falta para integralizar, agrupado por categoria — o
+                    aluno escolhe pelo que falta, não decorando código. */}
+                <div className="relative mt-2.5">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setAdicionandoEm(adicionandoEm === s.semestre ? null : s.semestre)
+                    }
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-dashed border-zinc-300 px-2.5 py-1 font-display text-[11px] font-bold text-zinc-500 transition-colors hover:border-utfpr-500 hover:text-zinc-900 dark:border-zinc-700 dark:hover:text-white"
+                  >
+                    <IconPlus className="h-3 w-3 shrink-0" />
+                    <span>Adicionar matéria neste semestre</span>
+                  </button>
+                  {adicionandoEm === s.semestre && (
+                    <div className="absolute left-0 top-full z-30 mt-1 max-h-80 w-96 max-w-[90vw] overflow-y-auto rounded-2xl border-2 border-utfpr-500/40 bg-white p-2 shadow-lg dark:bg-zinc-900">
+                      {faltantesPorCategoria.length === 0 ? (
+                        <p className="p-2 text-xs font-semibold text-zinc-500">
+                          Nada pendente: o plano já cobre tudo o que o curso exige.
+                        </p>
+                      ) : (
+                        faltantesPorCategoria.map(([cat, lista]) => (
+                          <div key={cat} className="mb-1.5">
+                            <p className="px-1.5 py-1 font-display text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                              {ROTULO_CURTO[cat]} · faltam {lista.horasFaltantes}h
+                            </p>
+                            {lista.disciplinas.slice(0, 40).map((alt) => (
+                              <button
+                                key={alt.codigo}
+                                type="button"
+                                onClick={() => {
+                                  moverParaSemestre(alt.codigo, s.semestre);
+                                  setAdicionandoEm(null);
+                                }}
+                                className="block w-full cursor-pointer rounded-xl px-2 py-1.5 text-left text-xs font-semibold text-zinc-700 hover:bg-utfpr-500/15 dark:text-zinc-200"
+                              >
+                                {alt.nome}
+                                <span className="ml-1.5 font-mono text-[10px] text-zinc-400">
+                                  {alt.codigo} · {alt.horas.total}h
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 {/* Botão de importação para Planejamento (quando o semestre tem oferta disponível, ex: 2026-2) */}
                 {ofertaDoSemestre && props.onImportarGrade && (
@@ -853,6 +1269,19 @@ export function TelaSimuladorFormatura(props: {
         onFechar={() => setExplicacaoAberta(false)}
         id="modalExplicacaoCalculosSimulador"
       />
+
+      {/* Etiqueta que segue o ponteiro durante o arrasto (TASK-50). No toque ela
+          é o único retorno visual do gesto: o dedo cobre a origem, e sem isso o
+          aluno não saberia que está arrastando alguma coisa. `pointer-events-none`
+          é essencial — do contrário ela mesma seria o alvo de elementFromPoint. */}
+      {arrasto && (
+        <div
+          className="pointer-events-none fixed z-50 max-w-[70vw] truncate rounded-xl border-2 border-utfpr-500 bg-white px-2.5 py-1 font-display text-xs font-black text-zinc-900 shadow-lg dark:bg-zinc-900 dark:text-white"
+          style={{ left: arrasto.x + 12, top: arrasto.y + 12 }}
+        >
+          {arrasto.nome}
+        </div>
+      )}
     </div>
   );
 }

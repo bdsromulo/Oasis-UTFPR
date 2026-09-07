@@ -12,9 +12,25 @@ import {
 import { calcularProgressoMateria, type StatusIcone } from "../domain/motor/progressoGrade";
 import type { Matriz, PerfilAluno } from "../domain/tipos";
 
-export function Card(props: { titulo?: ReactNode; children: ReactNode; classe?: string }) {
+export function Card({
+  titulo,
+  children,
+  classe,
+  ...resto
+}: {
+  titulo?: ReactNode;
+  children: ReactNode;
+  classe?: string;
+  /**
+   * O que sobra é repassado ao elemento raiz. O simulador marca o cartão do
+   * semestre com `data-semestre` para o arrasto localizar o destino sob o dedo
+   * (TASK-50); sem o repasse o Card engoliria o atributo.
+   */
+} & Omit<React.ComponentPropsWithoutRef<"div">, "className" | "children">) {
+  const props = { titulo, children, classe };
   return (
     <div
+      {...resto}
       className={`rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-xs transition-all hover:border-zinc-300 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-none dark:hover:border-zinc-700/80 ${props.classe ?? ""}`}
     >
       {props.titulo && (

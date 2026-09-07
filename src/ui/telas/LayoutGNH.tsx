@@ -9,6 +9,7 @@ import {
   IconLock,
   IconPin,
   IconSparkles,
+  IconWarning,
 } from "../icons";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
@@ -138,7 +139,9 @@ function DisciplinaGNHItem({
 
           {est.bloqueio ? (
             <span title={est.bloqueio} className="cursor-help">
-              <Badge tom="alerta">{<IconLock className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Trancada</Badge>
+              {/* Cadeado saiu com o bloqueio (TASK-45): a adição aqui sempre
+                  esteve liberada, e o ícone dizia o contrário. */}
+              <Badge tom="alerta">{<IconWarning className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Pré-req. pendente</Badge>
             </span>
           ) : est.pendente && est.naMatriz ? (
             <Badge tom="ok">{<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Liberada</Badge>

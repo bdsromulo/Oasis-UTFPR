@@ -26,6 +26,32 @@ import matriz823Json from "../../data/eng-mecatronica/matriz-823.json";
  */
 export const TETO_CH_SEMESTRE = 405;
 
+/**
+ * Quantos períodos à frente do seu o aluno pode adiantar disciplina.
+ *
+ * A UTFPR recusa a matrícula acima disso. A diferença de 2 é permitida: quem
+ * está no 7º alcança a disciplina do 9º; quem está no 6º, não.
+ */
+export const ADIANTAMENTO_MAXIMO_PERIODOS = 2;
+
+/**
+ * A disciplina está adiantada demais para o período em que o aluno se encontra?
+ *
+ * Só limita para cima, de propósito: a dependência do 3º período continua à mão
+ * de quem já está no 6º. E falha aberto sempre que falta um dos dois períodos —
+ * histórico sem período, ou disciplina que só existe na oferta e chega sem
+ * período conhecido. Travar as 1.290 disciplinas das matrizes por causa de um
+ * campo ausente seria muito pior do que não travar nenhuma.
+ */
+export function foraDaJanelaDePeriodo(
+  periodoDisciplina: number,
+  periodoAluno: number | null,
+): boolean {
+  if (!periodoAluno || periodoAluno <= 0) return false;
+  if (!periodoDisciplina || periodoDisciplina <= 0) return false;
+  return periodoDisciplina - periodoAluno > ADIANTAMENTO_MAXIMO_PERIODOS;
+}
+
 export interface CategoriaSimples {
   /** identificador estável usado em chaves de UI e agregação */
   id: string;

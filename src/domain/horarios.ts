@@ -32,6 +32,37 @@ export function faixaDoSlot(turno: string, aula: number): FaixaHorario | null {
   return HORARIOS_SLOTS[`${turno}${aula}`] ?? null;
 }
 
+/**
+ * Os 17 slots em ordem cronológica, do primeiro da manhã ao último da noite.
+ *
+ * É a régua sobre a qual a janela de aulas opera: "a partir de T2" e "até N3"
+ * viram um intervalo de índices, e o filtro se orienta pela estrutura de aulas
+ * da grade em vez de por horário solto.
+ *
+ * Deriva das chaves de `HORARIOS_SLOTS` em vez de repetir os 17 ids, para que
+ * as duas listas não possam divergir. A ordem é a de declaração: chaves de
+ * string que não são índice de array preservam a ordem de inserção por
+ * especificação, e a tabela acima já está em ordem cronológica.
+ */
+export const SLOTS_ORDENADOS: string[] = Object.keys(HORARIOS_SLOTS);
+
+const INDICE_POR_SLOT = new Map(SLOTS_ORDENADOS.map((s, i) => [s, i]));
+
+/** Posição do slot na régua; -1 quando o par turno/aula não existe. */
+export function indiceDoSlot(turno: string, aula: number): number {
+  return INDICE_POR_SLOT.get(`${turno}${aula}`) ?? -1;
+}
+
+/** Primeiro e último slot da régua — o padrão inerte da janela. */
+export const PRIMEIRO_SLOT = SLOTS_ORDENADOS[0];
+export const ULTIMO_SLOT = SLOTS_ORDENADOS[SLOTS_ORDENADOS.length - 1];
+
+/** rótulo "T2 · 13:50–14:40" a partir do id do slot */
+export function rotuloDoSlot(slot: string): string {
+  const f = HORARIOS_SLOTS[slot];
+  return f ? `${slot} · ${f.inicio}–${f.fim}` : slot;
+}
+
 /** rótulo "T4 · 15:50–16:40" */
 export function rotuloComHora(turno: string, aula: number): string {
   const f = faixaDoSlot(turno, aula);
