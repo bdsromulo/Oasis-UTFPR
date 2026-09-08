@@ -201,20 +201,33 @@ Ordem do trabalho:
    erros. Sem ela o semestre que era de planejamento vira corrente sem turmas.
 2. Registrar a oferta em `src/domain/dadosCurso.ts`: um `import` do JSON e uma
    chave em `ofertas`, por curso (Mecatrônica em `ofertasMecatronicaHistoricas.ts`).
-3. Empurrar as duas constantes de `semestres.ts` um período para a frente.
-4. Rodar `npm test`. Os testes que fixam a lista de semestres são os de regressão
+3. Empurrar as duas constantes de `semestres.ts` um período para a frente, e o
+   `semestrePadrao` de cada curso em `dadosCurso.ts` junto — ele é sempre o
+   semestre de planejamento, porque quem abre o Oásis está montando a grade do
+   período que vem.
+4. Trocar a chave `CHAVE_VIRADA` em `App.tsx` para o novo semestre. É ela que
+   move, uma vez só, quem estava no semestre que era o padrão antes da virada —
+   sem ela, quem já usava o site continuaria abrindo no período cuja matrícula
+   já passou. Quem escolheu um período mais antigo de propósito não é movido.
+5. Rodar `npm test`. Os testes que fixam a lista de semestres são os de regressão
    por curso e o `tests/semestres.test.ts`; asserções sobre **dado** usam
    `semestresReaisDoCurso` e mudam junto da oferta, asserções sobre **navegação**
    usam `semestresDoCurso` e ganham o semestre novo.
-5. Reescrever `src/ui/novidades.ts` e trocar `VERSAO_NOVIDADES` — é o que faz o
+6. Reescrever `src/ui/novidades.ts` e trocar `VERSAO_NOVIDADES` — é o que faz o
    modal de Novidades reaparecer para toda a base.
 
-Três coisas que **não** mudam, e não devem ser "corrigidas":
+Quatro coisas que **não** mudam, e não devem ser "corrigidas":
 
 - **As duas paridades são obrigatórias.** Cada curso precisa manter ao menos uma
   oferta de semestre par e uma de ímpar: o semestre de planejamento não tem PDF
   próprio e é projetado sobre a oferta real de mesma paridade
   (`ofertaReferenciaDoSemestre`). `tests/semestres.test.ts` guarda isso.
+- **Nunca leia `curso.ofertas[...]` direto por semestre.** Use
+  `ofertaDoSemestre`: o padrão do curso é o semestre projetado, que não tem
+  entrada própria, e a indexação direta devolve `undefined` em silêncio. Pelo
+  mesmo motivo o último recurso do acessor é a oferta conhecida mais recente, e
+  não `semestrePadrao` — um curso pode ter só uma paridade disponível, como
+  Mecatrônica nos instantes antes de o chunk de ofertas chegar.
 - **O semestre projetado não entra em `ofertas`.** `oferta.semestre` significa
   "de onde estas turmas vieram"; ele é resolvido em tempo de leitura por
   `ofertaDoSemestre`. Materializar uma cópia faria o site afirmar que tem um

@@ -262,6 +262,7 @@ export function TelaSimuladorFormatura(props: {
    */
   perfilReal?: PerfilAluno | null;
   presumidas?: string[];
+  onMudarPresumidas?: (presumidas: string[]) => void;
 }) {
   const { perfil, matriz, ofertas, ritmo, exclusoes, modelagem } = props;
   const setRitmo = props.onMudarRitmo;
@@ -552,7 +553,7 @@ export function TelaSimuladorFormatura(props: {
           perfil={props.perfilReal}
           matriz={matriz}
           presumidas={props.presumidas}
-          onMudar={() => undefined}
+          onMudar={props.onMudarPresumidas ?? (() => undefined)}
           compacto
         />
       )}

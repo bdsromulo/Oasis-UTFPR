@@ -35,7 +35,7 @@ export const NOVIDADES: ItemNovidade[] = [
     resumo:
       "O seletor de período agora abre em 2027.1. A UTFPR só publica o PDF de Turmas Abertas perto da matrícula, então até lá a lista de matérias e horários é a oferta real do último semestre de mesma paridade — 2026.1. Dá para montar a grade, ver choques e mandar tudo ao simulador.",
     detalhes: [
-      "Um aviso no topo diz de onde vieram as turmas e lembra que elas vão mudar.",
+      "O site já abre em 2027.1; um aviso no topo diz de onde vieram as turmas e lembra que elas vão mudar.",
       "2026.2 passou a semestre corrente, em laranja: a oferta dele é oficial, mas a matrícula já passou.",
       "Os semestres anteriores ficaram em cinza, como consulta.",
     ],
@@ -45,9 +45,9 @@ export const NOVIDADES: ItemNovidade[] = [
     titulo: "As matérias que você está cursando contam no plano",
     icone: "check",
     resumo:
-      "Em Minha Situação, as disciplinas em curso aparecem com um marcador. Marcadas, o planejamento as trata como aprovadas: liberam pré-requisitos, somam carga horária e saem da projeção de formatura — que é como você realmente vai estar em 2027.1.",
+      "As disciplinas em curso aparecem com um marcador, no topo do Simulador de Formatura e em Minha Situação. Marcadas, o planejamento as trata como aprovadas: liberam pré-requisitos, somam carga horária e saem da projeção — que é como você realmente vai estar em 2027.1.",
     detalhes: [
-      "Vêm todas marcadas; desmarque as que você acha que não vai passar.",
+      "Vêm todas marcadas; desmarque as que você acha que não vai passar, sem sair da projeção.",
       "É uma suposição sua: o histórico guardado continua exatamente como o PDF o descreve.",
       "A escolha viaja no savefile, junto das grades.",
     ],

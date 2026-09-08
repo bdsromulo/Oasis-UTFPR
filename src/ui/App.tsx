@@ -17,6 +17,7 @@ import {
   descritorDoSemestre,
   formatarSemestre,
   SEMESTRE_CORRENTE,
+  SEMESTRE_PLANEJAMENTO,
   type EstadoSemestre,
 } from "../domain/semestres";
 import { TelaSituacao } from "./telas/Situacao";
@@ -116,6 +117,10 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // indistinguível do real no próximo carregamento, e a suposição deixaria de ser
 // reversível.
 const CHAVE_PRESUMIDAS = "oasis.materias_presumidas.v1";
+// Marca que a virada para o semestre de planejamento já foi aplicada às
+// preferências guardadas. Sem ela, quem já usava o site continuaria abrindo no
+// semestre que era o padrão quando entrou — 2026.2, cuja matrícula já passou.
+const CHAVE_VIRADA = `oasis.virada.${SEMESTRE_PLANEJAMENTO}.v1`;
 // Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
 // novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
 // precisar de lógica de comparação de datas.
@@ -209,11 +214,28 @@ function Aplicacao() {
     () => (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis",
   );
   const [preferencias, setPreferencias] = useState<Preferencias>(() => {
+    const padrao: Preferencias = {
+      tema: "sistema",
+      layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis",
+      semestreAtivo: SEMESTRE_PLANEJAMENTO,
+    };
     try {
-      const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS) ?? "null");
-      return salvo || { tema: "sistema", layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis", semestreAtivo: SEMESTRE_CORRENTE };
+      const salvo: Preferencias | null = JSON.parse(localStorage.getItem(CHAVE_PREFS) ?? "null");
+      if (!salvo) return padrao;
+
+      // Virada de semestre, uma vez só. Quem estava no semestre que era o padrão
+      // antes da virada não o escolheu — foi colocado nele —, então acompanha a
+      // mudança. Quem escolheu um período mais antigo de propósito fica onde
+      // está, e quem trocar depois disso também: a marca já terá sido gravada.
+      if (!localStorage.getItem(CHAVE_VIRADA)) {
+        localStorage.setItem(CHAVE_VIRADA, "true");
+        if (!salvo.semestreAtivo || salvo.semestreAtivo === SEMESTRE_CORRENTE) {
+          return { ...salvo, semestreAtivo: SEMESTRE_PLANEJAMENTO };
+        }
+      }
+      return salvo;
     } catch {
-      return { tema: "sistema", layout: "oasis", semestreAtivo: SEMESTRE_CORRENTE };
+      return { ...padrao, layout: "oasis" };
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
@@ -647,7 +669,7 @@ function Aplicacao() {
   function confirmarSavefile(savefile: SavefileOasis) {
     const dados = savefile.dados;
     const perfilImportado = desserializarPerfil(dados.perfil);
-    const semestreImportado = dados.preferencias.semestreAtivo ?? SEMESTRE_CORRENTE;
+    const semestreImportado = dados.preferencias.semestreAtivo ?? SEMESTRE_PLANEJAMENTO;
     const cestasImportadas = dados.cestasPorSemestre;
     const cestasDoSemestre = cestasImportadas[semestreImportado] ?? { A: [] };
     const gradeImportada = cestasDoSemestre[dados.gradeAtiva]
@@ -789,7 +811,7 @@ function Aplicacao() {
     setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
     setGradeAtiva("A");
     setSelecao([]);
-    setPreferencias({ tema: "sistema", layout: "oasis", semestreAtivo: SEMESTRE_CORRENTE });
+    setPreferencias({ tema: "sistema", layout: "oasis", semestreAtivo: SEMESTRE_PLANEJAMENTO });
     setLayout("oasis");
     setAba("planejamento");
     setAbaPlanejamento("cursar");
@@ -1414,6 +1436,7 @@ function Aplicacao() {
                 perfil={perfilEfetivo}
                 perfilReal={perfil}
                 presumidas={presumidasEfetivas}
+                onMudarPresumidas={setPresumidas}
                 matriz={matriz}
                 ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                 semestreAtivo={semestreAtivo}
