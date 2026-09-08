@@ -221,6 +221,8 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
   const cursadasLinhas: { texto: string; origem: "obrigatoria" | "optativa" }[] = [];
   // a tabela de eletivas é acumulada à parte: schema e segmentação são próprios
   const eletivasLinhas: string[] = [];
+  // semestre lido do cabeçalho da tabela de matriculadas
+  let semestreMatriculadas: string | null = null;
 
   for (const l of linhas) {
     // transições de seção (a ordem importa: cabeçalhos mais específicos primeiro)
@@ -234,7 +236,15 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
     if (/Atividade Extensionista|Componentes Curriculares/.test(l)) { secao = "nenhuma"; }
     if (/Disciplinas Obrigatórias Faltantes/.test(l)) { secao = "faltantes"; continue; }
     if (/^Dependências/.test(l)) { secao = "dependencias"; continue; }
-    if (/Disciplinas Matriculadas/.test(l)) { secao = "matriculadas"; continue; }
+    // O cabeçalho traz o semestre da matrícula ("Disciplinas Matriculadas -
+    // 2026/2"). Ele é o que impede o planejamento de presumir aprovação sobre
+    // um histórico velho, aberto meses depois do semestre que ele descreve.
+    const mMatriculadas = /Disciplinas Matriculadas(?:\s*[-–]\s*(\d{4})\/([12]))?/.exec(l);
+    if (mMatriculadas) {
+      secao = "matriculadas";
+      semestreMatriculadas = mMatriculadas[1] ? `${mMatriculadas[1]}-${mMatriculadas[2]}` : null;
+      continue;
+    }
     // só o cabeçalho da seção, ancorado: a linha da própria disciplina termina em
     // "Aprovado Em Exame De Suficiência" e não pode encerrar a tabela de cursadas
     if (/^Exame De Curso|^Exame de Suficiência/i.test(l)) { secao = "nenhuma"; continue; }
@@ -323,7 +333,13 @@ export function parseHistorico(linhasIn: string[]): PerfilAluno {
       case "matriculadas": {
         const m = l.match(/^([A-Z0-9]{4,7})\s+(.+?)\s+([A-Z]\d{2})\s*(.*)$/);
         if (m && ehCodigo(m[1])) {
-          perfil.matriculadas.push({ codigo: m[1], nome: m[2].trim(), turma: m[3], situacao: m[4].trim() });
+          perfil.matriculadas.push({
+            codigo: m[1],
+            nome: m[2].trim(),
+            turma: m[3],
+            situacao: m[4].trim(),
+            semestre: semestreMatriculadas,
+          });
         }
         break;
       }

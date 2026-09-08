@@ -149,6 +149,12 @@ describe("histórico sintético", () => {
     expect(perfil.matriculadas.length).toBe(1);
   });
 
+  it("guarda o semestre da matrícula, lido do cabeçalho da tabela", () => {
+    // "Disciplinas Matriculadas - 2026/1" — sem isso não há como distinguir
+    // matéria em curso agora de um PDF emitido em outro período
+    expect(perfil.matriculadas[0].semestre).toBe("2026-1");
+  });
+
   it("sem anomalias silenciosas", () => {
     expect(perfil.avisos).toEqual([]);
   });

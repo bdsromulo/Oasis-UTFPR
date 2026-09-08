@@ -191,6 +191,13 @@ export function TelaCatalogo(props: {
     return null;
   }, [categoria, painel, props.perfil, matriz, curso]);
 
+  // Mesma fonte que `progressoGrade` e `listarElegiveis` consultam para saber
+  // o que está em curso: a lista de matriculadas do próprio histórico.
+  const codigosEmCurso = useMemo(
+    () => new Set(perfil?.matriculadas.map((m) => m.codigo) ?? []),
+    [perfil],
+  );
+
   // Mapeamento das disciplinas com status no histórico do aluno
   const itensDisciplinas = useMemo(() => {
     const mapaCursadas = new Map<string, { situacao: string; media: number | null; freq: number | null; cht: number; origem: string }>();
@@ -237,7 +244,11 @@ export function TelaCatalogo(props: {
       }
 
       const concluida = cursada?.situacao === "aprovado" || cursada?.situacao === "consignado" || cursada?.situacao === "dispensado";
-      const matriculada = cursada?.situacao === "matriculado";
+      // A tabela "Disciplinas Matriculadas" é uma seção à parte do PDF: nunca
+      // entrou em `perfil.cursadas`, e a situação que o parser guarda ali é o
+      // texto do Portal ("Cursando"), não "matriculado". A comparação antiga
+      // nunca casava, e a matéria em curso aparecia como se não existisse.
+      const matriculada = codigosEmCurso.has(dm.codigo);
       const dependencia = cursada?.situacao === "reprovado";
 
       const temOferta = codigosOfertados.has(dm.codigo) ||
@@ -307,7 +318,7 @@ export function TelaCatalogo(props: {
       });
 
     return [...itensMatriz, ...extras];
-  }, [matriz, perfil, oferta]);
+  }, [matriz, perfil, oferta, codigosEmCurso]);
 
   // Filtragem da busca e status
   const itensFiltrados = useMemo(() => {

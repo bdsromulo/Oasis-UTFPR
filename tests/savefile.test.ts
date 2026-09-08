@@ -47,3 +47,31 @@ describe("savefile portátil", () => {
     expect(() => lerSavefile(JSON.stringify(salvo))).toThrow("incompleto");
   });
 });
+
+describe("aprovação presumida no savefile", () => {
+  const perfil = {
+    nome: "Estudante Fictício",
+    curso: "Sistemas de Informação",
+    cursadas: [],
+    aprovadas: new Set<string>(),
+  } as unknown as PerfilAluno;
+
+  it("leva a escolha de matérias presumidas junto do planejamento", () => {
+    const salvo = criarSavefile({ ...base, perfil, materiasPresumidas: ["ICSE30", "ICSX30"] });
+    const lido = lerSavefile(JSON.stringify(salvo));
+
+    expect(lido.dados.materiasPresumidas).toEqual(["ICSE30", "ICSX30"]);
+  });
+
+  it("aceita savefile antigo, gerado antes do campo existir", () => {
+    // campo opcional de propósito: exigir bump de versão invalidaria todo
+    // savefile que alguém já tenha guardado
+    const salvo = criarSavefile({ ...base, perfil });
+    const semCampo = JSON.parse(JSON.stringify(salvo));
+    delete semCampo.dados.materiasPresumidas;
+
+    const lido = lerSavefile(JSON.stringify(semCampo));
+    expect(lido.dados.materiasPresumidas).toBeUndefined();
+    expect(lido.dados.gradeAtiva).toBe("A");
+  });
+});
