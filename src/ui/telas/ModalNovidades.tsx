@@ -1,8 +1,31 @@
-import { useEffect } from "react";
-import { Badge, Botao } from "../componentes";
-import { IconCheck, IconDownload, IconFileText, IconStar } from "../icons";
+import { useEffect, type ReactNode } from "react";
+import { Botao } from "../componentes";
+import {
+  IconCalendar,
+  IconCheck,
+  IconCheckCircle,
+  IconDownload,
+  IconFileText,
+  IconStar,
+  IconWarning,
+} from "../icons";
+import { NOVIDADES, type IconeNovidade } from "../novidades";
 
-/** Destaques da versão atual. A leitura é lembrada apenas depois de fechar o modal. */
+/**
+ * Destaques da versão atual. A leitura é lembrada apenas depois de fechar o
+ * modal; o conteúdo em si vem de `ui/novidades.ts`, junto da versão que dispara
+ * a exibição.
+ */
+
+const ICONES: Record<IconeNovidade, (p: { className?: string }) => ReactNode> = {
+  aviso: IconWarning,
+  calendario: IconCalendar,
+  check: IconCheckCircle,
+  download: IconDownload,
+  estrela: IconStar,
+  arquivo: IconFileText,
+};
+
 export function ModalNovidades(props: {
   aberto: boolean;
   onFechar: () => void;
@@ -34,118 +57,64 @@ export function ModalNovidades(props: {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="border-b border-zinc-200 bg-gradient-to-br from-utfpr-500/25 via-utfpr-500/10 to-transparent p-6 dark:border-zinc-800">
-          <h2 className="font-display text-3xl font-black uppercase tracking-[0.14em] text-zinc-950 dark:text-white">
+          <h2 className="font-display text-3xl font-black tracking-[0.14em] text-zinc-950 uppercase dark:text-white">
             Novidades
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-            Avaliações da comunidade, savefile portátil e novos cursos atendidos pelo Oásis.
+            O Oásis virou de semestre: já dá para planejar 2027.1, contar as matérias que você
+            está cursando e acompanhar os avisos sem perder a projeção de vista.
           </p>
         </div>
 
         <div className="space-y-4 p-5 text-sm leading-relaxed text-zinc-700 dark:text-zinc-200">
-          <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
-            <div className="flex items-center gap-2">
-              <IconStar className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
-              <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
-                Avaliações da Comunidade
-              </h3>
-            </div>
-            <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
-              Veja relatos de quem já cursou a matéria antes de escolher a turma. Nas listas do
-              Planejamento, o nome do professor e o botão de avaliações abrem a experiência da
-              comunidade naquela disciplina.
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-utfpr-500/50 bg-utfpr-500/10 px-2.5 py-1 text-xs font-bold text-utfpr-700 shadow-2xs dark:border-utfpr-500/40 dark:text-utfpr-300">
-                <span aria-hidden className="text-sm leading-none">★</span>
-                <span>3 avaliações</span>
-              </span>
-              <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                procure por um botão como este ao lado da turma
-              </span>
-            </div>
-            {onAvaliar && (
-              <p className="mt-3 text-[13px] text-zinc-600 dark:text-zinc-300">
-                Para contribuir, use <strong>Avaliar uma disciplina</strong> no topo da página
-                ou no Menu do celular. A lista traz as matérias aprovadas e as concluídas por
-                consignação; reprovações não entram.
-              </p>
-            )}
-            <ul className="mt-3 space-y-1.5 text-[13px] text-zinc-600 dark:text-zinc-300">
-              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Quatro notas independentes: personalidade, didática, dificuldade e carga. Dificuldade alta não significa aula ruim.</li>
-              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Uma avaliação por pessoa em cada disciplina; reenviar atualiza a anterior.</li>
-              <li className="flex gap-2"><IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />Com poucas respostas, os relatos aparecem sem transformar uma opinião isolada em média.</li>
-            </ul>
-          </section>
-
-          <section className="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-800/30">
-            <div className="flex items-center gap-2">
-              <IconFileText className="h-5 w-5 text-utfpr-600 dark:text-utfpr-400" />
-              <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
-                Adição de novos cursos e matrizes
-              </h3>
-            </div>
-            <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">
-              O sandbox ganhou suporte completo a novos cursos e matrizes, da leitura do histórico
-              ao catálogo, planejamento, grades e simulador.
-            </p>
-            <ul className="mt-3 divide-y divide-zinc-200/80 overflow-hidden rounded-xl border border-zinc-200/80 bg-white/70 dark:divide-zinc-700/80 dark:border-zinc-700/80 dark:bg-zinc-900/50">
-              <li className="p-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
-                    Sistemas de Informação
-                  </strong>
-                  <Badge tom="ok">matriz 806</Badge>
+          {NOVIDADES.map((item) => {
+            const Icone = ICONES[item.icone];
+            return (
+              <section
+                key={item.id}
+                data-novidade={item.id}
+                className={`rounded-2xl border p-4 ${
+                  item.destaque
+                    ? "border-utfpr-500/40 bg-utfpr-500/10 dark:bg-utfpr-500/5"
+                    : "border-zinc-200 bg-zinc-50/70 dark:border-zinc-800 dark:bg-zinc-800/30"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Icone className="h-5 w-5 shrink-0 text-utfpr-600 dark:text-utfpr-400" />
+                  <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
+                    {item.titulo}
+                  </h3>
                 </div>
-                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
-                  Regras curriculares, equivalências e progresso próprios, sem confundir a grade antiga com a matriz 981.
-                </p>
-              </li>
-              <li className="p-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
-                    Engenharia de Controle e Automação
-                  </strong>
-                  <Badge tom="ok">matriz 978</Badge>
-                </div>
-                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
-                  Cinco trilhas de formação, extensão, estágio e ofertas próprias de 2025.2 a 2026.2.
-                </p>
-              </li>
-              <li className="p-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <strong className="font-display text-sm text-zinc-900 dark:text-zinc-100">
-                    Engenharia Mecatrônica
-                  </strong>
-                  <Badge tom="ok">matriz 823</Badge>
-                  <Badge tom="ok">matriz 973</Badge>
-                </div>
-                <p className="mt-1 text-[12px] text-zinc-600 dark:text-zinc-300">
-                  Grades antiga e vigente, com Humanidades, trilhas, eletivas e ofertas atuais resolvidas pelas equivalências oficiais.
-                </p>
-              </li>
-            </ul>
-          </section>
-
-          <section className="rounded-2xl border border-utfpr-500/40 bg-utfpr-500/10 p-4 dark:bg-utfpr-500/5">
-            <div className="flex items-center gap-2">
-              <IconDownload className="h-5 w-5 text-utfpr-700 dark:text-utfpr-300" />
-              <h3 className="font-display text-base font-black text-zinc-900 dark:text-zinc-100">
-                Savefile: leve seu planejamento
-              </h3>
-            </div>
-            <p className="mt-2 text-[13px] text-zinc-700 dark:text-zinc-200">
-              Em Configurações, baixe um arquivo com o perfil que o navegador já extraiu do seu
-              histórico e as grades que você montou. Depois, importe esse arquivo em outro navegador.
-              O PDF original não é salvo nem enviado.
-            </p>
-          </section>
+                <p className="mt-2 text-[13px] text-zinc-600 dark:text-zinc-300">{item.resumo}</p>
+                {item.detalhes && item.detalhes.length > 0 && (
+                  <ul className="mt-3 space-y-1.5 text-[13px] text-zinc-600 dark:text-zinc-300">
+                    {item.detalhes.map((d) => (
+                      <li key={d} className="flex gap-2">
+                        <IconCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-utfpr-600" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            );
+          })}
         </div>
 
         <div className="flex flex-wrap justify-end gap-2 border-t border-zinc-200 p-4 dark:border-zinc-800">
-          <Botao variante="sutil" onClick={onFechar}>Fechar</Botao>
+          <Botao variante="sutil" onClick={onFechar}>
+            Fechar
+          </Botao>
+          {/* Só aparece para quem tem avaliações habilitadas: o modal em si não
+              depende disso, e por isso o botão do cabeçalho também não depende. */}
           {onAvaliar && (
-            <Botao variante="primario" onClick={() => { onFechar(); onAvaliar(); }}>
+            <Botao
+              variante="primario"
+              onClick={() => {
+                onFechar();
+                onAvaliar();
+              }}
+            >
               <IconStar className="h-4 w-4 shrink-0" />
               Avaliar uma disciplina
             </Botao>
