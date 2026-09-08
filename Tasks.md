@@ -142,9 +142,105 @@ Toda tarefa — seja **Feature** ou **Bug** — carrega exatamente um destes sta
 
 ### Em Revisão
 
+> **Atualização (2026-09-07):** as TASK-45 a 50 saíram do sandbox e entraram na
+> `main` oficial pela branch `feat/port-sandbox-45-50`, por `git merge
+> sandbox/main` — merge limpo, sem conflito, verificado antes com
+> `git merge-tree`. Os 13 commits que a `main` tinha a mais (reviews,
+> Gestão da Informação, conservação de formatura) foram preservados.
+
+- **TASK-57 — Modo Planejamento 2027/1: três estados de semestre e oferta projetada:**
+  - O site tratava 2026.2 como pré-matrícula em verde meses depois de o semestre
+    ter começado, e não havia como planejar 2027.1: o seletor só listava período
+    com PDF de Turmas Abertas publicado, e o de 2027.1 só sai perto da matrícula.
+  - O calendário virou um módulo, `src/domain/semestres.ts`, com
+    `SEMESTRE_PLANEJAMENTO`, `SEMESTRE_CORRENTE`, `estadoDoSemestre` e
+    `descritorDoSemestre`. As funções de semestre que moravam no
+    `simuladorFormatura.ts` (`proximoSemestre`, `formatarSemestre`,
+    `ofertaReferenciaDoSemestre`) foram para lá, reexportadas de onde estavam.
+  - **Três estados, como a tela Como Usar já prometia:** planejamento (verde),
+    corrente (laranja) e passado (cinza). Antes eram dois, e tudo que não fosse
+    pré-matrícula era rotulado "Passado" — inclusive o semestre em curso.
+  - **2027.1 não entra em `ofertas`.** `oferta.semestre` significa "de onde estas
+    turmas vieram"; materializar uma cópia faria o site afirmar que tem um quadro
+    oficial que a UTFPR não publicou, quebraria a identidade de objeto que a
+    regressão da 823 afere e congelaria Mecatrônica vazia, cujas ofertas chegam
+    por chunk assíncrono. A resolução acontece em `ofertaDoSemestre`, na leitura,
+    pelo mesmo espelho de paridade que o simulador já usava.
+  - Banner próprio explica de onde vieram as turmas e que elas vão mudar; montar
+    grade e mandar ao simulador ficam liberados no semestre de planejamento.
+  - Corrigido um caminho que morria em silêncio: em semestre projetado o
+    `ofertas.find` de `gradeFixada` não achava nada e a importação da grade do
+    Planejamento sumia sem erro.
+  - `REPOSITORIO.md` §4 ganhou o checklist da virada de semestre, que não existia
+    em lugar nenhum — a lista de literais a mexer era descoberta a cada período.
+
+- **TASK-58 — Aprovação presumida das matérias em curso:**
+  - Quem monta a grade do próximo semestre não está onde o histórico o coloca: as
+    matérias de 2026.2 ainda não têm nota, mas as subsequentes delas abrem em
+    2027.1. Sem contá-las o planejamento devolve um semestre travado em
+    pré-requisitos que na prática vão estar cumpridos.
+  - Painel em Minha Situação lista as disciplinas em curso com um marcador por
+    matéria, ligado por padrão. Marcadas, contam como aprovadas: liberam
+    pré-requisito, somam carga horária e saem da projeção de formatura.
+  - **Aplicada uma vez, na borda da interface** (`motor/presuncao.ts`), num perfil
+    derivado. Todo o motor lê desse perfil e nenhum módulo sabe que a presunção
+    existe — um interruptor dentro do simulador consertaria só o simulador e
+    deixaria Catálogo, Posso Cursar e o painel divergentes.
+  - **A carga horária move junto.** `progressoGlobalDoCurso` e
+    `cumpridoPorCategoria` leem de `resumoGeral`/`resumoConjuntos`, nunca de
+    `aprovadas`; presumir só em `aprovadas` faria o simulador parar de planejar a
+    matéria e continuar cobrando as horas dela.
+  - Persistimos só os códigos, nunca o perfil presumido: gravá-lo o tornaria
+    indistinguível do real no carregamento seguinte, e a suposição deixaria de
+    ser reversível. A escolha viaja no savefile, em campo opcional — savefile
+    antigo continua válido, sem bump de versão.
+  - **Parser:** o cabeçalho `Disciplinas Matriculadas - 2026/2` passa a ter o
+    semestre capturado. É o que distingue matéria em curso agora de um PDF
+    emitido meses antes, cujas matérias já têm nota lançada.
+  - **Bug morto corrigido de passagem:** `Catalogo.tsx` comparava
+    `situacao === "matriculado"`, mas o parser emite o texto do Portal
+    (`"Cursando"`) e as matriculadas nunca entraram em `perfil.cursadas`. A
+    marcação era sempre falsa; agora lê `perfil.matriculadas`, como o resto do
+    motor.
+
+- **TASK-59 — Avisos e conflitos em pop-up, no canto inferior direito:**
+  - Os alertas do Simulador empilhavam no topo da tela e empurravam a projeção
+    para baixo; o choque de horário ao adicionar turma abria janela bloqueante.
+  - `src/ui/toasts/` traz a pilha: `pilha.ts` é módulo puro (a suíte roda em
+    ambiente `node` e não executa efeitos — timer e deduplicação precisavam ser
+    testáveis fora do React), `contexto.tsx` bate o relógio, `PilhaToasts.tsx`
+    renderiza.
+  - **`publicarUmaVez` não republica nem reinicia o relógio.** O Simulador
+    recalcula a projeção a cada mexida num controle; sem essa trava, arrastar o
+    slider de ritmo reciclaria o mesmo aviso.
+  - Tom `alerta` (choque de turma, pedido negado) não expira sozinho: substitui
+    um modal e some só no X. Passar o ponteiro pausa a contagem.
+  - `ModalConflitoTurma` foi apagado; `verificarChoqueAoAdicionar` e
+    `descreverChoque` foram para `motor/grade.ts`, junto de `conflitosDaAdicao` e
+    `rotuloSlot`, de onde a suíte já importava.
+  - **Armadilha registrada:** ~20 componentes usam `animate-in` / `fade-in` /
+    `zoom-in-95`, classes do plugin `tailwindcss-animate` que **nunca foi
+    instalado** — são classes mortas que não animam nada. A pilha declara
+    keyframes próprios via `@theme --animate-*` do Tailwind v4, com respeito a
+    `prefers-reduced-motion`, e um teste de guarda impede que as classes mortas
+    entrem ali.
+  - O registro completo continua na página, recolhido num `<details>`: o toast
+    some sozinho, e quem estava rolando perderia a informação para sempre.
+
+- **TASK-60 — Simulador sob demanda, para caber no teto de bundle móvel:**
+  - O port do sandbox levou o bundle inicial de 412 KiB para 422,9 KiB gzip,
+    acima do limite de 420 KiB que `scripts/verificar-bundle.mjs` guarda.
+  - `TelaSimuladorFormatura` passou a entrar por `React.lazy`: ele carrega a
+    tela, os controles de modelagem e o motor de projeção, mas só abre com
+    histórico importado e depois de um clique na navegação.
+  - `ValorExclusoes`/`EXCLUSOES_VAZIAS` e `ValorModelagem`/`MODELAGEM_VAZIA`
+    foram para `telas/valoresSimulador.ts`, sem React nem motor: o `App` guarda
+    esse estado, e importá-lo dos componentes arrastava tudo de volta.
+  - Resultado: **404,8 KiB** — abaixo até da linha de base anterior ao port, com
+    o simulador num chunk próprio de 19,35 KiB gzip.
+
 > As TASK-45, 46, 47, 49 e 50 foram desenvolvidas no repositório **sandbox**
 > (`oasisutfpr-sandbox`), cada uma em sua branch e integradas na `main` de lá.
-> Nenhuma foi publicada no repositório oficial.
 
 - **TASK-49 — Painel de filtros unificado e filtro de turno/horário no Planejamento:**
   - Os filtros abriam um **segundo cartão** solto abaixo da busca — duas caixas falando da mesma coisa. Agora o próprio bloco da busca expande para baixo.
