@@ -7,6 +7,21 @@ import type {
   SelecaoTurma,
   Turma,
 } from "../tipos";
+// O calendário mora em `domain/semestres`; o simulador continua exportando
+// estes nomes porque metade da interface já os importa daqui.
+import {
+  chaveSemestre,
+  ehSemestrePar,
+  formatarSemestre,
+  ofertaReferenciaDoSemestre,
+  proximoSemestre,
+} from "../semestres";
+export {
+  formatarSemestre,
+  formatarSemestreExtenso,
+  ofertaReferenciaDoSemestre,
+  proximoSemestre,
+} from "../semestres";
 import {
   cargaAprovadaBlocoOptativo,
   chextCreditavel,
@@ -55,11 +70,6 @@ export interface MapaSazonalidade {
   semestresObservados: string[];
 }
 
-function ehSemestrePar(semestre: string): boolean {
-  return /[-.]2$/.test(semestre);
-
-
-}
 
 /**
  * Infere, para cada disciplina, em quais semestres do ano ela costuma abrir,
@@ -105,57 +115,6 @@ export function rotuloSazonalidade(s: Sazonalidade): string {
     case "sem_oferta":
       return "Sem oferta nos semestres conhecidos";
   }
-}
-
-// ------------------------------------------------------------------ semestres
-
-/** "2026-1" -> "2026-2" -> "2027-1" */
-export function proximoSemestre(semestre: string): string {
-  const [anoStr, semStr] = semestre.replace(".", "-").split("-");
-  const ano = parseInt(anoStr, 10) || 2026;
-  const sem = parseInt(semStr, 10) || 1;
-  return sem === 1 ? `${ano}-2` : `${ano + 1}-1`;
-}
-
-export function formatarSemestre(semestre: string): string {
-  const [ano, sem] = semestre.replace(".", "-").split("-");
-  return `${ano}.${sem}`;
-}
-
-export function formatarSemestreExtenso(semestre: string): string {
-  const [ano, sem] = semestre.replace(".", "-").split("-");
-  return `${sem === "2" ? "2º" : "1º"} semestre de ${ano}`;
-}
-
-/** "2026.2" e "2026-2" são o mesmo semestre; a fonte usa as duas grafias. */
-function chaveSemestre(semestre: string): string {
-  return semestre.replace(".", "-");
-}
-
-/**
- * Oferta que serve de espelho para um semestre projetado.
- *
- * A grade que a projeção monta precisa ser concreta o bastante para não colidir
- * consigo mesma, e as únicas turmas que existem são as dos semestres conhecidos.
- * Então cada semestre futuro herda a oferta conhecida mais recente de **mesma
- * paridade**: 2026.2 usa a própria 2026.2, 2027.1 usa 2026.1, 2027.2 volta à
- * 2026.2, 2028.1 à 2026.1, e assim em diante.
- *
- * Sem esse espelho o simulador escolhia disciplinas sem olhar horário e a
- * importação para o Planejamento acusava choque na grade que o próprio
- * simulador havia montado.
- */
-export function ofertaReferenciaDoSemestre(
-  semestre: string,
-  ofertas: OfertaSemestre[],
-): OfertaSemestre | null {
-  const alvo = chaveSemestre(semestre);
-  const exata = ofertas.find((o) => chaveSemestre(o.semestre) === alvo);
-  if (exata) return exata;
-  const mesmaParidade = ofertas
-    .filter((o) => ehSemestrePar(o.semestre) === ehSemestrePar(semestre))
-    .sort((a, b) => chaveSemestre(b.semestre).localeCompare(chaveSemestre(a.semestre)));
-  return mesmaParidade[0] ?? null;
 }
 
 // ----------------------------------------------------------------- categorias
