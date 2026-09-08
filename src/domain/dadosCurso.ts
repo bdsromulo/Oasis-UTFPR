@@ -40,7 +40,13 @@ export interface DadosCurso {
   matriz: Matriz;
   /** ofertas por semestre, da mais recente para a mais antiga */
   ofertas: Record<string, OfertaSemestre>;
-  /** semestre aberto por padrão ao entrar no curso */
+  /**
+   * Semestre aberto por padrão ao entrar no curso.
+   *
+   * É o de planejamento, não o corrente: quem abre o Oásis está montando a
+   * grade do período que vem: a matrícula do corrente já passou, e a oferta
+   * dele serve de consulta.
+   */
   semestrePadrao: string;
   /**
    * Semestres sem PDF de Turmas Abertas publicado, que a plataforma projeta
@@ -68,7 +74,7 @@ export const BSI: DadosCurso = {
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
     "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -87,7 +93,7 @@ export const BSI_806: DadosCurso = {
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
     "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -105,7 +111,7 @@ export const ENG_COMP: DadosCurso = {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -119,7 +125,7 @@ export const ENG_COMP_962: DadosCurso = {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -139,7 +145,7 @@ export const ENG_ELETRONICA: DadosCurso = {
     "2026-1": turmasEletronica20261 as unknown as OfertaSemestre,
     "2025-2": turmasEletronica20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -156,7 +162,7 @@ export const ENG_CONTROLE: DadosCurso = {
     "2026-1": turmasControle20261 as unknown as OfertaSemestre,
     "2025-2": turmasControle20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -178,7 +184,7 @@ export const ENG_MECATRONICA: DadosCurso = {
   ofertas: {
     "2026-2": OFERTA_MECATRONICA_CARREGANDO,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -193,7 +199,7 @@ export const ENG_MECATRONICA_823: DadosCurso = {
   ofertas: {
     "2026-2": OFERTA_MECATRONICA_CARREGANDO,
   },
-  semestrePadrao: SEMESTRE_CORRENTE,
+  semestrePadrao: SEMESTRE_PLANEJAMENTO,
   semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
@@ -258,9 +264,14 @@ export function semestresReaisDoCurso(curso: DadosCurso): string[] {
  */
 export function ofertaDoSemestre(curso: DadosCurso, semestre: string): OfertaSemestre {
   const alvo = chaveSemestre(semestre);
+  const conhecidas = semestresReaisDoCurso(curso).map((s) => curso.ofertas[s]);
   return (
     curso.ofertas[alvo] ??
-    ofertaReferenciaDoSemestre(alvo, Object.values(curso.ofertas)) ??
-    curso.ofertas[curso.semestrePadrao]
+    ofertaReferenciaDoSemestre(alvo, conhecidas) ??
+    // Último recurso: a oferta mais recente que existir. Não pode se apoiar em
+    // `semestrePadrao`, que é o semestre de planejamento e por definição não tem
+    // entrada própria — e um curso pode ter só uma paridade disponível, como
+    // Mecatrônica nos instantes antes de o chunk de ofertas chegar.
+    conhecidas[0]
   );
 }

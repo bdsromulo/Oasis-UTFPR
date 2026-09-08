@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  BSI,
   CURSOS,
   carregarOfertasHistoricasMecatronica,
   ofertaDoSemestre,
   semestresDoCurso,
   semestresReaisDoCurso,
+  type DadosCurso,
 } from "../src/domain/dadosCurso";
 import {
   descritorDoSemestre,
@@ -99,6 +101,40 @@ describe("o semestre de planejamento em todos os cursos servidos", () => {
         ofertaReferenciaDoSemestre(SEMESTRE_PLANEJAMENTO, Object.values(curso.ofertas)),
       );
     }
+  });
+
+  it("é o semestre que a plataforma abre por padrão", () => {
+    // quem entra no Oásis está montando a grade do período que vem; a
+    // matrícula do corrente já passou e a oferta dele serve de consulta
+    for (const curso of CURSOS) {
+      expect(curso.semestrePadrao, curso.id).toBe(SEMESTRE_PLANEJAMENTO);
+    }
+  });
+
+  it("o padrão nunca cai em oferta indefinida", () => {
+    for (const curso of CURSOS) {
+      const oferta = ofertaDoSemestre(curso, curso.semestrePadrao);
+      expect(oferta, curso.id).toBeDefined();
+      expect(oferta.disciplinas, curso.id).toBeDefined();
+    }
+  });
+
+  it("resolve mesmo quando o curso só tem oferta da paridade oposta", () => {
+    // É o estado da Mecatrônica nos instantes antes de o chunk de ofertas
+    // chegar: só um semestre par conhecido, e o padrão pedindo um ímpar.
+    // `ofertaDoSemestre` não pode se apoiar em `semestrePadrao` como último
+    // recurso — ele é o semestre projetado e não tem entrada própria, e o
+    // fallback devolvia undefined apesar do tipo de retorno.
+    const soPar: DadosCurso = {
+      ...BSI,
+      ofertas: { [SEMESTRE_CORRENTE]: BSI.ofertas[SEMESTRE_CORRENTE] },
+      semestresProjetados: [SEMESTRE_PLANEJAMENTO],
+      semestrePadrao: SEMESTRE_PLANEJAMENTO,
+    };
+
+    const oferta = ofertaDoSemestre(soPar, SEMESTRE_PLANEJAMENTO);
+    expect(oferta).toBeDefined();
+    expect(oferta.semestre).toBe(SEMESTRE_CORRENTE);
   });
 
   it("o semestre com PDF próprio continua servindo a própria oferta", () => {

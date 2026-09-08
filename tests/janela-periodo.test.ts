@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import matriz968Json from "../data/eng-eletronica/matriz-968.json";
 import oferta20262 from "../data/eng-eletronica/turmas/2026-2.json";
 import { ADIANTAMENTO_MAXIMO_PERIODOS, foraDaJanelaDePeriodo } from "../src/domain/cursos";
-import { CURSOS } from "../src/domain/dadosCurso";
+import { CURSOS, ofertaDoSemestre } from "../src/domain/dadosCurso";
 import { listarElegiveis } from "../src/domain/motor/elegiveis";
 import { gerarSugestaoGrade } from "../src/domain/motor/grade-magica";
 import { simularFormatura } from "../src/domain/motor/simuladorFormatura";
@@ -255,7 +255,9 @@ describe("a janela vale em todo curso servido", () => {
   for (const curso of CURSOS) {
     describe(curso.rotuloCurto, () => {
       const m = curso.matriz;
-      const of = curso.ofertas[curso.semestrePadrao];
+      // pelo acessor: o semestre padrão é o de planejamento, que não tem oferta
+      // própria e é servido pelo espelho de paridade
+      const of = ofertaDoSemestre(curso, curso.semestrePadrao);
       const perfil = perfilGenerico(m);
 
       it("a Sugestão de Grade não passa da janela", () => {

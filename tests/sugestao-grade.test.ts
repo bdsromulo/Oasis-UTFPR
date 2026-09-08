@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { BSI, ENG_COMP, ENG_COMP_962, ENG_ELETRONICA } from "../src/domain/dadosCurso";
+import {
+  BSI,
+  ENG_COMP,
+  ENG_COMP_962,
+  ENG_ELETRONICA,
+  ofertaDoSemestre,
+} from "../src/domain/dadosCurso";
 import { gerarSugestaoGrade } from "../src/domain/motor/grade-magica";
 import { haveriaConflito, itensDaSelecao } from "../src/domain/motor/grade";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
@@ -28,7 +34,9 @@ const OPCOES = {
 describe("Grade Inteligente em todos os cursos cobertos", () => {
   for (const curso of cursos) {
     describe(curso.rotuloCurto, () => {
-      const oferta = curso.ofertas[curso.semestrePadrao];
+      // pelo acessor: o semestre padrão é o de planejamento, servido pelo
+      // espelho de paridade e sem entrada própria em `ofertas`
+      const oferta = ofertaDoSemestre(curso, curso.semestrePadrao);
       const selecao = gerarSugestaoGrade(null, curso.matriz, oferta, OPCOES);
 
       it("sugere alguma coisa", () => {
@@ -85,7 +93,7 @@ describe("Grade Inteligente em todos os cursos cobertos", () => {
 describe("janela de aulas", () => {
   for (const curso of cursos) {
     describe(curso.rotuloCurto, () => {
-      const oferta = curso.ofertas[curso.semestrePadrao];
+      const oferta = ofertaDoSemestre(curso, curso.semestrePadrao);
       const slotsDe = (selecao: ReturnType<typeof gerarSugestaoGrade>) =>
         itensDaSelecao(oferta, selecao).flatMap((i) =>
           i.turma.horarios.map((h) => indiceDoSlot(h.turno, h.aula)),
