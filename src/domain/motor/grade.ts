@@ -177,3 +177,79 @@ export function itensDaSelecao(oferta: OfertaSemestre, selecao: SelecaoTurma[]):
   }
   return out;
 }
+
+/**
+ * Bloqueio de adição por choque de horário, no espírito do Grade na Hora: o
+ * clique não entra na grade e um aviso explica com quem bateu.
+ *
+ * Só choque de horário barra. Divergência de sede entre turnos vizinhos segue
+ * como alerta na grade montada, porque é heurística de deslocamento — apertado,
+ * mas possível —, e não uma sobreposição real de aula.
+ */
+export interface ConflitoBloqueado {
+  nome: string;
+  codigo: string;
+  codTurma: string;
+  /** referência da turma nova, para saber qual lado do conflito é o outro */
+  turma: Turma;
+  disciplina: DisciplinaOfertada;
+  conflitos: Conflito[];
+}
+
+/**
+ * Diz se a turma pode entrar. `selecaoSemADisciplina` já deve vir sem as turmas
+ * da mesma matéria: trocar de turma substitui a anterior, não soma.
+ */
+export function verificarChoqueAoAdicionar(
+  oferta: OfertaSemestre,
+  selecaoSemADisciplina: SelecaoTurma[],
+  codDisciplina: string,
+  codTurma: string,
+): ConflitoBloqueado | null {
+  // a mesma resolução da grade, para valer também nas turmas que chegam
+  // agrupadas por equivalência ("S71 (IF69D)")
+  const alvo = itensDaSelecao(oferta, [{ codDisciplina, codTurma }])[0];
+  if (!alvo) return null;
+
+  const itensAtuais = itensDaSelecao(oferta, selecaoSemADisciplina);
+  const conflitos = conflitosDaAdicao(itensAtuais, alvo.disciplina, alvo.turma).filter(
+    (c) => c.tipo === "choque",
+  );
+  if (conflitos.length === 0) return null;
+
+  return {
+    nome: alvo.disciplina.nome,
+    codigo: alvo.disciplina.codigo,
+    codTurma: alvo.turma.codigo,
+    turma: alvo.turma,
+    disciplina: alvo.disciplina,
+    conflitos,
+  };
+}
+
+/**
+ * Texto do aviso de choque, no formato da pilha de notificações: o título diz o
+ * que foi barrado e cada detalhe nomeia uma matéria adversária com o slot em
+ * que bateram. Mora aqui, junto de `rotuloSlot`, para a tela não remontar a
+ * frase de dois jeitos diferentes.
+ */
+export function descreverChoque(bloqueio: ConflitoBloqueado): {
+  titulo: string;
+  descricao: string;
+  detalhes: string[];
+} {
+  const varios = bloqueio.conflitos.length > 1;
+  return {
+    titulo: `${bloqueio.nome} não entrou na grade`,
+    descricao: `O horário da turma ${bloqueio.codTurma} se sobrepõe ao de ${
+      varios ? "matérias que já estão" : "uma matéria que já está"
+    } na sua grade. Remova a matéria conflitante ou escolha outra turma.`,
+    detalhes: bloqueio.conflitos.map((c) => {
+      const outro = c.a.turma === bloqueio.turma ? c.b : c.a;
+      const slots = horariosUnicos(outro.turma).map(rotuloSlot);
+      return `${outro.disciplina.codigo} ${outro.turma.codigo} · choque em ${c.detalhe}${
+        slots.length > 0 ? ` · ${slots.join(" ")}` : ""
+      }`;
+    }),
+  };
+}

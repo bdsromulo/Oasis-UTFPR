@@ -5,8 +5,11 @@ import {
   horariosUnicos,
   rotuloSlot,
   haveriaConflito,
+  verificarChoqueAoAdicionar,
   type ItemGrade,
 } from "../../domain/motor/grade";
+import { useToasts } from "../toasts/contexto";
+import { avisarChoque } from "../toasts/avisos";
 import {
   faixaDoSlot,
   PRIMEIRO_SLOT,
@@ -15,11 +18,6 @@ import {
   ULTIMO_SLOT,
 } from "../../domain/horarios";
 import { turmaViolaJanela, turmaViolaTurnos } from "../../domain/motor/grade-magica";
-import {
-  ModalConflitoTurma,
-  verificarChoqueAoAdicionar,
-  type ConflitoBloqueado,
-} from "./ModalConflitoTurma";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { EXIGE_HISTORICO } from "../SidebarNavegacao";
@@ -443,7 +441,7 @@ export function TelaPossoCursar(props: {
   const [naoNoite, setNaoNoite] = useState(false);
   const [aulaInicial, setAulaInicial] = useState(PRIMEIRO_SLOT);
   const [aulaFinal, setAulaFinal] = useState(ULTIMO_SLOT);
-  const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
+  const toasts = useToasts();
   const curso = descricaoDoCurso(matriz);
   const grupos = useMemo<[Grupo, string][]>(() => [
     ["todas", "Todas"],
@@ -587,7 +585,7 @@ export function TelaPossoCursar(props: {
       codTurma,
     );
     if (bloqueio) {
-      setConflitoBloqueado(bloqueio);
+      avisarChoque(toasts, bloqueio);
       return;
     }
 
@@ -830,10 +828,6 @@ export function TelaPossoCursar(props: {
         ))}
       </div>
 
-      <ModalConflitoTurma
-        bloqueio={conflitoBloqueado}
-        onFechar={() => setConflitoBloqueado(null)}
-      />
     </div>
   );
 }

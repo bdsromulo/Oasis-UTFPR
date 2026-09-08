@@ -18,14 +18,12 @@ import { EXIGE_HISTORICO } from "../SidebarNavegacao";
 import {
   horariosUnicos,
   haveriaConflito,
+  verificarChoqueAoAdicionar,
   type ItemGrade,
 } from "../../domain/motor/grade";
+import { useToasts } from "../toasts/contexto";
+import { avisarChoque } from "../toasts/avisos";
 import { faixaDoSlot } from "../../domain/horarios";
-import {
-  ModalConflitoTurma,
-  verificarChoqueAoAdicionar,
-  type ConflitoBloqueado,
-} from "./ModalConflitoTurma";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
@@ -308,7 +306,7 @@ export function TelaLayoutGNH(props: {
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [soPendentes, setSoPendentes] = useState(false);
   const [soLiberadas, setSoLiberadas] = useState(false);
-  const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
+  const toasts = useToasts();
   const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
 
   const reviews = useContagemPorTurma(matriz);
@@ -409,7 +407,7 @@ export function TelaLayoutGNH(props: {
       codTurma,
     );
     if (bloqueio) {
-      setConflitoBloqueado(bloqueio);
+      avisarChoque(toasts, bloqueio);
       return;
     }
 
@@ -490,11 +488,6 @@ export function TelaLayoutGNH(props: {
           );
         })}
       </div>
-
-      <ModalConflitoTurma
-        bloqueio={conflitoBloqueado}
-        onFechar={() => setConflitoBloqueado(null)}
-      />
 
       <PainelDisciplina
         alvo={revisando}
