@@ -2,6 +2,7 @@ import type { Matriz, OfertaSemestre, PerfilAluno, SelecaoTurma, Turma } from ".
 import { listarElegiveis } from "./elegiveis";
 import { haveriaConflito, itensDaSelecao } from "./grade";
 import { criarMapaIdentidade } from "./identidade";
+import { indiceDoSlot, SLOTS_ORDENADOS } from "../horarios";
 import {
   cargaAprovadaBlocoOptativo,
   categoriaSimples,
@@ -21,6 +22,13 @@ export interface OpcoesSugestaoGrade {
   sedeCentro?: boolean;
   sedeEcoville?: boolean;
   sedeNeoville?: boolean;
+  /**
+   * Janela de aulas (TASK-46): ids de slot da régua `SLOTS_ORDENADOS`, como
+   * "T2" e "N3". Recortam o dia por estrutura de aula, e não por horário solto.
+   * Ausentes = régua inteira, filtro inerte.
+   */
+  aulaInicial?: string;
+  aulaFinal?: string;
   maxDisciplinas?: number;
   disciplinasExcluidas?: ({ codigo: string; nome: string } | string)[];
   professoresExcluidos?: string[];
@@ -62,6 +70,34 @@ export function turmaViolaTurnos(
     if (restricoes.naoManha && h.turno === "M") return true;
     if (restricoes.naoTarde && h.turno === "T") return true;
     if (restricoes.naoNoite && h.turno === "N") return true;
+  }
+  return false;
+}
+
+/**
+ * Verifica se a turma cai fora da janela de aulas pedida (TASK-46).
+ *
+ * Basta um horário fora para a turma inteira sair: meia-matrícula não existe —
+ * quem não pode chegar antes de T2 não vai à aula de T1 de uma turma que tem as
+ * duas. Slot desconhecido na régua não derruba a turma; o dado da oferta manda,
+ * e inventar restrição a partir de horário que não sabemos ler seria pior.
+ */
+export function turmaViolaJanela(
+  turma: Turma,
+  restricoes: { aulaInicial?: string; aulaFinal?: string },
+): boolean {
+  const inicio = restricoes.aulaInicial
+    ? SLOTS_ORDENADOS.indexOf(restricoes.aulaInicial)
+    : 0;
+  const fim = restricoes.aulaFinal
+    ? SLOTS_ORDENADOS.indexOf(restricoes.aulaFinal)
+    : SLOTS_ORDENADOS.length - 1;
+  if (inicio < 0 || fim < 0) return false; // id fora da régua: pedido ignorado
+
+  for (const h of turma.horarios) {
+    const idx = indiceDoSlot(h.turno, h.aula);
+    if (idx < 0) continue;
+    if (idx < inicio || idx > fim) return true;
   }
   return false;
 }
@@ -407,9 +443,34 @@ export function gerarSugestaoGrade(
   const disciplinasPontuadas = elegiveis.map((e) => {
     let pts = 0;
     if (e.categoria === "obrigatória") pts += 80; // Prioridade máxima absoluta para obrigatórias de 1º estrato
-    if (e.categoria === "obrigatória" || e.categoria === "2º estrato") {
-      const periodo = e.disciplina.periodo || 9;
-      pts += (10 - periodo) * 12; // Períodos mais iniciais têm mais peso apenas para obrigatórias/2º estrato
+
+    // Distância entre o período da disciplina e o do aluno (TASK-48).
+    //
+    // O termo antigo era `(10 - periodo) * 12`, ancorado no 10 fixo: media
+    // "quão cedo no curso a matéria é", e não "quão perto ela está do que devo
+    // cursar agora". Nunca ficava negativo, então nunca desclassificava nada —
+    // o TCC do 9º período sobrava no topo da grade de um aluno do 7º, à frente
+    // de matérias do 6º e do 7º.
+    //
+    // O termo novo é assimétrico de propósito: matéria atrasada é dívida e
+    // ganha prioridade; matéria adiantada, ainda que dentro da janela que a
+    // matrícula permite, paga pedágio. E vale para TODA categoria — antes o
+    // grupo de escolha não tinha noção de período nenhuma, que é parte do
+    // motivo de a 968, onde quase tudo é grupo, se comportar tão mal.
+    //
+    // Nada é somado quando a disciplina está no próprio período do aluno, para
+    // que a mudança não infle optativas contra obrigatórias: as duas partem do
+    // mesmo zero, e o `+80` acima segue decidindo entre categorias.
+    const periodoDisc = e.disciplina.periodo;
+    if (perfil?.periodo && periodoDisc > 0) {
+      const distancia = periodoDisc - perfil.periodo;
+      pts += distancia < 0
+        ? Math.min(-distancia, 4) * 10 // atrasada: até +40, saturando em 4 períodos
+        : -distancia * 25; // adiantada: -25 por período à frente
+    } else if (e.categoria === "obrigatória" || e.categoria === "2º estrato") {
+      // Modo livre, sem histórico: não há período do aluno de que medir
+      // distância, e o termo antigo continua sendo a melhor aproximação.
+      pts += (10 - (periodoDisc || 9)) * 12;
     }
     pts += Math.min(e.disciplina.horas.total, 90) / 5; // Carga horária
 
@@ -450,7 +511,13 @@ export function gerarSugestaoGrade(
 
     // Filtrar e pontuar as turmas válidas dessa disciplina
     const turmasValidas = e.oferta!.turmas
-      .filter((t) => !turmaViolaTurnos(t, opcoes) && !turmaViolaSedes(t, opcoes) && !turmaViolaProfessores(t, opcoes))
+      .filter(
+        (t) =>
+          !turmaViolaTurnos(t, opcoes) &&
+          !turmaViolaJanela(t, opcoes) &&
+          !turmaViolaSedes(t, opcoes) &&
+          !turmaViolaProfessores(t, opcoes),
+      )
       .map((t) => ({
         turma: t,
         pontos: calcularPesoPrioridadeTurma(t, curso.matriz === 981),

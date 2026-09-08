@@ -185,6 +185,46 @@ python tools/validate_matriz_806.py
 URL_CSV_REVIEWS="<url do CSV publicado da aba Homologado>" npx tsx scripts/ingerir-reviews.ts
 ```
 
+### Virada de semestre (1x por período letivo)
+
+O calendário da plataforma vive em **`src/domain/semestres.ts`**, e a virada é a
+edição de duas constantes:
+
+```ts
+export const SEMESTRE_PLANEJAMENTO = "2027-1";  // o próximo, ainda sem PDF
+export const SEMESTRE_CORRENTE = "2026-2";      // o que está acontecendo agora
+```
+
+Ordem do trabalho:
+
+1. **Antes de tudo**, importar a oferta nova pelo pipeline acima e validar com 0
+   erros. Sem ela o semestre que era de planejamento vira corrente sem turmas.
+2. Registrar a oferta em `src/domain/dadosCurso.ts`: um `import` do JSON e uma
+   chave em `ofertas`, por curso (Mecatrônica em `ofertasMecatronicaHistoricas.ts`).
+3. Empurrar as duas constantes de `semestres.ts` um período para a frente.
+4. Rodar `npm test`. Os testes que fixam a lista de semestres são os de regressão
+   por curso e o `tests/semestres.test.ts`; asserções sobre **dado** usam
+   `semestresReaisDoCurso` e mudam junto da oferta, asserções sobre **navegação**
+   usam `semestresDoCurso` e ganham o semestre novo.
+5. Reescrever `src/ui/novidades.ts` e trocar `VERSAO_NOVIDADES` — é o que faz o
+   modal de Novidades reaparecer para toda a base.
+
+Três coisas que **não** mudam, e não devem ser "corrigidas":
+
+- **As duas paridades são obrigatórias.** Cada curso precisa manter ao menos uma
+  oferta de semestre par e uma de ímpar: o semestre de planejamento não tem PDF
+  próprio e é projetado sobre a oferta real de mesma paridade
+  (`ofertaReferenciaDoSemestre`). `tests/semestres.test.ts` guarda isso.
+- **O semestre projetado não entra em `ofertas`.** `oferta.semestre` significa
+  "de onde estas turmas vieram"; ele é resolvido em tempo de leitura por
+  `ofertaDoSemestre`. Materializar uma cópia faria o site afirmar que tem um
+  quadro oficial que a UTFPR ainda não publicou — e congelaria Mecatrônica
+  vazia, porque as ofertas dela chegam por chunk assíncrono.
+- **Os literais de semestre em `App.tsx` que migram `localStorage`** (`CHAVE_CESTA`,
+  `CHAVE_CESTA_EXCLUSOES`, `CHAVE_GRADE`) ficam onde estão. Eles apontam para
+  dados gravados por versões antigas, num semestre que já passou; trocá-los
+  arquiva o planejamento de quem migra num período em que ele nunca existiu.
+
 ### Hierarquia de conjuntos na matriz
 
 A legenda das optativas declara `Período inicial/final` **apenas** nos conjuntos

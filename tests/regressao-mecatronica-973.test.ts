@@ -109,7 +109,7 @@ describe("descritor e interface da matriz 973", () => {
     expect(Object.keys(curso?.ofertas ?? {})).toEqual(["2026-2"]);
     await carregarOfertasHistoricasMecatronica();
     expect(Object.keys(curso?.ofertas ?? {})).toEqual(["2026-2", "2026-1", "2025-2"]);
-    expect(curso?.semestresPreMatricula).toEqual(["2026-2"]);
+    expect(curso?.semestresProjetados).toEqual(["2027-1"]);
     expect(ofertas.map((oferta) => oferta.curso)).toEqual([
       "ENG MECATRÔNICA",
       "ENG MECATRÔNICA",

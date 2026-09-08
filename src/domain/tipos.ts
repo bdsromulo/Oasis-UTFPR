@@ -128,6 +128,12 @@ export interface DisciplinaCursada {
   semestre: number | null;
   /** Docentes impressos no histórico; nunca são inferidos quando ausentes. */
   professores?: string[];
+  /**
+   * Marca a disciplina que o aluno está cursando e escolheu contar como
+   * aprovada no planejamento. Não vem do PDF: é sempre derivada, nunca
+   * persistida junto do perfil, e some quando ele desmarca a matéria.
+   */
+  presumida?: boolean;
 }
 
 export interface ResumoConjunto {
@@ -151,7 +157,19 @@ export interface PerfilAluno {
   cursadas: DisciplinaCursada[];
   /** códigos com aprovação/consignação (contam para pré-requisito) */
   aprovadas: Set<string>;
-  matriculadas: { codigo: string; nome: string; turma: string; situacao: string }[];
+  matriculadas: {
+    codigo: string;
+    nome: string;
+    turma: string;
+    situacao: string;
+    /**
+     * Semestre da matrícula, lido do cabeçalho "Disciplinas Matriculadas -
+     * 2026/2". É o que distingue matérias em curso agora de um PDF antigo
+     * carregado meses depois — só as do semestre corrente podem ser presumidas
+     * como aprovadas. `null` quando o cabeçalho vem sem o sufixo.
+     */
+    semestre?: string | null;
+  }[];
   obrigatoriasFaltantes: { periodo: number; codigo: string; nome: string }[];
   dependencias: { codigo: string; nome: string }[];
   resumoConjuntos: ResumoConjunto[];

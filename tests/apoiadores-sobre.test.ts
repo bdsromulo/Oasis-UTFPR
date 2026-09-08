@@ -16,6 +16,7 @@ describe("apoiadores na página Sobre", () => {
   it("identifica curso e matriz de todas as pessoas creditadas", () => {
     const html = paginaSobre();
     const creditos = [
+      ["Gabriela Jahn Henning", "Sistemas de Informação (matriz 981)"],
       ["Guilherme Oliver Silva Pereira", "Sistemas de Informação (matriz 981)"],
       ["Namie Miquitera Yamada", "Sistemas de Informação (matriz 981)"],
       ["Thayssa Gaia Alves de Oliveira", "Engenharia de Controle e Automação (matriz 978)"],
@@ -37,12 +38,13 @@ describe("apoiadores na página Sobre", () => {
       expect(html).toContain(nome);
       expect(html).toContain(curso);
     }
-    expect(html).toContain("15 pessoas");
+    expect(html).toContain("16 pessoas");
   });
 
   it("mantém revisores e demais apoiadores em ordem alfabética", () => {
     const html = paginaSobre();
     esperarOrdem(html, [
+      "Gabriela Jahn Henning",
       "Guilherme Oliver Silva Pereira",
       "Namie Miquitera Yamada",
       "Thayssa Gaia Alves de Oliveira",

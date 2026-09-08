@@ -1,8 +1,9 @@
 // "O que posso cursar": cruza matriz (pré-requisitos e equivalências) com o
 // perfil do aluno e a oferta do semestre.
 import type { DisciplinaMatriz, DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../tipos";
-import { rotuloDoConjunto } from "../cursos";
+import { ADIANTAMENTO_MAXIMO_PERIODOS, foraDaJanelaDePeriodo, rotuloDoConjunto } from "../cursos";
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
+import { liberadoPorDesempenho } from "./prerequisitos";
 
 export interface Elegivel {
   disciplina: DisciplinaMatriz;
@@ -33,12 +34,21 @@ export function cumpre(codigo: string, perfil: PerfilAluno | null, mapa: MapaIde
 
 function bloqueio(d: DisciplinaMatriz, perfil: PerfilAluno | null, matriz: Matriz, mapa: MapaIdentidade): string | null {
   if (!perfil) return null; // Modo livre sem histórico: todas liberadas para simulação de grade
+
+  // Adiantamento além da janela (TASK-48): a matrícula é recusada, então é
+  // bloqueio da mesma natureza que o pré-requisito, e não aviso. Vem antes
+  // porque explica melhor: dizer que falta o pré-requisito de uma disciplina do
+  // 9º período a quem está no 6º é responder à pergunta errada.
+  if (foraDaJanelaDePeriodo(d.periodo, perfil.periodo)) {
+    return `abre a partir do ${d.periodo - ADIANTAMENTO_MAXIMO_PERIODOS}º período`;
+  }
+
   const pendentes: string[] = [];
   for (const p of d.prerequisitos) {
     const mPer = p.match(/^Período:(\d)$/);
     if (mPer) {
       if ((perfil.periodo ?? 0) < parseInt(mPer[1])) pendentes.push(`estar no ${mPer[1]}º período`);
-    } else if (!cumpre(p, perfil, mapa)) {
+    } else if (!cumpre(p, perfil, mapa) && !liberadoPorDesempenho(p, perfil, mapa)) {
       const dep = matriz.disciplinas.find((x) => x.codigo === p);
       pendentes.push(dep ? `${p} (${dep.nome})` : p);
     }

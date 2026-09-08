@@ -33,6 +33,7 @@ interface Pessoa {
 
 /** Quem cedeu o histórico que serviu de base para calibrar cada curso. */
 const APOIADORES: Pessoa[] = [
+  { nome: "Gabriela Jahn Henning", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisora" },
   { nome: "Guilherme Oliver Silva Pereira", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisor" },
   { nome: "Namie Miquitera Yamada", curso: "Sistemas de Informação (matriz 981)", revisor: "Revisora" },
   { nome: "Thayssa Gaia Alves de Oliveira", curso: "Engenharia de Controle e Automação (matriz 978)", revisor: "Revisora" },

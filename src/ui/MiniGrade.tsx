@@ -9,6 +9,7 @@ import {
   IconTrash,
 } from "./icons";
 import type { DisciplinaOfertada, OfertaSemestre, Turma, Matriz, PerfilAluno } from "../domain/tipos";
+import { formatarSemestre } from "../domain/semestres";
 import {
   aulasSemanais,
   chaveSlot,
@@ -59,6 +60,12 @@ export { itensDaSelecao };
 
 export function MiniGrade(props: {
   oferta: OfertaSemestre;
+  /**
+   * Semestre para o qual a grade está sendo montada. Num semestre projetado ele
+   * difere de `oferta.semestre`, que aponta para o espelho de onde as turmas
+   * vieram — e é o período de destino que interessa a quem monta a grade.
+   */
+  semestreAtivo?: string;
   selecao: SelecaoTurma[];
   preview: PreviewTurma | null;
   perfil?: PerfilAluno | null;
@@ -174,7 +181,8 @@ export function MiniGrade(props: {
             )}
           </div>
           <div className="text-[11px] font-bold text-zinc-400 truncate mt-0.5">
-            Minha grade · {oferta.semestre} {chavesGrades.length > 1 ? `(${gradeAtiva})` : ""}
+            Minha grade · {formatarSemestre(props.semestreAtivo ?? oferta.semestre)}{" "}
+            {chavesGrades.length > 1 ? `(${gradeAtiva})` : ""}
           </div>
         </div>
 

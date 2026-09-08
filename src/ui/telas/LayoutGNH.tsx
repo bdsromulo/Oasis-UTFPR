@@ -9,6 +9,7 @@ import {
   IconLock,
   IconPin,
   IconSparkles,
+  IconWarning,
 } from "../icons";
 import type { DisciplinaOfertada, Matriz, OfertaSemestre, PerfilAluno } from "../../domain/tipos";
 import { cumpre, listarElegiveis } from "../../domain/motor/elegiveis";
@@ -17,14 +18,12 @@ import { EXIGE_HISTORICO } from "../SidebarNavegacao";
 import {
   horariosUnicos,
   haveriaConflito,
+  verificarChoqueAoAdicionar,
   type ItemGrade,
 } from "../../domain/motor/grade";
+import { useToasts } from "../toasts/contexto";
+import { avisarChoque } from "../toasts/avisos";
 import { faixaDoSlot } from "../../domain/horarios";
-import {
-  ModalConflitoTurma,
-  verificarChoqueAoAdicionar,
-  type ConflitoBloqueado,
-} from "./ModalConflitoTurma";
 import type { SelecaoTurma } from "../App";
 import { itensDaSelecao, type PreviewTurma } from "../MiniGrade";
 import { Badge, MenuOrdenacao, BalaoProgressoHover, useIsMobile } from "../componentes";
@@ -138,7 +137,9 @@ function DisciplinaGNHItem({
 
           {est.bloqueio ? (
             <span title={est.bloqueio} className="cursor-help">
-              <Badge tom="alerta">{<IconLock className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Trancada</Badge>
+              {/* Cadeado saiu com o bloqueio (TASK-45): a adição aqui sempre
+                  esteve liberada, e o ícone dizia o contrário. */}
+              <Badge tom="alerta">{<IconWarning className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Pré-req. pendente</Badge>
             </span>
           ) : est.pendente && est.naMatriz ? (
             <Badge tom="ok">{<IconSparkles className="inline h-4 w-4 shrink-0 align-[-0.2em]" />} Liberada</Badge>
@@ -305,7 +306,7 @@ export function TelaLayoutGNH(props: {
   const [ordenacao, setOrdenacao] = useState<string>("az");
   const [soPendentes, setSoPendentes] = useState(false);
   const [soLiberadas, setSoLiberadas] = useState(false);
-  const [conflitoBloqueado, setConflitoBloqueado] = useState<ConflitoBloqueado | null>(null);
+  const toasts = useToasts();
   const [revisando, setRevisando] = useState<AlvoPainelDisciplina | null>(null);
 
   const reviews = useContagemPorTurma(matriz);
@@ -406,7 +407,7 @@ export function TelaLayoutGNH(props: {
       codTurma,
     );
     if (bloqueio) {
-      setConflitoBloqueado(bloqueio);
+      avisarChoque(toasts, bloqueio);
       return;
     }
 
@@ -487,11 +488,6 @@ export function TelaLayoutGNH(props: {
           );
         })}
       </div>
-
-      <ModalConflitoTurma
-        bloqueio={conflitoBloqueado}
-        onFechar={() => setConflitoBloqueado(null)}
-      />
 
       <PainelDisciplina
         alvo={revisando}

@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import turmas20262 from "../data/turmas/2026-2.json";
 import {
   conflitosDaAdicao,
+  descreverChoque,
   detectarConflitos,
   horariosUnicos,
   itensDaSelecao,
+  verificarChoqueAoAdicionar,
 } from "../src/domain/motor/grade";
 import type { OfertaSemestre, SelecaoTurma } from "../src/domain/tipos";
 
@@ -113,5 +115,55 @@ describe("conflitosDaAdicao", () => {
     const semADisciplina = selecao.filter((s) => s.codDisciplina !== comDuas.codigo);
     const conflitos = conflitosDaAdicao(itensDaSelecao(oferta, semADisciplina), comDuas, t2);
     expect(conflitos).toEqual([]);
+  });
+});
+
+describe("verificarChoqueAoAdicionar", () => {
+  const par = acharParQueChoca();
+
+  it("barra a turma que se sobrepõe e diz com quem bateu", () => {
+    const { a, b } = par!;
+    const bloqueio = verificarChoqueAoAdicionar(
+      oferta,
+      [{ codDisciplina: a.d.codigo, codTurma: a.t.codigo }],
+      b.d.codigo,
+      b.t.codigo,
+    );
+
+    expect(bloqueio).not.toBeNull();
+    expect(bloqueio!.codigo).toBe(b.d.codigo);
+    expect(bloqueio!.codTurma).toBe(b.t.codigo);
+    expect(bloqueio!.conflitos.every((c) => c.tipo === "choque")).toBe(true);
+  });
+
+  it("libera a troca de turma dentro da mesma matéria", () => {
+    const comDuas = oferta.disciplinas.find(
+      (d) => d.turmas.filter((t) => t.horarios?.length).length >= 2,
+    )!;
+    const [t1, t2] = comDuas.turmas.filter((t) => t.horarios?.length);
+    const semADisciplina = [{ codDisciplina: comDuas.codigo, codTurma: t1.codigo }].filter(
+      (s) => s.codDisciplina !== comDuas.codigo,
+    );
+
+    expect(
+      verificarChoqueAoAdicionar(oferta, semADisciplina, comDuas.codigo, t2.codigo),
+    ).toBeNull();
+  });
+
+  it("descreve o choque em texto pronto para o aviso flutuante", () => {
+    const { a, b } = par!;
+    const bloqueio = verificarChoqueAoAdicionar(
+      oferta,
+      [{ codDisciplina: a.d.codigo, codTurma: a.t.codigo }],
+      b.d.codigo,
+      b.t.codigo,
+    )!;
+    const { titulo, descricao, detalhes } = descreverChoque(bloqueio);
+
+    expect(titulo).toContain(b.d.nome);
+    expect(descricao).toContain(b.t.codigo);
+    expect(detalhes).toHaveLength(bloqueio.conflitos.length);
+    // cada detalhe nomeia a matéria adversária, e não a própria turma barrada
+    for (const linha of detalhes) expect(linha).toContain(a.d.codigo);
   });
 });

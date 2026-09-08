@@ -7,6 +7,21 @@ import type {
   SelecaoTurma,
   Turma,
 } from "../tipos";
+// O calendário mora em `domain/semestres`; o simulador continua exportando
+// estes nomes porque metade da interface já os importa daqui.
+import {
+  chaveSemestre,
+  ehSemestrePar,
+  formatarSemestre,
+  ofertaReferenciaDoSemestre,
+  proximoSemestre,
+} from "../semestres";
+export {
+  formatarSemestre,
+  formatarSemestreExtenso,
+  ofertaReferenciaDoSemestre,
+  proximoSemestre,
+} from "../semestres";
 import {
   cargaAprovadaBlocoOptativo,
   chextCreditavel,
@@ -14,12 +29,15 @@ import {
   descricaoDoCurso,
   ehGrupoOpcao,
   ehTrilha,
+  foraDaJanelaDePeriodo,
   categoriaSimples,
   grupoOpcaoDe,
   TETO_CH_SEMESTRE,
 } from "../cursos";
 import { criarMapaIdentidade, type MapaIdentidade } from "./identidade";
 import { buscarOfertaParaPlanejamento, cumpre } from "./elegiveis";
+import { liberadoPorDesempenho } from "./prerequisitos";
+import { turmaViolaJanela } from "./grade-magica";
 import { haveriaConflito, itensDaSelecao, type ItemGrade } from "./grade";
 import {
   calcularPesoPrioridadeTurma,
@@ -52,11 +70,6 @@ export interface MapaSazonalidade {
   semestresObservados: string[];
 }
 
-function ehSemestrePar(semestre: string): boolean {
-  return /[-.]2$/.test(semestre);
-
-
-}
 
 /**
  * Infere, para cada disciplina, em quais semestres do ano ela costuma abrir,
@@ -102,57 +115,6 @@ export function rotuloSazonalidade(s: Sazonalidade): string {
     case "sem_oferta":
       return "Sem oferta nos semestres conhecidos";
   }
-}
-
-// ------------------------------------------------------------------ semestres
-
-/** "2026-1" -> "2026-2" -> "2027-1" */
-export function proximoSemestre(semestre: string): string {
-  const [anoStr, semStr] = semestre.replace(".", "-").split("-");
-  const ano = parseInt(anoStr, 10) || 2026;
-  const sem = parseInt(semStr, 10) || 1;
-  return sem === 1 ? `${ano}-2` : `${ano + 1}-1`;
-}
-
-export function formatarSemestre(semestre: string): string {
-  const [ano, sem] = semestre.replace(".", "-").split("-");
-  return `${ano}.${sem}`;
-}
-
-export function formatarSemestreExtenso(semestre: string): string {
-  const [ano, sem] = semestre.replace(".", "-").split("-");
-  return `${sem === "2" ? "2º" : "1º"} semestre de ${ano}`;
-}
-
-/** "2026.2" e "2026-2" são o mesmo semestre; a fonte usa as duas grafias. */
-function chaveSemestre(semestre: string): string {
-  return semestre.replace(".", "-");
-}
-
-/**
- * Oferta que serve de espelho para um semestre projetado.
- *
- * A grade que a projeção monta precisa ser concreta o bastante para não colidir
- * consigo mesma, e as únicas turmas que existem são as dos semestres conhecidos.
- * Então cada semestre futuro herda a oferta conhecida mais recente de **mesma
- * paridade**: 2026.2 usa a própria 2026.2, 2027.1 usa 2026.1, 2027.2 volta à
- * 2026.2, 2028.1 à 2026.1, e assim em diante.
- *
- * Sem esse espelho o simulador escolhia disciplinas sem olhar horário e a
- * importação para o Planejamento acusava choque na grade que o próprio
- * simulador havia montado.
- */
-export function ofertaReferenciaDoSemestre(
-  semestre: string,
-  ofertas: OfertaSemestre[],
-): OfertaSemestre | null {
-  const alvo = chaveSemestre(semestre);
-  const exata = ofertas.find((o) => chaveSemestre(o.semestre) === alvo);
-  if (exata) return exata;
-  const mesmaParidade = ofertas
-    .filter((o) => ehSemestrePar(o.semestre) === ehSemestrePar(semestre))
-    .sort((a, b) => chaveSemestre(b.semestre).localeCompare(chaveSemestre(a.semestre)));
-  return mesmaParidade[0] ?? null;
 }
 
 // ----------------------------------------------------------------- categorias
@@ -304,7 +266,21 @@ export function gradeFixadaDaSelecao(
   return { semestre: chaveSemestre(semestre), origem, itens };
 }
 
-export type TipoExclusao = "disciplina" | "professor" | "trilha";
+/**
+ * O que o aluno pediu e a integralização pode não permitir.
+ *
+ * Os três primeiros são pedidos de recusa ("não quero isto"); os dois últimos,
+ * de escolha ("quero isto"), vindos das alavancas do simulador modelável. Os
+ * cinco compartilham a mesma estrutura de relato porque o problema é o mesmo:
+ * dizer que o pedido não coube e mostrar o estrago concreto.
+ */
+export type TipoExclusao =
+  | "disciplina"
+  | "professor"
+  | "trilha"
+  | "trilha-alvo"
+  | "disciplina-fixada"
+  | "semestre-fixado";
 
 /**
  * Filtros de exclusão, os mesmos da Sugestão de Grade: o aluno diz o que NÃO
@@ -443,6 +419,42 @@ function cumpridoPorCategoria(perfil: PerfilAluno | null, matriz: Matriz): Recor
   };
 }
 
+/**
+ * Disciplinas que poderiam ocupar o lugar de uma projetada (TASK-47).
+ *
+ * Obrigatória não tem substituta — o mínimo daquela categoria é o roster
+ * inteiro — e a lista volta vazia, que é o sinal para a tela não oferecer a
+ * troca. Nas demais categorias, substituta é toda pendente da mesma categoria
+ * com oferta conhecida: é exatamente o pool de onde o motor escolheu.
+ */
+export function alternativasPara(
+  codigo: string,
+  matriz: Matriz,
+  perfil: PerfilAluno | null,
+  ofertas: OfertaSemestre[],
+  jaNoPlano: string[] = [],
+): DisciplinaMatriz[] {
+  const mapa = criarMapaIdentidade(matriz);
+  const alvo = matriz.disciplinas.find((d) => d.codigo === codigo);
+  if (!alvo) return [];
+
+  const cat = categoriaDe(alvo, matriz);
+  if (cat === null || cat === "obrigatorias") return [];
+
+  const saz = inferirSazonalidade(ofertas, mapa);
+  const ocupados = new Set(jaNoPlano.filter((c) => c !== codigo));
+
+  return matriz.disciplinas
+    .filter((d) => {
+      if (d.codigo === codigo || d.codigo.startsWith("ENADE")) return false;
+      if (ocupados.has(d.codigo)) return false;
+      if (categoriaDe(d, matriz) !== cat) return false;
+      if (cumpre(d.codigo, perfil, mapa)) return false;
+      return saz.de(d.codigo) !== "sem_oferta";
+    })
+    .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+}
+
 export interface OpcoesSimulacao {
   /** matérias por semestre que o aluno pretende cursar */
   ritmo: number;
@@ -457,6 +469,35 @@ export interface OpcoesSimulacao {
   gradeFixada?: GradeFixada | null;
   /** o que o aluno pediu para não cursar */
   exclusoes?: ExclusoesSimulacao | null;
+  /**
+   * Trilhas em que o aluno quer investir (TASK-47). Vazio ou ausente devolve a
+   * escolha ao motor. Escolher menos que o curso exige é legítimo: o motor
+   * completa o resto pela heurística de sempre.
+   */
+  trilhasAlvo?: string[] | null;
+  /**
+   * Optativas, eletivas e demais escolhíveis que o aluno quer cursar. Não somam
+   * carga por cima do exigido: entram na frente na hora de fechar a categoria
+   * delas, no lugar do que o motor escolheria sozinho.
+   */
+  disciplinasFixadas?: string[];
+  /**
+   * Ritmo específico de um semestre, sobrepondo `ritmo`. Chave no formato
+   * `2026-2`; semestre sem entrada própria segue o ritmo global.
+   */
+  ritmoPorSemestre?: Record<string, number>;
+  /** Janela de aulas, na mesma régua da Sugestão de Grade (TASK-46). */
+  janela?: { aulaInicial?: string; aulaFinal?: string } | null;
+  /**
+   * Disciplinas presas a um semestre específico (TASK-50): o aluno arrastou o
+   * bloco, ou clicou nas setas de mover. Chave no formato `2027-1`.
+   *
+   * A disciplina presa só é elegível naquele semestre. Quando o pedido é
+   * impossível — pré-requisito ainda travado ali, teto de carga estourado,
+   * sem turma livre —, ele é relatado e ela volta ao pool, para a projeção
+   * seguir fechando.
+   */
+  fixacoesPorSemestre?: Record<string, string[]>;
 }
 
 /**
@@ -490,6 +531,52 @@ export function simularFormatura(
   const professoresExcluidos = (exclusoes.professores ?? []).filter((p) => p.trim());
   const trilhasExcluidas = new Set((exclusoes.trilhas ?? []).map(String));
   const exclusoesImpossiveis: ExclusaoImpossivel[] = [];
+
+  // ---- pedidos de escolha do aluno (TASK-47) ---------------------------
+  const trilhasEscolhidas = (opcoes.trilhasAlvo ?? []).map(String).filter((t) => t.trim());
+  const fixadasPeloAluno = new Set((opcoes.disciplinasFixadas ?? []).filter((c) => c.trim()));
+  const janela = opcoes.janela ?? {};
+  const ritmoPorSemestre = opcoes.ritmoPorSemestre ?? {};
+  /** Ritmo deste semestre; sem entrada própria, vale o ritmo global. */
+  const ritmoDoSemestre = (semestre: string) =>
+    ritmoPorSemestre[chaveSemestre(semestre)] ?? ritmoPorSemestre[semestre] ?? ritmo;
+
+  // ---- disciplinas presas a um semestre (TASK-50) -----------------------
+  // O aluno arrastou o bloco ou usou as setas. A disciplina presa fica fora de
+  // todo semestre que não seja o dela; se lá não couber, o pedido é relatado e
+  // ela volta ao pool — a projeção precisa fechar de todo jeito.
+  const semestreFixadoDe = new Map<string, string>();
+  for (const [semestre, codigos] of Object.entries(opcoes.fixacoesPorSemestre ?? {})) {
+    for (const codigo of codigos) semestreFixadoDe.set(codigo, chaveSemestre(semestre));
+  }
+  /** Fixações que o motor não conseguiu honrar e devolveu ao pool. */
+  const fixacoesLiberadas = new Set<string>();
+  // Prender a um semestre anterior ao de partida trava a disciplina para sempre:
+  // aquele semestre nunca vai ser visitado, e ela ficaria fora de todos os
+  // outros. O formato `2026-2` ordena por comparação de string.
+  for (const [codigo, alvo] of semestreFixadoDe) {
+    if (alvo >= chaveSemestre(semestreInicial)) continue;
+    fixacoesLiberadas.add(codigo);
+    const d = matriz.disciplinas.find((x) => x.codigo === codigo);
+    registrarImpossivel(
+      "semestre-fixado",
+      codigo,
+      d ? `${d.codigo} — ${d.nome}` : codigo,
+      `${formatarSemestre(alvo)} é anterior ao início da projeção — não há como cursar no passado.`,
+      codigo,
+    );
+  }
+  const presaEm = (codigo: string, semestre: string) =>
+    semestreFixadoDe.get(codigo) === chaveSemestre(semestre) &&
+    !fixacoesLiberadas.has(codigo);
+  const presaEmOutro = (codigo: string, semestre: string) => {
+    const alvo = semestreFixadoDe.get(codigo);
+    return (
+      alvo !== undefined &&
+      alvo !== chaveSemestre(semestre) &&
+      !fixacoesLiberadas.has(codigo)
+    );
+  };
 
   const excluidaPeloAluno = (d: DisciplinaMatriz) =>
     disciplinaEstaExcluida({ codigo: d.codigo, nome: d.nome }, disciplinasExcluidas);
@@ -781,6 +868,25 @@ export function simularFormatura(
     const d = matriz.disciplinas.find((x) => x.codigo === item.codigoMatriz);
     if (d?.conjunto != null && ehTrilha(cursoDesc, d.conjunto)) conjuntosFixados.add(d.conjunto);
   }
+  // Fixar uma optativa é escolher a trilha dela por tabela: sem isto, a
+  // disciplina pedida cairia fora justamente pelo filtro de trilha-alvo. Vale
+  // como preferência, não como ordem — a escolha explícita de trilhas manda.
+  for (const codigo of fixadasPeloAluno) {
+    const d = matriz.disciplinas.find((x) => x.codigo === codigo);
+    if (d?.conjunto != null && ehTrilha(cursoDesc, d.conjunto)) conjuntosFixados.add(d.conjunto);
+  }
+
+  // Pedido que a matriz não reconhece morre aqui, e explicado: o aluno digitou
+  // ou colou um código que este curso não tem.
+  for (const codigo of fixadasPeloAluno) {
+    if (matriz.disciplinas.some((d) => d.codigo === codigo)) continue;
+    registrarImpossivel(
+      "disciplina-fixada",
+      codigo,
+      codigo,
+      "não existe na matriz deste curso, então não há como incluí-la no plano.",
+    );
+  }
 
   /**
    * Escolhe, ANTES de montar os semestres, em quais trilhas o aluno vai investir.
@@ -807,7 +913,11 @@ export function simularFormatura(
     const alcancavel = (d: DisciplinaMatriz) =>
       d.prerequisitos.every((p) => {
         if (periodoExigido(p) !== null) return true;
-        return cumpre(p, perfil, mapa) || ehObrigatoria.has(p);
+        return (
+          cumpre(p, perfil, mapa) ||
+          liberadoPorDesempenho(p, perfil, mapa) ||
+          ehObrigatoria.has(p)
+        );
       });
 
     const disponiveisPorTrilha = new Map<number, number>();
@@ -838,11 +948,37 @@ export function simularFormatura(
           b.jaTem - a.jaTem,
       );
 
+    // A escolha do aluno (TASK-47) entra na frente da heurística. Trilha pedida
+    // que não fecha as 90h com a oferta conhecida é acusada e não entra: pôr uma
+    // trilha inalcançável como alvo faz a projeção nunca fechar, e o aluno
+    // merece saber disso em vez de receber uma linha do tempo quebrada.
+    const porConjunto = new Map(viaveis.map((t) => [String(t.conj), t]));
+    const pedidasViaveis: typeof viaveis = [];
+    for (const pedida of trilhasEscolhidas) {
+      const t = porConjunto.get(pedida);
+      if (t) {
+        if (!pedidasViaveis.includes(t)) pedidasViaveis.push(t);
+        continue;
+      }
+      const nome = matriz.conjuntos[pedida]?.nome;
+      registrarImpossivel(
+        "trilha-alvo",
+        pedida,
+        nome ?? `Trilha ${pedida}`,
+        nome
+          ? "não há disciplinas suficientes na oferta conhecida para ela fechar as horas exigidas."
+          : "não é uma trilha deste curso.",
+      );
+    }
+
     // A trilha excluída sai da fila, mas o curso continua exigindo o mesmo
     // número de trilhas validadas. Se não sobram trilhas suficientes, as
     // excluídas voltam — as mais baratas primeiro — e cada volta é registrada.
-    const permitidas = viaveis.filter((t) => !trilhasExcluidas.has(String(t.conj)));
-    const escolhidasAlvo = permitidas.slice(0, trilhasExigidas);
+    const permitidas = viaveis.filter(
+      (t) => !trilhasExcluidas.has(String(t.conj)) && !pedidasViaveis.includes(t),
+    );
+    // Escolher menos trilhas que o exigido é legítimo: o motor completa o resto.
+    const escolhidasAlvo = [...pedidasViaveis, ...permitidas].slice(0, trilhasExigidas);
 
     if (escolhidasAlvo.length < trilhasExigidas) {
       const reservas = viaveis.filter((t) => trilhasExcluidas.has(String(t.conj)));
@@ -873,6 +1009,16 @@ export function simularFormatura(
   const pendentes = new Set(candidatas.map((d) => d.codigo));
   const porCodigo = new Map(matriz.disciplinas.map((d) => [d.codigo, d]));
   const periodoAluno = perfil?.periodo ?? 1;
+  /**
+   * O período que o histórico declara, sem o `?? 1` acima.
+   *
+   * A janela de período (TASK-48) precisa distinguir "aluno do 1º período" de
+   * "não sei em que período ele está" — o fallback de 1 serve para fazer a
+   * projeção andar, mas usá-lo como se fosse dado real faria o modo livre, sem
+   * histórico, simular um calouro e barrar tudo do 4º período para cima. É a
+   * mesma convenção de `bloqueio()`, que libera tudo quando não há perfil.
+   */
+  const periodoDeclarado = perfil?.periodo ?? null;
 
   /**
    * Horas que a trilha vai de fato consumir até validar o próprio piso.
@@ -932,6 +1078,9 @@ export function simularFormatura(
     const elegiveis = (fixadoAqui ? [] : [...pendentes])
       .map((c) => porCodigo.get(c)!)
       .filter((d) => {
+        // presa a OUTRO semestre: fica reservada para ele, e não é planejada
+        // antes da hora só porque coube aqui
+        if (presaEmOutro(d.codigo, semestreAtual)) return false;
         const cat = categoriaDe(d, matriz)!;
         // categoria já fechada: não se cursa além do mínimo
         if (cat === "trilhas") {
@@ -948,10 +1097,21 @@ export function simularFormatura(
         if (s === "primeiro" && semestrePar) return false;
         if (s === "segundo" && !semestrePar) return false;
 
+        // Janela de período (TASK-48), medida contra o período PROJETADO e não
+        // contra o de hoje: a disciplina adiantada demais não some da projeção,
+        // só espera. O TCC do 9º entra sozinho quando a projeção alcança o 7º.
+        // Sem período no histórico o gate não roda — ver `periodoDeclarado`.
+        if (periodoDeclarado !== null && foraDaJanelaDePeriodo(d.periodo, periodoNoSemestre)) {
+          return false;
+        }
+
         return d.prerequisitos.every((p) => {
           const per = periodoExigido(p);
           if (per !== null) return periodoNoSemestre >= per;
-          return cumpre(p, perfil, mapa);
+          // `perfil.aprovadas` cresce durante a projeção; `perfil.cursadas`, que
+          // é o que a regra do 4 lê, não muda — a reprovada segue reprovada do
+          // começo ao fim, liberando a dependente em todos os semestres.
+          return cumpre(p, perfil, mapa) || liberadoPorDesempenho(p, perfil, mapa);
         });
       });
 
@@ -964,15 +1124,26 @@ export function simularFormatura(
     elegiveis.sort((a, b) => {
       const catA = categoriaDe(a, matriz)!;
       const catB = categoriaDe(b, matriz)!;
+      // 0. o que o aluno prendeu NESTE semestre vem antes de tudo, inclusive
+      //    das obrigatórias: ele apontou o lugar, e a vaga é dele.
+      const presaA = presaEm(a.codigo, semestreAtual) ? 1 : 0;
+      const presaB = presaEm(b.codigo, semestreAtual) ? 1 : 0;
+      if (presaA !== presaB) return presaB - presaA;
       // 1. obrigatórias primeiro: são todas exigidas e destravam o resto
       const obrA = catA === "obrigatorias" ? 1 : 0;
       const obrB = catB === "obrigatorias" ? 1 : 0;
       if (obrA !== obrB) return obrB - obrA;
-      // 2. cadeia mais longa primeiro
+      // 2. o que o aluno pediu (TASK-47) vem antes do que o motor escolheria.
+      //    Não é carga a mais: a categoria fecha com a escolha dele no lugar da
+      //    substituta que entraria sozinha.
+      const fixA = fixadasPeloAluno.has(a.codigo) ? 1 : 0;
+      const fixB = fixadasPeloAluno.has(b.codigo) ? 1 : 0;
+      if (fixA !== fixB) return fixB - fixA;
+      // 3. cadeia mais longa primeiro
       const hA = altura(a.codigo);
       const hB = altura(b.codigo);
       if (hA !== hB) return hB - hA;
-      // 3. Entre optativas, enquanto faltarem trilhas validadas, prioriza a que
+      // 4. Entre optativas, enquanto faltarem trilhas validadas, prioriza a que
       //    está mais perto de fechar as próprias 90h.
       if (catA === "trilhas" && catB === "trilhas") {
         if (trilhasValidadas() < trilhasExigidas) {
@@ -990,17 +1161,17 @@ export function simularFormatura(
           if (fA !== fB) return fA - fB;
         }
       }
-      // 4. oferta mais rara primeiro (perder a janela custa um ano)
+      // 5. oferta mais rara primeiro (perder a janela custa um ano)
       const raraA = saz.de(a.codigo) === "ambos" ? 0 : 1;
       const raraB = saz.de(b.codigo) === "ambos" ? 0 : 1;
       if (raraA !== raraB) return raraB - raraA;
-      // 5. período previsto na matriz
+      // 6. período previsto na matriz
       if (a.periodo !== b.periodo) return a.periodo - b.periodo;
       return b.horas.total - a.horas.total;
     });
 
     const escolhidas: DisciplinaPlanejada[] = [];
-    let vagas = ritmo;
+    let vagas = ritmoDoSemestre(semestreAtual);
     // Carga de sala de aula já reservada neste semestre. O ritmo limita quantas
     // matérias entram; este teto limita quanto elas pesam — 6 matérias de 90h
     // são 540h, e a UTFPR não deixa matricular isso.
@@ -1114,8 +1285,19 @@ export function simularFormatura(
           const semAlternativaDeDocente = aceitas.length === 0;
           const candidatasTurma = semAlternativaDeDocente ? porPrioridade : aceitas;
 
+          // ---- janela de aulas (TASK-47) --------------------------------
+          // Mesma lógica do docente: recorta as turmas que cabem no horário
+          // pedido e, quando nenhuma cabe, cede — a disciplina é necessária
+          // para integralizar, e devolver uma projeção que não fecha seria
+          // pior do que devolver uma turma fora da janela.
+          const naJanela =
+            janela.aulaInicial || janela.aulaFinal
+              ? candidatasTurma.filter((t) => !turmaViolaJanela(t, janela))
+              : candidatasTurma;
+          const candidatasFinais = naJanela.length > 0 ? naJanela : candidatasTurma;
+
           turmaEscolhida =
-            candidatasTurma.find(
+            candidatasFinais.find(
               (t) => !jaReservada(t) && !haveriaConflito(itensDoSemestre, ofertaDaDisciplina!, t),
             ) ?? null;
           // Nenhuma turma livre cabe junto do que já foi reservado: a disciplina
@@ -1361,7 +1543,76 @@ export function simularFormatura(
       semestreReferencia: referencia.oferta?.semestre ?? null,
       fixadoPeloPlanejamento: fixadoAqui,
     });
+
+    // Prendeu aqui e não coube: relata e devolve ao pool (TASK-50). Sem esta
+    // devolução a disciplina ficaria reservada para um semestre que já passou e
+    // nunca mais seria planejada — a projeção deixaria de fechar por causa de um
+    // arrasto do aluno.
+    const planejadasAqui = new Set(escolhidas.map((d) => d.codigo));
+    for (const [codigo, alvo] of semestreFixadoDe) {
+      if (alvo !== chaveSemestre(semestreAtual)) continue;
+      if (planejadasAqui.has(codigo) || fixacoesLiberadas.has(codigo)) continue;
+      if (!pendentes.has(codigo)) continue; // já cumprida ou fora do plano
+      fixacoesLiberadas.add(codigo);
+      const d = porCodigo.get(codigo);
+      registrarImpossivel(
+        "semestre-fixado",
+        codigo,
+        d ? `${d.codigo} — ${d.nome}` : codigo,
+        `não cabe em ${formatarSemestre(semestreAtual)}: ou o pré-requisito ainda não está ` +
+          `cumprido ali, ou o semestre já estourou o teto de carga, ou não sobrou turma sem ` +
+          `choque. Ela foi realocada no primeiro semestre em que couber.`,
+        codigo,
+      );
+    }
+
     semestreAtual = proximoSemestre(semestreAtual);
+  }
+
+  // ---- pedidos de escolha que não couberam (TASK-47) --------------------
+  // Diagnóstico feito no fim, contra o plano pronto: só aqui se sabe o que
+  // sobrou de fora. A regra é a mesma das exclusões — nenhum pedido do aluno
+  // pode ser ignorado calado, porque o silêncio é indistinguível de bug.
+  const codigosNoPlano = new Set(semestres.flatMap((s) => s.disciplinas).map((d) => d.codigo));
+
+  // Fixação de semestre que o horizonte nunca alcançou: sem este relato o aluno
+  // veria a matéria sumir do plano sem nenhuma explicação.
+  for (const [codigo, alvo] of semestreFixadoDe) {
+    if (codigosNoPlano.has(codigo) || fixacoesLiberadas.has(codigo)) continue;
+    const d = porCodigo.get(codigo);
+    registrarImpossivel(
+      "semestre-fixado",
+      codigo,
+      d ? `${d.codigo} — ${d.nome}` : codigo,
+      `a projeção não chegou a ${formatarSemestre(alvo)} dentro do horizonte simulado.`,
+      codigo,
+    );
+  }
+
+  for (const codigo of fixadasPeloAluno) {
+    if (codigosNoPlano.has(codigo)) continue;
+    if (exclusoesImpossiveis.some((x) => x.tipo === "disciplina-fixada" && x.alvo === codigo)) {
+      continue; // já acusada lá atrás por não existir na matriz
+    }
+    const d = porCodigo.get(codigo);
+    if (!d) continue;
+
+    const rotulo = `${d.codigo} — ${d.nome}`;
+    let motivo: string;
+    if (cumpre(d.codigo, perfilOriginal, mapa)) {
+      motivo = "seu histórico já a dá como cumprida: não há o que planejar.";
+    } else if (saz.de(d.codigo) === "sem_oferta") {
+      motivo = "não há registro de oferta dela nos semestres conhecidos.";
+    } else if (d.conjunto !== null && ehTrilha(cursoDesc, d.conjunto) && !trilhasAlvo.has(d.conjunto)) {
+      const nomeTrilha = matriz.conjuntos[String(d.conjunto)]?.nome ?? `trilha ${d.conjunto}`;
+      motivo =
+        `pertence a ${nomeTrilha}, que não entrou nas trilhas-alvo — escolha essa trilha ` +
+        `para poder cursá-la.`;
+    } else {
+      motivo =
+        "a categoria dela fecha sem ela, e o plano cursa só o mínimo para integralizar.";
+    }
+    registrarImpossivel("disciplina-fixada", d.codigo, rotulo, motivo, d.codigo);
   }
 
   const obrigatoriasRestantes = [...pendentes].filter(

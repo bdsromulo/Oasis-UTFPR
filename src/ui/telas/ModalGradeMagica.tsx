@@ -13,6 +13,12 @@ import {
   IconWarning,
 } from "../icons";
 import { descricaoDoCurso, ehTrilha, exigeExtensao } from "../../domain/cursos";
+import {
+  PRIMEIRO_SLOT,
+  rotuloDoSlot,
+  SLOTS_ORDENADOS,
+  ULTIMO_SLOT,
+} from "../../domain/horarios";
 
 export interface ModalSugestaoGradeProps {
   aberto: boolean;
@@ -47,6 +53,9 @@ export function ModalSugestaoGrade({
   const [naoManha, setNaoManha] = useState(false);
   const [naoTarde, setNaoTarde] = useState(false);
   const [naoNoite, setNaoNoite] = useState(false);
+  // Janela de aulas (TASK-46): padrão nas pontas da régua = filtro inerte.
+  const [aulaInicial, setAulaInicial] = useState(PRIMEIRO_SLOT);
+  const [aulaFinal, setAulaFinal] = useState(ULTIMO_SLOT);
 
   const [sedeCentro, setSedeCentro] = useState(true);
   const [sedeEcoville, setSedeEcoville] = useState(false);
@@ -168,7 +177,27 @@ export function ModalSugestaoGrade({
 
   const bloqueiaConfirmacaoTurno = naoManha && naoTarde && naoNoite;
   const bloqueiaConfirmacaoSede = !sedeCentro && !sedeEcoville && !sedeNeoville;
-  const bloqueiaConfirmacao = bloqueiaConfirmacaoTurno || bloqueiaConfirmacaoSede || !matriz;
+
+  // Duas formas de a janela inviabilizar a busca: invertida, ou sobrando apenas
+  // slots de turnos que o aluno recusou. Nos dois casos vale avisar antes de
+  // gerar, em vez de devolver "nada encontrado" e deixar o motivo por conta dele.
+  const idxInicial = SLOTS_ORDENADOS.indexOf(aulaInicial);
+  const idxFinal = SLOTS_ORDENADOS.indexOf(aulaFinal);
+  const janelaInvertida = idxInicial > idxFinal;
+  const turnoRecusado = (slot: string) =>
+    (slot.startsWith("M") && naoManha) ||
+    (slot.startsWith("T") && naoTarde) ||
+    (slot.startsWith("N") && naoNoite);
+  const janelaSemSlots =
+    !janelaInvertida &&
+    SLOTS_ORDENADOS.slice(idxInicial, idxFinal + 1).every(turnoRecusado);
+
+  const bloqueiaConfirmacao =
+    bloqueiaConfirmacaoTurno ||
+    bloqueiaConfirmacaoSede ||
+    janelaInvertida ||
+    janelaSemSlots ||
+    !matriz;
   const temExtensao = exigeExtensao(matriz);
   const temHumanidades = descricaoDoCurso(matriz ?? 981).categorias.some((c) => c.id === "humanidades");
 
@@ -188,6 +217,8 @@ export function ModalSugestaoGrade({
         naoManha,
         naoTarde,
         naoNoite,
+        aulaInicial,
+        aulaFinal,
         sedeCentro,
         sedeEcoville,
         sedeNeoville,
@@ -429,6 +460,61 @@ export function ModalSugestaoGrade({
                 <span>Não quero Noite</span>
               </label>
             </div>
+          </div>
+
+          {/* Janela de aulas (TASK-46): recorta as pontas do dia por estrutura
+              de aula. Compõe com os turnos acima em vez de substituí-los — é o
+              que mantém expressável "manhã e noite, sem tarde, até N3". */}
+          <div className="space-y-2">
+            <label className="block font-display text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              Janela de Aulas
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="space-y-1">
+                <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                  A partir de
+                </span>
+                <select
+                  value={aulaInicial}
+                  onChange={(e) => setAulaInicial(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 p-2.5 text-xs font-bold focus:border-utfpr-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800/50"
+                >
+                  {SLOTS_ORDENADOS.map((s) => (
+                    <option key={s} value={s}>
+                      {rotuloDoSlot(s)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-1">
+                <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                  Até
+                </span>
+                <select
+                  value={aulaFinal}
+                  onChange={(e) => setAulaFinal(e.target.value)}
+                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 p-2.5 text-xs font-bold focus:border-utfpr-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-800/50"
+                >
+                  {SLOTS_ORDENADOS.map((s) => (
+                    <option key={s} value={s}>
+                      {rotuloDoSlot(s)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {janelaInvertida && (
+              <p className="text-[11px] font-semibold text-red-600 dark:text-red-400">
+                A aula final vem antes da inicial — inverta os dois para a janela
+                fazer sentido.
+              </p>
+            )}
+            {janelaSemSlots && (
+              <p className="text-[11px] font-semibold text-red-600 dark:text-red-400">
+                Essa janela só cobre turnos que você recusou: não sobra nenhum
+                horário para procurar turma.
+              </p>
+            )}
           </div>
 
           {/* Filtro de Sedes */}

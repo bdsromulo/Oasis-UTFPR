@@ -21,6 +21,18 @@ export interface DadosSavefile {
   gradeParaSimulador: { semestre: string; grade: string } | null;
   ritmoSimulador: number;
   exclusoesSimulador: unknown;
+  /**
+   * Códigos das matérias em curso que o aluno decidiu contar como aprovadas.
+   * Campo opcional de propósito: savefiles gerados antes dele continuam válidos
+   * e caem na marcação padrão, sem exigir bump de VERSAO_SAVEFILE.
+   */
+  materiasPresumidas?: string[];
+  /**
+   * Alavancas de modelagem do simulador (TASK-47). Opcional de propósito:
+   * savefile gerado antes dela não tem o campo, e recusar esses arquivos
+   * custaria ao aluno a grade inteira por causa de um ajuste que ele nem fez.
+   */
+  modelagemSimulador?: unknown;
 }
 
 export interface SavefileOasis {

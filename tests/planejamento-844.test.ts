@@ -2,7 +2,14 @@ import { describe, expect, it } from "vitest";
 import { parseHistorico } from "../src/domain/historico/parser";
 import { listarElegiveis } from "../src/domain/motor/elegiveis";
 import { normNome } from "../src/domain/motor/identidade";
-import { BSI, ENG_COMP, dadosDoCurso, semestresDoCurso } from "../src/domain/dadosCurso";
+import {
+  BSI,
+  ENG_COMP,
+  dadosDoCurso,
+  semestresDoCurso,
+  semestresReaisDoCurso,
+} from "../src/domain/dadosCurso";
+import { SEMESTRE_PLANEJAMENTO } from "../src/domain/semestres";
 
 describe("dados por curso", () => {
   it("entrega matriz e ofertas do curso escolhido", () => {
@@ -14,11 +21,17 @@ describe("dados por curso", () => {
   });
 
   it("expõe só os semestres que cada curso tem", () => {
-    expect(semestresDoCurso(ENG_COMP)).toEqual(["2026-2", "2026-1", "2025-2"]);
-    expect(semestresDoCurso(BSI)).toContain("2026-2");
-    // 2026-2 é oferta oficial em fase de pré-matrícula (não simulada) nos dois cursos
-    expect(ENG_COMP.semestresPreMatricula).toContain("2026-2");
-    expect(BSI.semestresPreMatricula).toContain("2026-2");
+    // as ofertas são as que têm PDF do Portal; o dado não muda com a virada
+    expect(semestresReaisDoCurso(ENG_COMP)).toEqual(["2026-2", "2026-1", "2025-2"]);
+    expect(semestresReaisDoCurso(BSI)).toContain("2026-2");
+  });
+
+  it("oferece o semestre de planejamento acima dos que já têm oferta", () => {
+    // 2027-1 não tem PDF publicado: navega como período, mas não como dado
+    expect(semestresDoCurso(ENG_COMP)[0]).toBe(SEMESTRE_PLANEJAMENTO);
+    expect(semestresDoCurso(BSI)[0]).toBe(SEMESTRE_PLANEJAMENTO);
+    expect(ENG_COMP.ofertas).not.toHaveProperty(SEMESTRE_PLANEJAMENTO);
+    expect(ENG_COMP.semestresProjetados).toEqual([SEMESTRE_PLANEJAMENTO]);
   });
 });
 
@@ -67,7 +80,9 @@ describe("planejamento de Eng. Comp.", () => {
       MA70H: ["MA70H", "EST70A", "EST70C", "MA65A", "MA70F"],
       MA70G: ["MA70G", "MAT7ED", "FI74K", "MA63B", "MA70B", "MA70Z"],
     };
-    for (const semestre of semestresDoCurso(ENG_COMP)) {
+    // as ofertas reais: o semestre projetado é a de 2026-1 espelhada e não
+    // acrescenta nenhum caso novo a esta varredura
+    for (const semestre of semestresReaisDoCurso(ENG_COMP)) {
       const lista = listarElegiveis(null as any, ENG_COMP.matriz, ENG_COMP.ofertas[semestre]) as any[];
       for (const [codigo, aceitas] of Object.entries(legitimas)) {
         const e = lista.find((x) => x.disciplina.codigo === codigo);

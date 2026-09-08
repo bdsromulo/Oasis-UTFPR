@@ -464,24 +464,28 @@ export function TelaComoUsar() {
           <figure>
             <IlustracaoSemestres />
             <figcaption className="mt-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
-              Só o semestre em pré-matrícula ainda muda.
+              Só o semestre em planejamento ainda muda.
             </figcaption>
           </figure>
         </Card>
         <div className="grid gap-3.5 sm:grid-cols-3">
           <Card>
-            <Badge tom="ok">Pré-Matrícula</Badge>
+            <Badge tom="ok">Planejamento</Badge>
             <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              O semestre que ainda vai começar. A oferta é oficial e vem do PDF de Turmas
-              Abertas, mas segue provisória. Vagas, horários e turmas podem mudar até a
-              matrícula. Um aviso no topo marca esse estado.
+              O próximo semestre, o que você está montando. A UTFPR ainda não publicou o
+              PDF de Turmas Abertas dele, então a lista de matérias e horários é a{" "}
+              <strong className="text-zinc-800 dark:text-zinc-200">
+                oferta real do último semestre de mesma paridade
+              </strong>{" "}
+              — 2027.1 mostra o que abriu em 2026.1. Serve para ensaiar a matrícula;
+              turmas, horários e docentes vão mudar. Um aviso no topo marca esse estado.
             </p>
           </Card>
           <Card>
-            <Badge tom="neutro">Semestre corrente</Badge>
+            <Badge tom="aviso">Semestre corrente</Badge>
             <p className="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              Oferta oficial já consolidada. Também vem do Portal e passa por validação
-              linha a linha contra o PDF de origem.
+              O que está acontecendo agora. Oferta oficial já consolidada, vinda do Portal
+              e validada linha a linha contra o PDF de origem. A matrícula dele já passou.
             </p>
           </Card>
           <Card>

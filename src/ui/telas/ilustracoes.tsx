@@ -211,18 +211,21 @@ export function IlustracaoSemestres() {
       titulo: "Semestres anteriores",
       fonte: "Grade na Hora",
       nota: "referência histórica",
+      rodape: "fechado",
       cor: "zinc" as const,
     },
     {
       titulo: "Semestre corrente",
       fonte: "Portal do Aluno",
       nota: "oferta consolidada",
-      cor: "zinc" as const,
+      rodape: "em curso",
+      cor: "orange" as const,
     },
     {
       titulo: "Próximo semestre",
-      fonte: "Portal do Aluno",
-      nota: "ainda pode mudar",
+      fonte: "espelho da mesma paridade",
+      nota: "turmas prováveis",
+      rodape: "planejamento",
       cor: "emerald" as const,
     },
   ];
@@ -230,7 +233,7 @@ export function IlustracaoSemestres() {
     <svg
       viewBox="0 0 720 150"
       role="img"
-      aria-label="Semestres anteriores vêm do Grade na Hora, como referência histórica. O semestre corrente e o próximo vêm do Portal do Aluno; o próximo está em pré-matrícula e ainda pode mudar."
+      aria-label="Semestres anteriores vêm do Grade na Hora, como referência histórica. O semestre corrente vem do Portal do Aluno, com oferta consolidada. O próximo semestre ainda não tem PDF publicado: mostra as turmas prováveis, espelhadas do último semestre de mesma paridade."
       className="h-auto w-full"
       preserveAspectRatio="xMidYMid meet"
     >
@@ -241,6 +244,7 @@ export function IlustracaoSemestres() {
       {etapas.map((e, i) => {
         const x = 16 + i * 236;
         const destaque = e.cor === "emerald";
+        const corrente = e.cor === "orange";
         return (
           <g key={e.titulo}>
             <rect
@@ -248,7 +252,9 @@ export function IlustracaoSemestres() {
               className={
                 destaque
                   ? "fill-emerald-500/10 stroke-emerald-500/70"
-                  : "fill-zinc-100 stroke-zinc-300 dark:fill-zinc-800 dark:stroke-zinc-700"
+                  : corrente
+                    ? "fill-orange-500/10 stroke-orange-500/70"
+                    : "fill-zinc-100 stroke-zinc-300 dark:fill-zinc-800 dark:stroke-zinc-700"
               }
               strokeWidth="1.6"
             />
@@ -256,7 +262,11 @@ export function IlustracaoSemestres() {
             <text
               x={x + 16} y="58"
               className={`${ETIQUETA} ${
-                destaque ? "fill-emerald-700 dark:fill-emerald-400" : "fill-zinc-500 dark:fill-zinc-400"
+                destaque
+                  ? "fill-emerald-700 dark:fill-emerald-400"
+                  : corrente
+                    ? "fill-orange-700 dark:fill-orange-400"
+                    : "fill-zinc-500 dark:fill-zinc-400"
               }`}
             >
               {e.fonte}
@@ -267,17 +277,23 @@ export function IlustracaoSemestres() {
               className={
                 destaque
                   ? "fill-emerald-500 stroke-emerald-600"
-                  : "fill-zinc-300 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-500"
+                  : corrente
+                    ? "fill-orange-500 stroke-orange-600"
+                    : "fill-zinc-300 stroke-zinc-400 dark:fill-zinc-600 dark:stroke-zinc-500"
               }
               strokeWidth="1.5"
             />
             <text
               x={x + 108} y="142" textAnchor="middle"
               className={`${ETIQUETA} ${
-                destaque ? "fill-emerald-700 dark:fill-emerald-400" : "fill-zinc-400 dark:fill-zinc-500"
+                destaque
+                  ? "fill-emerald-700 dark:fill-emerald-400"
+                  : corrente
+                    ? "fill-orange-700 dark:fill-orange-400"
+                    : "fill-zinc-400 dark:fill-zinc-500"
               }`}
             >
-              {destaque ? "pré-matrícula" : "fechado"}
+              {e.rodape}
             </text>
           </g>
         );
