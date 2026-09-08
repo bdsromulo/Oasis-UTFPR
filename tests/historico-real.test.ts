@@ -10,7 +10,12 @@ import { listarElegiveis, cumpre } from "../src/domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../src/domain/motor/identidade";
 import { nomeDeEletiva } from "../src/domain/eletivas";
 import { criarAlvoAvaliacao } from "../src/domain/reviews/alvos";
-import { CURSOS, ENG_COMP, dadosDoCursoPorMatriz, semestresDoCurso } from "../src/domain/dadosCurso";
+import {
+  CURSOS,
+  ENG_COMP,
+  dadosDoCursoPorMatriz,
+  semestresReaisDoCurso,
+} from "../src/domain/dadosCurso";
 import type { Matriz, OfertaSemestre } from "../src/domain/tipos";
 import matrizJson from "../data/matriz-981.json";
 import turmasJson from "../data/turmas/2026-1.json";
@@ -211,7 +216,7 @@ for (const arquivo of CASOS_844) {
 
       // nas três ofertas: nada já cumprido é oferecido, e a turma casada é da
       // própria matéria
-      for (const semestre of semestresDoCurso(ENG_COMP)) {
+      for (const semestre of semestresReaisDoCurso(ENG_COMP)) {
         const elegiveis = listarElegiveis(perfil, matriz844, ENG_COMP.ofertas[semestre]) as any[];
         expect(elegiveis.length).toBeGreaterThan(0);
         for (const e of elegiveis) {
@@ -315,7 +320,7 @@ describe.skipIf(HISTORICOS_LOCAIS.length === 0)("históricos locais de referênc
     expect(montarPainel(perfil, matrizCurso).inconsistencias).toEqual([]);
 
     // nada já cumprido pode ser oferecido como elegível, em nenhuma das ofertas
-    for (const semestre of semestresDoCurso(curso!)) {
+    for (const semestre of semestresReaisDoCurso(curso!)) {
       const elegiveis = listarElegiveis(perfil, matrizCurso, curso!.ofertas[semestre]) as any[];
       const jaCumpridas = elegiveis
         .filter((e) => cumpre(e.disciplina.codigo, perfil, mapaCurso))

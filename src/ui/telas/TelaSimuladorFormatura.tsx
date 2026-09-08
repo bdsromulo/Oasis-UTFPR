@@ -34,6 +34,16 @@ import { buscarOfertaParaPlanejamento } from "../../domain/motor/elegiveis";
 import { criarMapaIdentidade } from "../../domain/motor/identidade";
 import { calcularPesoPrioridadeTurma } from "../../domain/motor/grade-magica";
 import { haveriaConflito, itensDaSelecao } from "../../domain/motor/grade";
+import {
+  chaveSemestre,
+  estadoDoSemestre,
+  ofertaReferenciaDoSemestre,
+  SEMESTRE_CORRENTE,
+  SEMESTRE_PLANEJAMENTO,
+} from "../../domain/semestres";
+import { useToasts } from "../toasts/contexto";
+import { PainelAprovacaoPresumida } from "./PainelAprovacaoPresumida";
+import { avisarProjecao } from "../toasts/avisos";
 import { Barra, Card } from "../componentes";
 import {
   IconBan,
@@ -119,7 +129,7 @@ function converterParaSelecao(
 
 export function listarGradesDoPlanejamento(
   todasCestas: Record<string, Record<string, SelecaoTurma[]>> | undefined,
-  semestre = "2026-2",
+  semestre = SEMESTRE_PLANEJAMENTO,
 ): { semestre: string; grade: string; quantidade: number }[] {
   const grades = todasCestas?.[semestre] ?? {};
   return Object.entries(grades)
@@ -245,6 +255,13 @@ export function TelaSimuladorFormatura(props: {
   /** alavancas de modelagem (TASK-47); sobem ao pai pelo mesmo motivo do ritmo */
   modelagem: ValorModelagem;
   onMudarModelagem: (v: ValorModelagem) => void;
+  /**
+   * Histórico como o PDF o descreve, sem a aprovação presumida — `perfil` já
+   * vem com ela aplicada. Serve só para dizer quantas matérias em curso a
+   * projeção está dando por aprovadas; a escolha em si é feita em Situação.
+   */
+  perfilReal?: PerfilAluno | null;
+  presumidas?: string[];
 }) {
   const { perfil, matriz, ofertas, ritmo, exclusoes, modelagem } = props;
   const setRitmo = props.onMudarRitmo;
@@ -255,31 +272,42 @@ export function TelaSimuladorFormatura(props: {
   const [seletorGradePlanejamentoAberto, setSeletorGradePlanejamentoAberto] = useState(false);
   const [explicacaoAberta, setExplicacaoAberta] = useState(false);
   const curso = descricaoDoCurso(matriz);
-  const semestresIniciais = useMemo(() => {
-    // Por enquanto restringe o simulador a começar apenas no semestre futuro,
-    // garantindo que projeções antigas não misturem ofertas passadas.
-    return ["2026-2"];
-  }, []);
+  // O simulador parte do que ainda não aconteceu: o semestre que se está
+  // planejando ou, para quem quer conferir o presente, o corrente. Projeções
+  // que começassem num semestre encerrado misturariam ofertas passadas.
+  const semestresIniciais = useMemo(() => [SEMESTRE_PLANEJAMENTO, SEMESTRE_CORRENTE], []);
 
+  // Se o período escolhido no Planejamento já passou, a projeção começa no
+  // semestre de planejamento — mas sem forçar isso a cada montagem, senão a
+  // escolha do aluno no seletor abaixo era desfeita a todo render.
   useEffect(() => {
-    setSemestreInicial("2026-2");
-  }, []);
+    if (estadoDoSemestre(semestreInicial) === "passado") {
+      setSemestreInicial(SEMESTRE_PLANEJAMENTO);
+    }
+  }, [semestreInicial]);
 
   // Caminho de volta da importação: a grade montada no Planejamento entra como
   // o primeiro semestre da projeção, turma por turma, e os seguintes saem dela.
   const gradeFixada = useMemo(() => {
     const g = props.gradeDoPlanejamento;
     if (!g || g.selecao.length === 0) return null;
-    const ofertaOrigem = ofertas.find((o) => o.semestre.replace(".", "-") === g.semestre);
+    // Num semestre projetado nenhuma oferta carrega esse `semestre`, e sem o
+    // espelho de paridade o `find` devolvia undefined: a grade importada do
+    // Planejamento sumia em silêncio, sem erro e sem aviso.
+    const ofertaOrigem =
+      ofertas.find((o) => chaveSemestre(o.semestre) === chaveSemestre(g.semestre)) ??
+      ofertaReferenciaDoSemestre(g.semestre, ofertas);
     if (!ofertaOrigem) return null;
     return gradeFixadaDaSelecao(g.semestre, ofertaOrigem, g.selecao, matriz, `Grade ${g.grade}`);
   }, [props.gradeDoPlanejamento, ofertas, matriz]);
 
   const semestreDePartida = gradeFixada?.semestre ?? semestreInicial;
 
+  // As grades oferecidas são as do semestre em que a projeção começa: importar
+  // a grade de outro período faria a linha do tempo nascer no lugar errado.
   const gradesPlanejamentoDisponiveis = useMemo(() => {
-    return listarGradesDoPlanejamento(props.todasCestasPorSemestre);
-  }, [props.todasCestasPorSemestre]);
+    return listarGradesDoPlanejamento(props.todasCestasPorSemestre, semestreInicial);
+  }, [props.todasCestasPorSemestre, semestreInicial]);
 
   const [painelExclusoesAberto, setPainelExclusoesAberto] = useState(false);
   const [painelAvancadoAberto, setPainelAvancadoAberto] = useState(false);
@@ -322,6 +350,21 @@ export function TelaSimuladorFormatura(props: {
       }),
     [perfil, matriz, ofertas, ritmo, semestreDePartida, gradeFixada, exclusoes, modelagem],
   );
+
+  // Todo aviso e todo pedido negado sobem para a pilha de notificações. A
+  // dependência é a lista de chaves, e não o resultado: a projeção é um objeto
+  // novo a cada mexida num controle, e sem isso o mesmo aviso republicaria a
+  // cada arrasto do ritmo. `publicarUmaVez` faz a segunda trava, por sessão.
+  const totalDeAvisos = resultado.avisos.length + resultado.exclusoesImpossiveis.length;
+  const toasts = useToasts();
+  const chavesDosAvisos = [
+    ...resultado.avisos,
+    ...resultado.exclusoesImpossiveis.map((x) => `${x.tipo}:${x.alvo}`),
+  ].join("|");
+  useEffect(() => {
+    avisarProjecao(toasts, resultado.avisos, resultado.exclusoesImpossiveis);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chavesDosAvisos]);
 
   // Trilhas do curso com o progresso real do aluno, para os chips da camada 1.
   const trilhasDisponiveis = useMemo(() => {
@@ -501,6 +544,19 @@ export function TelaSimuladorFormatura(props: {
         </div>
       </header>
 
+      {/* Quantas matérias em curso a projeção está dando por aprovadas. É a
+          premissa mais forte de toda a linha do tempo; escondê-la faria a data
+          de formatura parecer mais firme do que é. */}
+      {props.perfilReal && props.presumidas && (
+        <PainelAprovacaoPresumida
+          perfil={props.perfilReal}
+          matriz={matriz}
+          presumidas={props.presumidas}
+          onMudar={() => undefined}
+          compacto
+        />
+      )}
+
       {!perfil && (
         <div className="flex items-start gap-2.5 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-4 text-sm text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/50 dark:text-amber-200">
           <IconWarning className="mt-0.5 h-4 w-4 shrink-0" />
@@ -511,19 +567,75 @@ export function TelaSimuladorFormatura(props: {
         </div>
       )}
 
-      {/* Antes da lista de semestres, e não depois dela: extensão e estágio
-          saíram do plano semestre a semestre justamente por não serem turma que
-          se escolhe. Se o aviso ficasse no rodapé, a pessoa leria a projeção
-          inteira acreditando que basta cursar o que está listado. */}
-      {resultado.avisos.map((a) => (
-        <div
-          key={a}
-          className="flex items-start gap-2.5 rounded-2xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-xs font-medium text-amber-900 dark:border-amber-800/80 dark:bg-amber-950/50 dark:text-amber-200"
-        >
-          <IconWarning className="mt-0.5 h-4 w-4 shrink-0" />
-          <span>{a}</span>
-        </div>
-      ))}
+      {/* Registro dos avisos desta projeção.
+
+          Quem chama atenção agora é a pilha de notificações do canto inferior
+          direito — o que tirou daqui a pilha de faixas que empurrava a projeção
+          para baixo. Mas o toast some sozinho, e quem estava rolando a página
+          perderia a informação para sempre; e os pedidos negados carregam
+          estrutura (rótulo, motivo, disciplinas afetadas) que não cabe num
+          cartão de canto. Por isso o conteúdo continua aqui, recolhido. */}
+      {(resultado.avisos.length > 0 || resultado.exclusoesImpossiveis.length > 0) && (
+        <details className="group rounded-2xl border border-amber-300/80 bg-amber-50/70 dark:border-amber-800/80 dark:bg-amber-950/40">
+          <summary className="flex cursor-pointer list-none items-center gap-2.5 p-3.5 text-xs font-bold text-amber-900 dark:text-amber-200">
+            <IconWarning className="h-4 w-4 shrink-0" />
+            <span>
+              {totalDeAvisos === 1
+                ? "1 aviso desta projeção"
+                : `${totalDeAvisos} avisos desta projeção`}
+            </span>
+            <span className="ml-auto text-[10px] font-black tracking-wider uppercase opacity-70">
+              <span className="group-open:hidden">ver</span>
+              <span className="hidden group-open:inline">ocultar</span>
+            </span>
+          </summary>
+
+          <div className="space-y-2 px-3.5 pb-3.5">
+            {resultado.avisos.map((a) => (
+              <p
+                key={a}
+                className="rounded-xl border border-amber-300/70 bg-white/70 p-3 text-xs leading-relaxed font-medium text-amber-900 dark:border-amber-900/60 dark:bg-zinc-900/60 dark:text-amber-200"
+              >
+                {a}
+              </p>
+            ))}
+
+            {resultado.exclusoesImpossiveis.length > 0 && (
+              <>
+                {/* A seção nasceu só para exclusões; com as alavancas da TASK-47
+                    ela passou a receber também pedidos de escolha, e o texto
+                    precisou deixar de falar só em "excluir". */}
+                <p className="pt-1 text-xs leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+                  A projeção abaixo é a que fecha o curso. O que você pediu para{" "}
+                  <strong>excluir</strong> e o motor manteve aparece marcado na linha do tempo; o
+                  que você pediu para <strong>cursar</strong> e não coube está explicado aqui.
+                </p>
+                {resultado.exclusoesImpossiveis.map((x) => (
+                  <div
+                    key={`${x.tipo}-${x.alvo}`}
+                    className="rounded-xl border border-red-300/70 bg-white/80 p-3 text-xs dark:border-red-900/60 dark:bg-zinc-900/70"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-md bg-red-500/15 px-1.5 py-0.5 font-display text-[10px] font-black tracking-wide uppercase text-red-700 dark:text-red-300">
+                        {ROTULO_PEDIDO[x.tipo]}
+                      </span>
+                      <span className="font-display font-black text-zinc-900 dark:text-zinc-100">
+                        {x.rotulo}
+                      </span>
+                    </div>
+                    <p className="mt-1 leading-snug text-zinc-600 dark:text-zinc-300">{x.motivo}</p>
+                    {x.disciplinas.length > 0 && (
+                      <p className="mt-1.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+                        Entra no plano: {x.disciplinas.join(", ")}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </details>
+      )}
 
       {gradeFixada && (
         <div className="flex flex-wrap items-start justify-between gap-3 rounded-2xl border-2 border-utfpr-500/50 bg-gradient-to-r from-utfpr-500/10 via-amber-500/5 to-transparent p-4 dark:border-utfpr-500/40">
@@ -777,53 +889,6 @@ export function TelaSimuladorFormatura(props: {
           </div>
         )}
       </div>
-
-      {/* Exclusões que a integralização não permitiu respeitar */}
-      {resultado.exclusoesImpossiveis.length > 0 && (
-        <section className="rounded-2xl border-2 border-red-400/60 bg-red-50/70 p-4 dark:border-red-800/70 dark:bg-red-950/40">
-          <div className="flex items-start gap-2.5">
-            <IconWarning className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
-            <div>
-              {/* A seção nasceu só para exclusões; com as alavancas da TASK-47
-                  ela passou a receber também pedidos de escolha, e o texto
-                  precisou deixar de falar só em "excluir". */}
-              <h3 className="font-display text-sm font-black text-red-900 dark:text-red-200">
-                {resultado.exclusoesImpossiveis.length === 1
-                  ? "Um pedido que a integralização não permitiu atender"
-                  : `${resultado.exclusoesImpossiveis.length} pedidos que a integralização não permitiu atender`}
-              </h3>
-              <p className="mt-1 text-xs leading-relaxed text-red-900/80 dark:text-red-200/80">
-                A projeção abaixo é a que fecha o curso. O que você pediu para{" "}
-                <strong>excluir</strong> e o motor manteve aparece marcado na linha do tempo; o que
-                você pediu para <strong>cursar</strong> e não coube está explicado aqui.
-              </p>
-            </div>
-          </div>
-          <ul className="mt-3 space-y-2">
-            {resultado.exclusoesImpossiveis.map((x) => (
-              <li
-                key={`${x.tipo}-${x.alvo}`}
-                className="rounded-xl border border-red-300/70 bg-white/80 p-3 text-xs dark:border-red-900/60 dark:bg-zinc-900/70"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-md bg-red-500/15 px-1.5 py-0.5 font-display text-[10px] font-black uppercase tracking-wide text-red-700 dark:text-red-300">
-                    {ROTULO_PEDIDO[x.tipo]}
-                  </span>
-                  <span className="font-display font-black text-zinc-900 dark:text-zinc-100">
-                    {x.rotulo}
-                  </span>
-                </div>
-                <p className="mt-1 leading-snug text-zinc-600 dark:text-zinc-300">{x.motivo}</p>
-                {x.disciplinas.length > 0 && (
-                  <p className="mt-1.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Entra no plano: {x.disciplinas.join(", ")}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
 
       {/* Requisitos por categoria */}
       <section>

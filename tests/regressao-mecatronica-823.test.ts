@@ -96,7 +96,7 @@ describe("ofertas e interface da matriz 823", () => {
     for (const semestre of ["2026-2", "2026-1", "2025-2"]) {
       expect(curso823.ofertas[semestre]).toBe(curso973.ofertas[semestre]);
     }
-    expect(curso823.semestresPreMatricula).toEqual(["2026-2"]);
+    expect(curso823.semestresProjetados).toEqual(["2027-1"]);
     expect(reviewsHabilitadasPara(823)).toBe(true);
   });
 

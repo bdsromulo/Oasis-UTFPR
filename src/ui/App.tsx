@@ -1,13 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useCamadaHistorico } from "./hooks/useCamadaHistorico";
 import type { OfertaSemestre, PerfilAluno } from "../domain/tipos";
 import { parseHistorico } from "../domain/historico/parser";
+import { matriculadasPresumiveis, perfilComPresuncao } from "../domain/motor/presuncao";
+import { PainelAprovacaoPresumida } from "./telas/PainelAprovacaoPresumida";
+import { VERSAO_NOVIDADES } from "./novidades";
 import {
   dadosDoCurso,
   dadosDoCursoPorMatriz,
   carregarOfertasHistoricasMecatronica,
+  ofertaDoSemestre,
   semestresDoCurso,
+  semestresReaisDoCurso,
 } from "../domain/dadosCurso";
+import {
+  descritorDoSemestre,
+  formatarSemestre,
+  SEMESTRE_CORRENTE,
+  type EstadoSemestre,
+} from "../domain/semestres";
 import { TelaSituacao } from "./telas/Situacao";
 import { TelaPossoCursar } from "./telas/PossoCursar";
 import { TelaGrade } from "./telas/Grade";
@@ -19,7 +30,16 @@ import { MiniGrade, type PreviewTurma } from "./MiniGrade";
 import { ModalGradeMagica } from "./telas/ModalGradeMagica";
 import { Botao, Badge, BotaoIconeComDica } from "./componentes";
 import { SidebarNavegacao, type AbaPrincipal } from "./SidebarNavegacao";
-import { TelaSimuladorFormatura } from "./telas/TelaSimuladorFormatura";
+/**
+ * O Simulador de Formatura entra sob demanda. Ele carrega a tela, os controles
+ * de modelagem e o motor de projeção — o trecho mais pesado do código —, mas só
+ * abre com histórico importado e depois de um clique na navegação. Deixá-lo no
+ * bundle inicial fazia todo mundo pagar por ele já no primeiro carregamento,
+ * inclusive quem só quer olhar as turmas abertas do celular.
+ */
+const TelaSimuladorFormatura = lazy(() =>
+  import("./telas/TelaSimuladorFormatura").then((m) => ({ default: m.TelaSimuladorFormatura })),
+);
 import { TelaAmigosMatch } from "./telas/TelaAmigosMatch";
 import { TelaGestaoInformacao } from "./telas/TelaGestaoInformacao";
 import { TelaFluxograma } from "./telas/TelaFluxograma";
@@ -27,8 +47,14 @@ import { TelaSobre } from "./telas/TelaSobre";
 import { TelaComoUsar } from "./telas/TelaComoUsar";
 import { PilulaFaleConosco } from "./telas/Contato";
 import { PainelMenuMobile } from "./MenuMobile";
-import { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./telas/SeletorExclusoes";
-import { MODELAGEM_VAZIA, type ValorModelagem } from "./telas/ControlesSimulador";
+// Direto do módulo de valores, e não das telas: importar dos componentes
+// puxaria o Simulador inteiro para o bundle inicial.
+import {
+  EXCLUSOES_VAZIAS,
+  MODELAGEM_VAZIA,
+  type ValorExclusoes,
+  type ValorModelagem,
+} from "./telas/valoresSimulador";
 import {
   IconBookOpen,
   IconCalendar,
@@ -49,6 +75,8 @@ import {
 import { ModalMinhasAvaliacoes } from "./telas/ModalMinhasAvaliacoes";
 import { ModalNovidades } from "./telas/ModalNovidades";
 import { AvisoBeta } from "./telas/AvisoBeta";
+import { ProvedorToasts } from "./toasts/contexto";
+import { PilhaToasts } from "./toasts/PilhaToasts";
 import { reviewsHabilitadasPara } from "../domain/reviews/config";
 import { coletaHabilitada } from "../domain/reviews/forms";
 import {
@@ -83,6 +111,11 @@ const CHAVE_EXCLUSOES_POR_SEMESTRE = "oasis.exclusoes_por_semestre.v2";
 // o Simulador de Formatura; a seleção em si continua vindo da cesta, para o
 // simulador acompanhar as edições feitas na grade
 const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
+// Códigos das matérias em curso que o aluno decidiu contar como aprovadas.
+// Guardamos SÓ os códigos: gravar o perfil já presumido o tornaria
+// indistinguível do real no próximo carregamento, e a suposição deixaria de ser
+// reversível.
+const CHAVE_PRESUMIDAS = "oasis.materias_presumidas.v1";
 // Marca que o aviso de novidades já foi lido. Versionada no nome: a próxima
 // novidade troca o sufixo e o destaque volta a aparecer para todo mundo, sem
 // precisar de lógica de comparação de datas.
@@ -91,9 +124,48 @@ const CHAVE_GRADE_SIMULADOR = "oasis.grade_simulador.v1";
 // diferentes já isolam o localStorage do site oficial (domínio próprio via CNAME),
 // mas sem o sufixo o sandbox ainda compartilharia a chave com outras project pages
 // eventuais em bdsromulo.github.io.
-const CHAVE_NOVIDADES = `oasis.novidades_lidas.cursos_matrizes_2026_08_v1.${
+const CHAVE_NOVIDADES = `oasis.novidades_lidas.${VERSAO_NOVIDADES}.${
   __OASIS_BETA__ ? "beta" : "release"
 }`;
+
+// Cores do seletor de período, por estado do semestre. Verde é o que ainda vai
+// começar, laranja é o que está acontecendo, cinza é o que já passou — a mesma
+// convenção que a tela "Como Usar" descreve.
+const CAPSULA_SEMESTRE: Record<EstadoSemestre, string> = {
+  planejamento:
+    "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 dark:text-emerald-300",
+  corrente:
+    "border-orange-500/40 bg-orange-500/15 text-orange-700 hover:bg-orange-500/25 dark:text-orange-300",
+  passado:
+    "border-zinc-400/40 bg-zinc-500/10 text-zinc-600 hover:bg-zinc-500/20 dark:text-zinc-300",
+};
+
+const PONTO_SEMESTRE: Record<EstadoSemestre, string> = {
+  planejamento: "bg-emerald-500",
+  corrente: "bg-orange-500",
+  passado: "bg-zinc-400",
+};
+
+const OPCAO_SEMESTRE: Record<EstadoSemestre, string> = {
+  planejamento: "text-emerald-700 dark:text-emerald-400",
+  corrente: "text-orange-600 dark:text-orange-400",
+  passado: "text-zinc-600 dark:text-zinc-400",
+};
+
+/**
+ * Marcação inicial da aprovação presumida: tudo que está em curso AGORA entra
+ * marcado. Um histórico emitido em outro semestre já tem nota lançada em algum
+ * lugar e não deve ser presumido — nesses casos o painel lista as matérias com
+ * um aviso e os marcadores nascem desligados. Perfis antigos guardados no
+ * navegador não trazem o semestre; nesses, presumir preserva o comportamento de
+ * quem acabou de importar o PDF.
+ */
+function semearPresumidas(p: PerfilAluno | null): string[] {
+  if (!p) return [];
+  return matriculadasPresumiveis(p)
+    .filter((m) => !m.semestre || m.semestre === SEMESTRE_CORRENTE)
+    .map((m) => m.codigo);
+}
 
 // A previsão foi validada contra históricos reais da matriz 981 e passou a
 // respeitar o mínimo por categoria, os pré-requisitos e a sazonalidade observada
@@ -124,7 +196,7 @@ function lerPerfil(): PerfilAluno | null {
   }
 }
 
-export function App() {
+function Aplicacao() {
   const [perfil, setPerfil] = useState<PerfilAluno | null>(lerPerfil);
   const [checkinConcluido, setCheckinConcluido] = useState<boolean>(
     () => localStorage.getItem(CHAVE_CHECKIN) === "true",
@@ -139,9 +211,9 @@ export function App() {
   const [preferencias, setPreferencias] = useState<Preferencias>(() => {
     try {
       const salvo = JSON.parse(localStorage.getItem(CHAVE_PREFS) ?? "null");
-      return salvo || { tema: "sistema", layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis", semestreAtivo: "2026-2" };
+      return salvo || { tema: "sistema", layout: (localStorage.getItem(CHAVE_LAYOUT) as Layout) ?? "oasis", semestreAtivo: SEMESTRE_CORRENTE };
     } catch {
-      return { tema: "sistema", layout: "oasis", semestreAtivo: "2026-2" };
+      return { tema: "sistema", layout: "oasis", semestreAtivo: SEMESTRE_CORRENTE };
     }
   });
   const [modalConfigAberto, setModalConfigAberto] = useState(false);
@@ -195,15 +267,56 @@ export function App() {
 
   // o semestre guardado pode ser de outro curso: cai no padrão se não existir
   const semestreAtivo =
-    preferencias.semestreAtivo && todasOfertas[preferencias.semestreAtivo]
+    preferencias.semestreAtivo && semestresDisponiveis.includes(preferencias.semestreAtivo)
       ? preferencias.semestreAtivo
       : dadosCurso.semestrePadrao;
 
+  // Num semestre projetado a oferta vem espelhada da real de mesma paridade —
+  // `oferta.semestre` continua dizendo de onde as turmas vieram, e é disso que
+  // o banner se serve para avisar que o quadro é provável, não publicado.
   const oferta = useMemo<OfertaSemestre>(
-    () => todasOfertas[semestreAtivo] ?? todasOfertas[dadosCurso.semestrePadrao],
-    [semestreAtivo, todasOfertas, dadosCurso],
+    () => ofertaDoSemestre(dadosCurso, semestreAtivo),
+    [semestreAtivo, dadosCurso, versaoOfertasMecatronica],
   );
-  const ehPreMatricula = dadosCurso.semestresPreMatricula.includes(semestreAtivo);
+  const semestresReais = useMemo(
+    () => semestresReaisDoCurso(dadosCurso),
+    [dadosCurso, versaoOfertasMecatronica],
+  );
+  const descritorSemestre = useMemo(
+    () => descritorDoSemestre(semestreAtivo, semestresReais),
+    [semestreAtivo, semestresReais],
+  );
+
+  // Aprovação presumida: as matérias em curso que o aluno espera passar contam
+  // como aprovadas no planejamento. Persistimos só os códigos e derivamos o
+  // perfil a cada render — ver CHAVE_PRESUMIDAS.
+  const [presumidas, setPresumidas] = useState<string[] | null>(() => {
+    try {
+      const salvo = JSON.parse(localStorage.getItem(CHAVE_PRESUMIDAS) ?? "null");
+      if (Array.isArray(salvo)) return salvo.filter((c) => typeof c === "string");
+    } catch {}
+    // `null` distingue "ainda não escolheu" de "desmarcou tudo": sem isso, quem
+    // já tinha histórico guardado no navegador antes desta versão nunca receberia
+    // a marcação padrão, e teria de reimportar o PDF para ganhar o recurso.
+    return null;
+  });
+  useEffect(() => {
+    if (presumidas === null) return;
+    localStorage.setItem(CHAVE_PRESUMIDAS, JSON.stringify(presumidas));
+  }, [presumidas]);
+  useEffect(() => {
+    if (presumidas === null && perfil) setPresumidas(semearPresumidas(perfil));
+  }, [presumidas, perfil]);
+
+  const presumidasEfetivas = useMemo(
+    () => presumidas ?? semearPresumidas(perfil),
+    [presumidas, perfil],
+  );
+
+  const perfilEfetivo = useMemo(
+    () => perfilComPresuncao(perfil, presumidasEfetivas, matriz),
+    [perfil, presumidasEfetivas, matriz],
+  );
 
   const [preview, setPreview] = useState<PreviewTurma | null>(null);
   const [mobileGradeDrawerAberto, setMobileGradeDrawerAberto] = useState(false);
@@ -220,6 +333,11 @@ export function App() {
       const salvo = JSON.parse(localStorage.getItem(CHAVE_CESTAS_POR_SEMESTRE) ?? "null");
       if (salvo && typeof salvo === "object" && Object.keys(salvo).length > 0) return salvo;
     } catch {}
+    // Os semestres abaixo são LITERAIS DE PROPÓSITO e não acompanham a virada.
+    // São migrações de storage: a cesta v1 foi gravada quando 2026-1 era o
+    // semestre corrente, e a grade v0 quando era 2026-2. Trocá-los por
+    // SEMESTRE_CORRENTE arquivaria o planejamento antigo num semestre em que
+    // ele nunca existiu — na prática, apagaria a grade de quem migra.
     try {
       const salvoV1 = JSON.parse(localStorage.getItem(CHAVE_CESTA) ?? "null");
       if (salvoV1 && typeof salvoV1 === "object") {
@@ -230,7 +348,7 @@ export function App() {
       const gradeAtual = JSON.parse(localStorage.getItem(CHAVE_GRADE) ?? "[]");
       return { "2026-2": { A: gradeAtual } };
     } catch {
-      return { "2026-2": { A: [] } };
+      return { [SEMESTRE_CORRENTE]: { A: [] } };
     }
   });
 
@@ -241,13 +359,14 @@ export function App() {
       const salvo = JSON.parse(localStorage.getItem(CHAVE_EXCLUSOES_POR_SEMESTRE) ?? "null");
       if (salvo && typeof salvo === "object") return salvo;
     } catch {}
+    // literal de migração, como acima: as exclusões v1 são de 2026-1
     try {
       const salvoV1 = JSON.parse(localStorage.getItem(CHAVE_CESTA_EXCLUSOES) ?? "null");
       if (salvoV1 && typeof salvoV1 === "object") {
         return { "2026-1": salvoV1 };
       }
     } catch {}
-    return { "2026-2": {} };
+    return { [SEMESTRE_CORRENTE]: {} };
   });
 
   // Grade do Planejamento escolhida como ponto de partida do Simulador de
@@ -303,6 +422,7 @@ export function App() {
       const novo = typeof acao === "function" ? acao(atual) : acao;
       const novoTodas = { ...prevTodas, [semestreAtivo]: novo };
       localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(novoTodas));
+      // espelho legado: só o semestre da cesta v1 alimenta a chave antiga
       if (semestreAtivo === "2026-1") {
         localStorage.setItem(CHAVE_CESTA_EXCLUSOES, JSON.stringify(novo));
       }
@@ -318,6 +438,7 @@ export function App() {
       const novaCesta = { ...cestaAtual, [gradeAtiva]: selecao };
       const novoTodas = { ...prev, [semestreAtivo]: novaCesta };
       localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(novoTodas));
+      // espelho legado: só o semestre da cesta v1 alimenta a chave antiga
       if (semestreAtivo === "2026-1") {
         localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
       }
@@ -476,13 +597,16 @@ export function App() {
         ...prefs,
         curso: cursoDetectado.id,
         matriz: String(cursoDetectado.matriz.matriz),
-        semestreAtivo: cursoDetectado.ofertas[prefs.semestreAtivo ?? ""]
+        // pela lista navegável, e não por `ofertas`: o semestre de planejamento
+        // é uma escolha válida e não tem entrada própria lá
+        semestreAtivo: semestresDoCurso(cursoDetectado).includes(prefs.semestreAtivo ?? "")
           ? prefs.semestreAtivo
           : cursoDetectado.semestrePadrao,
       }));
     }
     salvarPerfil(p, preferencias.privado);
     setPerfil(p);
+    setPresumidas(semearPresumidas(p));
     setCheckinConcluido(true);
     localStorage.setItem(CHAVE_CHECKIN, "true");
     setAba("situacao");
@@ -505,6 +629,7 @@ export function App() {
       ritmoSimulador,
       exclusoesSimulador,
       modelagemSimulador,
+      materiasPresumidas: presumidasEfetivas,
     });
     const blob = new Blob([JSON.stringify(savefile, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -522,7 +647,7 @@ export function App() {
   function confirmarSavefile(savefile: SavefileOasis) {
     const dados = savefile.dados;
     const perfilImportado = desserializarPerfil(dados.perfil);
-    const semestreImportado = dados.preferencias.semestreAtivo ?? "2026-2";
+    const semestreImportado = dados.preferencias.semestreAtivo ?? SEMESTRE_CORRENTE;
     const cestasImportadas = dados.cestasPorSemestre;
     const cestasDoSemestre = cestasImportadas[semestreImportado] ?? { A: [] };
     const gradeImportada = cestasDoSemestre[dados.gradeAtiva]
@@ -535,6 +660,7 @@ export function App() {
       semestreAtivo: semestreImportado,
     }));
     setPerfil(perfilImportado);
+    setPresumidas(dados.materiasPresumidas ?? semearPresumidas(perfilImportado));
     if (perfilImportado) salvarPerfil(perfilImportado, preferencias.privado);
     else {
       localStorage.removeItem(CHAVE_PERFIL);
@@ -590,6 +716,7 @@ export function App() {
       const novaCesta = { ...cestaAtual, [gradeDestino]: novaSelecao };
       const novoTodas = { ...prev, [semestreDestino]: novaCesta };
       localStorage.setItem(CHAVE_CESTAS_POR_SEMESTRE, JSON.stringify(novoTodas));
+      // espelho legado, como acima
       if (semestreDestino === "2026-1") {
         localStorage.setItem(CHAVE_CESTA, JSON.stringify(novaCesta));
       }
@@ -600,6 +727,7 @@ export function App() {
       const novo = { ...atual, [gradeDestino]: { disciplinas: [], professores: [] } };
       const novoTodas = { ...prevTodas, [semestreDestino]: novo };
       localStorage.setItem(CHAVE_EXCLUSOES_POR_SEMESTRE, JSON.stringify(novoTodas));
+      // espelho legado, como acima
       if (semestreDestino === "2026-1") {
         localStorage.setItem(CHAVE_CESTA_EXCLUSOES, JSON.stringify(novo));
       }
@@ -655,12 +783,13 @@ export function App() {
     localStorage.clear();
     sessionStorage.removeItem(CHAVE_PERFIL);
     setPerfil(null);
+    setPresumidas([]);
     setCheckinConcluido(false);
     setTodasCestasPorSemestre({ [semestreAtivo]: { A: [] } });
     setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
     setGradeAtiva("A");
     setSelecao([]);
-    setPreferencias({ tema: "sistema", layout: "oasis", semestreAtivo: "2026-2" });
+    setPreferencias({ tema: "sistema", layout: "oasis", semestreAtivo: SEMESTRE_CORRENTE });
     setLayout("oasis");
     setAba("planejamento");
     setAbaPlanejamento("cursar");
@@ -676,6 +805,7 @@ export function App() {
     sessionStorage.removeItem(CHAVE_PERFIL);
     localStorage.removeItem(CHAVE_CHECKIN);
     setPerfil(null);
+    setPresumidas([]);
     setCheckinConcluido(false);
     setTodasCestasPorSemestre({ [semestreAtivo]: { A: [] } });
     setTodasExclusoesPorSemestre({ [semestreAtivo]: { A: { disciplinas: [], professores: [] } } });
@@ -737,12 +867,12 @@ export function App() {
               sem isso o convite para avaliar aparecia na própria tela de
               check-in, citando telas (Planejamento, Configurações) que quem
               ainda não entrou na plataforma nunca viu. */}
-          {(!!perfil || checkinConcluido) && reviewsHabilitadasPara(matriz.matriz) && (
+          {(!!perfil || checkinConcluido) && (
             <button
               type="button"
               onClick={abrirNovidades}
               aria-label="Novidades"
-              title="Conheça as avaliações da comunidade"
+              title="O que mudou no Oásis"
               className="relative flex h-11 min-w-[44px] shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3 text-utfpr-800 shadow-2xs active:scale-95 dark:border-utfpr-500/50 dark:text-utfpr-300"
             >
               <IconSparkles className="h-5 w-5 shrink-0" />
@@ -821,28 +951,26 @@ export function App() {
               </Botao>
             </div>
 
-            {/* Imediatamente à esquerda da estrela, e não no fim da fileira: o
-                modal ensina a usar aquele botão, então os dois precisam ser lidos
-                juntos. Fica dentro deste bloco por consequência — antes do
-                check-in a fileira inteira não existe, e ali a pessoa ainda não
-                entrou na plataforma. */}
-            {reviewsHabilitadasPara(matriz.matriz) && (
-              <button
-                type="button"
-                onClick={abrirNovidades}
-                title="Conheça as avaliações da comunidade"
-                className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
-              >
-                <IconSparkles className="h-4 w-4 shrink-0" />
-                <span>Novidades</span>
-                {!novidadesLidas && (
-                  <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
-                  </span>
-                )}
-              </button>
-            )}
+            {/* Fica dentro deste bloco de propósito: antes do check-in a
+                fileira inteira não existe, e ali a pessoa ainda não entrou na
+                plataforma para o que mudou fazer sentido. Não depende mais de
+                avaliações — o modal abre sozinho para todo mundo, e sem o botão
+                quem não tivesse reviews ficava sem como reabri-lo. */}
+            <button
+              type="button"
+              onClick={abrirNovidades}
+              title="O que mudou no Oásis"
+              className="relative flex h-9 cursor-pointer items-center gap-1.5 rounded-2xl border border-utfpr-500/60 bg-utfpr-500/15 px-3.5 font-display text-sm font-bold text-utfpr-800 shadow-2xs transition-all hover:bg-utfpr-500 hover:text-zinc-950 dark:border-utfpr-500/50 dark:text-utfpr-300 dark:hover:bg-utfpr-400 dark:hover:text-zinc-950"
+            >
+              <IconSparkles className="h-4 w-4 shrink-0" />
+              <span>Novidades</span>
+              {!novidadesLidas && (
+                <span className="absolute -right-1 -top-1 flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-utfpr-500 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-utfpr-600 dark:bg-utfpr-400" />
+                </span>
+              )}
+            </button>
 
             {/* Avaliar não vive só na tela de progresso: quem quer opinar sobre
                 uma matéria antiga precisa de um caminho direto (RF15). */}
@@ -892,23 +1020,60 @@ export function App() {
           um link não teria como saber que está numa cópia de teste. */}
       <AvisoBeta />
 
-      {/* Banner: 2026.2 em Pré-Matrícula (oferta oficial, porém provisória).
-          Fica fora do "Sobre", que é material do projeto e não do semestre. */}
-      {ehPreMatricula && !sobreAberta && !comoUsarAberta && (
+      {/* Banner do período escolhido. Fica fora do "Sobre", que é material do
+          projeto e não do semestre.
+
+          São três estados, não dois. O semestre de planejamento ainda não tem
+          PDF publicado e mostra turmas espelhadas — precisa dizer isso em voz
+          alta. O corrente tem oferta oficial e consolidada. Os passados não
+          merecem faixa nenhuma: quem escolhe um deles sabe o que está fazendo. */}
+      {descritorSemestre.estado === "planejamento" && !sobreAberta && !comoUsarAberta && (
         <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border-2 border-emerald-500/70 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 p-4.5 text-xs text-zinc-900 shadow-lg dark:border-emerald-500/80 dark:from-emerald-950/90 dark:via-teal-950/80 dark:to-emerald-950/90 dark:text-emerald-100">
             <div className="flex items-center gap-3.5">
               <IconClipboard className="h-4 w-4 shrink-0" />
               <div>
-                <div className="font-display text-sm font-black text-emerald-900 dark:text-emerald-100 uppercase tracking-wide flex items-center gap-2">
-                  <span>Período de Pré-Matrícula: {semestreAtivo.replace("-", ".")}</span>
-                  <span className="inline-flex items-center rounded-lg bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white shadow-2xs">OFERTA OFICIAL PROVISÓRIA</span>
+                <div className="flex items-center gap-2 font-display text-sm font-black tracking-wide text-emerald-900 uppercase dark:text-emerald-100">
+                  <span>Planejando {descritorSemestre.rotulo}</span>
+                  <span className="inline-flex items-center rounded-lg bg-emerald-600 px-2 py-0.5 text-[10px] font-black text-white shadow-2xs">
+                    TURMAS PROVÁVEIS
+                  </span>
                 </div>
-                <p className="mt-1 leading-relaxed text-zinc-800 dark:text-zinc-200 text-xs font-semibold">
-                  As turmas de <strong className="text-emerald-700 dark:text-emerald-300 underline">{semestreAtivo.replace("-", ".")}</strong> vêm do PDF oficial de <em>Turmas Abertas</em> do Portal do Aluno — são <strong className="text-emerald-700 dark:text-emerald-300 font-black">dados genuínos</strong>, não uma simulação. Como o período ainda não começou, vagas, horários e a lista de turmas <strong className="uppercase">ainda podem mudar</strong> até a matrícula.
+                <p className="mt-1 text-xs leading-relaxed font-semibold text-zinc-800 dark:text-zinc-200">
+                  A UTFPR ainda não publicou o PDF de <em>Turmas Abertas</em> de{" "}
+                  <strong className="text-emerald-700 underline dark:text-emerald-300">
+                    {descritorSemestre.rotulo}
+                  </strong>
+                  . Até lá, a lista de matérias e horários é a{" "}
+                  <strong>oferta real de{" "}
+                    {descritorSemestre.ofertaEspelhada
+                      ? formatarSemestre(descritorSemestre.ofertaEspelhada)
+                      : "um semestre de mesma paridade"}
+                  </strong>
+                  , o último semestre de mesma paridade — serve para{" "}
+                  <strong className="text-emerald-700 dark:text-emerald-300">
+                    ensaiar a matrícula
+                  </strong>
+                  , mas <strong className="uppercase">turmas, horários e docentes vão mudar</strong>.
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {descritorSemestre.estado === "corrente" && !sobreAberta && !comoUsarAberta && (
+        <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3.5 rounded-2xl border border-orange-500/50 bg-orange-500/10 p-3.5 text-xs text-zinc-900 dark:border-orange-500/50 dark:bg-orange-950/50 dark:text-orange-100">
+            <IconClipboard className="h-4 w-4 shrink-0" />
+            <p className="leading-relaxed font-semibold">
+              <strong className="font-display tracking-wide uppercase">
+                Semestre corrente: {descritorSemestre.rotulo}
+              </strong>{" "}
+              — a matrícula já passou e as turmas abaixo são a oferta oficial consolidada. Para
+              montar a grade do próximo semestre, troque o período em{" "}
+              <em>Montando grade para</em>.
+            </p>
           </div>
         </div>
       )}
@@ -1016,9 +1181,21 @@ export function App() {
                   </div>
                 </div>
 
+                {/* Antes do painel, e não depois: o que ele mostra já leva a
+                    presunção em conta, e quem não souber disso lê os números
+                    achando que são só o histórico. */}
+                {abaSituacao === "painel" && perfil && (
+                  <PainelAprovacaoPresumida
+                    perfil={perfil}
+                    matriz={matriz}
+                    presumidas={presumidasEfetivas}
+                    onMudar={setPresumidas}
+                  />
+                )}
+
                 {abaSituacao === "painel" && (
                   <TelaSituacao
-                    perfil={perfil}
+                    perfil={perfilEfetivo}
                     matriz={matriz}
                     onAbrirConfiguracoes={() => setModalConfigAberto(true)}
                     onAbrirCatalogo={(cat) => {
@@ -1030,7 +1207,7 @@ export function App() {
 
                 {abaSituacao === "catalogo" && (
                   <TelaCatalogo
-                    perfil={perfil}
+                    perfil={perfilEfetivo}
                     matriz={matriz}
                     oferta={oferta}
                     categoriaInicial={categoriaCatalogo}
@@ -1041,7 +1218,7 @@ export function App() {
                 {abaSituacao === "trilhas" && (
                   <TelaFluxograma
                     matriz={matriz}
-                    perfil={perfil}
+                    perfil={perfilEfetivo}
                     ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                   />
                 )}
@@ -1062,16 +1239,14 @@ export function App() {
                         Montando grade para
                       </div>
                       <label
-                        className={`relative mt-0.5 inline-flex items-center gap-1.5 rounded-lg border pl-2.5 pr-5 py-0.5 font-mono text-sm font-bold transition-colors cursor-pointer shadow-2xs select-none ${
-                          ehPreMatricula
-                            ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25"
-                            : "border-orange-500/40 bg-orange-500/15 text-orange-700 dark:text-orange-300 hover:bg-orange-500/25"
-                        }`}
+                        className={`relative mt-0.5 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border py-0.5 pr-5 pl-2.5 font-mono text-sm font-bold shadow-2xs transition-colors select-none ${CAPSULA_SEMESTRE[descritorSemestre.estado]}`}
                         title="Período letivo usado para listar turmas e montar a grade"
                       >
+                        {/* O pulso é da expectativa: só o semestre que ainda vai
+                            começar merece piscar. */}
                         <span
-                          className={`h-1.5 w-1.5 rounded-full shrink-0 animate-pulse ${
-                            ehPreMatricula ? "bg-emerald-500" : "bg-orange-500"
+                          className={`h-1.5 w-1.5 shrink-0 rounded-full ${PONTO_SEMESTRE[descritorSemestre.estado]} ${
+                            descritorSemestre.estado === "planejamento" ? "animate-pulse" : ""
                           }`}
                         />
                         <select
@@ -1080,18 +1255,14 @@ export function App() {
                           className="cursor-pointer appearance-none bg-transparent font-mono text-sm font-bold text-current focus:outline-none max-sm:min-h-11"
                         >
                           {semestresDisponiveis.map((sem) => {
-                            const preMatricula = dadosCurso.semestresPreMatricula.includes(sem);
+                            const d = descritorDoSemestre(sem, semestresReais);
                             return (
                               <option
                                 key={sem}
                                 value={sem}
-                                className={`bg-white font-bold dark:bg-zinc-900 ${
-                                  preMatricula
-                                    ? "text-emerald-700 dark:text-emerald-400"
-                                    : "text-orange-600 dark:text-orange-400"
-                                }`}
+                                className={`bg-white font-bold dark:bg-zinc-900 ${OPCAO_SEMESTRE[d.estado]}`}
                               >
-                                {sem.replace("-", ".")} ({preMatricula ? "Pré-Matrícula" : "Passado"})
+                                {d.rotulo} ({d.rotuloEstado})
                               </option>
                             );
                           })}
@@ -1164,7 +1335,7 @@ export function App() {
                 {abaPlanejamento === "cursar" ? (
                   (preferencias.layout ?? layout) === "gnh" ? (
                     <TelaLayoutGNH
-                      perfil={perfil}
+                      perfil={perfilEfetivo}
                       matriz={matriz}
                       oferta={oferta}
                       selecao={selecao}
@@ -1179,7 +1350,7 @@ export function App() {
                     />
                   ) : (
                     <TelaPossoCursar
-                      perfil={perfil}
+                      perfil={perfilEfetivo}
                       matriz={matriz}
                       oferta={oferta}
                       selecao={selecao}
@@ -1203,7 +1374,7 @@ export function App() {
                     onMudarGradeAtiva={handleMudarGradeAtiva}
                     onNovaGrade={handleNovaGrade}
                     onRemoverGrade={handleRemoverGrade}
-                    perfil={perfil}
+                    perfil={perfilEfetivo}
                     matriz={matriz}
                     onAbrirGradeMagica={() => setModalGradeMagica(true)}
                     exclusoesSugestao={exclusoesAtivas}
@@ -1215,6 +1386,7 @@ export function App() {
                     }}
                     todasCestasPorSemestre={todasCestasPorSemestre}
                     semestreAtivo={semestreAtivo}
+                    semestresConhecidos={semestresReais}
                     todasOfertas={todasOfertas}
                     onEnviarParaSimulador={
                       SIMULADOR_LIBERADO && perfil
@@ -1231,8 +1403,17 @@ export function App() {
             )}
 
             {aba === "simulador" && SIMULADOR_LIBERADO && perfil && (
+              <Suspense
+                fallback={
+                  <div className="rounded-3xl border border-zinc-200/80 bg-white/80 p-8 text-center text-sm font-semibold text-zinc-500 dark:border-zinc-800/80 dark:bg-zinc-900/80 dark:text-zinc-400">
+                    Carregando o Simulador de Formatura…
+                  </div>
+                }
+              >
               <TelaSimuladorFormatura
-                perfil={perfil}
+                perfil={perfilEfetivo}
+                perfilReal={perfil}
+                presumidas={presumidasEfetivas}
                 matriz={matriz}
                 ofertas={semestresDisponiveis.map((sem) => todasOfertas[sem]).filter(Boolean)}
                 semestreAtivo={semestreAtivo}
@@ -1248,8 +1429,11 @@ export function App() {
                 modelagem={modelagemSimulador}
                 onMudarModelagem={setModelagemSimulador}
               />
+              </Suspense>
             )}
 
+            {/* Perfil cru: o match compara históricos reais entre pessoas, e
+                uma suposição minha não pode entrar na conta de outra. */}
             {aba === "match" && (
               <TelaAmigosMatch
                 perfil={perfil}
@@ -1271,9 +1455,10 @@ export function App() {
             <aside className="sticky top-4 self-start hidden w-60 shrink-0 lg:block">
               <MiniGrade
                 oferta={oferta}
+                semestreAtivo={semestreAtivo}
                 selecao={selecao}
                 preview={preview}
-                perfil={perfil}
+                perfil={perfilEfetivo}
                 matriz={matriz}
                 onLimpar={() => {
                   setSelecao([]);
@@ -1307,7 +1492,7 @@ export function App() {
       <ModalGradeMagica
         aberto={modalGradeMagica}
         onFechar={() => setModalGradeMagica(false)}
-        perfil={perfil}
+        perfil={perfilEfetivo}
         matriz={matriz}
         oferta={oferta}
         selecaoAtual={selecao}
@@ -1429,9 +1614,10 @@ export function App() {
                 <div className="flex-1 overflow-y-auto pb-6">
                   <MiniGrade
                     oferta={oferta}
+                    semestreAtivo={semestreAtivo}
                     selecao={selecao}
                     preview={preview}
-                    perfil={perfil}
+                    perfil={perfilEfetivo}
                     matriz={matriz}
                     onLimpar={() => {
                       setSelecao([]);
@@ -1492,6 +1678,23 @@ export function App() {
           setSobreAberta(true);
         }}
       />
+
+      {/* A pilha de avisos fecha a árvore: fica acima de tudo e sobe quando a
+          barra de grade flutuante do mobile está na tela. */}
+      <PilhaToasts acimaDaBarraMobile={barraGradeMobileVisivel} />
     </div>
+  );
+}
+
+/**
+ * O provedor de avisos envolve a aplicação inteira, e não só o Planejamento:
+ * choque de turma nasce no Planejamento, mas os avisos da projeção nascem no
+ * Simulador, e ambos publicam na mesma pilha.
+ */
+export function App() {
+  return (
+    <ProvedorToasts>
+      <Aplicacao />
+    </ProvedorToasts>
   );
 }

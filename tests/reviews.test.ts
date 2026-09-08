@@ -66,7 +66,7 @@ function cursoFicticio(id: string, disciplinas: { codigo: string; turmas: Turma[
       },
     },
     semestrePadrao: "2026-1",
-    semestresPreMatricula: [],
+    semestresProjetados: [],
   } satisfies DadosCurso;
 }
 

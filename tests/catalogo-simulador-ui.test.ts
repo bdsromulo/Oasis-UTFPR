@@ -47,7 +47,7 @@ describe("grade pronta do Planejamento no Simulador", () => {
       "2026-2": { C: [turma, turma], B: [], A: [turma] },
     };
 
-    expect(listarGradesDoPlanejamento(cestas)).toEqual([
+    expect(listarGradesDoPlanejamento(cestas, "2026-2")).toEqual([
       { semestre: "2026-2", grade: "A", quantidade: 1 },
       { semestre: "2026-2", grade: "C", quantidade: 2 },
     ]);

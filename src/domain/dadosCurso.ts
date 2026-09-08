@@ -1,4 +1,10 @@
 import type { Matriz, OfertaSemestre } from "./tipos";
+import {
+  chaveSemestre,
+  ofertaReferenciaDoSemestre,
+  SEMESTRE_CORRENTE,
+  SEMESTRE_PLANEJAMENTO,
+} from "./semestres";
 import matriz981Json from "../../data/matriz-981.json";
 import matriz806Json from "../../data/matriz-806.json";
 import turmasBsi20262 from "../../data/turmas/2026-2.json";
@@ -37,12 +43,16 @@ export interface DadosCurso {
   /** semestre aberto por padrão ao entrar no curso */
   semestrePadrao: string;
   /**
-   * Semestres em fase de Pré-Matrícula: a oferta já é oficial (PDF de Turmas
-   * Abertas do Portal), mas o período ainda não começou — vagas, horários e a
-   * própria lista de turmas ainda podem mudar até a matrícula. NÃO são dados
-   * simulados; a etiqueta serve para o aluno saber que o quadro é provisório.
+   * Semestres sem PDF de Turmas Abertas publicado, que a plataforma projeta
+   * sobre a oferta real de mesma paridade.
+   *
+   * Eles NÃO entram em `ofertas`: `oferta.semestre` significa "de onde estas
+   * turmas vieram", e reescrevê-lo faria o Oásis afirmar que tem um quadro
+   * oficial de 2027.1 que a UTFPR ainda não publicou — justamente o que a
+   * etiqueta de provisoriedade precisa poder negar. A resolução acontece em
+   * `ofertaDoSemestre`, em tempo de leitura.
    */
-  semestresPreMatricula: string[];
+  semestresProjetados: string[];
 }
 
 const bsi20262 = turmasBsi20262 as unknown as OfertaSemestre;
@@ -58,8 +68,8 @@ export const BSI: DadosCurso = {
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
     "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // A BSI tem uma oferta só por semestre, publicada com os códigos da matriz nova.
@@ -77,8 +87,8 @@ export const BSI_806: DadosCurso = {
     "2026-1": turmasBsi20261 as unknown as OfertaSemestre,
     "2025-2": turmasBsi20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // Eng. Comp. tem uma única oferta de Turmas Abertas por semestre (curso "ENG DE
@@ -95,8 +105,8 @@ export const ENG_COMP: DadosCurso = {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 export const ENG_COMP_962: DadosCurso = {
@@ -109,8 +119,8 @@ export const ENG_COMP_962: DadosCurso = {
     "2026-1": turmasEng20261 as unknown as OfertaSemestre,
     "2025-2": turmasEng20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // Eng. Eletrônica tem PDF de Turmas Abertas próprio (curso "ENG ELETRÔNICA"),
@@ -129,8 +139,8 @@ export const ENG_ELETRONICA: DadosCurso = {
     "2026-1": turmasEletronica20261 as unknown as OfertaSemestre,
     "2025-2": turmasEletronica20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // Controle e Automação tem oferta própria do Portal. 2026-2 é a fonte oficial
@@ -146,8 +156,8 @@ export const ENG_CONTROLE: DadosCurso = {
     "2026-1": turmasControle20261 as unknown as OfertaSemestre,
     "2025-2": turmasControle20252 as unknown as OfertaSemestre,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // Mecatrônica tem uma das maiores ofertas do Portal. As três versões entram em
@@ -155,7 +165,7 @@ export const ENG_CONTROLE: DadosCurso = {
 // mantém o contrato síncrono das telas durante os poucos instantes do download.
 const OFERTA_MECATRONICA_CARREGANDO: OfertaSemestre = {
   curso: "ENG MECATRÔNICA",
-  semestre: "2026-2",
+  semestre: SEMESTRE_CORRENTE,
   fonte: "Turmas de Engenharia Mecatrônica em carregamento",
   disciplinas: [],
 };
@@ -168,8 +178,8 @@ export const ENG_MECATRONICA: DadosCurso = {
   ofertas: {
     "2026-2": OFERTA_MECATRONICA_CARREGANDO,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 // As matrizes 823 e 973 pertencem ao mesmo curso e consultam a mesma lista de
@@ -183,8 +193,8 @@ export const ENG_MECATRONICA_823: DadosCurso = {
   ofertas: {
     "2026-2": OFERTA_MECATRONICA_CARREGANDO,
   },
-  semestrePadrao: "2026-2",
-  semestresPreMatricula: ["2026-2"],
+  semestrePadrao: SEMESTRE_CORRENTE,
+  semestresProjetados: [SEMESTRE_PLANEJAMENTO],
 };
 
 /** Carrega as três ofertas de Mecatrônica sem bloquear o bundle inicial. */
@@ -221,7 +231,36 @@ export function dadosDoCursoPorMatriz(matriz: number | null | undefined): DadosC
   return CURSOS.find((c) => c.matriz.matriz === matriz) ?? null;
 }
 
-/** Semestres que o curso oferece, do mais recente para o mais antigo. */
+/**
+ * Semestres navegáveis, do mais recente para o mais antigo: os projetados vêm
+ * junto dos que têm oferta própria, porque para quem planeja os dois são
+ * períodos possíveis. "2027-1" ordena naturalmente acima de "2026-2".
+ */
 export function semestresDoCurso(curso: DadosCurso): string[] {
+  return [...new Set([...curso.semestresProjetados, ...Object.keys(curso.ofertas)])]
+    .sort()
+    .reverse();
+}
+
+/**
+ * Só os semestres com PDF publicado. É o conjunto que `oferta.semestre` pode
+ * legitimamente assumir, e a base do espelho de paridade.
+ */
+export function semestresReaisDoCurso(curso: DadosCurso): string[] {
   return Object.keys(curso.ofertas).sort().reverse();
+}
+
+/**
+ * Oferta a exibir para um semestre: a própria, quando existe; senão a real de
+ * mesma paridade. Resolver aqui, e não guardar uma cópia em `ofertas`, é o que
+ * mantém Mecatrônica correta — as ofertas dela chegam por chunk assíncrono, e
+ * um espelho materializado na carga do módulo nasceria do placeholder vazio.
+ */
+export function ofertaDoSemestre(curso: DadosCurso, semestre: string): OfertaSemestre {
+  const alvo = chaveSemestre(semestre);
+  return (
+    curso.ofertas[alvo] ??
+    ofertaReferenciaDoSemestre(alvo, Object.values(curso.ofertas)) ??
+    curso.ofertas[curso.semestrePadrao]
+  );
 }
