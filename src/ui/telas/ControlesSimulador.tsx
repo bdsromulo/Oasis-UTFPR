@@ -16,28 +16,10 @@ import { descricaoDoCurso, ehTrilha } from "../../domain/cursos";
 import { PRIMEIRO_SLOT, rotuloDoSlot, SLOTS_ORDENADOS, ULTIMO_SLOT } from "../../domain/horarios";
 import { formatarSemestre } from "../../domain/motor/simuladorFormatura";
 
-/** O que o aluno modelou, à parte das exclusões. */
-export interface ValorModelagem {
-  /** conjuntos de trilha escolhidos; vazio devolve a escolha ao motor */
-  trilhasAlvo: string[];
-  /** códigos que ele quer cursar */
-  disciplinasFixadas: string[];
-  /** ritmo específico por semestre, sobrepondo o global */
-  ritmoPorSemestre: Record<string, number>;
-  aulaInicial: string;
-  aulaFinal: string;
-  /** disciplinas presas a um semestre: chave = semestre, valor = códigos */
-  fixacoesPorSemestre: Record<string, string[]>;
-}
-
-export const MODELAGEM_VAZIA: ValorModelagem = {
-  trilhasAlvo: [],
-  disciplinasFixadas: [],
-  ritmoPorSemestre: {},
-  aulaInicial: PRIMEIRO_SLOT,
-  aulaFinal: ULTIMO_SLOT,
-  fixacoesPorSemestre: {},
-};
+// Mesmo motivo do SeletorExclusoes: o valor puro mora em `valoresSimulador`
+// para o App poder guardá-lo sem carregar os controles.
+import type { ValorModelagem } from "./valoresSimulador";
+export { MODELAGEM_VAZIA, type ValorModelagem } from "./valoresSimulador";
 
 /**
  * Prende uma disciplina a um semestre, tirando-a de qualquer outro (TASK-50).

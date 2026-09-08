@@ -12,17 +12,11 @@ import { IconBan, IconInfo } from "../icons";
  * professor viria vazia.
  */
 
-export interface ValorExclusoes {
-  disciplinas: { codigo: string; nome: string }[];
-  professores: string[];
-  trilhas: { conjunto: string; nome: string }[];
-}
-
-export const EXCLUSOES_VAZIAS: ValorExclusoes = {
-  disciplinas: [],
-  professores: [],
-  trilhas: [],
-};
+// O tipo e o valor vazio moram em `valoresSimulador`, sem React nem motor:
+// é o que permite o App guardar o estado sem arrastar esta tela para o bundle
+// inicial. Reexportados aqui porque metade do simulador já os importa daqui.
+import type { ValorExclusoes } from "./valoresSimulador";
+export { EXCLUSOES_VAZIAS, type ValorExclusoes } from "./valoresSimulador";
 
 export function totalExclusoes(v: ValorExclusoes): number {
   return v.disciplinas.length + v.professores.length + v.trilhas.length;
