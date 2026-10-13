@@ -1,5 +1,12 @@
 # dados pessoais e documentos-fonte nunca entram no repo público
-*.pdf
+# O Portal exporta `.PDF` em maiúsculas, e fora do Windows o git distingue caixa:
+# `*.pdf` sozinho deixaria passar `Histórico do Aluno - X.PDF` em Linux e macOS.
+*.[pP][dD][fF]
+# Páginas salvas do Portal e do Grade na Hora (`Histórico do Aluno.html`) trazem os
+# mesmos dados do PDF. A única página HTML do repositório é a de entrada do app.
+*.[hH][tT][mM][lL]
+*.[hH][tT][mM]
+!/index.html
 # exceção: fixture SINTÉTICA de teste (aluno fictício, sem dados pessoais)
 !tests/fixtures/historico-sintetico.pdf
 
