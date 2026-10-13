@@ -31,6 +31,19 @@ npm run build  # produção
 
 O app é publicado automaticamente no GitHub Pages a cada push na main.
 
+## Dois ambientes
+
+O mesmo código é publicado em dois sites, cada um com seu repositório:
+
+| Ambiente | Repositório | Site |
+|---|---|---|
+| Produção | `bdsromulo/Oasis-UTFPR` | https://oasisutfpr.com.br/ |
+| Sandbox (beta de testes) | `bdsromulo/oasisutfpr-sandbox` | https://bdsromulo.github.io/oasisutfpr-sandbox/ |
+
+O sandbox serve para validar versões novas sem tocar no site final, e a produção só
+recebe o que já foi validado lá. O fluxo completo está em
+[`REPOSITORIO.md`](REPOSITORIO.md) §7.
+
 ## Arquitetura em camadas
 
 1. **Dados** (`data/` + `tools/`): JSONs públicos gerados dos documentos oficiais,

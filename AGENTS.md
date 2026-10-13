@@ -22,6 +22,21 @@ Informação (matrizes 981 e 806)**, **Engenharia de Computação (844 e 962)**,
 ficam fora do repo, na pasta local do dono do projeto. `data/` contém apenas dados
 públicos derivados.
 
+## Ambientes: produção e sandbox
+
+O mesmo código vive em **dois repositórios**, com papéis diferentes (detalhes e
+comandos em `REPOSITORIO.md` §7):
+
+- **Sandbox** (`bdsromulo/oasisutfpr-sandbox`, https://bdsromulo.github.io/oasisutfpr-sandbox/):
+  ambiente de teste. Publica um site à parte, com faixa de beta e `noindex`, para
+  validar versão nova sem tocar no site final. É normal que fique à frente da produção.
+- **Produção** (`bdsromulo/Oasis-UTFPR`, https://oasisutfpr.com.br/): o site final. Só
+  recebe o que já foi validado no sandbox, por `git merge sandbox/main`, nunca por cópia
+  de arquivos.
+
+Feature nova nasce em branch no sandbox. Os workflows de deploy têm guarda pelo nome do
+repositório, e `data/reviews.json` é gerado só na produção (nunca editar à mão).
+
 ## Pipeline de dados
 
 - `tools/parse_matriz.py` + `tools/validate_matriz*.py` → `data/matriz-<n>.json` por

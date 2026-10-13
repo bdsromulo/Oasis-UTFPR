@@ -257,6 +257,7 @@ ocorre em `1146..1149 → 1140`: as subáreas oferecem as disciplinas, mas a car
 - Toda nova funcionalidade deve ser planejada e registrada primeiro em `Tasks.md`.
 - Se a feature envolver mudanças de arquitetura de informação ou usabilidade, consulte e registre em `Estrategia.md`.
 - Garantir que `git status` esteja limpo e que `npm test` e `npm run build` tenham sido executados localmente com sucesso antes de concluir uma tarefa.
+- Feature nova nasce no sandbox e só chega à produção depois de validada lá (§7).
 
 ---
 
@@ -289,3 +290,89 @@ Este repositório consolida as seguintes definições canônicas de interface e 
    - **Publicação sob demanda:** `python tools/publicar_reviews.py` roda localmente a mesma sequência do workflow — baixa o CSV homologado, valida, regenera `data/reviews.json`, roda a suíte e publica com confirmação. Serve para não esperar o cron de segunda; o Action continua sendo o caminho normal. Use `--somente-gerar` para inspecionar sem publicar. A URL do CSV fica em `.env.local` (coberto pelo `.gitignore`) ou na variável `URL_CSV_REVIEWS` do repositório.
    - **Modo Livre:** o aluno pode navegar sem carregar histórico, escolhendo curso e matriz manualmente. Sem `perfil`, a aba *Minha Situação* fica bloqueada e o Planejamento vira ponto de entrada (item 1 acima).
    - **Savefile** (`src/domain/savefile.ts`): exportação/importação de um JSON versionado com o perfil já derivado e as grades montadas — nunca o PDF original. É o mecanismo de portar dados entre navegadores sem backend.
+
+---
+
+## 7. Ambientes: produção e sandbox
+
+O mesmo código vive em **dois repositórios do GitHub**. Cada um publica o próprio site
+no GitHub Pages, o que permite publicar uma versão de teste sem tocar no site final.
+
+| | Produção | Sandbox |
+|---|---|---|
+| Repositório | `bdsromulo/Oasis-UTFPR` | `bdsromulo/oasisutfpr-sandbox` |
+| Site | https://oasisutfpr.com.br/ | https://bdsromulo.github.io/oasisutfpr-sandbox/ |
+| Workflow de deploy | `.github/workflows/deploy.yml` | `.github/workflows/deploy-sandbox.yml` |
+| Build | padrão (`base` `/`, com `CNAME`) | `OASIS_BASE=/oasisutfpr-sandbox/` e `OASIS_BETA=1`, sem `CNAME` |
+| Papel | site final, só o que já foi validado | canal de homologação, pode ficar à frente |
+
+O sandbox **não é um fork**: são dois repositórios independentes com histórico comum, e
+por isso o `gh api .../compare` entre eles não serve. A comparação verdadeira exige o
+outro repositório como remote (abaixo).
+
+### O que o build de sandbox muda
+
+O código-fonte é o mesmo; a diferença está no build e nos workflows. `OASIS_BETA=1`
+troca a constante `__OASIS_BETA__`, que liga a faixa de aviso `AvisoBeta.tsx`, o `noindex`
+(o sandbox exibe nomes reais de quem avaliou) e o sufixo `beta` nas chaves de
+`localStorage`. O `CNAME` é removido do artefato, senão o sandbox reivindicaria
+`oasisutfpr.com.br` e brigaria com a produção pelo domínio.
+
+### Fluxo de trabalho
+
+1. Criar uma branch da feature no sandbox (`task-NN-descricao`).
+2. Integrá-la na `main` do sandbox. O `push` na `main` dispara o `deploy-sandbox.yml` e
+   publica o site beta, onde a feature é testada.
+3. Com a feature validada, promover para a produção. No clone da **produção**:
+   ```bash
+   git fetch sandbox
+   git log main..sandbox/main        # o que vai subir
+   git merge sandbox/main
+   npm test -- --run && npm run build
+   git push origin main              # dispara o deploy.yml
+   ```
+4. O sentido inverso (acervo de reviews e correções feitas só na produção) é um merge de
+   `producao/main` na `main` do sandbox, no clone do **sandbox**.
+
+O merge leva **todo** o histórico da `main` do sandbox. Para promover só parte das
+mudanças, mantenha cada feature em branch própria até a hora de integrar na `main` do
+sandbox. Não copie arquivos de um repositório para o outro: o histórico em comum é o que
+permite o `fast-forward` e o merge limpo.
+
+### Remotes (convenção local)
+
+`origin` é sempre o próprio GitHub do clone. Cada clone adiciona o outro como remote:
+
+```bash
+# no clone da produção
+git remote add sandbox https://github.com/bdsromulo/oasisutfpr-sandbox.git
+# no clone do sandbox
+git remote add producao https://github.com/bdsromulo/Oasis-UTFPR.git
+```
+
+`git rev-list --left-right --count main...sandbox/main` (na produção) mostra quantos
+commits cada lado tem a mais. **Nunca** dê `push` para o remote do outro repositório:
+envie sempre com `git push origin <branch>`.
+
+### Como publicar
+
+- **Normal:** `push` na `main` do repositório. Cada repositório só publica o próprio site.
+- **Sem alterar código** (republicar o que já está na `main`):
+  ```bash
+  gh workflow run deploy-sandbox.yml -R bdsromulo/oasisutfpr-sandbox
+  gh workflow run deploy.yml -R bdsromulo/Oasis-UTFPR
+  ```
+  Equivale a *Actions → workflow → Run workflow* na interface do GitHub.
+- **O ambiente `github-pages` só aceita deploy vindo da `main`.** Uma branch de feature
+  não publica direto, nem pelo disparo manual. Para testar uma branch no beta, integre-a na
+  `main` do sandbox ou libere a branch em *Settings → Environments → github-pages*.
+
+### Guardas entre os dois
+
+- `deploy.yml` roda só em `bdsromulo/Oasis-UTFPR` e `deploy-sandbox.yml` só em
+  `bdsromulo/oasisutfpr-sandbox` (`if: github.repository == …`). Sem a guarda, o
+  repositório de produção tentaria publicar um build de subpasta por cima do site real.
+- A ingestão semanal de reviews (`ingerir-reviews.yml`) é gerada **só na produção**. No
+  sandbox o job aparece como `skipped`. `data/reviews.json` chega ao sandbox pelo merge da
+  `main` e nunca é editado à mão: dois geradores divergiriam o arquivo e quebrariam a
+  relação de fast-forward entre os repositórios.
