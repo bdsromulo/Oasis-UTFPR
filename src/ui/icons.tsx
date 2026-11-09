@@ -1,34 +1,33 @@
 import type { SVGProps } from "react";
 
+// Símbolo do Oásis (palmeira refinada), canvas 256. Versão "fina" do mestre: é a
+// usada sobre o tile escuro, levemente afinada para compensar a irradiação do
+// amarelo. Fonte e variantes: kit do logo (Drive, "Logo redesign 2026-11").
+const SIMBOLO_OASIS =
+  "M128 88 Q157.46 18.4 210 38 Q179.63 69.4 128 88Z M128 88 Q76.37 69.4 46 38 Q98.54 18.4 128 88Z M128 88 Q216.31 70.74 232 135.6 Q180.75 126.54 128 88Z M128 88 Q75.25 126.54 24 135.6 Q39.69 70.74 128 88Z M120.5 88 L135.5 88 L142.5 190 Q128 195.5 113.5 190 L120.5 88Z M140.5 88 A12.5 12.5 0 1 1 115.5 88 A12.5 12.5 0 1 1 140.5 88Z M48 207.66 Q59.33 200.5 71 200.5 Q82.67 200.5 94 207.66 Q101.67 212.5 109 212.5 Q116.33 212.5 124 207.66 Q135.33 200.5 147 200.5 Q158.67 200.5 170 207.66 Q177.67 212.5 185 212.5 Q192.33 212.5 200 207.66 A7.5 7.5 0 0 1 208 220.34 Q196.67 227.5 185 227.5 Q173.33 227.5 162 220.34 Q154.33 215.5 147 215.5 Q139.67 215.5 132 220.34 Q120.67 227.5 109 227.5 Q97.33 227.5 86 220.34 Q78.33 215.5 71 215.5 Q63.67 215.5 56 220.34 A7.5 7.5 0 0 1 48 207.66Z";
+
 export function LogoUTFPR(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      viewBox="0 0 64 64"
+      viewBox="0 0 256 256"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
       className={props.className ?? "w-9 h-9"}
       {...props}
     >
-      <rect width="64" height="64" rx="16" className="fill-zinc-900 dark:fill-zinc-100 shadow-xs" />
-      <path
-        d="M32 44V26M32 26C28 20 20 20 14 24C18 24 24 26 32 26ZM32 26C36 20 44 20 50 24C46 24 40 26 32 26ZM32 26C26 16 20 14 16 14C20 16 26 20 32 26ZM32 26C38 16 44 14 48 14C44 16 38 20 32 26Z"
-        className="stroke-white dark:stroke-zinc-900"
-        strokeWidth="3.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      {/* Tile zinc-900 nos dois temas; no escuro, um contorno sutil o separa do fundo zinc-950. */}
+      <rect width="256" height="256" rx="64" className="fill-zinc-900" />
+      <rect
+        x="2"
+        y="2"
+        width="252"
+        height="252"
+        rx="62"
+        strokeWidth="4"
+        className="stroke-transparent dark:stroke-white/15"
       />
-      <path
-        d="M20 48C24 46 28 50 32 48C36 46 40 50 44 48"
-        className="stroke-white dark:stroke-zinc-900"
-        strokeWidth="2.8"
-        strokeLinecap="round"
-      />
-      <path
-        d="M24 53C27 51.5 30 54 33 53C36 51.5 39 54 42 53"
-        className="stroke-white/70 dark:stroke-zinc-900/70"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
+      <path d={SIMBOLO_OASIS} transform="translate(33.28 33.28) scale(0.74)" className="fill-utfpr-500" />
     </svg>
   );
 }
